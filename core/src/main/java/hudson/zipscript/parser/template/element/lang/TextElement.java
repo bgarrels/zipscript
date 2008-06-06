@@ -37,7 +37,7 @@ public class TextElement extends AbstractElement implements Element {
 	}
 
 	public String toString() {
-		return text;
+		return "'" + text + "'";
 	}
 
 	public ElementIndex normalize(int index, List elementList, ParseParameters parameters) throws ParseException {
