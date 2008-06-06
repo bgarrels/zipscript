@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
-import hudson.zipscript.ExpressEngine;
+import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.context.MapContextWrapper;
@@ -61,7 +61,7 @@ public class ParserTest extends TestCase {
 		context.put("va2", "bar");
 
 		String contents = IOUtils.toString(getClass().getResourceAsStream("/template.etl"));
-		Template template = ExpressEngine.getTemplate(contents);
+		Template template = ZipEngine.getTemplate(contents);
 		System.out.println(template.merge(context));
 	}
 
@@ -70,10 +70,10 @@ public class ParserTest extends TestCase {
 		TextElement textElement = new TextElement("this is a test");
 		context.put("foo", textElement);
 		EvaluationTemplate template = null;
-		template = ExpressEngine.getTemplateForEvaluation(
+		template = ZipEngine.getTemplateForEvaluation(
 			"${foo.text}");
 		System.out.println(template.objectValue(context));
-		template = ExpressEngine.getTemplateForEvaluation(
+		template = ZipEngine.getTemplateForEvaluation(
 			"1+2<4");
 		System.out.println(template.objectValue(context));
 	}
