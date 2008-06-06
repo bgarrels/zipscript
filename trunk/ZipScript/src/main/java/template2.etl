@@ -1,0 +1,27 @@
+${3+4%2}
+
+this is a test
+[#foreach foo in bar]  --> ${foo} - ${i} - ${hasNext}[/#foreach]
+
+[#if val1 != null]
+	12345
+[#elseif val == 'bar']
+	3343
+[#elseif val == 'ccc']
+	6656
+[#else]
+	88787
+[/#if]
+
+[#while i < 5]
+	test - ${i}
+[#while i <= 3]
+		test - ${i}
+[/#while]
+[/#while]
+
+
+
+[#set abc={1,2,3}/]
+[#set abc=[foo=bar; fee=boo/]
+[#set abc['foo'] = 'bar'/]
