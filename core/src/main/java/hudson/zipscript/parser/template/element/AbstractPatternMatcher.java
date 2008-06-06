@@ -32,7 +32,7 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 			char c = contents.get();
 			if (c == endMatchStart) {
 				// possible match
-				if (c == startMatchStart) {
+				if (c == endMatchStart) {
 					nesting --;
 					if (nesting > 0) {
 						length ++;

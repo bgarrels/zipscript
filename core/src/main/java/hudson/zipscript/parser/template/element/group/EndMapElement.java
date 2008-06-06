@@ -8,8 +8,10 @@ import hudson.zipscript.parser.template.element.directive.NestableDirective;
 
 public class EndMapElement extends NestableDirective {
 
+	
+
 	public void merge(ZSContext context, StringWriter sw) {
-		sw.append(')');
+		sw.append(']');
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
@@ -21,6 +23,6 @@ public class EndMapElement extends NestableDirective {
 	}
 
 	public String toString() {
-		return ")";
+		return "]";
 	}
 }
