@@ -1,4 +1,4 @@
-package test.hudson.zipscript.parser;
+package test.hudson.zipscript;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
