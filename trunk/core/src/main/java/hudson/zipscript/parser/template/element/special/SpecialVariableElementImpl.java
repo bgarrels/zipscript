@@ -26,7 +26,6 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 					pattern.append(getPattern());
 				}
 				pattern.append(((SpecialElement) e).getTokenValue());
-				elementList.remove(index);
 				continue;
 			}
 			else {

@@ -24,12 +24,14 @@ import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMat
 import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
 import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
 import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
+import hudson.zipscript.parser.template.element.special.SpecialStringDefaultEelementFactory;
+import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 import hudson.zipscript.template.EvaluationTemplate;
 import hudson.zipscript.template.Template;
 import hudson.zipscript.template.TemplateImpl;
 
-public class ExpressEngine {
+public class ZipEngine {
 
 	private static final Component[] components = new Component[] {
 			new IfComponent(),
@@ -51,18 +53,19 @@ public class ExpressEngine {
 			new GroupPatternMatcher(),
 			new WhitespacePatternMatcher()
 	};
-	private static final DefaultElementFactory def = new TextDefaultElementFactory();
+	private static final DefaultElementFactory mergeElementFactory = new TextDefaultElementFactory();
+	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
 	private static final ParseParameters params = new ParseParameters(false, false);
 
 	public static Template getTemplate (String resourcePath) throws ParseException {
-		ParseData pd = ExpressionParser.getInstance().parse(resourcePath, components, def);
+		ParseData pd = ExpressionParser.getInstance().parse(resourcePath, components, mergeElementFactory);
 		Template template = new TemplateImpl(pd.getElements());
 		return template;
 	}
 
 	public static EvaluationTemplate getTemplateForEvaluation (String contents) throws ParseException {
 		Element element = ExpressionParser.getInstance().parseToElement(
-				contents, matchers, def);
+				contents, matchers, evalElementFactory);
 		return new TemplateImpl(element);
 	}
 }

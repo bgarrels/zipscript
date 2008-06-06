@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
+import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 
@@ -13,8 +14,7 @@ public class SpecialStringElementImpl extends TextElement implements SpecialStri
 		super(text);
 	}
 
-	public ElementIndex normalize(
-			int index, List elementList) throws ParseException {
+	public ElementIndex normalize(int index, List elementList, ParseParameters parameters) throws ParseException {
 		while (elementList.size() > index) {
 			Element e = (Element) elementList.get(index);
 			if (e instanceof SpecialElement) {
