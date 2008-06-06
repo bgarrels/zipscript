@@ -14,7 +14,7 @@ public class MapElement extends NestableElement {
 	}
 
 	protected boolean isEndElement(Element e) {
-		return (e instanceof EndGroupElement);
+		return (e instanceof EndMapElement);
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {
