@@ -18,6 +18,9 @@ import hudson.zipscript.parser.template.element.component.MacroComponent;
 import hudson.zipscript.parser.template.element.component.VariableComponent;
 import hudson.zipscript.parser.template.element.component.WhileComponent;
 import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
+import hudson.zipscript.parser.template.element.group.ListPatternMatcher;
+import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
 import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
@@ -33,14 +36,14 @@ import hudson.zipscript.template.TemplateImpl;
 
 public class ZipEngine {
 
-	private static final Component[] components = new Component[] {
+	public static final Component[] TEMPLATE_COMPONENTS = new Component[] {
 			new IfComponent(),
 			new ForeachComponent(),
 			new WhileComponent(),
 			new MacroComponent(),
 			new VariableComponent()
 	};
-	private static final PatternMatcher[] matchers = new PatternMatcher[] {
+	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
 			new VariablePatternMatcher(),
 			new StringPatternMatcher(),
 			new NumericPatternMatcher(),
@@ -51,21 +54,24 @@ public class ZipEngine {
 			new MathPatternMatcher(),
 			new NullPatternMatcher(),
 			new GroupPatternMatcher(),
-			new WhitespacePatternMatcher()
+			new WhitespacePatternMatcher(),
+			new MapPatternMatcher(),
+			new ListPatternMatcher(),
+			new DotPatternMatcher()
 	};
 	private static final DefaultElementFactory mergeElementFactory = new TextDefaultElementFactory();
 	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
 	private static final ParseParameters params = new ParseParameters(false, false);
 
 	public static Template getTemplate (String resourcePath) throws ParseException {
-		ParseData pd = ExpressionParser.getInstance().parse(resourcePath, components, mergeElementFactory);
+		ParseData pd = ExpressionParser.getInstance().parse(resourcePath, TEMPLATE_COMPONENTS, mergeElementFactory);
 		Template template = new TemplateImpl(pd.getElements());
 		return template;
 	}
 
 	public static EvaluationTemplate getTemplateForEvaluation (String contents) throws ParseException {
 		Element element = ExpressionParser.getInstance().parseToElement(
-				contents, matchers, evalElementFactory);
+				contents, VARIABLE_MATCHERS, evalElementFactory);
 		return new TemplateImpl(element);
 	}
 }

@@ -61,6 +61,7 @@ public class NumericPatternMatcher implements PatternMatcher {
 					}
 				}
 				if (type != Character.MIN_VALUE) {
+					if (sb.length() == 1 && sb.charAt(0) == '.') return null;
 					return new NumberElement(sb.toString(), type, locale);
 				}
 				else if (Character.isLetter(c)) {
