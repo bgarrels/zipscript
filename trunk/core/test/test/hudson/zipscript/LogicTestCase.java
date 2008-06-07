@@ -10,13 +10,13 @@ import junit.framework.TestCase;
 
 public class LogicTestCase extends TestCase {
 
-	public void _testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions () throws Exception {
 		assertEquals(true, eval("4>3||3<4"));
 		assertEquals(true, eval("4>3&&3<4"));
 		assertEquals(true, eval("4>3 && (3<4 || true)"));
 		assertEquals(true, eval("4>3&&(3<4||true)"));
-		assertEquals(false, eval("4>3&&(3<4||false)"));
-		assertEquals(true, eval("4>=3&&4==4&3<4&&3<=4)"));
+		assertEquals(true, eval("4>3&&(3<4||false)"));
+		assertEquals(true, eval("4>=3&&4==4&&3<4&&3<=4"));
 
 	}
 

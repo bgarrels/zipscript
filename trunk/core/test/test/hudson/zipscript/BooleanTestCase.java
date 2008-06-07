@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class BooleanTestCase extends TestCase {
 
-	public void _testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions () throws Exception {
 		assertEquals(true, eval("true"));
 		assertEquals(false, eval("false"));
 		assertEquals(false, eval("'true'"));
@@ -22,7 +22,7 @@ public class BooleanTestCase extends TestCase {
 		assertEquals(true, eval("4==4"));
 		assertEquals(false, eval("4==3"));
 		assertEquals(true, eval("4==3+1"));
-		assertEquals(false, eval("4!=3"));
+		assertEquals(true, eval("4!=3"));
 
 	}
 
