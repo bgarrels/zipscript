@@ -39,11 +39,27 @@ public class DirectiveTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
+	public void testWhile () throws Exception {
+		String mergeTemplate = "/templates/while_test.zs";
+		String resultFile = "/templates/while_result.txt";
+		evalResult(mergeTemplate, resultFile, null);
+	}
+
+	public void testIf () throws Exception {
+		String mergeTemplate = "/templates/if_test.zs";
+		String resultFile = "/templates/if_result.txt";
+		Map context = new HashMap();
+		context.put("foo", "abc");
+		context.put("bar", "def");
+		context.put("baz", "ghi");
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
 	throws ParseException, ExecutionException, IOException {
 		String expectedResult = IOUtils.toString(getClass().getResourceAsStream(resultFile));
 		String actualResult = merge(mergeTemplate, context);
-		this.assertEquals(expectedResult, actualResult);
+		assertEquals(expectedResult, actualResult);
 	}
 
 	private String merge (String template, Object context)
