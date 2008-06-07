@@ -82,9 +82,9 @@ public class ForeachDirective extends NestableElement {
 					context = new NestedContextWrapper(context);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
-					for (Iterator iter=c.iterator(); iter.hasNext(); i++) {
-						if (iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
 						context.put(varName, iter.next());
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
@@ -99,7 +99,7 @@ public class ForeachDirective extends NestableElement {
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (iter.hasNext()) {
 						context.put(varName, iter.next());
-						if (iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
