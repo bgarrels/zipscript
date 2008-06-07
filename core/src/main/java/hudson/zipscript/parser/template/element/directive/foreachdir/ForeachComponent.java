@@ -1,8 +1,7 @@
-package hudson.zipscript.parser.template.element.component;
+package hudson.zipscript.parser.template.element.directive.foreachdir;
 
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.directive.foreachdir.EndForeachPatternMatcher;
-import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachPatternMatcher;
+import hudson.zipscript.parser.template.element.component.Component;
 
 public class ForeachComponent implements Component {
 

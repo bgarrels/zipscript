@@ -4,6 +4,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 
@@ -25,9 +26,10 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 			return "false";
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParseParameters parameters) throws ParseException {
+	public ElementIndex normalize(
+			int index, List elementList, ParsingSession session) throws ParseException {
 		return SpecialElementNormalizer.normalizeSpecialElement(
-				this, index, elementList, parameters);
+				this, index, elementList, session);
 	}
 
 	public Object objectValue(ZSContext context) {

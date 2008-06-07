@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -18,7 +19,8 @@ public class VariablePatternMatcher implements PatternMatcher {
 		return new char[][]{"${".toCharArray(), "$!{".toCharArray()};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader)
+	public Element match(
+			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
 			throws ParseException {
 		StringBuffer sb = new StringBuffer();
 		int nesting = 1;
@@ -44,9 +46,9 @@ public class VariablePatternMatcher implements PatternMatcher {
 					if (nesting == 0) {
 						// we've got a match
 						if (startChars[1] == '!')
-							return new VariableElement(true, sb.toString());
+							return new VariableElement(true, sb.toString(), session);
 						else
-							return new VariableElement(false, sb.toString());
+							return new VariableElement(false, sb.toString(), session);
 					}
 					
 				}

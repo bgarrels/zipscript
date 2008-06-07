@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
 import java.io.StringWriter;
@@ -77,7 +78,7 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	}
 
 	public ElementIndex normalize(int index, List elementList,
-			ParseParameters parameters) throws ParseException {
+			ParsingSession session) throws ParseException {
 		return null;
 	}
 

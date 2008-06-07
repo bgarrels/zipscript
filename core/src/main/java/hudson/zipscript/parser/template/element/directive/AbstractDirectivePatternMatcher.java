@@ -11,11 +11,21 @@ public abstract class AbstractDirectivePatternMatcher extends AbstractPatternMat
 	private char[] startToken;
 	public char[] getStartToken() {
 		if (null == startToken) {
-			startToken = new char[2 + getDirectiveName().length()];
-			startToken[0] = '[';
-			startToken[1] = '#';
-			System.arraycopy(
-					getDirectiveName().toCharArray(), 0, startToken, 2, getDirectiveName().length());
+			if (!onlyAllowEmpty() && !allowEmpty()) {
+				startToken = new char[3 + getDirectiveName().length()];
+				startToken[0] = '[';
+				startToken[1] = '#';
+				System.arraycopy(
+						getDirectiveName().toCharArray(), 0, startToken, 2, getDirectiveName().length());
+				startToken[startToken.length-1] = ' ';
+			}
+			else {
+				startToken = new char[2 + getDirectiveName().length()];
+				startToken[0] = '[';
+				startToken[1] = '#';
+				System.arraycopy(
+						getDirectiveName().toCharArray(), 0, startToken, 2, getDirectiveName().length());
+			}
 		}
 		return startToken;
 	}

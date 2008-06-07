@@ -1,7 +1,8 @@
 package hudson.zipscript.parser.exception;
 
 import hudson.zipscript.parser.template.data.LinePosition;
-import hudson.zipscript.parser.template.data.ParseData;
+import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
@@ -12,7 +13,7 @@ public class ParseException extends Exception {
 	public static final int TYPE_UNEXPECTED_CHARACTER = 1;
 
 	private int position;
-	private ParseData parseData;
+	private ParsingResult parseData;
 
 	public ParseException (int type, PatternMatcher pattern, int position) {
 		this.position = position;
@@ -27,8 +28,8 @@ public class ParseException extends Exception {
 		this.position = position;
 	}
 
-	public void setParsingData (ParseData parsingData) {
-		this.parseData = parseData;
+	public void setParsingData (ParsingResult parsingData) {
+		this.parseData = parsingData;
 	}
 
 	public String getMessage() {

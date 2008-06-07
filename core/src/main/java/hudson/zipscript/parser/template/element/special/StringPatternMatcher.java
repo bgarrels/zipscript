@@ -1,12 +1,14 @@
 package hudson.zipscript.parser.template.element.special;
 
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 
 public class StringPatternMatcher extends AbstractPatternMatcher {
 
-	protected Element createElement(char[] startToken, String s) {
+	protected Element createElement(
+			char[] startToken, String s, ParsingSession session) {
 		return new TextElement(s);
 	}
 

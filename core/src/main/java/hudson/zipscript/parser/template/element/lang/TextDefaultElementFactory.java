@@ -1,11 +1,12 @@
 package hudson.zipscript.parser.template.element.lang;
 
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 
 public class TextDefaultElementFactory implements DefaultElementFactory {
 
-	public Element createDefaultElement(String text) {
+	public Element createDefaultElement(String text, ParsingSession session) {
 		TextElement element = new TextElement(text);
 		return element;
 	}

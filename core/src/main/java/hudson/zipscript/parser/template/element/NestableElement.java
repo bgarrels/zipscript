@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.HeaderElementList;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
@@ -33,7 +34,7 @@ public abstract class NestableElement extends AbstractDirective {
 		this.children = children;
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParseParameters parameters)
+	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 	throws ParseException {
 		int nestedIndex = 1;
 		Element element = null;
@@ -45,7 +46,7 @@ public abstract class NestableElement extends AbstractDirective {
 			else if (isEndElement(element)) {
 				nestedIndex --;
 				if (nestedIndex == 0) {
-					return endMatchFound(index, element, elementList, parameters);
+					return endMatchFound(index, element, elementList, session);
 				}
 			}
 		}
@@ -55,7 +56,7 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected ElementIndex endMatchFound (
-			int startIndex, Element endMatch, List elementList, ParseParameters parameters)
+			int startIndex, Element endMatch, List elementList, ParsingSession session)
 	throws ParseException {
 		List l = new ArrayList();
 		Element topLevelElement = null;
@@ -69,7 +70,7 @@ public abstract class NestableElement extends AbstractDirective {
 			}
 			if (isTopLevelElement(element)) {
 				if (null != topLevelElement) {
-					ElementNormalizer.normalize(l, parameters, false);
+					ElementNormalizer.normalize(l, session, false);
 					setTopLevelElements(new HeaderElementList(topLevelElement, l));
 				}
 				else {
@@ -89,7 +90,7 @@ public abstract class NestableElement extends AbstractDirective {
 					break;
 				}
 			}
-			ElementNormalizer.normalize(l, parameters, false);
+			ElementNormalizer.normalize(l, session, false);
 			if (null != topLevelElement) {
 				setTopLevelElements(
 						new HeaderElementList(topLevelElement, l));

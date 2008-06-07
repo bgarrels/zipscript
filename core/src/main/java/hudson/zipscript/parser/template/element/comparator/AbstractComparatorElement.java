@@ -5,6 +5,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
@@ -44,7 +45,7 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 			sw.append(rtn.toString());
 	}
 
-	public ElementIndex normalize(int index, List elements, ParseParameters parameters) throws ParseException {
+	public ElementIndex normalize(int index, List elements, ParsingSession session) throws ParseException {
 		if (elements.size() == 1) {
 			return null;
 		}
@@ -56,7 +57,7 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 		while (null == rhs || rhs instanceof WhitespaceElement) {
 			rhs = (Element) elements.remove(index);
 		}
-		ElementIndex ei = rhs.normalize(index, elements, parameters);
+		ElementIndex ei = rhs.normalize(index, elements, session);
 		if (null != ei)
 			rhs = ei.getElement();
 		setRightHandSide(rhs);
@@ -82,7 +83,7 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 					// reset the right side context
 					elements.add(j, getRightHandSide());
 					setRightHandSide((ComparatorElement) elements.remove(j+1));
-					ce.normalize(j+1, elements, parameters);
+					ce.normalize(j+1, elements, session);
 					break;
 				}
 			}

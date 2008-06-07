@@ -1,7 +1,7 @@
-package hudson.zipscript.parser.template.element.component;
+package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.component.Component;
 
 public class VariableComponent implements Component {
 

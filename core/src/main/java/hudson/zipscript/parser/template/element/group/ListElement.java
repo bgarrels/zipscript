@@ -10,6 +10,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
@@ -20,8 +21,8 @@ public class ListElement extends NestableElement {
 	private java.util.List listElements = new ArrayList();
 
 	public ElementIndex normalize(int index, List elementList,
-			ParseParameters parameters) throws ParseException {
-		ElementIndex rtn = super.normalize(index, elementList, parameters);
+			ParsingSession session) throws ParseException {
+		ElementIndex rtn = super.normalize(index, elementList, session);
 		// load the elements into a list
 		boolean waslastEntryComma = true;
 		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {

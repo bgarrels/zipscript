@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 
 import java.nio.CharBuffer;
 
@@ -32,17 +33,15 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 			char c = contents.get();
 			if (c == endMatchStart) {
 				// possible match
-				if (c == endMatchStart) {
-					nesting --;
-					if (nesting > 0) {
-						length ++;
-						continue;
-					}
+				nesting --;
+				if (nesting > 0) {
+					length ++;
+					continue;
 				}
 				if (contents.length() >= endChars.length-1) {
 					boolean match = true;
 					for (int i=1; i<endChars.length; i++) {
-						if (contents.charAt(i) != endChars[i])
+						if (contents.charAt(i-1) != endChars[i])
 							match = false;
 							break;
 					}
@@ -72,12 +71,13 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		}
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer contents) throws ParseException {
+	public Element match(
+			char previousChar, char[] startChars, CharBuffer contents, ParsingSession parseData) throws ParseException {
 		int position = contents.position();
 		char[] endChars = getEndChars();
 		int length = findMatch (contents, startChars, endChars, getInvalidChars(), true);
 		String s = read(contents, position, length, endChars.length);
-		Element rtn = createElement(startChars, s);
+		Element rtn = createElement(startChars, s, parseData);
 		rtn = onCreateElement (rtn, startChars, s, contents);
 		return rtn;
 	}
@@ -109,5 +109,6 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		return null;
 	}
 
-	protected abstract Element createElement (char[] startToken, String s) throws ParseException;
+	protected abstract Element createElement (
+			char[] startToken, String s, ParsingSession parseData) throws ParseException;
 }

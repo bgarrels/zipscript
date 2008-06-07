@@ -3,6 +3,7 @@ package hudson.zipscript.parser.util;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
@@ -11,12 +12,12 @@ import java.util.List;
 public class ElementNormalizer {
 
 	public static void normalize (
-			List elements, ParseParameters parameters, boolean topLevel) throws ParseException {
+			List elements, ParsingSession session, boolean topLevel) throws ParseException {
 		Element e = null;
 		ElementIndex ei = null;
 		for (int i=0; i<elements.size(); i++) {
 			e = (Element) elements.remove(i);
-			ei = e.normalize(i, elements, parameters);
+			ei = e.normalize(i, elements, session);
 			if (null == ei) {
 				elements.add(i, e);
 			}
@@ -26,7 +27,7 @@ public class ElementNormalizer {
 			}
 		}
 
-		if (parameters.cleanWhitespace) {
+		if (session.getParameters().cleanWhitespace) {
 			// remove white spaces
 			for (int i=0; i<elements.size(); i++) {
 				if (elements.get(i) instanceof WhitespaceElement) {
@@ -35,7 +36,7 @@ public class ElementNormalizer {
 				}
 			}
 		}
-		else if (parameters.trim) {
+		else if (session.getParameters().trim) {
 			trim(elements);
 		}
 	}

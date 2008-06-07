@@ -1,15 +1,14 @@
 package hudson.zipscript.parser.template.element.lang;
 
-import java.io.StringWriter;
-import java.util.List;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
-import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
-import hudson.zipscript.parser.template.element.special.SpecialElement;
+
+import java.io.StringWriter;
+import java.util.List;
 
 public class IdentifierElement extends AbstractElement {
 
@@ -25,7 +24,7 @@ public class IdentifierElement extends AbstractElement {
 	}
 
 	public ElementIndex normalize(int index, List elementList,
-			ParseParameters parameters) throws ParseException {
+			ParsingSession session) throws ParseException {
 		return null;
 	}
 

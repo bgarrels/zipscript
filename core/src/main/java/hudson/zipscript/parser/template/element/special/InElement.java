@@ -2,7 +2,7 @@ package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
-import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 
@@ -21,8 +21,8 @@ public class InElement extends IdentifierElement implements SpecialElement {
 		return "in";
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParseParameters parameters) throws ParseException {
-		return SpecialElementNormalizer.normalizeSpecialElement(this, index, elementList, parameters);
+	public ElementIndex normalize(int index, List elementList, ParsingSession session) throws ParseException {
+		return SpecialElementNormalizer.normalizeSpecialElement(this, index, elementList, session);
 	}
 
 	
