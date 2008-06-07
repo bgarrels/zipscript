@@ -1,3 +1,0 @@
-[#foreach foo in abc['def']]
-	test
-[/#foreach]

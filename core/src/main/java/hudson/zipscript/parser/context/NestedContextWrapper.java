@@ -6,7 +6,7 @@ import java.util.Iterator;
 public class NestedContextWrapper implements ZSContext {
 
 	private ZSContext context;
-	private HashMap map = new HashMap(8);
+	private HashMap map = new HashMap(4);
 
 	public NestedContextWrapper (ZSContext context) {
 		this.context = context;
@@ -28,5 +28,9 @@ public class NestedContextWrapper implements ZSContext {
 
 	public Object remove(String key) {
 		return map.remove(key);
+	}
+
+	public Object getSuper () {
+		return context;
 	}
 }
