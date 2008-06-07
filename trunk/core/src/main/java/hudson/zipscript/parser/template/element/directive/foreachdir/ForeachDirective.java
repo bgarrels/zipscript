@@ -5,6 +5,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
@@ -39,12 +40,12 @@ public class ForeachDirective extends NestableElement {
 	private String varName;
 	private VariableElement listElement;
 
-	public ForeachDirective (String contents) throws ParseException {
-		parseContents(contents);
+	public ForeachDirective (String contents, ParsingSession parseData) throws ParseException {
+		parseContents(contents, parseData);
 	}
 
-	private void parseContents (String contents) throws ParseException {
-		java.util.List elements = parseElements(contents);
+	private void parseContents (String contents, ParsingSession session) throws ParseException {
+		java.util.List elements = parseElements(contents, session);
 		try {
 			if (elements.get(0) instanceof SpecialStringElement) {
 				this.varName = ((SpecialStringElement) elements.get(0)).getTokenValue();
@@ -56,7 +57,7 @@ public class ForeachDirective extends NestableElement {
 			}
 			if (!(elements.remove(0) instanceof InElement))
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: 'in' should be second token");
-			this.listElement = new VariableElement(elements);
+			this.listElement = new VariableElement(elements, session);
 		}
 		catch (IndexOutOfBoundsException e) {
 			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: must have at least 3 tokens");

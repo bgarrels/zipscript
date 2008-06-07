@@ -1,8 +1,7 @@
-package hudson.zipscript.parser.template.element.component;
+package hudson.zipscript.parser.template.element.directive.whiledir;
 
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.directive.whiledir.EndWhilePatternMatcher;
-import hudson.zipscript.parser.template.element.directive.whiledir.WhilePatternMatcher;
+import hudson.zipscript.parser.template.element.component.Component;
 
 public class WhileComponent implements Component {
 

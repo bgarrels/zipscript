@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
@@ -19,7 +20,8 @@ public class BooleanPatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader)
+	public Element match(
+			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
 			throws ParseException {
 		if (startChars[0] == 't')
 			return new BooleanElement(true);

@@ -5,6 +5,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.LocaleUtil;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
@@ -86,10 +87,10 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 		return type;
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParseParameters parameters)
+	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 			throws ParseException {
 		return SpecialElementNormalizer.normalizeSpecialElement(
-				this, index, elementList, parameters);
+				this, index, elementList, session);
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {

@@ -1,8 +1,7 @@
-package hudson.zipscript.parser.template.element.component;
+package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.directive.macrodir.EndMacroPatternMatcher;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroPatternMatcher;
+import hudson.zipscript.parser.template.element.component.Component;
 
 public class MacroComponent implements Component {
 

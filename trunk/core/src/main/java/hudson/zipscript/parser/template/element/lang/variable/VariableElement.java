@@ -7,29 +7,18 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
 import hudson.zipscript.parser.template.element.group.GroupElement;
-import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapElement;
-import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
-import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.DotElement;
-import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
-import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
-import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
-import hudson.zipscript.parser.template.element.special.SpecialStringDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
-import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -43,26 +32,35 @@ public class VariableElement extends AbstractElement implements Element {
 	private List children;
 	private String originalContent;
 
-	public VariableElement (boolean silence, String pattern) throws ParseException {
+	public VariableElement (boolean silence, String pattern, ParsingSession session) throws ParseException {
 		this.silence = silence;
-		setPattern(pattern);
+		setPattern(pattern, session);
 	}
 
-	public VariableElement (List elements) throws ParseException {
-		this.children = parse(elements);
+	public VariableElement (List elements, ParsingSession session) throws ParseException {
+		this.children = parse(elements, session);
 	}
 
-	public void setPattern (String pattern) throws ParseException {
+	public void setPattern (String pattern, ParsingSession session) throws ParseException {
 		if (!silence)
 			originalContent = pattern;
 		pattern = pattern.trim();
 		if (null == this.children) this.children = new ArrayList();
 		this.children.clear();
 		if (!quickScan(pattern)) {
+			if (session.isVariablePatternRecognized(pattern)) {
+				// we'll be in a loop if we go in here...
+				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable syntax");
+			}
+			session.setReferencedVariable(pattern);
+			ParseParameters parameters = new ParseParameters(false, true);
+			ParseParameters currentParameters = session.getParameters();
+			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
 					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
-					new ParseParameters(false, true));
-			this.children = parse(elements);
+					session);
+			session.setParameters(currentParameters);
+			this.children = parse(elements, session);
 		}
 	}
 
@@ -70,7 +68,7 @@ public class VariableElement extends AbstractElement implements Element {
 	private boolean quickScan (String pattern) {
 		for (int i=0; i<pattern.length(); i++) {
 			char c = pattern.charAt(i);
-			if (!Character.isLetterOrDigit(c) && c!='_' && c!='-') return false;
+			if (!(Character.isLetterOrDigit(c) || c == '_' || c =='-')) return false;
 		}
 		this.children.add(new RootChild(pattern));
 		return true;
@@ -107,7 +105,7 @@ public class VariableElement extends AbstractElement implements Element {
 	}
 
 	public ElementIndex normalize(
-			int index, List elementList, ParseParameters parameters) throws ParseException {
+			int index, List elementList, ParsingSession session) throws ParseException {
 		return null;
 	}
 
@@ -130,7 +128,7 @@ public class VariableElement extends AbstractElement implements Element {
 		return sb.toString();
 	}
 
-	private List parse (List elements) throws ParseException {
+	private List parse (List elements, ParsingSession parseData) throws ParseException {
 		List children = new ArrayList();
 		if (elements.size() == 1) {
 			elements.add(0, new ElementWrapperChild((Element) elements.remove(0)));
@@ -192,7 +190,7 @@ public class VariableElement extends AbstractElement implements Element {
 					VariableChild child = (VariableChild) children.remove(children.size()-1);
 					if (null == child.getPropertyName())
 						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence '" + e.toString() + "'");
-					List parameters = getMethodParameters((GroupElement) e);
+					List parameters = getMethodParameters((GroupElement) e, parseData);
 					children.add(new MethodChild(child.getPropertyName(), parameters));
 				}
 				wasWhitespace = false;
@@ -203,7 +201,8 @@ public class VariableElement extends AbstractElement implements Element {
 					children.add(new MapChild((Element) me.getChildren().get(0)));
 				}
 				else {
-					children.add(new MapChild(new VariableElement(me.getChildren())));
+					children.add(new MapChild(
+							new VariableElement(me.getChildren(), parseData)));
 				}
 			}
 			else {
@@ -220,7 +219,7 @@ public class VariableElement extends AbstractElement implements Element {
 			children.add(new PropertyChild(s));
 	}
 
-	private List getMethodParameters (GroupElement ge) throws ParseException {
+	private List getMethodParameters (GroupElement ge, ParsingSession parseData) throws ParseException {
 		List parameters = new ArrayList();
 		List t = new ArrayList();
 		CommaElement lastSeparator = null;
@@ -228,7 +227,7 @@ public class VariableElement extends AbstractElement implements Element {
 		for (int i=0; i<ge.getChildren().size(); i++) {
 			Element e = (Element) ge.getChildren().get(i);
 			if (e instanceof CommaElement) {
-				Element mpe = getMethodParameterElement(t);
+				Element mpe = getMethodParameterElement(t, parseData);
 				if (null != mpe)
 					parameters.add(mpe);
 				t.clear();
@@ -249,26 +248,28 @@ public class VariableElement extends AbstractElement implements Element {
 		if (whitespaceOnly && null != lastSeparator)
 			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, lastSeparator, "Invalid sequence '" + lastSeparator.toString() + "'");
 		if (!whitespaceOnly) {
-			Element mpe = getMethodParameterElement(t);
+			Element mpe = getMethodParameterElement(t, parseData);
 			if (null != mpe)
 				parameters.add(mpe);
 		}
 		return parameters;
 	}
 
-	private Element getMethodParameterElement (List elements) throws ParseException {
+	private Element getMethodParameterElement (
+			List elements, ParsingSession parseData) throws ParseException {
 		if (null == elements || elements.size() == 0) return null;
 		if (elements.size() == 1) {
 			Element e = (Element) elements.get(0);
 			if (e instanceof SpecialStringElement) {
-				return new VariableElement(false, ((SpecialStringElement) e).getTokenValue());
+				return new VariableElement(
+						false, ((SpecialStringElement) e).getTokenValue(), parseData);
 			}
 			else {
 				return e;
 			}
 		}
 		else {
-			return new VariableElement(elements);
+			return new VariableElement(elements, parseData);
 		}
 	}
 }

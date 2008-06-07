@@ -4,6 +4,8 @@ import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.comparator.ComparatorPatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
 import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
@@ -62,10 +64,14 @@ public abstract class AbstractElement implements Element {
 				getContentParsingDefaultElementFactory());
 	}
 
-	protected List parseElements (String contents) throws ParseException {
-		return ExpressionParser.getInstance().parse(
+	protected List parseElements (String contents, ParsingSession session) throws ParseException {
+		ParseParameters oldParameters = session.getParameters();
+		session.setParameters(new ParseParameters(true, true));
+		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
-				new ParseParameters(true, true));
+				session);
+		session.setParameters(oldParameters);
+		return rtn;
 	}
 
 	protected PatternMatcher[] getContentParsingPatternMatchers () {

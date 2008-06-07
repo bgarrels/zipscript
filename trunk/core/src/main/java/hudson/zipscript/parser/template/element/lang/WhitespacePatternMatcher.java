@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
@@ -21,7 +22,8 @@ public class WhitespacePatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader)
+	public Element match(
+			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
 			throws ParseException {
 		return new WhitespaceElementImpl();
 	}

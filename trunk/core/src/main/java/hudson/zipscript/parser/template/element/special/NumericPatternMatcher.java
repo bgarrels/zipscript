@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.util.LocaleUtil;
@@ -42,7 +43,8 @@ public class NumericPatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader)
+	public Element match(
+			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
 			throws ParseException {
 		StringBuffer sb = new StringBuffer();
 		sb.append (startChars);

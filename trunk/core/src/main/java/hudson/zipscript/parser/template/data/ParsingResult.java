@@ -2,12 +2,12 @@ package hudson.zipscript.parser.template.data;
 
 import java.util.List;
 
-public class ParseData {
+public class ParsingResult {
 
 	private List elements;
 	private long[] lineBreaks;
 
-	public ParseData (List elements, long[] lineBreaks) {
+	public ParsingResult (List elements, long[] lineBreaks) {
 		this.elements = elements;
 		this.lineBreaks = lineBreaks;
 	}

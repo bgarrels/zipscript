@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.util;
 
 import hudson.zipscript.parser.template.data.ElementIndex;
-import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -12,7 +12,7 @@ import java.util.List;
 public class SpecialElementNormalizer {
 
 	public static ElementIndex normalizeSpecialElement (
-			SpecialElement element, int index, List elementList, ParseParameters parameters) {
+			SpecialElement element, int index, List elementList, ParsingSession session) {
 		StringBuffer text = new StringBuffer();
 		text.append(element.getTokenValue());
 		boolean appended = false;

@@ -1,7 +1,8 @@
 package hudson.zipscript.parser;
 
 import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.parser.template.data.ParseData;
+import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
@@ -24,22 +25,24 @@ public class ExpressionParser {
 	}
 	private ExpressionParser () {}
 
-	public ParseData parse (
+	public ParsingResult parse (
 			String contents, Component[] components, DefaultElementFactory defaultElementFactory)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(false, false);
+		ParsingSession session = new ParsingSession(parameters);
 		return parse(
 				CharBuffer.wrap(contents.toCharArray()),
 				getStartTokens(components),
-				defaultElementFactory, parameters);
+				defaultElementFactory, session);
 	}
 
 	public Element parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(true, true);
-		ParseData data = parse(
-				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, parameters);
+		ParsingSession session = new ParsingSession(parameters);
+		ParsingResult data = parse(
+				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session);
 		if (data.getElements().size() == 1)
 			return (Element) data.getElements().get(0);
 		else
@@ -49,15 +52,15 @@ public class ExpressionParser {
 
 	public List parse (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
-			ParseParameters parameters)
+			ParsingSession session)
 	throws ParseException {
-		ParseData data = parse(
-				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, parameters);
+		ParsingResult data = parse(
+				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session);
 		return data.getElements();
 	}
 
-	private ParseData parse (
-			CharBuffer buffer, StartTokenEntry[] startTokens, DefaultElementFactory defaultElementFactory, ParseParameters parameters) 
+	private ParsingResult parse (
+			CharBuffer buffer, StartTokenEntry[] startTokens, DefaultElementFactory defaultElementFactory, ParsingSession session) 
 	throws ParseException {
 		List elements = new ArrayList();
 		List lineBreaks = new ArrayList();
@@ -74,18 +77,19 @@ public class ExpressionParser {
 						// possible start token match
 						startTokenEntry = startTokens[i];
 						int position = buffer.position();
-						if (isMatch(buffer, startTokenEntry.startToken)) {
+						match = isMatch(buffer, startTokenEntry.startToken);
+						if (match) {
 							// we've got a start token match - remove remaining start tokens from buffer
 							for (int j=1; j<startTokenEntry.startToken.length; j++)
 								buffer.get();
 							Element e = startTokenEntry.patternMatcher.match(
-									previousChar, startTokenEntry.startToken, buffer);
+									previousChar, startTokenEntry.startToken, buffer, session);
 							
 							if (null != e) {
 								e.setElementPosition(position);
 								e.setElementLength((int) (buffer.position()-position));
 								unmatchedChars = recordUnmatchedChars(
-										unmatchedChars, elements, defaultElementFactory);
+										unmatchedChars, elements, session, defaultElementFactory);
 								elements.add(e);
 								match = true;
 
@@ -104,9 +108,9 @@ public class ExpressionParser {
 					unmatchedChars.append(c);
 				}
 			}
-			recordUnmatchedChars(unmatchedChars, elements, defaultElementFactory);
+			recordUnmatchedChars(unmatchedChars, elements, session, defaultElementFactory);
 	
-			ElementNormalizer.normalize(elements, parameters, true);
+			ElementNormalizer.normalize(elements, session, true);
 			return getParsingData(elements, lineBreaks);
 		}
 		catch (ParseException e) {
@@ -115,21 +119,21 @@ public class ExpressionParser {
 		}
 	}
 
-	private ParseData getParsingData (List elements, List lineBreaks) {
+	private ParsingResult getParsingData (List elements, List lineBreaks) {
 		long[] lineBreakArr = new long[lineBreaks.size()];
 		for (int i=0; i<lineBreaks.size(); i++)
 			lineBreakArr[i] = ((Long) lineBreaks.get(i)).longValue();
-		return new ParseData(elements, lineBreakArr);
+		return new ParsingResult(elements, lineBreakArr);
 	}
 
 	private StringBuffer recordUnmatchedChars (
-			StringBuffer sb, List elements, DefaultElementFactory factory)
+			StringBuffer sb, List elements, ParsingSession session, DefaultElementFactory factory)
 	throws ParseException {
 		// we've got an element match - record it
 		if (sb.length() > 0) {
 			// record any unmatched characters as an element
 			elements.add(factory.createDefaultElement(
-					sb.toString()));
+					sb.toString(), session));
 			return new StringBuffer();
 		}
 		else return sb;

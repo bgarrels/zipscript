@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element.comparator.math;
 import java.nio.CharBuffer;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
@@ -23,7 +24,7 @@ public class MathPatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader)
+	public Element match(char previousChar, char[] startChars, CharBuffer reader, ParsingSession parseData)
 			throws ParseException {
 		char c = startChars[0];
 		if (c == '+')
