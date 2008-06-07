@@ -22,7 +22,6 @@ public class VariableTestCase extends TestCase {
 		Map context = null;
 		
 		context = new HashMap();
-		String[] l1 = new String[] {"abc", "def", "ghi"};
 		context.put("myObject", new Obj1());
 		
 //		String contents = IOUtils.toString(getClass().getResourceAsStream(mergeTemplate));

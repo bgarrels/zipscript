@@ -1,24 +1,63 @@
 package hudson.zipscript.parser.template.element.group;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementIndex;
+import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.lang.CommaElement;
+import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
 public class ListElement extends NestableElement {
 
-	protected boolean isStartElement(hudson.zipscript.parser.template.element.Element e) {
-		return (e instanceof ListElement);
+	private java.util.List listElements = new ArrayList();
+
+	public ElementIndex normalize(int index, List elementList,
+			ParseParameters parameters) throws ParseException {
+		ElementIndex rtn = super.normalize(index, elementList, parameters);
+		// load the elements into a list
+		boolean waslastEntryComma = true;
+		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+			Element e = (Element) i.next();
+			if (e instanceof WhitespaceElement) continue;
+			if (waslastEntryComma) {
+				if (e instanceof CommaElement) {
+					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected Comma");
+				}
+				else {
+					waslastEntryComma = false;
+					listElements.add(e);
+				}
+			}
+			else {
+				if (!(e instanceof CommaElement))
+					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Expecting comma but found '" + e.toString() + "'");
+				else {
+					waslastEntryComma = true;
+				}
+			}
+		}
+		return rtn;
 	}
 
-	protected boolean isEndElement(Element e) {
-		return (e instanceof EndListElement);
+	public void merge(ZSContext context, StringWriter sw)
+			throws ExecutionException {
+		throw new ExecutionException("Lists can not be merged directly");
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
-		sw.append('{');
+	public Object objectValue(ZSContext context) throws ExecutionException {
+		List l = new ArrayList();
+		for (Iterator i=listElements.iterator(); i.hasNext(); ) {
+			l.add(((Element) i.next()).objectValue(context));
+		}
+		return l;
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
@@ -28,11 +67,12 @@ public class ListElement extends NestableElement {
 			throw new ExecutionException("lists can not be evaluated as booleans");
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
-		if (getChildren().size() == 1)
-			return ((Element) getChildren().get(0)).objectValue(context);
-		else
-			throw new ExecutionException("lists can not be evaluated as objects");
+	protected boolean isStartElement(hudson.zipscript.parser.template.element.Element e) {
+		return (e instanceof ListElement);
+	}
+
+	protected boolean isEndElement(Element e) {
+		return (e instanceof EndListElement);
 	}
 
 	public String toString() {

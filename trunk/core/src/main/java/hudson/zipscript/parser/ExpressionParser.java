@@ -37,7 +37,7 @@ public class ExpressionParser {
 	public Element parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory)
 	throws ParseException {
-		ParseParameters parameters = new ParseParameters(false, true);
+		ParseParameters parameters = new ParseParameters(true, true);
 		ParseData data = parse(
 				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, parameters);
 		if (data.getElements().size() == 1)

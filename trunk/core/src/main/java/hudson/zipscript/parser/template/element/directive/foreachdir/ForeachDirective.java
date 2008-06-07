@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.foreachdir;
 
+import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -7,11 +8,15 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.InElement;
+import hudson.zipscript.parser.template.element.special.InPatternMatcher;
+import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 
 import java.io.StringWriter;
 import java.util.Collection;
@@ -22,6 +27,14 @@ public class ForeachDirective extends NestableElement {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
+
+	private static PatternMatcher[] MATCHERS;
+	static {
+		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
+		MATCHERS = new PatternMatcher[matchers.length+1];
+		System.arraycopy(matchers, 0, MATCHERS, 1, matchers.length);
+		MATCHERS[0] = new InPatternMatcher();
+	}
 
 	private String varName;
 	private VariableElement listElement;
@@ -41,8 +54,6 @@ public class ForeachDirective extends NestableElement {
 				throw new ParseException(
 						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting variable name");
 			}
-			if (!(elements.remove(0) instanceof WhitespaceElement))
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting whitespace");
 			if (!(elements.remove(0) instanceof InElement))
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: 'in' should be second token");
 			this.listElement = new VariableElement(elements);
@@ -53,7 +64,7 @@ public class ForeachDirective extends NestableElement {
 	}
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
-		return SpecialStringDefaultEelementFactory.getInstance();
+		return SpecialVariableDefaultEelementFactory.getInstance();
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
@@ -124,6 +135,10 @@ public class ForeachDirective extends NestableElement {
 				throw new ExecutionException("List entry is not of a list nature");
 			}
 		}
+	}
+
+	protected PatternMatcher[] getContentParsingPatternMatchers() {
+		return MATCHERS;
 	}
 
 	protected boolean isStartElement(Element e) {
