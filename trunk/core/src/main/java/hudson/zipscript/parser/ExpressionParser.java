@@ -73,9 +73,9 @@ public class ExpressionParser {
 					if (c == startTokens[i].startToken[0]) {
 						// possible start token match
 						startTokenEntry = startTokens[i];
+						int position = buffer.position();
 						if (isMatch(buffer, startTokenEntry.startToken)) {
 							// we've got a start token match - remove remaining start tokens from buffer
-							long position = buffer.position()-1;
 							for (int j=1; j<startTokenEntry.startToken.length; j++)
 								buffer.get();
 							Element e = startTokenEntry.patternMatcher.match(
@@ -95,7 +95,7 @@ public class ExpressionParser {
 							}
 							else {
 								// remove start tokens that were read from the buffer
-								buffer.position(buffer.position()+1 - startTokenEntry.startToken.length);
+								buffer.position(position);
 							}
 						}
 					}

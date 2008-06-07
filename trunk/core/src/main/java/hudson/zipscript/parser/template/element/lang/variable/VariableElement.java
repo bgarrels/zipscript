@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
+import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -12,6 +13,8 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
 import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
+import hudson.zipscript.parser.template.element.group.MapElement;
+import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.DotElement;
@@ -39,19 +42,6 @@ public class VariableElement extends AbstractElement implements Element {
 	private List children;
 	private String originalContent;
 
-	private static PatternMatcher[] patternMatchers = new PatternMatcher[] {
-		new StringPatternMatcher(),
-		new VariablePatternMatcher(),
-		new DotPatternMatcher(),
-		new WhitespacePatternMatcher(),
-		new CommaPatternMatcher(),
-		new NumericPatternMatcher(),
-		new MathPatternMatcher(),
-		new BooleanPatternMatcher(),
-		new NullPatternMatcher(),
-		new GroupPatternMatcher()
-	};
-
 	public VariableElement (boolean silence, String pattern) throws ParseException {
 		this.silence = silence;
 		setPattern(pattern);
@@ -69,7 +59,7 @@ public class VariableElement extends AbstractElement implements Element {
 		this.children.clear();
 		if (!quickScan(pattern)) {
 			java.util.List elements = ExpressionParser.getInstance().parse(
-					pattern, patternMatchers, SpecialStringDefaultEelementFactory.getInstance(),
+					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialStringDefaultEelementFactory.getInstance(),
 					new ParseParameters(false, true));
 			this.children = parse(elements);
 		}
@@ -205,6 +195,15 @@ public class VariableElement extends AbstractElement implements Element {
 					children.add(new MethodChild(child.getPropertyName(), parameters));
 				}
 				wasWhitespace = false;
+			}
+			else if (e instanceof MapElement) {
+				MapElement me = (MapElement) e;
+				if (me.getChildren().size() == 1) {
+					children.add(new MapChild((Element) me.getChildren().get(0)));
+				}
+				else {
+					children.add(new MapChild(new VariableElement(me.getChildren())));
+				}
 			}
 			else {
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid element detected '" + e.toString() + "'");
