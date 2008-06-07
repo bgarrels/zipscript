@@ -20,6 +20,7 @@ import hudson.zipscript.parser.template.element.component.WhileComponent;
 import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
 import hudson.zipscript.parser.template.element.group.ListPatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
 import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
@@ -45,8 +46,10 @@ public class ZipEngine {
 	};
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
 			new VariablePatternMatcher(),
-			new StringPatternMatcher(),
+			new ListPatternMatcher(),
 			new NumericPatternMatcher(),
+			new CommaPatternMatcher(),
+			new StringPatternMatcher(),
 			new AndLogicPatternMatcher(),
 			new OrLogicPatternMatcher(),
 			new BooleanPatternMatcher(),
@@ -56,7 +59,6 @@ public class ZipEngine {
 			new GroupPatternMatcher(),
 			new WhitespacePatternMatcher(),
 			new MapPatternMatcher(),
-			new ListPatternMatcher(),
 			new DotPatternMatcher()
 	};
 	private static final DefaultElementFactory mergeElementFactory = new TextDefaultElementFactory();

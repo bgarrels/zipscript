@@ -29,6 +29,7 @@ public class MathTestCase extends TestCase {
 		assertEquals(new Double(5), eval(" num1 / num2 ", context));
 		assertEquals(new Double(5), eval("${num1}/${num2}", context));
 		assertEquals(new Double(5), eval(" ${num1} / ${num2} ", context));
+		assertEquals(new Integer(20), eval("${num1+10}", context));
 	}
 
 	private Object eval (String s)

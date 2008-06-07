@@ -28,6 +28,7 @@ import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 
 import java.io.StringWriter;
@@ -59,7 +60,7 @@ public class VariableElement extends AbstractElement implements Element {
 		this.children.clear();
 		if (!quickScan(pattern)) {
 			java.util.List elements = ExpressionParser.getInstance().parse(
-					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialStringDefaultEelementFactory.getInstance(),
+					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
 					new ParseParameters(false, true));
 			this.children = parse(elements);
 		}

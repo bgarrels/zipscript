@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element;
 
+import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
@@ -64,28 +65,11 @@ public abstract class AbstractElement implements Element {
 	protected List parseElements (String contents) throws ParseException {
 		return ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
-				new ParseParameters(false, true));
+				new ParseParameters(true, true));
 	}
 
-	private static PatternMatcher[] matchers = new PatternMatcher[] {
-		new BooleanPatternMatcher(),
-		new NullPatternMatcher(),
-		new InPatternMatcher(),
-		new StringPatternMatcher(),
-		new VariablePatternMatcher(),
-		new DotPatternMatcher(),
-		new WhitespacePatternMatcher(),
-		new NumericPatternMatcher(),
-		new CommaPatternMatcher(),
-		new NumericPatternMatcher(),
-		new MathPatternMatcher(),
-		new GroupPatternMatcher(),
-		new MapPatternMatcher(),
-		new AssignmentPatternMatcher(),
-		new ComparatorPatternMatcher(),
-	};
 	protected PatternMatcher[] getContentParsingPatternMatchers () {
-		return matchers;
+		return ZipEngine.VARIABLE_MATCHERS;
 	}
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory () {
