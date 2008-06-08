@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 
 public class DirectiveTestCase extends TestCase {
 
-	public void testForEach () throws Exception {
+	public void _testForEach () throws Exception {
 		String mergeTemplate = "/templates/foreach_test.zs";
 		String resultFile = "/templates/foreach_result.txt";
 		Map context = null;
@@ -39,13 +39,13 @@ public class DirectiveTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testWhile () throws Exception {
+	public void _testWhile () throws Exception {
 		String mergeTemplate = "/templates/while_test.zs";
 		String resultFile = "/templates/while_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
-	public void testIf () throws Exception {
+	public void _testIf () throws Exception {
 		String mergeTemplate = "/templates/if_test.zs";
 		String resultFile = "/templates/if_result.txt";
 		Map context = new HashMap();
@@ -53,6 +53,12 @@ public class DirectiveTestCase extends TestCase {
 		context.put("bar", "def");
 		context.put("baz", "ghi");
 		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void testMacro () throws Exception {
+		String mergeTemplate = "/templates/macro_test.zs";
+		String resultFile = "/templates/macro_result.txt";
+		evalResult(mergeTemplate, resultFile, null);
 	}
 
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
