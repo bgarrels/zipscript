@@ -8,7 +8,9 @@ public class MacroComponent implements Component {
 	public PatternMatcher[] getPatternMatchers() {
 		return new PatternMatcher[] {
 			new MacroPatternMatcher(),
-			new EndMacroPatternMatcher()
+			new EndMacroPatternMatcher(),
+			new MacroInstancePatternMatcher(),
+			new EndMacroInstancePatternMatcher()
 		};
 	}
 }
