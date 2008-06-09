@@ -1,8 +1,8 @@
 package hudson.zipscript.template;
 
-import java.io.StringWriter;
-
 import hudson.zipscript.parser.exception.ExecutionException;
+
+import java.io.StringWriter;
 
 public interface Template {
 

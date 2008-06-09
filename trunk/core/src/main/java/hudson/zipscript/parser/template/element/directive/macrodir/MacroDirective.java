@@ -18,8 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.xerces.internal.dom.AttributeMap;
-
 public class MacroDirective extends NestableElement {
 
 	private String contents;
@@ -59,6 +57,10 @@ public class MacroDirective extends NestableElement {
 			MacroAttribute attr = (MacroAttribute) i.next();
 			attributeMap.put(attr.getName(), attr);
 		}
+	}
+
+	public MacroAttribute getAttribute (String name) {
+		return (MacroAttribute) attributeMap.get(name);
 	}
 
 	protected MacroAttribute getAttribute(List elements, ParsingSession session)
@@ -144,7 +146,30 @@ public class MacroDirective extends NestableElement {
 				if (null != val) context.put(instAttribute.getName(), val);
 			}
 		}
-		context.put("nested", instance.getNestedContent(context));
+		context.put("nested", new MacroInstanceExecutor(instance, context));
+
+		// add template defined parameters
+		List tdp = new ArrayList();
+		appendMacroInstances(instance.getChildren(), context, tdp);
+		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
+			MacroInstanceEntity mie = (MacroInstanceEntity) i.next();
+			Object obj = context.get(mie.getMacroInstance().getName());
+			if (null == obj) {
+				context.put(mie.getMacroInstance().getName(), mie);
+			}
+			else if (obj instanceof List) {
+				((List) obj).add(mie);
+			}
+			else if (obj instanceof MacroInstanceEntity) {
+				List l = new ArrayList();
+				l.add(obj);
+				l.add(mie);
+				context.put(mie.getMacroInstance().getName(), l);
+			}
+			else {
+				context.put(mie.getMacroInstance().getName(), mie);
+			}
+		}
 
 		// execute macro
 		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
@@ -181,5 +206,9 @@ public class MacroDirective extends NestableElement {
 
 	public List getAttributes() {
 		return attributes;
+	}
+
+	public Map getAttributeMap() {
+		return attributeMap;
 	}
 }

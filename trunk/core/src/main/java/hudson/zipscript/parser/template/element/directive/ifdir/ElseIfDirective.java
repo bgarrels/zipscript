@@ -1,10 +1,10 @@
 package hudson.zipscript.parser.template.element.directive.ifdir;
 
-import java.io.StringWriter;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
+
+import java.io.StringWriter;
 
 public class ElseIfDirective extends NestableDirective {
 

@@ -1,20 +1,17 @@
 package hudson.zipscript.parser.template.element.directive.setdir;
 
-import java.io.StringWriter;
-import java.util.List;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
-import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
-import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
-import hudson.zipscript.parser.template.element.special.InElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+
+import java.io.StringWriter;
+import java.util.List;
 
 public class SetDirective extends AbstractDirective {
 

@@ -1,11 +1,11 @@
 package hudson.zipscript.parser.template.element.special;
 
-import java.nio.CharBuffer;
-
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
+
+import java.nio.CharBuffer;
 
 public abstract class WordPatternMatcher implements PatternMatcher {
 

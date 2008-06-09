@@ -1,12 +1,12 @@
 package hudson.zipscript.parser.template.element.special;
 
-import java.nio.CharBuffer;
-
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.TextElement;
+
+import java.nio.CharBuffer;
 
 public class StringPatternMatcher extends AbstractPatternMatcher {
 

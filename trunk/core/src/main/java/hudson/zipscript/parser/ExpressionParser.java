@@ -1,9 +1,9 @@
 package hudson.zipscript.parser;
 
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -13,8 +13,6 @@ import hudson.zipscript.parser.util.ElementNormalizer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import sun.security.pkcs.ParsingException;
 
 
 public class ExpressionParser {

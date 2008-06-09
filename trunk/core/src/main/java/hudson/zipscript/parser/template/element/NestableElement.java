@@ -5,9 +5,11 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.HeaderElementList;
-import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
 import java.io.StringWriter;
@@ -102,6 +104,20 @@ public abstract class NestableElement extends AbstractDirective {
 		}
 		else{
 			throw new ParseException(ParseException.TYPE_EOF, this, "No end element found");
+		}
+	}
+
+	protected void appendMacroInstances (
+			List children, ZSContext context, List macroInstanceList) {
+		for (Iterator j=children.iterator(); j.hasNext(); ) {
+			Element e = (Element) j.next();
+			if (e instanceof MacroInstanceDirective)
+				macroInstanceList.add(
+						new MacroInstanceEntity(
+								(MacroInstanceDirective) e, context));
+			else if (e instanceof MacroInstanceAware)
+				((MacroInstanceAware) e).getMacroInstances(
+						context, macroInstanceList);
 		}
 	}
 

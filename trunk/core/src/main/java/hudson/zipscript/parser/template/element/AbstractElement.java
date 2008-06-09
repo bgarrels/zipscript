@@ -4,25 +4,10 @@ import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
-import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.element.comparator.ComparatorPatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
-import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
-import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.AssignmentPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
-import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
 import hudson.zipscript.parser.template.element.special.DefaultVariablePatternMatcher;
-import hudson.zipscript.parser.template.element.special.InPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 
 import java.util.List;
 

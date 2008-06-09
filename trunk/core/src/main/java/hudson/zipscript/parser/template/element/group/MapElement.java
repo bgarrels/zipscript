@@ -1,11 +1,11 @@
 package hudson.zipscript.parser.template.element.group;
 
-import java.io.StringWriter;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+
+import java.io.StringWriter;
 
 public class MapElement extends NestableElement {
 

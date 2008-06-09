@@ -1,10 +1,10 @@
 package hudson.zipscript.parser.template.element.comparator.math;
 
-import java.math.BigDecimal;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.comparator.AbstractComparatorElement;
+
+import java.math.BigDecimal;
 
 public abstract class AbstractMathExpression extends AbstractComparatorElement {
 

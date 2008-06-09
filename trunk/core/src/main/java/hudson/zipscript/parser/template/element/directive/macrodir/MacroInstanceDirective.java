@@ -13,8 +13,10 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class MacroInstanceDirective extends NestableElement {
 
@@ -24,6 +26,7 @@ public class MacroInstanceDirective extends NestableElement {
 	private String name;
 	
 	List attributes = new ArrayList();
+	Map attributeMap;
 	MacroDirective macro;
 
 	public MacroInstanceDirective (String contents, boolean isFlat, ParsingSession session) throws ParseException {
@@ -51,16 +54,26 @@ public class MacroInstanceDirective extends NestableElement {
 		if (elements.size() != 0) {
 			if (elements.size() == 1)
 				isOrdinal = true;
-			else if (elements.get(1) instanceof AssignmentElement)
+			else if (elements.get(1) instanceof AssignmentElement) {
 				isOrdinal = false;
+				attributeMap = new HashMap();
+			}
 
 			// look for attributes
 			while (true) {
 				MacroAttribute attribute = getAttribute(elements, session);
 				if (null == attribute) break;
-				else this.attributes.add(attribute);
+				else {
+					this.attributes.add(attribute);
+					if (!isOrdinal) attributeMap.put(attribute.getName(), attribute);
+				}
 			}
 		}
+	}
+
+	public MacroAttribute getAttribute (String name) {
+		if (null == attributeMap) return null;
+		else return (MacroAttribute) attributeMap.get(name);
 	}
 
 	protected MacroAttribute getAttribute(List elements, ParsingSession session)
@@ -143,8 +156,28 @@ public class MacroInstanceDirective extends NestableElement {
 
 		// find macro in session
 		macro = session.getMacroDirective(getName());
-		if (null == macro)
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Undefined macro name '" + getName() + "'");
+		if (null == macro) {
+			// maybe a template defined parameter
+			boolean isTDP = false;
+			if (!isOrdinal) {
+				for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+					Element e = (Element) i.next();
+					if (e instanceof MacroInstanceDirective) {
+						MacroInstanceDirective directive = (MacroInstanceDirective) e;
+						MacroDirective macroDef = session.getMacroDirective(directive.getName());
+						if (null != macroDef) {
+							if (!directive.isOrdinal() && null != macroDef.getAttribute(getName())) {
+								isTDP = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (!isTDP) {
+				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Undefined macro name '" + getName() + "'");
+			}
+		}
 		return rtn;
 	}
 
@@ -178,6 +211,10 @@ public class MacroInstanceDirective extends NestableElement {
 		return sw.toString();
 	}
 
+	public MacroDirective getMacroDefinition () {
+		return macro;
+	}
+
 	public String getContents() {
 		return contents;
 	}
@@ -196,5 +233,9 @@ public class MacroInstanceDirective extends NestableElement {
 
 	public void setOrdinal(boolean isOrdinal) {
 		this.isOrdinal = isOrdinal;
+	}
+
+	public boolean isFlat() {
+		return isFlat;
 	}
 }

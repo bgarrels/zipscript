@@ -4,12 +4,14 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class ParsingSession {
 
 	private ParseParameters parameters;
 	private Map unknownVariablePatterns;
 	private Map inlineMacroDefinitions;
+	private Stack nestingStack;
 
 	public ParsingSession (ParseParameters parameters) {
 		this.parameters = parameters;
@@ -44,5 +46,10 @@ public class ParsingSession {
 	public MacroDirective getMacroDirective (String name) {
 		if (null == inlineMacroDefinitions) return null;
 		else return (MacroDirective) inlineMacroDefinitions.get(name);
+	}
+
+	public Stack getNestingStack() {
+		if (null == nestingStack) nestingStack = new Stack();
+		return nestingStack;
 	}
 }
