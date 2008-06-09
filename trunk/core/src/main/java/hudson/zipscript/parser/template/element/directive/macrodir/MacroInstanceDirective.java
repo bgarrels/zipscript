@@ -163,14 +163,11 @@ public class MacroInstanceDirective extends NestableElement {
 				for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
 					Element e = (Element) i.next();
 					if (e instanceof MacroInstanceDirective) {
-						MacroInstanceDirective directive = (MacroInstanceDirective) e;
-						MacroDirective macroDef = session.getMacroDirective(directive.getName());
-						if (null != macroDef) {
-							if (!directive.isOrdinal() && null != macroDef.getAttribute(getName())) {
-								isTDP = true;
-								break;
-							}
-						}
+						// assume that maybe this is a TDP
+						// this issue with this is that it will show up as an execution error
+						// as opposed to a parsing error
+						isTDP = true;
+						break;
 					}
 				}
 			}
