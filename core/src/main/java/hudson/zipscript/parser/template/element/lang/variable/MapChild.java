@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.MethodUtils;
-
 public class MapChild implements VariableChild {
 
 	private static final int TYPE_MAP = 1;

@@ -2,7 +2,6 @@ package hudson.zipscript.parser.exception;
 
 import hudson.zipscript.parser.template.data.LinePosition;
 import hudson.zipscript.parser.template.data.ParsingResult;
-import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 

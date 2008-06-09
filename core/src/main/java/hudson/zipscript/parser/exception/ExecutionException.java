@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.exception;
 
-public class ExecutionException extends Exception {
+public class ExecutionException extends RuntimeException {
 
 	public ExecutionException() {
 		// TODO Auto-generated constructor stub

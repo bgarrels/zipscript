@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.element.directive.foreachdir;
 
 import hudson.zipscript.ZipEngine;
-import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
+import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -10,12 +10,10 @@ import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.InElement;
 import hudson.zipscript.parser.template.element.special.InPatternMatcher;
-import hudson.zipscript.parser.template.element.special.SpecialElement;
-import hudson.zipscript.parser.template.element.special.SpecialStringDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 
@@ -23,8 +21,9 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 
-public class ForeachDirective extends NestableElement {
+public class ForeachDirective extends NestableElement implements MacroInstanceAware {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
@@ -66,6 +65,83 @@ public class ForeachDirective extends NestableElement {
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
 		return SpecialVariableDefaultEelementFactory.getInstance();
+	}
+
+
+
+	public void getMacroInstances(ZSContext context, List macroInstanceList) {
+		Object list = listElement.objectValue(context);
+		if (null != list) {
+			if (list instanceof Object[]) {
+				Object[] arr = (Object[]) list;
+				if (arr.length > 0) {
+					int i=0;
+					context = new NestedContextWrapper(context);
+					context.put(TOKEN_INDEX, new Integer(0));
+					int checkNum = arr.length-1;
+					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					while (i<arr.length) {
+						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						context.put(varName, arr[i]);
+						appendMacroInstances(getChildren(), context, macroInstanceList);
+						context.put(TOKEN_INDEX, new Integer(++i));
+					}
+				}
+			}
+			else if (list instanceof Collection) {
+				Collection c = (Collection) list;
+				if (c.size() > 0) {
+					int i=0;
+					context = new NestedContextWrapper(context);
+					context.put(TOKEN_INDEX, new Integer(0));
+					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
+						context.put(varName, iter.next());
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						appendMacroInstances(getChildren(), context, macroInstanceList);
+						context.put(TOKEN_INDEX, new Integer(++i));
+					}
+				}
+			}
+			else if (list instanceof Iterator) {
+				Iterator iter = (Iterator) list;
+				if (iter.hasNext()) {
+					int i=0;
+					context = new NestedContextWrapper(context);
+					context.put(TOKEN_INDEX, new Integer(0));
+					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					while (iter.hasNext()) {
+						context.put(varName, iter.next());
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						appendMacroInstances(getChildren(), context, macroInstanceList);
+						context.put(TOKEN_INDEX, new Integer(++i));
+					}
+				}
+			}
+			else if (list instanceof Enumeration) {
+				Enumeration enum = (Enumeration) list;
+				if (enum.hasMoreElements()) {
+					int i=0;
+					context = new NestedContextWrapper(context);
+					context.put(TOKEN_INDEX, new Integer(0));
+					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					while (enum.hasMoreElements()) {
+						context.put(varName, enum.nextElement());
+						if (enum.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						appendMacroInstances(getChildren(), context, macroInstanceList);
+						context.put(TOKEN_INDEX, new Integer(++i));
+					}
+				}
+			}
+			else {
+				// just put the object in the context and loop 1 time
+				context = new NestedContextWrapper(context);
+				context.put(TOKEN_INDEX, new Integer(0));
+				context.put(TOKEN_HASNEXT, Boolean.FALSE);
+				context.put(varName, list);
+				appendMacroInstances(getChildren(), context, macroInstanceList);
+			}
+		}
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
@@ -133,7 +209,12 @@ public class ForeachDirective extends NestableElement {
 				}
 			}
 			else {
-				throw new ExecutionException("List entry is not of a list nature");
+				// just put the object in the context and loop 1 time
+				context = new NestedContextWrapper(context);
+				context.put(TOKEN_INDEX, new Integer(0));
+				context.put(TOKEN_HASNEXT, Boolean.FALSE);
+				context.put(varName, list);
+				appendElements(getChildren(), context, sw);
 			}
 		}
 	}

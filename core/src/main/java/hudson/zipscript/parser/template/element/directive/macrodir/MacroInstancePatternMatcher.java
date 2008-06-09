@@ -1,12 +1,11 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import java.nio.CharBuffer;
-
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.directive.AbstractDirectivePatternMatcher;
+
+import java.nio.CharBuffer;
 
 
 public class MacroInstancePatternMatcher implements PatternMatcher {
