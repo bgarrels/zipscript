@@ -8,8 +8,9 @@ import hudson.zipscript.parser.template.element.directive.AbstractDirectivePatte
 
 public class WhilePatternMatcher extends AbstractDirectivePatternMatcher {
 
-	protected Element createElement(char[] startToken, String s, ParsingSession parseData) throws ParseException {
-		return new WhileDirective(s);
+	protected Element createElement(
+			char[] startToken, String s, int contentIndex, ParsingSession parseData) throws ParseException {
+		return new WhileDirective(s, contentIndex);
 	}
 
 	protected String getDirectiveName() {

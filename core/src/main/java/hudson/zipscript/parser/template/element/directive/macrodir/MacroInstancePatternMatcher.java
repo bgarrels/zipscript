@@ -51,7 +51,7 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 						}
 					}
 					return new MacroInstanceDirective(
-							sb.toString(), isFlat, session);
+							sb.toString(), isFlat, session, reader.position());
 				}
 			}
 			else if (c == '\\') {

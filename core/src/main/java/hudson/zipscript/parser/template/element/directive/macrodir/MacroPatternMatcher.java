@@ -9,9 +9,9 @@ import hudson.zipscript.parser.template.element.directive.AbstractDirectivePatte
 public class MacroPatternMatcher extends AbstractDirectivePatternMatcher {
 
 	protected Element createElement(
-			char[] startToken, String s, ParsingSession session)
+			char[] startToken, String s, int contentIndex, ParsingSession session)
 	throws ParseException {
-		return new MacroDirective(s, session);
+		return new MacroDirective(s, session, contentIndex);
 	}
 
 	protected String getDirectiveName() {

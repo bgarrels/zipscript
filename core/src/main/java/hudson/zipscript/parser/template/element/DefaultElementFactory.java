@@ -6,7 +6,8 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 
 public interface DefaultElementFactory {
 
-	public Element createDefaultElement (String text, ParsingSession session) throws ParseException;
+	public Element createDefaultElement (
+			String text, ParsingSession session, int contentPosition) throws ParseException;
 
 	public boolean doAppend(char c);
 }

@@ -19,6 +19,6 @@ public class EndForeachDirective extends NestableDirective {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		throw new ExecutionException("Invalid foreach directive");
+		throw new ExecutionException("Invalid foreach directive", this);
 	}
 }

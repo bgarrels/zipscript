@@ -19,6 +19,6 @@ public class EndIfDirective extends NestableDirective {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		throw new ExecutionException("Invalid if directive");
+		throw new ExecutionException("Invalid if directive", this);
 	}
 }

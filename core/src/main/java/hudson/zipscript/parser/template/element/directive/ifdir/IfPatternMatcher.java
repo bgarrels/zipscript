@@ -8,8 +8,9 @@ import hudson.zipscript.parser.template.element.directive.AbstractDirectivePatte
 
 public class IfPatternMatcher extends AbstractDirectivePatternMatcher {
 
-	protected Element createElement(char[] startToken, String s, ParsingSession parseData) throws ParseException {
-		return new IfDirective(s);
+	protected Element createElement(
+			char[] startToken, String s, int contentIndex, ParsingSession parseData) throws ParseException {
+		return new IfDirective(s, contentIndex);
 	}
 
 	protected String getDirectiveName() {

@@ -25,14 +25,14 @@ public class MapElement extends NestableElement {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as booleans");
+			throw new ExecutionException("groups can not be evaluated as booleans", this);
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).objectValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as objects");
+			throw new ExecutionException("groups can not be evaluated as objects", this);
 	}
 
 	public String toString() {

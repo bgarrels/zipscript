@@ -34,7 +34,7 @@ public class MapChild implements VariableChild {
 			else if (parent instanceof Collection)
 				type = TYPE_COLLECTION;
 			else
-				throw new ExecutionException("Unmappable type");
+				throw new ExecutionException("Unmappable type", keyElement);
 		}
 		Object key = keyElement.objectValue(context);
 		if (type == TYPE_MAP) {
@@ -42,7 +42,7 @@ public class MapChild implements VariableChild {
 		}
 		int index = 0;
 		if (!(key instanceof Number))
-			throw new ExecutionException("Invalid type key");
+			throw new ExecutionException("Invalid type key", keyElement);
 		else
 			index = ((Number) key).intValue();
 		if (type == TYPE_ARRAY) {

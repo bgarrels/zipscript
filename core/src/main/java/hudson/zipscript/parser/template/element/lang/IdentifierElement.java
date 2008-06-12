@@ -16,11 +16,11 @@ public class IdentifierElement extends AbstractElement {
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("identifiers can not be evaluated as booleans");
+		throw new ExecutionException("identifiers can not be evaluated as booleans", this);
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("identifiers can not be evaluated as objects");
+		throw new ExecutionException("identifiers can not be evaluated as objects", this);
 	}
 
 	public ElementIndex normalize(int index, List elementList,

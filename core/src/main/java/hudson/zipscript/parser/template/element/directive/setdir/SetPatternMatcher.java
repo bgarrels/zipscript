@@ -7,9 +7,10 @@ import hudson.zipscript.parser.template.element.directive.AbstractDirectivePatte
 
 public class SetPatternMatcher extends AbstractDirectivePatternMatcher {
 
-	protected Element createElement(char[] startToken, String s, ParsingSession session)
+	protected Element createElement(
+			char[] startToken, String s, int contentPosition, ParsingSession session)
 			throws ParseException {
-		return new SetDirective(s, session);
+		return new SetDirective(s, session, contentPosition);
 	}
 
 	protected char[] getEndChars() {

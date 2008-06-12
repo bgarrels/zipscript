@@ -13,16 +13,11 @@ public abstract class AbstractDirective extends AbstractElement implements Direc
 	private Stack elementStack;
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("Directives are only applicable for template parsing");
+		throw new ExecutionException("Directives are only applicable for template parsing", this);
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("Directives are only applicable for template parsing");
-	}
-
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+		throw new ExecutionException("Directives are only applicable for template parsing", this);
 	}
 
 	public Stack getElementStack() {

@@ -26,14 +26,14 @@ public class MacroDirective extends NestableElement {
 	private Map attributeMap = new HashMap();
 	
 
-	public MacroDirective (String contents, ParsingSession session) throws ParseException {
+	public MacroDirective (String contents, ParsingSession session, int contentPosition) throws ParseException {
 		this.contents = contents;
-		parseContents(contents, session);
+		parseContents(contents, session, contentPosition);
 		session.addInlineMacroDefinition(this);
 	}
 
-	protected void parseContents (String contents, ParsingSession session) throws ParseException {
-		java.util.List elements = parseElements(contents, session);
+	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+		java.util.List elements = parseElements(contents, session, contentPosition);
 		if (elements.size() == 0)
 			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Macro name was not specified");
 		Element e;
@@ -115,14 +115,15 @@ public class MacroDirective extends NestableElement {
 	}
 
 	public void executeMacro (
-			ZSContext context, MacroInstanceDirective instance, StringWriter sw)
+			ZSContext context, boolean isOrdinal, List attributes,
+			MacroInstanceExecutor nestedContent, StringWriter sw)
 	throws ExecutionException {
 		context = new NestedContextWrapper(context);
 		// add attributes to context
-		if (instance.isOrdinal()) {
-			for (int i=0; i<instance.getAttributes().size(); i++) {
+		if (isOrdinal) {
+			for (int i=0; i<attributes.size(); i++) {
 				MacroAttribute defAttribute = (MacroAttribute) getAttributes().get(i);
-				MacroAttribute instAttribute = (MacroAttribute) instance.getAttributes().get(i);
+				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
 				Object val = instAttribute.getDefaultValue().objectValue(context);
 				if (null == val) {
 					
@@ -134,8 +135,8 @@ public class MacroDirective extends NestableElement {
 			}
 		}
 		else {
-			for (int i=0; i<instance.getAttributes().size(); i++) {
-				MacroAttribute instAttribute = (MacroAttribute) instance.getAttributes().get(i);
+			for (int i=0; i<attributes.size(); i++) {
+				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
 				Object val = instAttribute.getDefaultValue().objectValue(context);
 				if (null == val) {
 					MacroAttribute defAttribute = (MacroAttribute) attributeMap.get(instAttribute.getName());
@@ -146,11 +147,12 @@ public class MacroDirective extends NestableElement {
 				if (null != val) context.put(instAttribute.getName(), val);
 			}
 		}
-		context.put("nested", new MacroInstanceExecutor(instance, context));
+		
+		context.put("nested", nestedContent);
 
 		// add template defined parameters
 		List tdp = new ArrayList();
-		appendMacroInstances(instance.getChildren(), context, tdp);
+		appendMacroInstances(nestedContent.getChildren(), context, tdp);
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 			MacroInstanceEntity mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(mie.getMacroInstance().getName());

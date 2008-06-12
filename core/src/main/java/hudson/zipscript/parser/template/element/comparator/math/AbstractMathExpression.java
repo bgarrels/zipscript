@@ -18,7 +18,7 @@ public abstract class AbstractMathExpression extends AbstractComparatorElement {
 		if (null == lhs) return rhs;
 		if (null == rhs) return lhs;
 		if (!(lhs instanceof Number) || !(rhs instanceof Number)) {
-			throw new ExecutionException("Invalid math operator value");
+			throw new ExecutionException("Invalid math operator value", this);
 		}
 		return performOperation ((Number) lhs, (Number) rhs);
 	}

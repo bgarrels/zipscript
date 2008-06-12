@@ -13,11 +13,11 @@ public class EndGroupElement extends NestableDirective {
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("groups can not be evaluated as booleans");
+		throw new ExecutionException("groups can not be evaluated as booleans", this);
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("groups can not be evaluated as objects");
+		throw new ExecutionException("groups can not be evaluated as objects", this);
 	}
 
 	public String toString() {

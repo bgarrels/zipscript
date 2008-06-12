@@ -43,18 +43,18 @@ public abstract class AbstractElement implements Element {
 		this.elementLength = elementLength;
 	}
 
-	protected Element parseElement (String contents) throws ParseException {
+	protected Element parseElement (String contents, int startPosition) throws ParseException {
 		return ExpressionParser.getInstance().parseToElement(
 				contents, getContentParsingPatternMatchers(),
-				getContentParsingDefaultElementFactory());
+				getContentParsingDefaultElementFactory(), startPosition);
 	}
 
-	protected List parseElements (String contents, ParsingSession session) throws ParseException {
+	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {
 		ParseParameters oldParameters = session.getParameters();
 		session.setParameters(new ParseParameters(true, true));
 		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
-				session).getElements();
+				session, startPosition).getElements();
 		session.setParameters(oldParameters);
 		return rtn;
 	}

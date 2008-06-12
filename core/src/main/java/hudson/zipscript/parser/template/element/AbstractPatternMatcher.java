@@ -8,7 +8,6 @@ import java.nio.CharBuffer;
 
 public abstract class AbstractPatternMatcher implements PatternMatcher {
 
-
 	protected String read (
 			CharBuffer contents, int position, int length, int endCharLength) {
 		contents.position(position);
@@ -77,13 +76,13 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		char[] endChars = getEndChars();
 		int length = findMatch (contents, startChars, endChars, getInvalidChars(), true);
 		String s = read(contents, position, length, endChars.length);
-		Element rtn = createElement(startChars, s, parseData);
-		rtn = onCreateElement (rtn, startChars, s, contents);
+		Element rtn = createElement(startChars, s, position, parseData);
+		rtn = onCreateElement (rtn, startChars, s, position, contents);
 		return rtn;
 	}
 
 	protected Element onCreateElement (
-			Element element, char[] startChars, String contents, CharBuffer  buffer) {
+			Element element, char[] startChars, String contents, int contentStartPosition, CharBuffer  buffer) {
 		return element;
 	}
 
@@ -110,5 +109,5 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 	}
 
 	protected abstract Element createElement (
-			char[] startToken, String s, ParsingSession parseData) throws ParseException;
+			char[] startToken, String s, int contentStartPosition, ParsingSession parseData) throws ParseException;
 }

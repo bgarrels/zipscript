@@ -1,23 +1,36 @@
 package hudson.zipscript.parser.exception;
 
+import hudson.zipscript.parser.template.data.LinePosition;
+import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.element.Element;
+
 public class ExecutionException extends RuntimeException {
 
-	public ExecutionException() {
-		// TODO Auto-generated constructor stub
-	}
+	private Element element;
+	ParsingResult parsingResult;
 
-	public ExecutionException(String message) {
+	public ExecutionException(
+			String message, Element element) {
 		super(message);
-		// TODO Auto-generated constructor stub
+		this.element = element;
 	}
 
-	public ExecutionException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
+	public ExecutionException(
+			String message, Element element, Exception thrownException) {
+		super(message, thrownException);
+		this.element = element;
 	}
 
-	public ExecutionException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
+	public void setParsingResult (ParsingResult parsingResult) {
+		this.parsingResult = parsingResult;
+	}
+
+	public String getMessage() {
+		if (null == parsingResult)
+			return super.getMessage();
+		else {
+			LinePosition lp = parsingResult.getLinePosition(element.getElementPosition());
+			return "(line " + lp.line + ", position " + lp.position + ") " + super.getMessage();
+		}
 	}
 }

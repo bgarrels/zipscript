@@ -18,12 +18,12 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	public static final int MAX_LOOPS = 5000;
 	public Element whileElement;
 
-	public WhileDirective (String contents) throws ParseException {
-		parseContents(contents);
+	public WhileDirective (String contents, int contentIndex) throws ParseException {
+		parseContents(contents, contentIndex);
 	}
 
-	private void parseContents (String s) throws ParseException {
-		whileElement = parseElement(s);
+	private void parseContents (String s, int contentIndex) throws ParseException {
+		whileElement = parseElement(s, contentIndex);
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
@@ -32,7 +32,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
 			if (i > MAX_LOOPS)
-				throw new ExecutionException("Max loops limit reached");
+				throw new ExecutionException("Max loops limit reached", this);
 			appendElements(getChildren(), context, sw);
 			context.put(TOKEN_INDEX, new Integer(++i));
 		}
@@ -45,7 +45,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
 			if (i > MAX_LOOPS)
-				throw new ExecutionException("Max loops limit reached");
+				throw new ExecutionException("Max loops limit reached", this);
 			appendMacroInstances(getChildren(), context, macroInstanceList);
 			context.put(TOKEN_INDEX, new Integer(++i));
 		}

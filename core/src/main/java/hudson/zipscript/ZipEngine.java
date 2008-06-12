@@ -108,7 +108,7 @@ public class ZipEngine {
 		String s = configuration.getString("templateResourceLoader.class");
 		if (null != s) {
 			try {
-				this.templateResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader");
+				this.templateResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
 			}
 			catch (ClassCastException e) {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
@@ -117,7 +117,7 @@ public class ZipEngine {
 		s = configuration.getString("evalResourceLoader.class");
 		if (null != s) {
 			try {
-				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader");
+				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
 			}
 			catch (ClassCastException e) {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
@@ -143,7 +143,7 @@ public class ZipEngine {
 
 	public EvaluationTemplate getTemplateForEvaluation (String contents) throws ParseException {
 		Element element = ExpressionParser.getInstance().parseToElement(
-				contents, VARIABLE_MATCHERS, evalElementFactory);
+				contents, VARIABLE_MATCHERS, evalElementFactory, 0);
 		return new TemplateImpl(element);
 	}
 
@@ -155,16 +155,15 @@ public class ZipEngine {
 		ParsingResult pr = null;
 		if (null != components) {
 			pr = ExpressionParser.getInstance().parse(
-					contents, components, mergeElementFactory);
+					contents, components, mergeElementFactory, 0);
 		}
 		else {
 			pr = ExpressionParser.getInstance().parse(
 					contents, patternMatchers, mergeElementFactory,
-					new ParsingSession(parseParameters));
+					new ParsingSession(parseParameters), 0);
 		}
 		return new TemplateResource(
-				new TemplateImpl(pr.getElements(), pr.getParsingSession()),
-				resource);
+				new TemplateImpl(pr.getElements(), pr.getParsingSession(), pr), resource);
 	}
 
 	protected Template loadTemplateForEvaluation (
@@ -175,11 +174,11 @@ public class ZipEngine {
 		Element element = null;
 		if (null != components) {
 			element = ExpressionParser.getInstance().parseToElement(
-					contents, components, mergeElementFactory);
+					contents, components, mergeElementFactory, 0);
 		}
 		else {
 			element = ExpressionParser.getInstance().parseToElement(
-					source, patternMatchers, mergeElementFactory);
+					source, patternMatchers, mergeElementFactory, 0);
 		}
 		return new TemplateImpl(element);
 	}

@@ -23,7 +23,7 @@ public class EndMacroInstanceDirective extends NestableDirective {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		throw new ExecutionException("Invalid macro directive");
+		throw new ExecutionException("Invalid macro directive", this);
 	}
 
 	public ElementIndex normalize(int index, List elementList,

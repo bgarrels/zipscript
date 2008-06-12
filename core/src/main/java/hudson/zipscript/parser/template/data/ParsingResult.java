@@ -22,7 +22,7 @@ public class ParsingResult {
 		return lineBreaks;
 	}
 
-	public LinePosition getLinePosition (int position) {
+	public LinePosition getLinePosition (long position) {
 		int lineCount = 0;
 		long lineBreakPosition = 0;
 		for (int i=0; lineBreaks.length > i; i++) {

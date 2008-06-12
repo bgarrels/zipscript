@@ -17,7 +17,7 @@ public class IOUtil {
 		    return out.toString();
 		}
 		catch (IOException e) {
-			throw new ExecutionException("Error reading input stream", e);
+			throw new ExecutionException("Error reading input stream", null);
 		}
 	}
 }

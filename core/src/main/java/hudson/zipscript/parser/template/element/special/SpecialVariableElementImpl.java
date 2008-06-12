@@ -10,8 +10,9 @@ import java.util.List;
 
 public class SpecialVariableElementImpl extends VariableElement implements SpecialStringElement {
 
-	public SpecialVariableElementImpl(boolean silence, String text, ParsingSession session) throws ParseException {
-		super(silence, text, session);
+	public SpecialVariableElementImpl(
+			boolean silence, String text, ParsingSession session, int contentPosition) throws ParseException {
+		super(silence, text, session, contentPosition);
 	}
 
 	public ElementIndex normalize(
@@ -33,7 +34,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 			}
 		}
 		if (null != pattern)
-			setPattern(pattern.toString(), session);
+			setPattern(pattern.toString(), session, 0);
 		return null;
 	}
 

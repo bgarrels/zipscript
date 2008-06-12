@@ -24,19 +24,20 @@ public class MacroInstanceDirective extends NestableElement {
 	private boolean isOrdinal = true;
 	private String contents;
 	private String name;
-	
+
 	List attributes = new ArrayList();
 	Map attributeMap;
 	MacroDirective macro;
 
-	public MacroInstanceDirective (String contents, boolean isFlat, ParsingSession session) throws ParseException {
+	public MacroInstanceDirective (
+			String contents, boolean isFlat, ParsingSession session, int contentPosition) throws ParseException {
 		this.contents = contents;
 		this.isFlat = isFlat;
-		parseContents(contents, session);
+		parseContents(contents, session, contentPosition);
 	}
 
-	protected void parseContents (String contents, ParsingSession session) throws ParseException {
-		java.util.List elements = parseElements(contents, session);
+	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+		java.util.List elements = parseElements(contents, session, contentPosition);
 		if (elements.size() == 0)
 			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Macro name was not specified");
 		Element e;
@@ -131,7 +132,8 @@ public class MacroInstanceDirective extends NestableElement {
 				}
 			}
 			else {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Missing macro reference attribute value");
+				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this,
+						"Missing macro value for '" + name + "' in " + this.toString());
 			}
 		}
 	}
@@ -159,7 +161,7 @@ public class MacroInstanceDirective extends NestableElement {
 		if (null == macro) {
 			// maybe a template defined parameter
 			boolean isTDP = false;
-			if (!isOrdinal) {
+			if (!isOrdinal || this.getAttributes().size() == 0) {
 				for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
 					Element e = (Element) i.next();
 					if (e instanceof MacroInstanceDirective) {
@@ -170,6 +172,9 @@ public class MacroInstanceDirective extends NestableElement {
 						break;
 					}
 				}
+			}
+			else  {
+				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "The template defined parameter '" + getName() + "' can have only named parameters");
 			}
 			if (!isTDP) {
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Undefined macro name '" + getName() + "'");
@@ -193,11 +198,13 @@ public class MacroInstanceDirective extends NestableElement {
 	}
 
 	public String toString() {
-		return "[#macro " + contents + "]";
+		return "[@" + contents + "]";
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		macro.executeMacro(context, this, sw);
+		macro.executeMacro(
+				context, isOrdinal(), getAttributes(), new MacroInstanceExecutor(
+						this, context), sw);
 	}
 
 	public String getNestedContent (ZSContext context) throws ExecutionException {

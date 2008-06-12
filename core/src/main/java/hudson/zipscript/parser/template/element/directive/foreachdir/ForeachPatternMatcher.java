@@ -12,8 +12,9 @@ public class ForeachPatternMatcher extends AbstractDirectivePatternMatcher {
 	private String varName;
 	private VariableElement listValue;
 
-	protected Element createElement(char[] startToken, String s, ParsingSession parseData) throws ParseException {
-		return new ForeachDirective(s, parseData);
+	protected Element createElement(
+			char[] startToken, String s, int contentPosition, ParsingSession parseData) throws ParseException {
+		return new ForeachDirective(s, parseData, contentPosition);
 	}
 
 	protected String getDirectiveName() {

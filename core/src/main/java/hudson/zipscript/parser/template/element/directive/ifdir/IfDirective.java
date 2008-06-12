@@ -19,12 +19,12 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 	private List elseifScenarios;
 	private List elseElements;
 
-	public IfDirective (String contents) throws ParseException {
-		parseContents(contents);
+	public IfDirective (String contents, int contentIindex) throws ParseException {
+		parseContents(contents, contentIindex);
 	}
 
-	private void parseContents (String contents) throws ParseException {
-		ifElement = parseElement(contents);
+	private void parseContents (String contents, int contentIindex) throws ParseException {
+		ifElement = parseElement(contents, contentIindex);
 		if (null == ifElement) throw new ParseException(
 				ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid element syntax");
 	}
@@ -38,7 +38,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 			if (null == elseifScenarios)
 				elseifScenarios = new ArrayList();
 			ElseIfDirective directive = (ElseIfDirective) elements.getHeader();
-			Element element = parseElement(directive.getContents());
+			Element element = parseElement(directive.getContents(), (int) elements.getHeader().getElementPosition());
 			elements.setHeader(element);
 			elseifScenarios.add(elements);
 		}

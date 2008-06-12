@@ -11,18 +11,19 @@ import java.nio.CharBuffer;
 public class StringPatternMatcher extends AbstractPatternMatcher {
 
 	protected Element createElement(
-			char[] startToken, String s, ParsingSession session) {
+			char[] startToken, String s, int contentIndex, ParsingSession session) {
 		return new TextElement(s);
 	}
 
 	public Element match(
-			char previousChar, char[] startChars, CharBuffer contents, ParsingSession parseData) throws ParseException {
+			char previousChar, char[] startChars, CharBuffer contents, ParsingSession parseData)
+	throws ParseException {
 		int position = contents.position();
 		char[] endChars = getEndChars();
 		int length = findMatch (contents, startChars, startChars, getInvalidChars(), true);
 		String s = read(contents, position, length, 1);
-		Element rtn = createElement(startChars, s, parseData);
-		rtn = onCreateElement (rtn, startChars, s, contents);
+		Element rtn = createElement(startChars, s, contents.position(), parseData);
+		rtn = onCreateElement (rtn, startChars, s, contents.position(), contents);
 		return rtn;
 	}
 

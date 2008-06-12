@@ -10,24 +10,30 @@ public class ParseException extends Exception {
 
 	public static final int TYPE_EOF = 0;
 	public static final int TYPE_UNEXPECTED_CHARACTER = 1;
+	public static final int TYPE_MISSING_ELEMENT = 1;
 
-	private int position;
+	private long position;
 	private ParsingResult parseData;
+	private Element element;
+	private int type;
 
 	public ParseException (int type, PatternMatcher pattern, int position) {
-		this.position = position;
+		this(type, pattern, null, position, null);
 	}
 
 	public ParseException (int type, Element element, String message) {
+		this(type, null, element, element.getElementPosition(), message);
+	}
+
+	public ParseException (
+			int type, PatternMatcher pattern, Element element, long position, String message) {
 		super(message);
-	}
-
-	public ParseException (int type, PatternMatcher pattern, Element element, int position) {
-		super(element.toString());
 		this.position = position;
+		this.type = type;
+		this.element = element;
 	}
 
-	public void setParsingData (ParsingResult parsingData) {
+	public void setParsingResult (ParsingResult parsingData) {
 		this.parseData = parsingData;
 	}
 
