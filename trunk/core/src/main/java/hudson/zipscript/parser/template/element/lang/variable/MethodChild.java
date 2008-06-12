@@ -10,12 +10,14 @@ import org.apache.commons.beanutils.MethodUtils;
 
 public class MethodChild implements VariableChild {
 
+	private Element variableElement;
 	private String methodName;
 	private List parameters;
 
-	public MethodChild (String name, List parameters) {
+	public MethodChild (String name, List parameters, Element variableElement) {
 		this.methodName = name;
 		this.parameters = parameters;
+		this.variableElement = variableElement;
 	}
 
 	public Object execute(Object parent, ZSContext context) throws ExecutionException {
@@ -28,7 +30,7 @@ public class MethodChild implements VariableChild {
 			return MethodUtils.invokeMethod(parent, methodName, arr);
 		}
 		catch (Exception e) {
-			throw new ExecutionException(e);
+			throw new ExecutionException(e.getMessage(), variableElement, e);
 		}
 	}
 

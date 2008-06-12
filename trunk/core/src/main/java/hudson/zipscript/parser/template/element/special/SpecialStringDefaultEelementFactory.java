@@ -11,7 +11,8 @@ public class SpecialStringDefaultEelementFactory implements DefaultElementFactor
 		return INSTANCE;
 	}
 
-	public Element createDefaultElement(String text, ParsingSession session) {
+	public Element createDefaultElement(
+			String text, ParsingSession session, int contentPosition) {
 		SpecialStringElementImpl element = new SpecialStringElementImpl(text);
 		return element;
 	}

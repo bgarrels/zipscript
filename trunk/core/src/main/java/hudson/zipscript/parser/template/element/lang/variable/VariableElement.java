@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
@@ -32,16 +33,17 @@ public class VariableElement extends AbstractElement implements Element {
 	private List children;
 	private String originalContent;
 
-	public VariableElement (boolean silence, String pattern, ParsingSession session) throws ParseException {
+	public VariableElement (
+			boolean silence, String pattern, ParsingSession session, int contentIndex) throws ParseException {
 		this.silence = silence;
-		setPattern(pattern, session);
+		setPattern(pattern, session, contentIndex);
 	}
 
 	public VariableElement (List elements, ParsingSession session) throws ParseException {
 		this.children = parse(elements, session);
 	}
 
-	public void setPattern (String pattern, ParsingSession session) throws ParseException {
+	public void setPattern (String pattern, ParsingSession session, int contentIndex) throws ParseException {
 		if (!silence)
 			originalContent = pattern;
 		pattern = pattern.trim();
@@ -58,7 +60,7 @@ public class VariableElement extends AbstractElement implements Element {
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
 					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
-					session).getElements();
+					session, contentIndex).getElements();
 			session.setParameters(currentParameters);
 			this.children = parse(elements, session);
 		}
@@ -77,11 +79,14 @@ public class VariableElement extends AbstractElement implements Element {
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
 		Object obj = objectValue(context);
 		if (null != obj) {
-			sw.append(obj.toString());
+			if (obj instanceof ToStringWithContextElement)
+				sw.append(((ToStringWithContextElement) obj).toString(context));
+			else
+				sw.append(obj.toString());
 		}
 		else {
 			if (!silence) {
-				throw new ExecutionException("Value evaluated as null " + this);
+				throw new ExecutionException("Value evaluated as null " + this.toString(), this);
 			}
 		}
 	}
@@ -101,7 +106,7 @@ public class VariableElement extends AbstractElement implements Element {
 		else if (obj instanceof Boolean)
 			return ((Boolean) obj).booleanValue();
 		else
-			throw new ExecutionException("The variable " + this + " could not be evaluated to a boolean");
+			throw new ExecutionException("The variable " + this + " could not be evaluated to a boolean", this);
 	}
 
 	public ElementIndex normalize(
@@ -161,7 +166,7 @@ public class VariableElement extends AbstractElement implements Element {
 				if (children.size() == 0)
 					children.add(new RootChild(((SpecialElement) e).getTokenValue()));
 				else
-					children.add(new PropertyChild(((SpecialElement) e).getTokenValue()));
+					children.add(new PropertyChild(((SpecialElement) e).getTokenValue(), this));
 			}
 			else if (e instanceof SpecialStringElement) {
 				if (wasWhitespace)
@@ -191,7 +196,7 @@ public class VariableElement extends AbstractElement implements Element {
 					if (null == child.getPropertyName())
 						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence '" + e.toString() + "'");
 					List parameters = getMethodParameters((GroupElement) e, parseData);
-					children.add(new MethodChild(child.getPropertyName(), parameters));
+					children.add(new MethodChild(child.getPropertyName(), parameters, this));
 				}
 				wasWhitespace = false;
 			}
@@ -216,7 +221,7 @@ public class VariableElement extends AbstractElement implements Element {
 		if (children.size() == 0)
 			children.add(new RootChild(s));
 		else
-			children.add(new PropertyChild(s));
+			children.add(new PropertyChild(s, this));
 	}
 
 	private List getMethodParameters (GroupElement ge, ParsingSession parseData) throws ParseException {
@@ -262,7 +267,7 @@ public class VariableElement extends AbstractElement implements Element {
 			Element e = (Element) elements.get(0);
 			if (e instanceof SpecialStringElement) {
 				return new VariableElement(
-						false, ((SpecialStringElement) e).getTokenValue(), parseData);
+						false, ((SpecialStringElement) e).getTokenValue(), parseData, (int) e.getElementPosition());
 			}
 			else {
 				return e;

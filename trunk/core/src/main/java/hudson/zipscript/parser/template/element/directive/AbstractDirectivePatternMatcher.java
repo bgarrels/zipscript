@@ -30,6 +30,15 @@ public abstract class AbstractDirectivePatternMatcher extends AbstractPatternMat
 		return startToken;
 	}
 
+	protected Element onCreateElement (
+			Element element, char[] startChars, String contents, int contentStartPosition, CharBuffer  buffer) {
+		if (buffer.hasRemaining() && buffer.charAt(0) == '\r')
+			buffer.get();
+		if (buffer.hasRemaining() && buffer.charAt(0) == '\n')
+			buffer.get();
+		return super.onCreateElement(element, startChars, contents, contentStartPosition, buffer);
+	}
+
 	public char[][] getStartTokens() {
 		return null;
 	}

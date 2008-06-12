@@ -1,23 +1,38 @@
 package test.hudson.zipscript;
 
+import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.exception.ParseException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.apache.commons.io.IOUtils;
 
-import hudson.zipscript.ZipEngine;
-import hudson.zipscript.parser.exception.ExecutionException;
-import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.resource.StringResourceLoader;
-import junit.framework.TestCase;
-
 public class DirectiveTestCase extends TestCase {
 
-	public void testForEach () throws Exception {
+	public static TestSuite suite () {
+		TestSuite suite = new TestSuite();
+		suite.addTest(new DirectiveTestCase("testForeach"));
+		suite.addTest(new DirectiveTestCase("testWhile"));
+		suite.addTest(new DirectiveTestCase("testIf"));
+		suite.addTest(new DirectiveTestCase("testMacro"));
+		return suite;
+	}
+
+	public DirectiveTestCase () {}
+
+	public DirectiveTestCase (String name) {
+		super(name);
+	}
+	
+	public void testForeach () throws Exception {
 		String mergeTemplate = "templates/foreach_test.zs";
 		String resultFile = "/templates/foreach_result.txt";
 		Map context = null;
@@ -60,6 +75,10 @@ public class DirectiveTestCase extends TestCase {
 	public void testMacro () throws Exception {
 		String mergeTemplate = "templates/macro_test.zs";
 		String resultFile = "/templates/macro_result.txt";
+		evalResult(mergeTemplate, resultFile, null);
+
+		mergeTemplate = "templates/macro_nesting_test.zs";
+		resultFile = "/templates/macro_nesting_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 

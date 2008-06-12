@@ -4,6 +4,7 @@ import java.util.Map;
 
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.template.element.Element;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -13,10 +14,12 @@ public class PropertyChild implements VariableChild {
 	private static final short TYPE_CONTEXT = 2;
 	private static final short TYPE_OBJECT = 3;
 
+	private Element variableElement;
 	private Short type;
 	private String name;
-	public PropertyChild (String name) {
+	public PropertyChild (String name, Element variableElement) {
 		this.name = name;
+		this.variableElement = variableElement;
 	}
 
 	public Object execute(Object parent, ZSContext context) throws ExecutionException {
@@ -44,7 +47,7 @@ public class PropertyChild implements VariableChild {
 			}
 		}
 		catch (Exception e) {
-			throw new ExecutionException(e);
+			throw new ExecutionException(e.getMessage(), variableElement, e);
 		}
 	}
 

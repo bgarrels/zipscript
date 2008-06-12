@@ -54,7 +54,7 @@ public abstract class NestableElement extends AbstractDirective {
 		}
 		// no end element was found
 		throw new ParseException(
-				ParseException.TYPE_EOF, this, "no end element was found");
+				ParseException.TYPE_EOF, this, "no end element was found for '" + this.toString() + "'");
 	}
 
 	protected ElementIndex endMatchFound (
@@ -76,6 +76,7 @@ public abstract class NestableElement extends AbstractDirective {
 					setTopLevelElements(new HeaderElementList(topLevelElement, l));
 				}
 				else {
+					ElementNormalizer.normalize(l, session, false);
 					setChildren(l);
 				}
 				topLevelElement = element;
@@ -99,6 +100,7 @@ public abstract class NestableElement extends AbstractDirective {
 			}
 			else {
 				setChildren(l);
+				
 			}
 			return null;
 		}
@@ -139,8 +141,10 @@ public abstract class NestableElement extends AbstractDirective {
 	protected void appendElements (
 			List elements, ZSContext context, StringWriter sw)
 	throws ExecutionException {
-		for (Iterator i=elements.iterator(); i.hasNext(); ) {
-			((Element) i.next()).merge(context, sw);
+		if (null != elements) {
+			for (Iterator i=elements.iterator(); i.hasNext(); ) {
+				((Element) i.next()).merge(context, sw);
+			}
 		}
 	}
 }

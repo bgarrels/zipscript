@@ -19,6 +19,6 @@ public class EndWhileDirective extends NestableDirective {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		throw new ExecutionException("Invalid while directive");
+		throw new ExecutionException("Invalid while directive", this);
 	}
 }

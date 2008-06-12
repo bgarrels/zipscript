@@ -25,22 +25,24 @@ public class GroupElement extends NestableElement {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as booleans");
+			throw new ExecutionException("groups can not be evaluated as booleans", this);
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).objectValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as objects");
+			throw new ExecutionException("groups can not be evaluated as objects", this);
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("(");
-		for (int i=0; i<getChildren().size(); i++) {
-			if (i > 0) sb.append(' ');
-			sb.append(getChildren().get(i));
+		if (null != getChildren()) {
+			for (int i=0; i<getChildren().size(); i++) {
+				if (i > 0) sb.append(' ');
+				sb.append(getChildren().get(i));
+			}
 		}
 		sb.append(")");
 		return sb.toString();

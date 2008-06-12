@@ -12,17 +12,20 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.WithElement;
+import hudson.zipscript.parser.template.element.special.WithPatternMatcher;
 
 import java.io.StringWriter;
 import java.util.List;
 
 public class CallDirective extends AbstractDirective {
 
-	private String macroNamespace;
 	private String macroName;
+	MacroDirective macroDirective;
 	private Element withElement;
 
 	private static PatternMatcher[] MATCHERS;
@@ -30,18 +33,19 @@ public class CallDirective extends AbstractDirective {
 		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
 		MATCHERS = new PatternMatcher[matchers.length+1];
 		System.arraycopy(matchers, 0, MATCHERS, 1, matchers.length);
-		MATCHERS[0] = new CallPatternMatcher();
+		MATCHERS[0] = new WithPatternMatcher();
 	}
 
-	public CallDirective (String contents, ParsingSession session) throws ParseException {
-		parseContents(contents, session);
+	public CallDirective (String contents, ParsingSession session, int contentStartPosition) throws ParseException {
+		parseContents(contents, session, contentStartPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session) throws ParseException {
-		java.util.List elements = parseElements(contents, session);
+	private void parseContents (String contents, ParsingSession session, int contentStartPosition) throws ParseException {
+		java.util.List elements = parseElements(contents, session, contentStartPosition);
 		try {
 			if (elements.get(0) instanceof SpecialStringElement) {
-				this.macroName = ((SpecialStringElement) elements.remove(0)).getTokenValue();
+				macroName = ((SpecialStringElement) elements.remove(0)).getTokenValue();
+				this.macroDirective = session.getMacroDirective(macroName);
 			}
 			else {
 				throw new ParseException(
@@ -65,30 +69,38 @@ public class CallDirective extends AbstractDirective {
 			throws ExecutionException {
 		Object obj = withElement.objectValue(context);
 		if (obj instanceof MacroInstanceEntity) {
-			// this is good
-			MacroInstanceEntity callParent = (MacroInstanceEntity) obj;
-			// find the macro to be called
-			MacroDirective macro = context.getParsingSession().getMacroDirective(macroName);
-			if (null != macro) {
-				ZSContext subContext = new NestedContextWrapper(context);
-				for (int i=0; i<macro.getAttributes().size(); i++) {
-					MacroAttribute attribute = (MacroAttribute) macro.getAttributes().get(i);
-					Object val = callParent.get(attribute.getName());
-					if (null != val) subContext.put(attribute.getName(), val);
-					macro.merge(subContext, sw);
-				}
-			}
-			else {
-				throw new ExecutionException("Invalid call: unknown macro '" + macroName + "'");
-			}
+			MacroInstanceEntity callInput = (MacroInstanceEntity) obj;
+			MacroInstanceDirective macroInstance = callInput.getMacroInstance();
+			MacroInstanceExecutor executor = new MacroInstanceExecutor(macroInstance, context);
+			getMacroDirective(context.getParsingSession()).executeMacro(
+					context, macroInstance.isOrdinal(), macroInstance.getAttributes(), executor, sw);
 		}
 		else {
-			throw new ExecutionException("Invalid call: a macro instance must be passed");
+			throw new ExecutionException("Invalid call: a macro instance must be passed", this);
 		}
+	}
+
+	protected MacroDirective getMacroDirective (ParsingSession session) {
+		if (null == macroDirective) {
+			// we might have to lazy load
+			macroDirective = session.getMacroDirective(macroName);
+		}
+		if (null == macroDirective) {
+			throw new ExecutionException("Unknown macro '" + macroName + "'", this);
+		}
+		return macroDirective;
+	}
+
+	protected PatternMatcher[] getContentParsingPatternMatchers() {
+		return MATCHERS;
 	}
 
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
 		return null;
+	}
+
+	public String toString() {
+		return "[#call " + macroName + " with " + withElement + "]";
 	}
 }

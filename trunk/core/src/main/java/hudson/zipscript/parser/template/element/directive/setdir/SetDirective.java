@@ -18,12 +18,12 @@ public class SetDirective extends AbstractDirective {
 	private String varName;
 	private Element setElement;
 
-	public SetDirective (String contents, ParsingSession session) throws ParseException {
-		parseContents(contents, session);
+	public SetDirective (String contents, ParsingSession session, int contentPosition) throws ParseException {
+		parseContents(contents, session, contentPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session) throws ParseException {
-		java.util.List elements = parseElements(contents, session);
+	private void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+		java.util.List elements = parseElements(contents, session, contentPosition);
 		try {
 			if (elements.get(0) instanceof SpecialStringElement) {
 				this.varName = ((SpecialStringElement) elements.remove(0)).getTokenValue();

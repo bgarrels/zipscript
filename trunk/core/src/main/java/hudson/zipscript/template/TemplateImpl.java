@@ -5,6 +5,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
+import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
@@ -17,10 +18,12 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	private Element element;
 	private List elements;
 	private ParsingSession parsingSession;
+	private ParsingResult result;
 
-	public TemplateImpl (List elements, ParsingSession parsingSession) {
+	public TemplateImpl (List elements, ParsingSession parsingSession, ParsingResult result) {
 		this.elements = elements;
 		this.parsingSession = parsingSession;
+		this.result = result;
 	}
 
 	public TemplateImpl (Element element) {
@@ -50,24 +53,43 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	/** Element Methods **/
 	public void merge(ZSContext context, StringWriter sw)
 	throws ExecutionException {
-		for (Iterator i=elements.iterator(); i.hasNext(); ) {
-			((Element) i.next()).merge(context, sw);
+		try {
+			for (Iterator i=elements.iterator(); i.hasNext(); ) {
+				((Element) i.next()).merge(context, sw);
+			}
+		}
+		catch (ExecutionException e) {
+			e.setParsingResult(result);
+			throw (e);
 		}
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
 		if (null != element)
-			return element.booleanValue(
-					context);
+			try {
+				return element.booleanValue(
+						context);
+			}
+			catch (ExecutionException e) {
+				e.setParsingResult(result);
+				throw (e);
+			}
 		else
-			throw new ExecutionException("Invalid boolean expression");
+			throw new ExecutionException("Invalid boolean expression", null);
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		if (null != element)
-			return element.objectValue(context);
+			try {
+				return element.objectValue(
+						context);
+			}
+			catch (ExecutionException e) {
+				e.setParsingResult(result);
+				throw (e);
+			}
 		else
-			throw new ExecutionException("Invalid object expression");
+			throw new ExecutionException("Invalid object expression", null);
 	}
 
 	public int getElementLength() {

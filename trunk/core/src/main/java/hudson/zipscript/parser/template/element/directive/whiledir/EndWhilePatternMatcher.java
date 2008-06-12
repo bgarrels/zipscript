@@ -7,7 +7,8 @@ import hudson.zipscript.parser.template.element.directive.AbstractEndPatternMatc
 
 public class EndWhilePatternMatcher extends AbstractEndPatternMatcher {
 
-	protected Element createElement(char[] startToken, String s, ParsingSession parseData) {
+	protected Element createElement(
+			char[] startToken, String s, int contentIndex, ParsingSession parseData) {
 		return new EndWhileDirective(s);
 	}
 

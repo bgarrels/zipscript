@@ -12,8 +12,10 @@ public class SpecialVariableDefaultEelementFactory implements DefaultElementFact
 		return INSTANCE;
 	}
 
-	public Element createDefaultElement(String text, ParsingSession session) throws ParseException {
-		SpecialVariableElementImpl element = new SpecialVariableElementImpl(false, text, session);
+	public Element createDefaultElement(
+			String text, ParsingSession session, int contentPosition) throws ParseException {
+		SpecialVariableElementImpl element = new SpecialVariableElementImpl(
+				false, text, session, contentPosition);
 		return element;
 	}
 

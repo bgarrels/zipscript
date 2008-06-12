@@ -97,7 +97,7 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
-		throw new ExecutionException("numbers can not be evaluated as boolean");
+		throw new ExecutionException("numbers can not be evaluated as boolean", this);
 	}
 
 	public Object objectValue(ZSContext context) {

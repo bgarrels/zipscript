@@ -19,6 +19,6 @@ public class EndMacroDirective extends NestableDirective {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
-		throw new ExecutionException("Invalid macro directive");
+		throw new ExecutionException("Invalid macro directive", this);
 	}
 }

@@ -1,27 +1,39 @@
 
-	this is a test
+
+
+
+
+
 	abc=zyx
 	baz=jjj
 	bar=kkk
 - 	flip flop zyx
 - 	flip flop jibjab
 
-	this is a test
-	abc=zyx
-	baz=jjj
-	bar=kkk
-- 	joe test
-- 	joe test
-
 
 --- Tab ---
 	Id: myId
-	Title: Tab Title
+	Title: Tab Title 1
 	--- Page ---
-	Id: page1
-	Title: Page 1
-	Selected: true
+		Id: page1
+		Title: Page 1
+		Selected: true
 	--- Page ---
-	Id: page2
-	Title: Page 2
-	Selected: false
+		Id: page2
+		Title: Page 2
+		Selected: false
+
+--- Tab ---
+	Id: myId
+	Title: Tab Title 2
+				--- Common Page ---
+		Id: page1
+		Title: Page 1
+		Selected: true
+	
+				--- Common Page ---
+		Id: page2
+		Title: Page 2
+		Selected: false
+	
+	

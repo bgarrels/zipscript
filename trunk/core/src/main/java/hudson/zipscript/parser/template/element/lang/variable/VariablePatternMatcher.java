@@ -45,9 +45,9 @@ public class VariablePatternMatcher implements PatternMatcher {
 					if (nesting == 0) {
 						// we've got a match
 						if (startChars[1] == '!')
-							return new VariableElement(true, sb.toString(), session);
+							return new VariableElement(true, sb.toString(), session, reader.position());
 						else
-							return new VariableElement(false, sb.toString(), session);
+							return new VariableElement(false, sb.toString(), session, reader.position());
 					}
 					
 				}

@@ -5,6 +5,7 @@ import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
@@ -39,12 +40,12 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	private String varName;
 	private VariableElement listElement;
 
-	public ForeachDirective (String contents, ParsingSession parseData) throws ParseException {
-		parseContents(contents, parseData);
+	public ForeachDirective (String contents, ParsingSession parseData, int contentPosition) throws ParseException {
+		parseContents(contents, parseData, contentPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session) throws ParseException {
-		java.util.List elements = parseElements(contents, session);
+	private void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+		java.util.List elements = parseElements(contents, session, contentPosition);
 		try {
 			if (elements.get(0) instanceof SpecialStringElement) {
 				this.varName = ((SpecialStringElement) elements.get(0)).getTokenValue();
