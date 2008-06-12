@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.template.data.ParsingSession;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -32,5 +34,13 @@ public class NestedContextWrapper implements ZSContext {
 
 	public Object getSuper () {
 		return context;
+	}
+
+	public ParsingSession getParsingSession() {
+		return context.getParsingSession();
+	}
+
+	public void setParsingSession(ParsingSession session) {
+		context.setParsingSession(session);
 	}
 }

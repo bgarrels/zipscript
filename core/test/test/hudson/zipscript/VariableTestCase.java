@@ -38,7 +38,6 @@ public class VariableTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		String contents = IOUtils.toString(getClass().getResourceAsStream(template));
-		return ZipEngine.getTemplate(contents).merge(context);
+		return ZipEngine.getInstance().getTemplate(template).merge(context);
 	}
 }

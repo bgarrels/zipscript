@@ -54,7 +54,7 @@ public abstract class AbstractElement implements Element {
 		session.setParameters(new ParseParameters(true, true));
 		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
-				session);
+				session).getElements();
 		session.setParameters(oldParameters);
 		return rtn;
 	}

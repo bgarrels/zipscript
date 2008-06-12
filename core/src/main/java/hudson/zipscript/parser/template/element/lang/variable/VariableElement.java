@@ -48,17 +48,17 @@ public class VariableElement extends AbstractElement implements Element {
 		if (null == this.children) this.children = new ArrayList();
 		this.children.clear();
 		if (!quickScan(pattern)) {
-			if (session.isVariablePatternRecognized(pattern)) {
-				// we'll be in a loop if we go in here...
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable syntax");
-			}
+//			if (session.isVariablePatternRecognized(pattern)) {
+//				// we'll be in a loop if we go in here...
+//				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable syntax '" + pattern + "'");
+//			}
 			session.setReferencedVariable(pattern);
 			ParseParameters parameters = new ParseParameters(false, true);
 			ParseParameters currentParameters = session.getParameters();
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
 					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
-					session);
+					session).getElements();
 			session.setParameters(currentParameters);
 			this.children = parse(elements, session);
 		}

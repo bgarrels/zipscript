@@ -1,5 +1,8 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+
 import java.util.Iterator;
 
 
@@ -12,4 +15,8 @@ public interface ZSContext {
 	public void put (String key, Object value);
 
 	public Iterator getKeys ();
+
+	public ParsingSession getParsingSession();
+
+	public void setParsingSession (ParsingSession session);
 }

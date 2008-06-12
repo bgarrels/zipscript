@@ -6,10 +6,12 @@ public class ParsingResult {
 
 	private List elements;
 	private long[] lineBreaks;
+	private ParsingSession parsingSession;
 
-	public ParsingResult (List elements, long[] lineBreaks) {
+	public ParsingResult (List elements, long[] lineBreaks, ParsingSession parsingSession) {
 		this.elements = elements;
 		this.lineBreaks = lineBreaks;
+		this.parsingSession = parsingSession;
 	}
 
 	public List getElements() {
@@ -31,5 +33,9 @@ public class ParsingResult {
 			lineCount ++;
 		}
 		return new LinePosition(lineCount, (int) (position - lineBreakPosition));
+	}
+
+	public ParsingSession getParsingSession() {
+		return parsingSession;
 	}
 }
