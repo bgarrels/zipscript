@@ -1,9 +1,4 @@
 
-
-
-
-
-
 	this is a test
 	abc=zyx
 	baz=jjj

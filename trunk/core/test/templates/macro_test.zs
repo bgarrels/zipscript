@@ -7,7 +7,6 @@
 [#set abc="jibjab"/]
 - ${nested}
 [/#macro]
-
 [#macro tab id title page]
 --- Tab ---
 	Id: ${id}
@@ -19,16 +18,12 @@
 	Selected: ${page.selected}
 [/#foreach]
 [/#macro]
-
 [#macro somePage id title selected]
 	--- Page ---
 		Id: ${page.id}
 		Title: ${page.title}
 		Selected: ${page.selected}
 [/#macro]
-
-
-
 
 [@foo abc="zyx" baz="jjj" bar="kkk"]
 	flip flop ${abc}
