@@ -1,10 +1,9 @@
 package hudson.zipscript.parser.context;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class MapContextWrapper extends HashMap implements ZSContext {
+public class MapContextWrapper extends AbstractContext {
 
 	private Map map;
 

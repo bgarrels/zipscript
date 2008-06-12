@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
 import java.util.HashMap;
@@ -10,9 +11,11 @@ public class MacroInstanceEntity implements ZSContext {
 
 	private MacroInstanceDirective macroInstance;
 	private java.util.Map values;
+	private ParsingSession parsingSession;
 
 	public MacroInstanceEntity (
 			MacroInstanceDirective macroInstance, ZSContext context) {
+		this.parsingSession = context.getParsingSession();
 		this.macroInstance = macroInstance;
 		values = new HashMap(macroInstance.getAttributes().size());
 		for (java.util.Iterator i=macroInstance.getAttributes().iterator(); i.hasNext(); ) {
@@ -44,5 +47,13 @@ public class MacroInstanceEntity implements ZSContext {
 
 	public Object remove(String key) {
 		return null;
+	}
+
+	public ParsingSession getParsingSession() {
+		return parsingSession;
+	}
+
+	public void setParsingSession(ParsingSession parsingSession) {
+		this.parsingSession = parsingSession;
 	}
 }

@@ -5,18 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.resource.StringResourceLoader;
 import junit.framework.TestCase;
 
 public class DirectiveTestCase extends TestCase {
 
-	public void _testForEach () throws Exception {
-		String mergeTemplate = "/templates/foreach_test.zs";
+	public void testForEach () throws Exception {
+		String mergeTemplate = "templates/foreach_test.zs";
 		String resultFile = "/templates/foreach_result.txt";
 		Map context = null;
 		
@@ -39,14 +41,14 @@ public class DirectiveTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testWhile () throws Exception {
-		String mergeTemplate = "/templates/while_test.zs";
+	public void testWhile () throws Exception {
+		String mergeTemplate = "templates/while_test.zs";
 		String resultFile = "/templates/while_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
-	public void _testIf () throws Exception {
-		String mergeTemplate = "/templates/if_test.zs";
+	public void testIf () throws Exception {
+		String mergeTemplate = "templates/if_test.zs";
 		String resultFile = "/templates/if_result.txt";
 		Map context = new HashMap();
 		context.put("foo", "abc");
@@ -56,7 +58,7 @@ public class DirectiveTestCase extends TestCase {
 	}
 
 	public void testMacro () throws Exception {
-		String mergeTemplate = "/templates/macro_test.zs";
+		String mergeTemplate = "templates/macro_test.zs";
 		String resultFile = "/templates/macro_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
@@ -70,7 +72,6 @@ public class DirectiveTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		String contents = IOUtils.toString(getClass().getResourceAsStream(template));
-		return ZipEngine.getTemplate(contents).merge(context);
+		return ZipEngine.getInstance().getTemplate(template).merge(context);
 	}
 }

@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
+import java.io.InputStream;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,19 @@ public class ExpressionParser {
 	}
 
 	public Element parseToElement (
+			String contents, Component[] components, DefaultElementFactory defaultElementFactory)
+	throws ParseException {
+		ParseParameters parameters = new ParseParameters(true, true);
+		ParsingSession session = new ParsingSession(parameters);
+		ParsingResult data = parse(
+				CharBuffer.wrap(contents), getStartTokens(components), defaultElementFactory, session);
+		if (data.getElements().size() == 1)
+			return (Element) data.getElements().get(0);
+		else
+			return null;
+	}
+
+	public Element parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(true, true);
@@ -48,13 +62,13 @@ public class ExpressionParser {
 	}
 			
 
-	public List parse (
+	public ParsingResult parse (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
 			ParsingSession session)
 	throws ParseException {
 		ParsingResult data = parse(
 				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session);
-		return data.getElements();
+		return data;
 	}
 
 	private ParsingResult parse (
@@ -109,19 +123,19 @@ public class ExpressionParser {
 			recordUnmatchedChars(unmatchedChars, elements, session, defaultElementFactory);
 	
 			ElementNormalizer.normalize(elements, session, true);
-			return getParsingData(elements, lineBreaks);
+			return getParsingData(elements, lineBreaks, session);
 		}
 		catch (ParseException e) {
-			e.setParsingData(getParsingData(elements, lineBreaks));
+			e.setParsingData(getParsingData(elements, lineBreaks, session));
 			throw e;
 		}
 	}
 
-	private ParsingResult getParsingData (List elements, List lineBreaks) {
+	private ParsingResult getParsingData (List elements, List lineBreaks, ParsingSession parsingSession) {
 		long[] lineBreakArr = new long[lineBreaks.size()];
 		for (int i=0; i<lineBreaks.size(); i++)
 			lineBreakArr[i] = ((Long) lineBreaks.get(i)).longValue();
-		return new ParsingResult(elements, lineBreakArr);
+		return new ParsingResult(elements, lineBreakArr, parsingSession);
 	}
 
 	private StringBuffer recordUnmatchedChars (

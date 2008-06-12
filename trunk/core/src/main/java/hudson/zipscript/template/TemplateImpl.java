@@ -16,9 +16,11 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 
 	private Element element;
 	private List elements;
+	private ParsingSession parsingSession;
 
-	public TemplateImpl (List elements) {
+	public TemplateImpl (List elements, ParsingSession parsingSession) {
 		this.elements = elements;
+		this.parsingSession = parsingSession;
 	}
 
 	public TemplateImpl (Element element) {
@@ -27,11 +29,11 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 
 	/** Template Methods **/
 	public boolean booleanValue(Object context) throws ExecutionException {
-		return booleanValue(ContextWrapperFactory.getInstance().wrap(context));
+		return booleanValue(getContext(context));
 	}
 
 	public Object objectValue(Object context) throws ExecutionException {
-		return objectValue(ContextWrapperFactory.getInstance().wrap(context));
+		return objectValue(getContext(context));
 	}
 
 	public String merge(Object context) throws ExecutionException {
@@ -41,7 +43,7 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	}
 
 	public void merge(Object context, StringWriter sw) throws ExecutionException {
-		merge(ContextWrapperFactory.getInstance().wrap(context), sw);
+		merge(getContext(context), sw);
 	}
 
 
@@ -85,5 +87,11 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	}
 
 	public void setElementPosition(long position) {
+	}
+
+	private ZSContext getContext (Object obj) {
+		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj);
+		context.setParsingSession(parsingSession);
+		return context;
 	}
 }

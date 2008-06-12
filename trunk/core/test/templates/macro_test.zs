@@ -14,10 +14,17 @@
 	Title: ${title}
 [#foreach page in page]
 	--- Page ---
+	Id: ${page.id}
+	Title: ${page.title}
+	Selected: ${page.selected}
+[/#foreach]
+[/#macro]
+
+[#macro somePage id title selected]
+	--- Page ---
 		Id: ${page.id}
 		Title: ${page.title}
 		Selected: ${page.selected}
-[/#foreach]
 [/#macro]
 
 
