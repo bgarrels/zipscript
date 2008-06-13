@@ -18,7 +18,7 @@ public class GroupElement extends NestableElement {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {
-		sw.append('(');
+		sw.write('(');
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {

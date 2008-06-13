@@ -1,12 +1,12 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import java.util.Map;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.util.BeanUtil;
 
-import org.apache.commons.beanutils.PropertyUtils;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 public class PropertyChild implements VariableChild {
 
@@ -17,6 +17,8 @@ public class PropertyChild implements VariableChild {
 	private Element variableElement;
 	private Short type;
 	private String name;
+	private Method accessorMethod;
+
 	public PropertyChild (String name, Element variableElement) {
 		this.name = name;
 		this.variableElement = variableElement;
@@ -26,6 +28,7 @@ public class PropertyChild implements VariableChild {
 		if (null == parent) return null;
 		try {
 			if (null == type) {
+				// initialize type
 				if (parent instanceof Map) {
 					type = new Short(TYPE_MAP);
 				}
@@ -34,8 +37,15 @@ public class PropertyChild implements VariableChild {
 				}
 				else {
 					type = new Short(TYPE_OBJECT);
+					accessorMethod = BeanUtil.getPropertyMethod(
+							parent, name, null);
+					if (null == accessorMethod) {
+						throw new ExecutionException(
+								"Unknown property '" + name + "' on " + variableElement.toString(), null);
+					}
 				}
 			}
+
 			if (type.shortValue() == TYPE_MAP) {
 				return ((Map) parent).get(name);
 			}
@@ -43,7 +53,7 @@ public class PropertyChild implements VariableChild {
 				return ((ZSContext) parent).get(name);
 			}
 			else {
-				return PropertyUtils.getProperty(parent, name);
+				return accessorMethod.invoke(parent, null);
 			}
 		}
 		catch (Exception e) {

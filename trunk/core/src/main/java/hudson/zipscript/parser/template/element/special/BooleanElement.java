@@ -36,7 +36,7 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {
-		sw.append(value.toString());
+		sw.write(value.toString());
 	}
 
 	public boolean booleanValue(ZSContext context) {

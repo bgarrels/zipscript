@@ -29,7 +29,7 @@ public class TextElement extends AbstractElement implements Element {
 
 	public void merge(ZSContext context, StringWriter sw) {
 		if (null != text)
-			sw.append(text);
+			sw.write(text);
 	}
 
 	public void setText(String text) {
