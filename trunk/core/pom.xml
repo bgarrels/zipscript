@@ -1,0 +1,67 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- POM Relationships -->
+	<groupId>zipscript</groupId>
+	<artifactId>zipscript</artifactId>
+	<version>0.8.1</version>
+	<packaging>jar</packaging>
+
+	<!-- Project Information -->
+	<name>ZipScript</name>
+	<description>A nested, model-driven expression language</description>
+	<url>http://code.google.com/p/zipscript/</url>
+	<inceptionYear>2008</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+		</license>
+	</licenses>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/zipscript/issues/list</url>
+    </issueManagement>
+
+	<scm>
+		<connection>https://zipscript.googlecode.com/svn/trunk</connection>
+		<url>https://zipscript.googlecode.com/svn/trunk</url>
+    </scm>
+
+	<developers>
+		<developer>
+			<id>jhudson</id>
+			<name>Joe Hudson</name>
+			<email>joe@binamics.com</email>
+        </developer>
+	</developers>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils-core</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<artifactId>commons-logging</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<properties>
+		<maven.compile.source>1.4</maven.compile.source>
+		<maven.compile.target>1.4</maven.compile.target>
+	</properties> 
+</project>

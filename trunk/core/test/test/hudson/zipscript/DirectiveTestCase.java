@@ -3,7 +3,7 @@ package test.hudson.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.template.Template;
+import hudson.zipscript.parser.util.IOUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,8 +13,6 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.commons.io.IOUtils;
 
 public class DirectiveTestCase extends TestCase {
 
@@ -93,7 +91,7 @@ public class DirectiveTestCase extends TestCase {
 
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
 	throws ParseException, ExecutionException, IOException {
-		String expectedResult = IOUtils.toString(getClass().getResourceAsStream(resultFile));
+		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
 		String actualResult = merge(mergeTemplate, context);
 		assertEquals(expectedResult, actualResult);
 	}
