@@ -3,16 +3,17 @@ package hudson.zipscript.parser.template.element.lang.variable;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.util.BeanUtil;
 
+import java.lang.reflect.Method;
 import java.util.List;
-
-import org.apache.commons.beanutils.MethodUtils;
 
 public class MethodChild implements VariableChild {
 
 	private Element variableElement;
 	private String methodName;
 	private List parameters;
+	private Method accessorMethod;
 
 	public MethodChild (String name, List parameters, Element variableElement) {
 		this.methodName = name;
@@ -22,12 +23,24 @@ public class MethodChild implements VariableChild {
 
 	public Object execute(Object parent, ZSContext context) throws ExecutionException {
 		if (null == parent) return null;
-		try {
-			Object[] arr = new Object[parameters.size()];
-			for (int i=0; i<parameters.size(); i++) {
-				arr[i] = ((Element) parameters.get(i)).objectValue(context);
+		
+		// get the method parameters
+		Object[] arr = new Object[parameters.size()];
+		for (int i=0; i<parameters.size(); i++) {
+			arr[i] = ((Element) parameters.get(i)).objectValue(context);
+		}
+
+		if (null == accessorMethod) {
+			// initialize
+			accessorMethod = BeanUtil.getPropertyMethod(parent, methodName, arr);
+			if (null == accessorMethod) {
+				throw new ExecutionException(
+						"Unknown method '" + methodName + "' on " + variableElement.toString(), null);
 			}
-			return MethodUtils.invokeMethod(parent, methodName, arr);
+		}
+
+		try {
+			return accessorMethod.invoke(parent, arr);
 		}
 		catch (Exception e) {
 			throw new ExecutionException(e.getMessage(), variableElement, e);

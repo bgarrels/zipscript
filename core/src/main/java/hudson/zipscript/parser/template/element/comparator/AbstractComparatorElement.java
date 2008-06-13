@@ -9,7 +9,9 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
+import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 
@@ -40,8 +42,12 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 	public void merge (ZSContext context, StringWriter sw)
 	throws ExecutionException {
 		Object rtn = objectValue(context);
-		if (null != rtn)
-			sw.append(rtn.toString());
+		if (null != rtn) {
+			try {
+				sw.write(rtn.toString().toCharArray());
+			}
+			catch (IOException e) {}
+		}
 	}
 
 	public ElementIndex normalize(int index, List elements, ParsingSession session) throws ParseException {

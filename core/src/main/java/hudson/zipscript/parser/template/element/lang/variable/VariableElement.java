@@ -23,6 +23,7 @@ import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,10 +82,12 @@ public class VariableElement extends AbstractElement implements Element {
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
 		Object obj = objectValue(context);
 		if (null != obj) {
-			if (obj instanceof ToStringWithContextElement)
-				sw.append(((ToStringWithContextElement) obj).toString(context));
-			else
-				sw.append(obj.toString());
+			if (obj instanceof ToStringWithContextElement) {
+				sw.write(((ToStringWithContextElement) obj).toString(context));
+			}
+			else {
+				sw.write(obj.toString());
+			}
 		}
 		else {
 			if (!silence) {

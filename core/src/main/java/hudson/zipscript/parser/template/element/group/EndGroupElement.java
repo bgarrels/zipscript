@@ -9,7 +9,7 @@ import java.io.StringWriter;
 public class EndGroupElement extends NestableDirective {
 
 	public void merge(ZSContext context, StringWriter sw) {
-		sw.append(')');
+		sw.write(')');
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {

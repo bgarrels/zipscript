@@ -93,7 +93,7 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {
-		sw.append(number.toString());
+		sw.write(number.toString());
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
