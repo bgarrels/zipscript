@@ -3,6 +3,7 @@ package test.hudson.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.template.Template;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,10 +20,11 @@ public class DirectiveTestCase extends TestCase {
 
 	public static TestSuite suite () {
 		TestSuite suite = new TestSuite();
-		suite.addTest(new DirectiveTestCase("testForeach"));
-		suite.addTest(new DirectiveTestCase("testWhile"));
-		suite.addTest(new DirectiveTestCase("testIf"));
-		suite.addTest(new DirectiveTestCase("testMacro"));
+		suite.addTest(new DirectiveTestCase("testSimple"));
+//		suite.addTest(new DirectiveTestCase("testForeach"));
+//		suite.addTest(new DirectiveTestCase("testWhile"));
+//		suite.addTest(new DirectiveTestCase("testIf"));
+//		suite.addTest(new DirectiveTestCase("testMacro"));
 		return suite;
 	}
 
@@ -30,6 +32,13 @@ public class DirectiveTestCase extends TestCase {
 
 	public DirectiveTestCase (String name) {
 		super(name);
+	}
+	
+	public void testSimple () throws Exception {
+		String mergeTemplate = "templates/simple_test.zs";
+		System.out.println(
+				ZipEngine.getInstance().getTemplate(mergeTemplate).merge(null));
+		
 	}
 	
 	public void testForeach () throws Exception {

@@ -27,6 +27,8 @@ import hudson.zipscript.parser.template.element.lang.AssignmentPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
+import hudson.zipscript.parser.template.element.lang.VarDefaultElementPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
@@ -90,6 +92,8 @@ public class ZipEngine {
 			new MapPatternMatcher(),
 			new DotPatternMatcher(),
 			new AssignmentPatternMatcher(),
+			new VarDefaultElementPatternMatcher(),
+			new VarSpecialElementPatternMatcher()
 	};
 	private static final DefaultElementFactory mergeElementFactory = new TextDefaultElementFactory();
 	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();

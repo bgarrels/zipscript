@@ -16,6 +16,8 @@ import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
+import hudson.zipscript.parser.template.element.lang.VarDefaultElement;
+import hudson.zipscript.parser.template.element.lang.VarSpecialElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -32,6 +34,7 @@ public class VariableElement extends AbstractElement implements Element {
 	boolean silence = false;
 	private List children;
 	private String originalContent;
+	private List specialElements;
 
 	public VariableElement (
 			boolean silence, String pattern, ParsingSession session, int contentIndex) throws ParseException {
@@ -50,10 +53,9 @@ public class VariableElement extends AbstractElement implements Element {
 		if (null == this.children) this.children = new ArrayList();
 		this.children.clear();
 		if (!quickScan(pattern)) {
-//			if (session.isVariablePatternRecognized(pattern)) {
-//				// we'll be in a loop if we go in here...
-//				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable syntax '" + pattern + "'");
-//			}
+			if (session.isVariablePatternRecognized(pattern))
+				throw new ParseException(
+						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable reference '" + pattern + "'");
 			session.setReferencedVariable(pattern);
 			ParseParameters parameters = new ParseParameters(false, true);
 			ParseParameters currentParameters = session.getParameters();
@@ -92,12 +94,28 @@ public class VariableElement extends AbstractElement implements Element {
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
-		Object parent = null;
+		Object rtn = null;
 		for (Iterator i=children.iterator(); i.hasNext(); ) {
-			parent = ((VariableChild) i.next()).execute(parent, context);
-			if (null == parent) break;
+			rtn = ((VariableChild) i.next()).execute(rtn, context);
+			if (null == rtn) break;
 		}
-		return parent;
+		if (null != specialElements) {
+			if (null == rtn && !(specialElements.get(0) instanceof VarDefaultElement)) {
+				return null;
+			}
+			for (int i=0; i<specialElements.size(); i++) {
+				Element e = (Element) specialElements.get(i);
+				if (e instanceof VarDefaultElement) {
+					if (null != rtn) break;
+					rtn = e.objectValue(context);
+				}
+				else if (e instanceof VarSpecialElement) {
+					if (null == rtn) break;
+					else rtn = e.objectValue(context);
+				}
+			}
+		}
+		return rtn;
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
@@ -111,6 +129,22 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public ElementIndex normalize(
 			int index, List elementList, ParsingSession session) throws ParseException {
+		// if the next element over is a special char - process for variable
+		if (elementList.size() > index) {
+			Element nextElement = (Element) elementList.get(index);
+			while (nextElement instanceof VarDefaultElement
+					|| nextElement instanceof VarSpecialElement) {
+				if (null == specialElements) specialElements = new ArrayList(1);
+	
+				Element e = (Element) elementList.remove(index);
+				ElementIndex ei = e.normalize(index, elementList, session);
+				if (null != ei) {
+					index = ei.getIndex();
+					e = ei.getElement();
+				}
+				specialElements.add(e);
+			}
+		}
 		return null;
 	}
 
@@ -200,6 +234,10 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 				wasWhitespace = false;
 			}
+			else if (e instanceof VarDefaultElement || e instanceof VarSpecialElement) {
+				if (null == specialElements) specialElements = new ArrayList();
+				specialElements.add(elements.get(i));
+			}
 			else if (e instanceof MapElement) {
 				MapElement me = (MapElement) e;
 				if (me.getChildren().size() == 1) {
@@ -276,5 +314,10 @@ public class VariableElement extends AbstractElement implements Element {
 		else {
 			return new VariableElement(elements, parseData);
 		}
+	}
+
+	protected void addSpecialElement (Element e) {
+		if (null == specialElements) specialElements = new ArrayList(1);
+		specialElements.add(e);
 	}
 }

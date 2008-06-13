@@ -8,6 +8,7 @@ public class TestSuite extends junit.framework.TestSuite {
 		suite.addTestSuite(DirectiveTestCase.class);
 		suite.addTestSuite(LogicTestCase.class);
 		suite.addTestSuite(MathTestCase.class);
+		suite.addTestSuite(VariableDefaultsTestCase.class);
 		return suite;
 	}
 }
