@@ -3,7 +3,7 @@ Suff at top
 [#if callCommonMacro]
 	Here's the list
 	[#foreach foo in foo]
-		${foo.nested} - ${foo.flipflop}
+		${foo.body} - ${foo.flipflop}
 	[/#foreach]
 [#else]
 	[#foreach foo in foo]

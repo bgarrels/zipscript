@@ -1,7 +1,7 @@
 [#macro test doIt foo]
 [#if test1]
 	[#foreach foo in foo]
-		${foo.nested}
+		${foo.body}
 	[/#foreach]
 [/#if]
 [/#macro]
@@ -9,7 +9,7 @@
 [#macro sectionHeader title]
 	The section header title is ${title}
 	--
-	${nested}
+	${body}
 	--
 [/#macro]
 
@@ -17,9 +17,9 @@
 	abc=${abc}
 	baz=$!{baz}
 	bar=${bar}
-- ${nested}
+- ${body}
 [#set abc="jibjab"/]
-- ${nested}
+- ${body}
 [/#macro]
 
 [#macro tab id title page callMacro]

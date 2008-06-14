@@ -1,8 +1,9 @@
-package hudson.zipscript.parser.template.element.lang;
+package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
+import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 
 import java.util.List;
 

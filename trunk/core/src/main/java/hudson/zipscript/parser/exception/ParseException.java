@@ -22,13 +22,16 @@ public class ParseException extends Exception {
 	}
 
 	public ParseException (int type, Element element, String message) {
-		this(type, null, element, element.getElementPosition(), message);
+		this(type, null, element, Long.MIN_VALUE, message);
 	}
 
 	public ParseException (
 			int type, PatternMatcher pattern, Element element, long position, String message) {
 		super(message);
-		this.position = position;
+		if (position >= 0)
+			this.position = position;
+		else if (null != element)
+			this.position = element.getElementPosition();
 		this.type = type;
 		this.element = element;
 	}

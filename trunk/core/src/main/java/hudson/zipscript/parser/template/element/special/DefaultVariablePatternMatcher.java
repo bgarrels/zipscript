@@ -4,6 +4,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 
 public class DefaultVariablePatternMatcher implements DefaultElementFactory {
 

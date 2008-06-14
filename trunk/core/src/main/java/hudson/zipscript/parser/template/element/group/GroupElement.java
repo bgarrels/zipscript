@@ -40,7 +40,7 @@ public class GroupElement extends NestableElement {
 		sb.append("(");
 		if (null != getChildren()) {
 			for (int i=0; i<getChildren().size(); i++) {
-				if (i > 0) sb.append(' ');
+				if (i > 0) sb.append(", ");
 				sb.append(getChildren().get(i));
 			}
 		}

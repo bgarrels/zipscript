@@ -10,6 +10,8 @@ public class TestSuite extends junit.framework.TestSuite {
 		suite.addTestSuite(MathTestCase.class);
 		suite.addTestSuite(VariableTestCase.class);
 		suite.addTestSuite(VariableDefaultsTestCase.class);
+		suite.addTestSuite(ListTestCase.class);
+		suite.addTestSuite(PerformanceTestCase.class);
 		return suite;
 	}
 }

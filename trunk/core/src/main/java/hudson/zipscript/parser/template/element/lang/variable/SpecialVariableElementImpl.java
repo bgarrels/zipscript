@@ -1,20 +1,20 @@
-package hudson.zipscript.parser.template.element.special;
+package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
-import hudson.zipscript.parser.template.element.lang.VarDefaultElement;
-import hudson.zipscript.parser.template.element.lang.VarSpecialElement;
-import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
+import hudson.zipscript.parser.template.element.special.SpecialElement;
+import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.util.List;
 
 public class SpecialVariableElementImpl extends VariableElement implements SpecialStringElement {
 
 	// normally we won't do this but there are occasions with variable defaults
-	private boolean shouldEvaluateSeparators = false;
+	private boolean shouldEvaluateSeparators = true;
 	
 	public SpecialVariableElementImpl(
 			boolean silence, String text, ParsingSession session, int contentPosition) throws ParseException {
@@ -39,6 +39,15 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				elementList.remove(index);
 				e.normalize(index, elementList, session);
 				addSpecialElement(e);
+			}
+			else if (isShouldEvaluateSeparators() && e instanceof GroupElement) {
+				elementList.remove(index);
+				if (null == pattern) {
+					pattern = new StringBuffer();
+					pattern.append(getPattern());
+				}
+				e.normalize(index, elementList, session);
+				pattern.append(e);
 			}
 			else if (isShouldEvaluateSeparators() && e instanceof DotElement) {
 				elementList.remove(index);

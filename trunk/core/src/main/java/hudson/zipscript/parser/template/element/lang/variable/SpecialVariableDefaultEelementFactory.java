@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.template.element.special;
+package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -16,6 +16,7 @@ public class SpecialVariableDefaultEelementFactory implements DefaultElementFact
 			String text, ParsingSession session, int contentPosition) throws ParseException {
 		SpecialVariableElementImpl element = new SpecialVariableElementImpl(
 				false, text, session, contentPosition);
+		element.setShouldEvaluateSeparators(false);
 		return element;
 	}
 
