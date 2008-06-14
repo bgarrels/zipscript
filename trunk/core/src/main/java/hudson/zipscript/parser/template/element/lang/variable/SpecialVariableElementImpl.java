@@ -35,7 +35,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				pattern.append(((SpecialElement) e).getTokenValue());
 				continue;
 			}
-			else if (e instanceof VarDefaultElement || e instanceof VarSpecialElement) {
+			else if (e instanceof VariableTokenSeparatorElement) {
 				elementList.remove(index);
 				e.normalize(index, elementList, session);
 				addSpecialElement(e);

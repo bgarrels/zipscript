@@ -16,16 +16,16 @@ import junit.framework.TestSuite;
 
 public class DirectiveTestCase extends TestCase {
 
-//	public static TestSuite suite () {
-//		TestSuite suite = new TestSuite();
+	public static TestSuite suite () {
+		TestSuite suite = new TestSuite();
 //		suite.addTest(new DirectiveTestCase("testForeach"));
 //		suite.addTest(new DirectiveTestCase("testWhile"));
 //		suite.addTest(new DirectiveTestCase("testIf"));
-//		suite.addTest(new DirectiveTestCase("testMacro"));
+		suite.addTest(new DirectiveTestCase("testMacro"));
 //		suite.addTest(new DirectiveTestCase("testSet"));
 //		suite.addTest(new DirectiveTestCase("testComment"));
-//		return suite;
-//	}
+		return suite;
+	}
 
 	public DirectiveTestCase () {}
 

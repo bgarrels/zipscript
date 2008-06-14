@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
+import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.util.LocaleUtil;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 
@@ -88,8 +89,18 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 
 	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 			throws ParseException {
-		return SpecialElementNormalizer.normalizeSpecialElement(
-				this, index, elementList, session);
+		if (elementList.size() > index) {
+			if (elementList.get(index) instanceof DotElement) {
+				elementList.remove(index);
+				if (elementList.get(index) instanceof NumberElement) {
+					// we've got a decimal value
+					NumberElement e = (NumberElement) elementList.remove(index);
+					this.tokenValue = this.tokenValue + '.' + e.getTokenValue();
+					this.type = e.type;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void merge(ZSContext context, StringWriter sw) {

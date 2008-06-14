@@ -9,8 +9,9 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 
 import java.util.List;
+import java.util.Locale;
 
-public class VarDefaultElement extends IdentifierElement {
+public class VarDefaultElement extends IdentifierElement implements VariableTokenSeparatorElement {
 
 	private Element executeElement;
 	public ElementIndex normalize(int index, List elementList, ParsingSession session)
@@ -31,7 +32,15 @@ public class VarDefaultElement extends IdentifierElement {
 		return "!" + executeElement;
 	}
 
+	public Object execute(Object source, ZSContext context) {
+		return objectValue(context);
+	}
+
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		return executeElement.objectValue(context);
+	}
+
+	public boolean requiresInput(ZSContext context) {
+		return false;
 	}
 }
