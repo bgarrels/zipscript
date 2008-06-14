@@ -5,18 +5,18 @@ import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
+import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.InElement;
 import hudson.zipscript.parser.template.element.special.InPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 
 import java.io.StringWriter;
 import java.util.Collection;
@@ -32,9 +32,16 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	private static PatternMatcher[] MATCHERS;
 	static {
 		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
-		MATCHERS = new PatternMatcher[matchers.length+1];
-		System.arraycopy(matchers, 0, MATCHERS, 1, matchers.length);
-		MATCHERS[0] = new InPatternMatcher();
+		MATCHERS = new PatternMatcher[matchers.length];
+		for (int i=0; i<matchers.length; i++) {
+			if (matchers[i] instanceof InComparatorPatternMatcher) {
+				// replace with the standard in element
+				MATCHERS[i] = new InPatternMatcher();
+			}
+			else {
+				MATCHERS[i] = matchers[i];
+			}
+		}
 	}
 
 	private String varName;

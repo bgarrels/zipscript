@@ -148,7 +148,7 @@ public class MacroDirective extends NestableElement {
 			}
 		}
 		
-		context.put("nested", nestedContent);
+		context.put("body", nestedContent);
 
 		// add template defined parameters
 		List tdp = new ArrayList();

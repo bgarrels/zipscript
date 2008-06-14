@@ -16,12 +16,9 @@ import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.lang.VarDefaultElement;
-import hudson.zipscript.parser.template.element.lang.VarSpecialElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;

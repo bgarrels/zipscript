@@ -1,3 +1,23 @@
+${1 in {1,2}}
+
+[#if 1 in {1,2}]
+	Correct!
+[#else]
+	Not correct!
+[/#if]
+
+[#if "abc" in {foo, bar, baz}]
+	Correct!
+[#else]
+	Not correct!
+[/#if]
+
+[#if "abc" not in {foo, bar, baz}]
+	Not correct!
+[#else]
+	Correct!
+[/#if]
+
 [#if foo=='abc']
 Correct
 [#elseif foo=='def']

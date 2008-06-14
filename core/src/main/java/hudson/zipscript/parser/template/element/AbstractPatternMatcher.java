@@ -22,18 +22,20 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 			CharBuffer contents, char[] startChars, char[] endChars, char[] stopChars, boolean allowEscape)
 	throws ParseException {
 		int nesting = 1;
+		if (!isNestingApplicable()) nesting = 0;
 		char startMatchStart = startChars[0];
 		char endMatchStart = endChars[0];
 		int length = 0;
 		while (true) {
 			if (!contents.hasRemaining()) {
-				throw new ParseException(ParseException.TYPE_EOF, this, length);
+				throw new ParseException(ParseException.TYPE_EOF, null,
+						"Unexpected end of file reached while looking for '" + new String(getEndChars()) + "'");
 			}
 			char c = contents.get();
 			if (c == endMatchStart) {
 				// possible match
-				nesting --;
-				if (nesting > 0) {
+				if (isNestingApplicable()) nesting --;
+				if (nesting > 0 && isNestingApplicable()) {
 					length ++;
 					continue;
 				}
@@ -60,7 +62,7 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 				}
 			}
 			else if (c == startMatchStart) {
-				nesting ++;
+				if (isNestingApplicable())nesting ++;
 			}
 			else if (isMatch(c, stopChars)) {
 				throw new ParseException(
@@ -100,6 +102,10 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 
 	protected boolean onlyAllowEmpty () {
 		return false;
+	}
+
+	protected boolean isNestingApplicable () {
+		return true;
 	}
 
 	protected abstract char[] getEndChars();

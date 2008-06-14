@@ -9,7 +9,10 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
+import hudson.zipscript.parser.template.element.comment.CommentComponent;
+import hudson.zipscript.parser.template.element.comment.CommentElement;
 import hudson.zipscript.parser.template.element.comparator.ComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.logic.AndLogicPatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.logic.OrLogicPatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
@@ -27,15 +30,15 @@ import hudson.zipscript.parser.template.element.lang.AssignmentPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
-import hudson.zipscript.parser.template.element.lang.VarDefaultElementPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
+import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
 import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
 import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
 import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
-import hudson.zipscript.parser.template.element.special.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.IOUtil;
@@ -67,6 +70,7 @@ public class ZipEngine {
 	}
 
 	public static final Component[] TEMPLATE_COMPONENTS = new Component[] {
+			new CommentComponent(),
 			new IfComponent(),
 			new ForeachComponent(),
 			new WhileComponent(),
@@ -81,6 +85,7 @@ public class ZipEngine {
 			new NumericPatternMatcher(),
 			new CommaPatternMatcher(),
 			new StringPatternMatcher(),
+			new InComparatorPatternMatcher(),
 			new AndLogicPatternMatcher(),
 			new OrLogicPatternMatcher(),
 			new BooleanPatternMatcher(),

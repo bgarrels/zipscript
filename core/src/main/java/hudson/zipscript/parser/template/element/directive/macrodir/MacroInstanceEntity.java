@@ -35,7 +35,7 @@ public class MacroInstanceEntity implements ZSContext {
 	}
 
 	public Object get(String key) {
-		if (key.equals("nested"))
+		if (key.equals("body"))
 			return macroInstance.getNestedContent(this);
 		else
 			return values.get(key);

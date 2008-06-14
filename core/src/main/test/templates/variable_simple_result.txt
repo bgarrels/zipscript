@@ -1,5 +1,7 @@
 3
 foo
+foo
+foo
 	foo
 	bar
 	baz
