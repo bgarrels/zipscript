@@ -100,18 +100,19 @@ public class VariableElement extends AbstractElement implements Element {
 			if (null == rtn) break;
 		}
 		if (null != specialElements) {
-			if (null == rtn && !(specialElements.get(0) instanceof VarDefaultElement)) {
+			if (null == rtn
+					&& (((VariableTokenSeparatorElement) specialElements.get(0)).requiresInput(context))) {
 				return null;
 			}
 			for (int i=0; i<specialElements.size(); i++) {
-				Element e = (Element) specialElements.get(i);
-				if (e instanceof VarDefaultElement) {
-					if (null != rtn) break;
-					rtn = e.objectValue(context);
+				VariableTokenSeparatorElement e = (VariableTokenSeparatorElement) specialElements.get(i);
+				if (!e.requiresInput(context)) {
+					// a default element
+					if (null == rtn) rtn = e.execute(rtn, context);
+					if (null != rtn) return rtn;
 				}
-				else if (e instanceof VarSpecialElement) {
-					if (null == rtn) break;
-					else rtn = e.objectValue(context);
+				else {
+					rtn = e.execute(rtn, context);
 				}
 			}
 		}

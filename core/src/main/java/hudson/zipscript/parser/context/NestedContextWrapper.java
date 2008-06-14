@@ -4,6 +4,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class NestedContextWrapper implements ZSContext {
 
@@ -42,5 +43,9 @@ public class NestedContextWrapper implements ZSContext {
 
 	public void setParsingSession(ParsingSession session) {
 		context.setParsingSession(session);
+	}
+
+	public Locale getLocale () {
+		return context.getLocale();
 	}
 }

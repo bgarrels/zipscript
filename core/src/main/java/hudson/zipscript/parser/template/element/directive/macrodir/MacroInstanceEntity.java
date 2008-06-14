@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class MacroInstanceEntity implements ZSContext {
 
@@ -58,5 +59,9 @@ public class MacroInstanceEntity implements ZSContext {
 
 	public void setParsingSession(ParsingSession parsingSession) {
 		this.parsingSession = parsingSession;
+	}
+
+	public Locale getLocale () {
+		return null;
 	}
 }

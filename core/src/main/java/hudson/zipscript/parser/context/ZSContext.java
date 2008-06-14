@@ -4,6 +4,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 
 public interface ZSContext {
@@ -19,4 +20,6 @@ public interface ZSContext {
 	public ParsingSession getParsingSession();
 
 	public void setParsingSession (ParsingSession session);
+
+	public Locale getLocale ();
 }

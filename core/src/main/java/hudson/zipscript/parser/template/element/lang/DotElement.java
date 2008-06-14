@@ -1,13 +1,13 @@
 package hudson.zipscript.parser.template.element.lang;
 
+import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
-import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
 
 import java.util.List;
 
-public class DotElement extends IdentifierElement implements VariableTokenSeparatorElement {
+public class DotElement extends IdentifierElement {
 
 	public ElementIndex normalize(int index, List elementList, ParseParameters parameters)
 			throws ParseException {
@@ -16,5 +16,9 @@ public class DotElement extends IdentifierElement implements VariableTokenSepara
 
 	public String toString() {
 		return ".";
+	}
+
+	public boolean requiresInput(ZSContext context) {
+		return true;
 	}
 }

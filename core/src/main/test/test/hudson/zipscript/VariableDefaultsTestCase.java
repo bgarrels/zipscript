@@ -36,7 +36,6 @@ public class VariableDefaultsTestCase extends TestCase {
 		assertEquals("bibble", eval("foo!pop!baz.foo", context));
 		context.put("pop", "babble");
 		assertEquals("babble", eval("foo!pop!baz.foo", context));
-
 	}
 
 	private Object eval (String s)

@@ -1,7 +1,6 @@
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
-import hudson.zipscript.template.EvaluationTemplate;
 import hudson.zipscript.template.Template;
 
 import java.util.ArrayList;
@@ -36,13 +35,13 @@ public class PerformanceTestCase extends TestCase {
 		context.put("obj3", new Obj3("test test test"));
 
 		long currentMilis = System.currentTimeMillis();
-		int numRuns = 10000;
+		int numRuns = 1000;
 		for (int i=0; i<numRuns; i++) {
 			template.merge(context);
 		}
 		long diff = System.currentTimeMillis() - currentMilis;
 		float currentSeconds =  ((float) diff / (float) 1000);
 		System.out.println(numRuns + " merges in " + currentSeconds + " seconds");
-		assertTrue("Performance test failed!", (currentSeconds < 4));
+		assertTrue("Performance test failed!", (currentSeconds < 1));
 	}
 }

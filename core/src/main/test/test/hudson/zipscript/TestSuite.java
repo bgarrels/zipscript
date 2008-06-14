@@ -12,6 +12,7 @@ public class TestSuite extends junit.framework.TestSuite {
 		suite.addTestSuite(VariableDefaultsTestCase.class);
 		suite.addTestSuite(ListTestCase.class);
 		suite.addTestSuite(PerformanceTestCase.class);
+		suite.addTestSuite(VariableFormattingTestCase.class);
 		return suite;
 	}
 }
