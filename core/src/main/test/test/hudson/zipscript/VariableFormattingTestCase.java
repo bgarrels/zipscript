@@ -21,7 +21,7 @@ public class VariableFormattingTestCase extends TestCase {
 		context.put("myDate", date);
 		context.put("myNumber", new BigDecimal("12345.67"));
 		context.put("myPercent", new BigDecimal(".67"));
-		
+
 		assertEquals("7/21/75", eval("myDate|short", context));
 		assertEquals("Jul 21, 1975", eval("myDate|medium", context));
 		assertEquals("July 21, 1975", eval("myDate|long", context));
