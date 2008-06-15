@@ -24,9 +24,6 @@ public class VariableTestCase extends TestCase {
 		context.put("myObject", new Obj1());
 		context.put("myString", "this is a test");
 		context.put("myList", new ArrayList());
-		
-//		String contents = IOUtils.toString(getClass().getResourceAsStream(mergeTemplate));
-//		System.out.println(ZipEngine.getTemplate(contents).merge(context));
 		evalResult(mergeTemplate, resultFile, context);
 	}
 

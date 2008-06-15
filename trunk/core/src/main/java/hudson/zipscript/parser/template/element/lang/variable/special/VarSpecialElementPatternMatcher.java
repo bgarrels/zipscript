@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.template.element.lang.variable;
+package hudson.zipscript.parser.template.element.lang.variable.special;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
