@@ -7,7 +7,6 @@ import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 
 import java.util.List;
-import java.util.Locale;
 
 public class VarSpecialElement extends IdentifierElement implements VariableTokenSeparatorElement {
 

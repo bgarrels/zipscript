@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class SimpleDateFormatter implements Formatter {
+public class CustomDateFormatter implements Formatter {
 
 	private String format;
 	private Locale locale;
 	private SimpleDateFormat formatter;
 	private Map localeFormatters;
 
-	public SimpleDateFormatter (String format, Locale locale) {
+	public CustomDateFormatter (String format, Locale locale) {
 		this.format = format;
 		this.formatter = new SimpleDateFormat(format, locale);
 		this.locale = locale;

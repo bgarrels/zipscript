@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.template.element.lang.variable;
+package hudson.zipscript.parser.template.element.lang.variable.format;
 
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -8,9 +8,8 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.lang.variable.format.Formatter;
-import hudson.zipscript.parser.template.element.lang.variable.format.SimpleDateFormatter;
-import hudson.zipscript.parser.template.element.lang.variable.format.SimpleNumberFormatter;
+import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
+import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
 
 import java.util.Date;
 import java.util.List;
@@ -57,7 +56,10 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			return formatter.format(source, context);
 		}
 		catch (Exception e) {
-			if (e instanceof ExecutionException) throw (ExecutionException) e;
+			if (e instanceof ExecutionException) {
+				((ExecutionException) e).setElement(this);
+				throw (ExecutionException) e;
+			}
 			else throw new ExecutionException(e.getMessage(), this);
 		}
 	}
@@ -70,18 +72,18 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			Object source, ZSContext context) {
 		if (source instanceof Date) {
 			if (null != this.format) {
-				return new SimpleDateFormatter(this.format, context.getLocale());
+				return new CustomDateFormatter(this.format, context.getLocale());
 			}
 			else {
-				
+				return new DefinedDateFormatter(this.formatFunction, context.getLocale());
 			}
 		}
 		else if (source instanceof Number) {
 			if (null != this.format) {
-				return new SimpleNumberFormatter(this.format, context.getLocale());
+				return new CustomNumberFormatter(this.format, context.getLocale());
 			}
 			else {
-				
+				return new DefinedNumberFormatter(this.formatFunction, context.getLocale());
 			}
 		}
 		return null;

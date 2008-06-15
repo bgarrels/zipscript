@@ -9,7 +9,6 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 
 import java.util.List;
-import java.util.Locale;
 
 public class VarDefaultElement extends IdentifierElement implements VariableTokenSeparatorElement {
 

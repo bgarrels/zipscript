@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import java.util.List;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
+
+import java.util.List;
 
 public class MacroInstanceExecutor implements ToStringWithContextElement {
 

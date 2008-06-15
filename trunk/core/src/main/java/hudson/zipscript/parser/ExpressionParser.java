@@ -11,7 +11,6 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
-import java.io.InputStream;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
