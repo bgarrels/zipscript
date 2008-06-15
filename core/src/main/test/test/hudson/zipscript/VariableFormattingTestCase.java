@@ -32,6 +32,7 @@ public class VariableFormattingTestCase extends TestCase {
 		assertEquals("Jul 21, 1975 10:37 AM", eval("myDate|medium:short", context));
 		assertEquals("Jul 21, 1975", eval("myDate|'MMM dd, yyyy'", context));
 		assertEquals("12,345.67", eval("myNumber|'##,###.00'", context));
+		assertEquals("12,345.67", eval("myNumber|number", context));
 		assertEquals("67%", eval("myPercent|percent", context));
 		assertEquals("$12,345.67", eval("myNumber|currency", context));
 	}

@@ -19,15 +19,7 @@ public class DefinedNumberFormatter implements Formatter {
 	public DefinedNumberFormatter (String format, Locale locale) {
 		this.format = format;
 		this.locale = locale;
-		if (format.equals("currency")) {
-			formatter = NumberFormat.getCurrencyInstance(locale);
-		}
-		else if (format.equals("percent")) {
-			formatter = NumberFormat.getPercentInstance(locale);
-		}
-		else {
-			throw new ExecutionException("Undefined number format '" + format + "'", null);
-		}
+		this.formatter = getNumberFormat(locale);
 	}
 
 	public String format(Object object, ZSContext context) throws Exception {
@@ -37,14 +29,27 @@ public class DefinedNumberFormatter implements Formatter {
 		}
 		else {
 			if (null == localeFormatters) localeFormatters = new HashMap(2);
-			NumberFormat formatter = null;
-			if (format.equals("currency")) {
-				formatter = NumberFormat.getCurrencyInstance(context.getLocale());
+			NumberFormat formatter = (NumberFormat) localeFormatters.get(locale);
+			if (null == formatter) {
+				formatter = getNumberFormat(locale);
+				localeFormatters.put(locale, formatter);
 			}
-			else if (format.equals("percent")) {
-				formatter = NumberFormat.getPercentInstance(context.getLocale());
-			}
-			return formatter.format((Date) object);
+			return formatter.format((Number) object);
+		}
+	}
+
+	private NumberFormat getNumberFormat (Locale locale) {
+		if (format.equals("currency")) {
+			return NumberFormat.getCurrencyInstance(locale);
+		}
+		else if (format.equals("number")) {
+			return NumberFormat.getNumberInstance(locale);
+		}
+		else if (format.equals("percent")) {
+			return NumberFormat.getPercentInstance(locale);
+		}
+		else {
+			throw new ExecutionException("Undefined number format '" + format + "'", null);
 		}
 	}
 }
