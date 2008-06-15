@@ -1,10 +1,9 @@
-package hudson.zipscript.parser.template.element.lang.variable;
+package hudson.zipscript.parser.template.element.lang.variable.format;
 
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElement;
 
 import java.nio.CharBuffer;
 
