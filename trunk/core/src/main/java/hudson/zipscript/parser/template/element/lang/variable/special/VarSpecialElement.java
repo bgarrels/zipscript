@@ -10,6 +10,9 @@ import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.Ceiling;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.Floor;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.Round;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HTML;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.JS;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerCase;
@@ -99,6 +102,16 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			else if (method.equals("xml"))
 				return XML.INSTANCE;
 			else return null;
+		}
+		else if (source instanceof Number) {
+			if (method.equals("round"))
+				return Round.INSTANCE;
+			else if (method.equals("ceiling"))
+				return Ceiling.INSTANCE;
+			else if (method.equals("floor"))
+				return Floor.INSTANCE;
+			else
+				return null;
 		}
 		else return null;
 	}

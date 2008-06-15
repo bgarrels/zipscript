@@ -29,6 +29,16 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge("str?url", context));
 	}
 
+	public void testNumberMethods () throws Exception {
+		Map context = new HashMap();
+		context.put("myNumber", new Double("939.4323"));
+		assertEquals("940", merge("myNumber?ceiling", context));
+		assertEquals("939", merge("myNumber?floor", context));
+		assertEquals("939", merge("myNumber?round", context));
+		context.put("myNumber", new Double("939.5"));
+		assertEquals("940", merge("myNumber?round", context));
+	}
+
 	private String merge (String contents, Object context)
 	throws ParseException, ExecutionException, IOException {
 		return ZipEngine.getInstance().getTemplateForEvaluation(
