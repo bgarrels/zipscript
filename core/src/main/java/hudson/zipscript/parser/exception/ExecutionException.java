@@ -33,4 +33,12 @@ public class ExecutionException extends RuntimeException {
 			return "(line " + lp.line + ", position " + lp.position + ") " + super.getMessage();
 		}
 	}
+
+	public Element getElement() {
+		return element;
+	}
+
+	public void setElement(Element element) {
+		this.element = element;
+	}
 }

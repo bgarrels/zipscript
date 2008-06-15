@@ -11,7 +11,6 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.List;
 
 

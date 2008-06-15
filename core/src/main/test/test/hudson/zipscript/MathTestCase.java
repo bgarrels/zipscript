@@ -1,11 +1,12 @@
 package test.hudson.zipscript;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 public class MathTestCase extends TestCase {

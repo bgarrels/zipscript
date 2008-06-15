@@ -1,12 +1,13 @@
 package test.hudson.zipscript;
 
+import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.exception.ParseException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import hudson.zipscript.ZipEngine;
-import hudson.zipscript.parser.exception.ExecutionException;
-import hudson.zipscript.parser.exception.ParseException;
 import junit.framework.TestCase;
 
 public class ListTestCase extends TestCase {

@@ -1,10 +1,6 @@
 package hudson.zipscript.resource;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import hudson.zipscript.parser.exception.InitializationException;
-import hudson.zipscript.template.Template;
 
 import org.apache.commons.configuration.Configuration;
 

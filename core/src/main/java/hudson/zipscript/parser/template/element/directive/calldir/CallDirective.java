@@ -1,7 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.calldir;
 
 import hudson.zipscript.ZipEngine;
-import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
@@ -10,7 +9,6 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;

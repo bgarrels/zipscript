@@ -5,11 +5,11 @@ import hudson.zipscript.parser.context.ZSContext;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
-public class SimpleNumberFormatter implements Formatter {
+public class CustomNumberFormatter implements Formatter {
 
 	private DecimalFormat formatter;
 
-	public SimpleNumberFormatter (String format, Locale defaultLocale) {
+	public CustomNumberFormatter (String format, Locale defaultLocale) {
 		this.formatter = new DecimalFormat(format);
 	}
 

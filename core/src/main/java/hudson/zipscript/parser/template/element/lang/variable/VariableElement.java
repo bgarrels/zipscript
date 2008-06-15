@@ -20,7 +20,6 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,6 +47,7 @@ public class VariableElement extends AbstractElement implements Element {
 		if (!silence)
 			originalContent = pattern;
 		pattern = pattern.trim();
+		
 		if (null == this.children) this.children = new ArrayList();
 		this.children.clear();
 		if (!quickScan(pattern)) {
@@ -70,7 +70,7 @@ public class VariableElement extends AbstractElement implements Element {
 	private boolean quickScan (String pattern) {
 		for (int i=0; i<pattern.length(); i++) {
 			char c = pattern.charAt(i);
-			if (!(Character.isLetterOrDigit(c) || c == '_' || c =='-')) return false;
+			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == ':')) return false;
 		}
 		this.children.add(new RootChild(pattern));
 		return true;
