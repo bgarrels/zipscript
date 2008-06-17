@@ -201,24 +201,6 @@ public class VariableElement extends AbstractElement implements Element {
 		boolean started = false;
 		boolean wasWhitespace = false;
 		boolean wasSeparator = false;
-		// first, normalize the elements
-		boolean doInitialNormalize = false;
-		for (int i=0; i<elements.size(); i++) {
-			if (elements.get(i) instanceof ComparatorElement)
-				doInitialNormalize = true;
-		}
-		if (doInitialNormalize) {
-			System.out.println("here");
-//			for (int i=0; i<elements.size(); i++) {
-//				Element e = (Element) elements.remove(i);
-//				ElementIndex ei = e.normalize(i, elements, session);
-//				if (null == ei)
-//					elements.add(i, e);
-//				else
-//					elements.add(ei.getIndex(), ei.getElement());
-//			}
-		}
-		
 		for (int i=0; i<elements.size(); i++) {
 			Element e = (Element) elements.get(i);
 			if (!started && e instanceof WhitespaceElement)
