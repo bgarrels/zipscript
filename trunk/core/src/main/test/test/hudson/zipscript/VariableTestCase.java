@@ -17,20 +17,22 @@ import test.hudson.zipscript.model.Obj3;
 
 public class VariableTestCase extends TestCase {
 
-	public void testTest () throws Exception {
-		EvaluationTemplate template = ZipEngine.getInstance().getTemplateForEvaluation(
+	public void testSeparatedPathVariables () throws Exception {
+		EvaluationTemplate template = null;
+		template = ZipEngine.getInstance().getTemplateForEvaluation(
 				"${'foo.bar'}");
 		Map context = new HashMap();
 		context.put("foo.bar", "black sheep");
-		System.out.println(template.objectValue(context));
+		assertEquals("black sheep", template.objectValue(context));
+		template = ZipEngine.getInstance().getTemplateForEvaluation(
+				"foo.bar");
+		assertEquals("black sheep", template.objectValue(context));
 	}
 	
 	public void _testSimpleVariables () throws Exception {
 		String mergeTemplate = "templates/variable_simple_test.zs";
 		String resultFile = "/templates/variable_simple_result.txt";
-		Map context = null;
-		
-		context = new HashMap();
+		Map context = new HashMap();
 		context.put("myObject", new Obj1());
 		context.put("myString", "this is a test");
 		context.put("myList", new ArrayList());
@@ -38,6 +40,7 @@ public class VariableTestCase extends TestCase {
 		context.put("dynamicPath", "text");
 		evalResult(mergeTemplate, resultFile, context);
 	}
+
 
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
 	throws ParseException, ExecutionException, IOException {

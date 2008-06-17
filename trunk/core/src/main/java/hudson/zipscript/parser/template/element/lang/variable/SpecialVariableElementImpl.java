@@ -91,7 +91,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 			}
 		}
 		if (null != pattern)
-			setPattern(pattern.toString(), session, 0);
+			setPattern(getStartToken() + pattern.toString() + getEndToken(), session, 0);
 		return null;
 	}
 
@@ -105,5 +105,13 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 
 	public void setShouldEvaluateSeparators(boolean shouldEvaluateSeparators) {
 		this.shouldEvaluateSeparators = shouldEvaluateSeparators;
+	}
+
+	public String getStartToken () {
+		return "${";
+	}
+
+	public String getEndToken () {
+		return "}";
 	}
 }

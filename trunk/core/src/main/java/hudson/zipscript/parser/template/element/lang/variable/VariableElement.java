@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
+import hudson.zipscript.parser.template.element.comparator.ComparatorElement;
 import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
@@ -31,7 +32,7 @@ public class VariableElement extends AbstractElement implements Element {
 
 	boolean silence = false;
 	private List children;
-	private String originalContent;
+	private String pattern;
 	private List specialElements;
 
 	public VariableElement (
@@ -45,8 +46,6 @@ public class VariableElement extends AbstractElement implements Element {
 	}
 
 	public void setPattern (String pattern, ParsingSession session, int contentIndex) throws ParseException {
-		if (!silence)
-			originalContent = pattern;
 		pattern = pattern.trim();
 		
 		if (null == this.children) this.children = new ArrayList();
@@ -69,6 +68,14 @@ public class VariableElement extends AbstractElement implements Element {
 
 	private static final char[] normalChars = new char[] {'_','-'};
 	private boolean quickScan (String pattern) {
+		int trimIndex = 0;
+		if (pattern.startsWith("$")) trimIndex ++;
+		if (pattern.indexOf('!') == trimIndex) trimIndex ++;
+		if (pattern.indexOf('{') == trimIndex) trimIndex ++;
+		if (trimIndex > 0) {
+			pattern = pattern.substring(trimIndex, pattern.length()-1);
+		}
+		
 		for (int i=0; i<pattern.length(); i++) {
 			char c = pattern.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == ':')) return false;
@@ -96,9 +103,29 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		Object rtn = null;
-		for (Iterator i=children.iterator(); i.hasNext(); ) {
-			rtn = ((VariableChild) i.next()).execute(rtn, context);
-			if (null == rtn) break;
+		int count = 0;
+		if (null == pattern) {
+			count ++;
+			for (Iterator i=children.iterator(); i.hasNext(); ) {
+				rtn = ((VariableChild) i.next()).execute(rtn, context);
+				if (null == rtn) {
+					break;
+				}
+			}
+		}
+		else {
+			// bypass path and get the full path from the context
+			rtn = context.get(pattern);
+		}
+		if (null == rtn && count == 1) {
+			StringBuffer sb = new StringBuffer();
+			for (Iterator i=children.iterator(); i.hasNext(); ) {
+				if (sb.length() > 0) sb.append('.');
+				VariableChild child = (VariableChild) i.next();
+				sb.append(child.getPropertyName());
+			}
+			pattern = sb.toString();
+			rtn = context.get(pattern);
 		}
 		if (null != specialElements) {
 			if (null == rtn
@@ -169,16 +196,29 @@ public class VariableElement extends AbstractElement implements Element {
 		return sb.toString();
 	}
 
-	private List parse (List elements, ParsingSession parseData) throws ParseException {
+	private List parse (List elements, ParsingSession session) throws ParseException {
 		List children = new ArrayList();
-		if (elements.size() == 1) {
-			elements.add(0, new ElementWrapperChild((Element) elements.remove(0)));
-			return elements;
-		}
-
 		boolean started = false;
 		boolean wasWhitespace = false;
 		boolean wasSeparator = false;
+		// first, normalize the elements
+		boolean doInitialNormalize = false;
+		for (int i=0; i<elements.size(); i++) {
+			if (elements.get(i) instanceof ComparatorElement)
+				doInitialNormalize = true;
+		}
+		if (doInitialNormalize) {
+			System.out.println("here");
+//			for (int i=0; i<elements.size(); i++) {
+//				Element e = (Element) elements.remove(i);
+//				ElementIndex ei = e.normalize(i, elements, session);
+//				if (null == ei)
+//					elements.add(i, e);
+//				else
+//					elements.add(ei.getIndex(), ei.getElement());
+//			}
+		}
+		
 		for (int i=0; i<elements.size(); i++) {
 			Element e = (Element) elements.get(i);
 			if (!started && e instanceof WhitespaceElement)
@@ -227,14 +267,13 @@ public class VariableElement extends AbstractElement implements Element {
 					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after sparator '" + e.toString() + "'");
 				wasWhitespace = false;
 				wasSeparator = false;
-				addChildProperty(((TextElement) e).getText(), children);
-			}
-			else if (e instanceof TextElement) {
-				if (children.size() == 0)
+				if (children.size() == 0) {
+					// qualified path to use as context key
+					children.add(new RootChild(((TextElement) e).getText()));
+				}
+				else {
 					addChildProperty(((TextElement) e).getText(), children);
-				else
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid text element detected '" + e.toString() + "'");
-				wasWhitespace = false;
+				}
 			}
 			else if (e instanceof VariableElement) {
 				if (wasSeparator) {
@@ -243,7 +282,13 @@ public class VariableElement extends AbstractElement implements Element {
 					wasSeparator = false;
 				}
 				else {
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid dynamic variable element '" + e.toString() + "'.  This must be the first token or follow a separator");
+					if (elements.size() == 1) {
+						// single variable element - just use it
+						return ((VariableElement) e).children;
+					}
+					else {
+						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid dynamic variable element '" + e.toString() + "'.  This must be the first token or follow a separator");
+					}
 				}
 			}
 			else if (e instanceof GroupElement) {
@@ -257,7 +302,7 @@ public class VariableElement extends AbstractElement implements Element {
 					VariableChild child = (VariableChild) children.remove(children.size()-1);
 					if (null == child.getPropertyName())
 						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence '" + e.toString() + "'");
-					List parameters = getMethodParameters((GroupElement) e, parseData);
+					List parameters = getMethodParameters((GroupElement) e, session);
 					children.add(new MethodChild(child.getPropertyName(), parameters, this));
 				}
 				wasWhitespace = false;
@@ -273,8 +318,11 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 				else {
 					children.add(new MapChild(
-							new VariableElement(me.getChildren(), parseData)));
+							new VariableElement(me.getChildren(), session)));
 				}
+			}
+			else if (e instanceof ComparatorElement && elements.size() == 1) {
+				children.add(new ElementWrapperChild(e));
 			}
 			else {
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid element detected '" + e.toString() + "'");

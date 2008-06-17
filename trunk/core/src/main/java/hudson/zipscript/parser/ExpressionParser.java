@@ -2,6 +2,7 @@ package hudson.zipscript.parser;
 
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -9,6 +10,7 @@ import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
+import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
 import java.nio.CharBuffer;
@@ -55,6 +57,19 @@ public class ExpressionParser {
 		ParsingSession session = new ParsingSession(parameters);
 		ParsingResult data = parse(
 				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session, startPosition);
+		
+		// check for special cases
+		List elements = data.getElements();
+		if (elements.size() > 1) {
+			if (elements.get(0) instanceof SpecialVariableElementImpl) {
+				SpecialVariableElementImpl e = (SpecialVariableElementImpl) elements.remove(0);
+				e.setShouldEvaluateSeparators(true);
+				ElementIndex ei = e.normalize(0, elements, session);
+				if (null == ei) elements.add(0, e);
+				else elements.add(ei.getIndex(), ei.getElement());
+			}
+		}
+		
 		if (data.getElements().size() == 1)
 			return (Element) data.getElements().get(0);
 		else

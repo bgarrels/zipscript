@@ -12,6 +12,7 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
+import hudson.zipscript.parser.template.element.group.ListElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.InElement;
@@ -45,7 +46,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	}
 
 	private String varName;
-	private VariableElement listElement;
+	private Element listElement;
 
 	public ForeachDirective (String contents, ParsingSession parseData, int contentPosition) throws ParseException {
 		parseContents(contents, parseData, contentPosition);
@@ -64,7 +65,13 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			}
 			if (!(elements.remove(0) instanceof InElement))
 				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: 'in' should be second token");
-			this.listElement = new VariableElement(elements, session);
+			if (elements.size() == 1 && elements.get(0) instanceof ListElement) {
+				// bypass element parsing
+				this.listElement = (Element) elements.get(0);
+			}
+			else {
+				this.listElement = new VariableElement(elements, session);
+			}
 		}
 		catch (IndexOutOfBoundsException e) {
 			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: must have at least 3 tokens");
