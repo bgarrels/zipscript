@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import test.hudson.zipscript.model.Person;
+
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -21,7 +23,6 @@ public class DirectiveTestCase extends TestCase {
 //		suite.addTest(new DirectiveTestCase("testForeach"));
 //		suite.addTest(new DirectiveTestCase("testWhile"));
 //		suite.addTest(new DirectiveTestCase("testIf"));
-//		suite.addTest(new DirectiveTestCase("testMacro"));
 //		suite.addTest(new DirectiveTestCase("testSet"));
 //		suite.addTest(new DirectiveTestCase("testComment"));
 //		return suite;
@@ -81,9 +82,15 @@ public class DirectiveTestCase extends TestCase {
 	}
 
 	public void testMacro () throws Exception {
+		Map context = new HashMap();
+		List l = new ArrayList(3);
+		l.add(new Person("John", "Smith", "03/14/82"));
+		l.add(new Person("Jimmy", "Carter", "09/03/63"));
+		l.add(new Person("Jerry", null, "11/21/79"));
+		context.put("people", l);
 		String mergeTemplate = "templates/macro_test.zs";
 		String resultFile = "/templates/macro_result.txt";
-		evalResult(mergeTemplate, resultFile, null);
+		evalResult(mergeTemplate, resultFile, context);
 
 		mergeTemplate = "templates/macro_nesting_test.zs";
 		resultFile = "/templates/macro_nesting_result.txt";

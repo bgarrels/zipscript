@@ -10,21 +10,31 @@ import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
-import hudson.zipscript.parser.template.element.lang.variable.special.number.Ceiling;
-import hudson.zipscript.parser.template.element.lang.variable.special.number.Floor;
-import hudson.zipscript.parser.template.element.lang.variable.special.number.Round;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.HTML;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.JS;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerCase;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerFirst;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.RTF;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.URL;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperCase;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperFirst;
-import hudson.zipscript.parser.template.element.lang.variable.special.string.XML;
+import hudson.zipscript.parser.template.element.lang.variable.special.map.KeysSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.map.ValuesSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.CeilingSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.FloorSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.number.RoundSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.ContainsSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.HTMLSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.JSSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.LPadSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerCaseSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerFirstSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.RPadSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.RTFSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.SplitSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.URLSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperCaseSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperFirstSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.XMLSpecialMethod;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class VarSpecialElement extends IdentifierElement implements VariableTokenSeparatorElement {
 
@@ -45,6 +55,7 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			if (elementList.size() > index) {
 				if (elementList.get(index) instanceof GroupElement) {
 					parameters = (GroupElement) elementList.remove(index);
+					parameters.normalize(index, elementList, session);
 				}
 			}
 			return null;
@@ -84,35 +95,70 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			Object source, ZSContext context) {
 		if (source instanceof String) {
 			if (method.equals("upperFirst"))
-				return UpperFirst.INSTANCE;
+				return UpperFirstSpecialMethod.INSTANCE;
 			else if (method.equals("lowerFirst"))
-				return LowerFirst.INSTANCE;
+				return LowerFirstSpecialMethod.INSTANCE;
 			else if (method.equals("lowerCase"))
-				return LowerCase.INSTANCE;
+				return LowerCaseSpecialMethod.INSTANCE;
 			else if (method.equals("upperCase"))
-				return UpperCase.INSTANCE;
+				return UpperCaseSpecialMethod.INSTANCE;
 			else if (method.equals("html"))
-				return HTML.INSTANCE;
+				return HTMLSpecialMethod.INSTANCE;
 			else if (method.equals("js"))
-				return JS.INSTANCE;
+				return JSSpecialMethod.INSTANCE;
 			else if (method.equals("rtf"))
-				return RTF.INSTANCE;
+				return RTFSpecialMethod.INSTANCE;
 			else if (method.equals("url"))
-				return new URL(context.getParsingSession());
+				return new URLSpecialMethod(context.getParsingSession());
 			else if (method.equals("xml"))
-				return XML.INSTANCE;
+				return XMLSpecialMethod.INSTANCE;
+			else if (method.equals("leftPad"))
+				return new LPadSpecialMethod(getParameters());
+			else if (method.equals("rightPad"))
+				return new RPadSpecialMethod(getParameters());
+			else if (method.equals("contains"))
+				return new ContainsSpecialMethod(getParameters());
+			else if (method.equals("split"))
+				return new SplitSpecialMethod(getParameters());
 			else return null;
 		}
 		else if (source instanceof Number) {
 			if (method.equals("round"))
-				return Round.INSTANCE;
+				return RoundSpecialMethod.INSTANCE;
 			else if (method.equals("ceiling"))
-				return Ceiling.INSTANCE;
+				return CeilingSpecialMethod.INSTANCE;
 			else if (method.equals("floor"))
-				return Floor.INSTANCE;
+				return FloorSpecialMethod.INSTANCE;
+			else
+				return null;
+		}
+		else if (source instanceof Map) {
+			if (method.equals("keys"))
+				return KeysSpecialMethod.INSTANCE;
+			else if (method.equals("values"))
+				return ValuesSpecialMethod.INSTANCE;
+			else
+				return null;
+		}
+		else if (source instanceof Object[]
+		        || source instanceof Collection) {
+			if (method.equals("first"))
+				return new FirstSpecialMethod();
+			else if (method.equals("last"))
+				return new LastSpecialMethod();
+			else if (method.equals("contains"))
+				return new hudson.zipscript.parser.template.element.lang.variable.special.sequence.ContainsSpecialMethod(getParameters());
 			else
 				return null;
 		}
 		else return null;
+	}
+
+	private Element[] getParameters () {
+		if (null == parameters) return null;
+		else {
+			return (Element[]) parameters.getChildren().toArray(
+					new Element[parameters.getChildren().size()]);
+		}
 	}
 }

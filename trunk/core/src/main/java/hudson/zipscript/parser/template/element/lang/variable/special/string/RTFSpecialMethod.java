@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 
-public class RTF extends AbstractReplacementMethod {
+public class RTFSpecialMethod extends AbstractReplacementMethod {
 
-	public static final RTF INSTANCE = new RTF();
+	public static final RTFSpecialMethod INSTANCE = new RTFSpecialMethod();
 
 	protected char[] getCharsToReplace() {
 		return new char[] {'\\', '{', '}'};

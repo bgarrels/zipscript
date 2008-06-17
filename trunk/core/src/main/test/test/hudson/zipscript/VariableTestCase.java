@@ -4,6 +4,7 @@ import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.util.IOUtil;
+import hudson.zipscript.template.EvaluationTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,10 +13,19 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 import test.hudson.zipscript.model.Obj1;
+import test.hudson.zipscript.model.Obj3;
 
 public class VariableTestCase extends TestCase {
 
-	public void testSimpleVariables () throws Exception {
+	public void testTest () throws Exception {
+		EvaluationTemplate template = ZipEngine.getInstance().getTemplateForEvaluation(
+				"${'foo.bar'}");
+		Map context = new HashMap();
+		context.put("foo.bar", "black sheep");
+		System.out.println(template.objectValue(context));
+	}
+	
+	public void _testSimpleVariables () throws Exception {
 		String mergeTemplate = "templates/variable_simple_test.zs";
 		String resultFile = "/templates/variable_simple_result.txt";
 		Map context = null;
@@ -24,6 +34,8 @@ public class VariableTestCase extends TestCase {
 		context.put("myObject", new Obj1());
 		context.put("myString", "this is a test");
 		context.put("myList", new ArrayList());
+		context.put("obj", new Obj3("foo bar"));
+		context.put("dynamicPath", "text");
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
