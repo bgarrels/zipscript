@@ -1,7 +1,9 @@
 [@grid id="myGrid" entries=people]
 	[@column title="First Name"]${entry.firstName?upperFirst}[/@column]
 	[@column title="Last Name"]${entry.lastName!"Unknown Last Name"}[/@column]
-	[@column title="Birthday"]${entry.birthday|short}[/@column]
+	[#if doShowBirthday]
+		[@column title="Birthday"]${entry.birthday|short}[/@column]
+	[/#if]
 [/@grid]
 
 [@tab id="myId" title="Tab Title 1"]
