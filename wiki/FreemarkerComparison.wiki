@@ -1,0 +1,21 @@
+#Differences of ZipScript to Freemarker.
+
+=Directives=
+==Iterator Directive==
+===FM Implementation ===
+{{{[#list myList as entry] ... [/#list]}}}
+  * ${entry_index} is special token to reference index number
+  * ${entry_hasNext) is special token to reference if there are more entries
+===ZS Implementation===
+{{{[#foreach entry in myList] ... [/#foreach]}}}
+  * ${i} is a special token to reference index number
+  * ${hasNext} is special token to reference if there are more entries
+  * scoped context (so ${i} will always relate to the appropriate loop index)
+
+==While Directive==
+===FM Implementation===
+  * FM has no implementation
+===ZS Implementation===
+{{{[#while boolean expression ex: i<10] ... [/#while]}}}
+  * ${i} is a special token to reference index number
+  * scoped context (so ${i} will always relate to the appropriate loop index)
