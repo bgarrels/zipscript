@@ -19,6 +19,8 @@ public class MapTestCase extends TestCase {
 		context.put("myMap", map);
 		Object obj = eval("${myMap['foo']}", context);
 		assertEquals("this is a test", obj);
+		obj = eval("bar.b.q", context);
+		assertEquals("this is another test", obj);
 	}
 
 	private Object eval (String s)
