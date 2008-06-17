@@ -71,7 +71,10 @@ public class NumericPatternMatcher implements PatternMatcher {
 				}
 				else {
 					reader.position(reader.position()-1);
-					return new NumberElement(sb.toString(), locale);
+					if (sb.length() == 1 && !Character.isDigit(sb.charAt(0)))
+						return null;
+					else
+						return new NumberElement(sb.toString(), locale);
 				}
 			}
 		}

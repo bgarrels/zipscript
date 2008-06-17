@@ -212,6 +212,22 @@ public class VariableElement extends AbstractElement implements Element {
 				wasWhitespace = false;
 				wasSeparator = false;
 				addChildProperty(((SpecialStringElement) e).getTokenValue(), children);
+				if (e instanceof VariableElement) {
+					// check for special directives
+					if (null != ((VariableElement) e).specialElements) {
+						if (null == this.specialElements) specialElements = new ArrayList(1);
+						this.specialElements.addAll(((VariableElement) e).specialElements);
+					}
+				}
+			}
+			else if (e instanceof TextElement) {
+				if (wasWhitespace)
+					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid whitespace");
+				if (!wasSeparator && children.size() > 0)
+					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after sparator '" + e.toString() + "'");
+				wasWhitespace = false;
+				wasSeparator = false;
+				addChildProperty(((TextElement) e).getText(), children);
 			}
 			else if (e instanceof TextElement) {
 				if (children.size() == 0)
@@ -219,6 +235,16 @@ public class VariableElement extends AbstractElement implements Element {
 				else
 					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid text element detected '" + e.toString() + "'");
 				wasWhitespace = false;
+			}
+			else if (e instanceof VariableElement) {
+				if (wasSeparator) {
+					// dynamic path
+					children.add(new DynamicChild(e));
+					wasSeparator = false;
+				}
+				else {
+					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid dynamic variable element '" + e.toString() + "'.  This must be the first token or follow a separator");
+				}
 			}
 			else if (e instanceof GroupElement) {
 				if (children.size() == 0)

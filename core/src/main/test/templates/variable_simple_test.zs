@@ -9,3 +9,4 @@ ${myObject.testMap['anotherObj'].list1[0].text}
 
 ${myString} is ${myString.length} characters long
 
+${obj.${dynamicPath}} <-- we can access object paths dynamically

@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.util.BeanUtil;
@@ -12,7 +13,8 @@ public class PropertyChild implements VariableChild {
 
 	private static final short TYPE_MAP = 1;
 	private static final short TYPE_CONTEXT = 2;
-	private static final short TYPE_OBJECT = 3;
+	private static final short TYPE_CONTEXT_REQUIRED = 3;
+	private static final short TYPE_OBJECT = 4;
 
 	private Element variableElement;
 	private Short type;
@@ -32,6 +34,9 @@ public class PropertyChild implements VariableChild {
 				if (parent instanceof Map) {
 					type = new Short(TYPE_MAP);
 				}
+				else if (parent instanceof ZSContextRequiredGetter) {
+					type = new Short(TYPE_CONTEXT_REQUIRED);
+				}
 				else if (parent instanceof ZSContext) {
 					type = new Short(TYPE_CONTEXT);
 				}
@@ -49,6 +54,9 @@ public class PropertyChild implements VariableChild {
 			if (type.shortValue() == TYPE_MAP) {
 				return ((Map) parent).get(name);
 			}
+			else if (type.shortValue() == TYPE_CONTEXT_REQUIRED) {
+				return ((ZSContextRequiredGetter) parent).get(name, context);
+			}
 			else if (type.shortValue() == TYPE_CONTEXT) {
 				return ((ZSContext) parent).get(name);
 			}
@@ -57,7 +65,8 @@ public class PropertyChild implements VariableChild {
 			}
 		}
 		catch (Exception e) {
-			throw new ExecutionException(e.getMessage(), variableElement, e);
+			if (e instanceof ExecutionException) throw (ExecutionException) e;
+			else throw new ExecutionException(e.getMessage(), variableElement, e);
 		}
 	}
 

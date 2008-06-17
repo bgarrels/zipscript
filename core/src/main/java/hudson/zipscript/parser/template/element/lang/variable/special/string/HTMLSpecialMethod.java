@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 
-public class HTML extends AbstractReplacementMethod {
+public class HTMLSpecialMethod extends AbstractReplacementMethod {
 
-	public static final HTML INSTANCE = new HTML();
+	public static final HTMLSpecialMethod INSTANCE = new HTMLSpecialMethod();
 
 	protected char[] getCharsToReplace() {
 		return new char[] {'<', '>', '&', '\"'};

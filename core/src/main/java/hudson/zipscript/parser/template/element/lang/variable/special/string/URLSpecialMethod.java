@@ -7,10 +7,10 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 import java.net.URLEncoder;
 
 
-public class URL implements SpecialMethod {
+public class URLSpecialMethod implements SpecialMethod {
 
 	private String encoding;
-	public URL (ParsingSession parsingSession) {
+	public URLSpecialMethod (ParsingSession parsingSession) {
 		this.encoding = "UTF-8";
 	}
 
