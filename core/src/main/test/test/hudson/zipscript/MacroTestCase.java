@@ -39,7 +39,7 @@ public class MacroTestCase extends TestCase {
 		context.put("people", l);
 		String mergeTemplate = "templates/macro_oo_test.zs";
 		String resultFile = "/templates/macro_oo_result.txt";
-		evalResult(mergeTemplate, resultFile, null);
+		evalResult(mergeTemplate, resultFile, context);
 	}
 
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
