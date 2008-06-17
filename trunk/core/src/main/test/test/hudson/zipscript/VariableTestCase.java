@@ -29,7 +29,7 @@ public class VariableTestCase extends TestCase {
 		assertEquals("black sheep", template.objectValue(context));
 	}
 	
-	public void _testSimpleVariables () throws Exception {
+	public void testSimpleVariables () throws Exception {
 		String mergeTemplate = "templates/variable_simple_test.zs";
 		String resultFile = "/templates/variable_simple_result.txt";
 		Map context = new HashMap();
