@@ -9,7 +9,7 @@
   * ${hasNext} is special token to reference if there are more entries
   * scoped context (so ${i} will always relate to the appropriate loop index)
 
-===While Directive===
+==While Directive==
 *FM Implementation*
   * FM has no implementation
 *ZS Implementation*
@@ -17,7 +17,7 @@
   * ${i} is a special token to reference index number
   * scoped context (so ${i} will always relate to the appropriate loop index)
 
-===Variables===
+==Variables==
 *FM Implementation*
   * You must start properties with lowercase eg: foo.bar will reference getBar() on foo
   * You can not reference objects in the session that contain a '.' in the key
