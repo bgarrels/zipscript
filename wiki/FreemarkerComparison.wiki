@@ -1,5 +1,4 @@
-=Directives=
-==Iterator Directive==
+===Iterator Directive===
 *FM Implementation*
 {{{[#list myList as entry] ... [/#list]}}}
   * ${entry_index} is special token to reference index number
@@ -10,10 +9,26 @@
   * ${hasNext} is special token to reference if there are more entries
   * scoped context (so ${i} will always relate to the appropriate loop index)
 
-==While Directive==
+===While Directive===
 *FM Implementation*
   * FM has no implementation
 *ZS Implementation*
 {{{[#while boolean expression ex: i<10] ... [/#while]}}}
   * ${i} is a special token to reference index number
   * scoped context (so ${i} will always relate to the appropriate loop index)
+
+===Variables===
+*FM Implementation*
+  * You must start properties with lowercase eg: foo.bar will reference getBar() on foo
+  * You can not reference objects in the session that contain a '.' in the key
+  * Formatting variables is accomplished by using ?string.something
+
+*ZS Implementation*
+  * Properties can start with either uppercase or lowercase characters
+  * ${foo.bar} will either reference foo.getBar(), foo.isBar(), foo.bar(), or context value retrieved with key 'foo.bar' in that order
+  * Special token for formatting '|'  ex:
+  # ${myDate|short} -> 12/25/2008
+  # ${myDate|t:short} -> 10:37 AM
+  # ${myDate|"MMM dd, yyyy"} -> Dec 21, 2008
+  # ${myNumber|currency} -> $23,254.98
+  # ${myNumber|"#,###.00} -> 23,254.98
