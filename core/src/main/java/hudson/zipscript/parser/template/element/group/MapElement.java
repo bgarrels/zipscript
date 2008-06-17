@@ -38,9 +38,11 @@ public class MapElement extends NestableElement {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		for (int i=0; i<getChildren().size(); i++) {
-			if (i > 0) sb.append(' ');
-			sb.append(getChildren().get(i));
+		if (null != getChildren()) {
+			for (int i=0; i<getChildren().size(); i++) {
+				if (i > 0) sb.append(' ');
+				sb.append(getChildren().get(i));
+			}
 		}
 		sb.append("]");
 		return sb.toString();
