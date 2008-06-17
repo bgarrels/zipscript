@@ -39,7 +39,7 @@
   * Can have ordinal/named attribute parameters
   * Can reference nested content in macro definition
 
-*ZS Implementation
+*ZS Implementation*
   * Can have ordinal/named attribute parameters
   * Can reference nested content in macro definition
   * Can create macro data structures which can be evaluated in the macro definition for true object oriented macros
