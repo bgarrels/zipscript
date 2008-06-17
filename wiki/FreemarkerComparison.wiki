@@ -47,7 +47,9 @@
 [@grid id="myGrid" entries=people]
 	[@column title="First Name"]${entry.firstName?upperFirst}[/@column]
 	[@column title="Last Name"]${entry.lastName!"Unknown Last Name"}[/@column]
-	[@column title="Birthday"]${entry.birthday|short}[/@column]
+	[#if doShowBirthday]
+		[@column title="Birthday"]${entry.birthday|short}[/@column]
+	[/#if]
 [/@grid]
 
 [#macro grid id entries column]
