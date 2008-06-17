@@ -1,5 +1,3 @@
-${1 in {1,2}}
-
 [#if 1 in {1,2}]
 	Correct!
 [#else]
