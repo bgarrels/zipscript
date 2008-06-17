@@ -32,3 +32,50 @@
   # ${myDate|"MMM dd, yyyy"} -> Dec 21, 2008
   # ${myNumber|currency} -> $23,254.98
   # ${myNumber|"#,###.00} -> 23,254.98
+
+
+==Macros==
+*FM Implementation*
+  * Can have ordinal/named attribute parameters
+  * Can reference nested content in macro definition
+
+*ZS Implementation
+  * Can have ordinal/named attribute parameters
+  * Can reference nested content in macro definition
+  * Can create macro data structures which can be evaluated in the macro definition for true object oriented macros
+{{{
+[@grid id="myGrid" entries=people]
+	[@column title="First Name"]${entry.firstName?upperFirst}[/@column]
+	[@column title="Last Name"]${entry.lastName!"Unknown Last Name"}[/@column]
+	[@column title="Birthday"]${entry.birthday|short}[/@column]
+[/@grid]
+
+[#macro grid id entries column]
+	The grid id is ${id}
+	<table>
+		<tr>
+			[#foreach column in column]
+			 <th>${column.title}</th>
+			[/#foreach]
+		</tr>
+		[#foreach entry in entries]
+		<tr>
+			[#foreach column in column]
+				<td>${column.body}</td>
+			[/#foreach]
+		</tr>
+		[/#foreach]
+	</table>
+[/#macro]
+}}}
+Will output:
+{{{
+	The grid id is myGrid
+	<table>
+		<tr>
+						 <th>First Name</th>
+						 <th>Last Name</th>
+						 <th>Birthday</th>
+					</tr>
+			</table>
+}}}
