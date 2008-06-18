@@ -27,6 +27,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 	public ElementIndex normalize(
 			int index, List elementList, ParsingSession session) throws ParseException {
 		StringBuffer pattern = null;
+		boolean wasWhitespace = false;
 		while (elementList.size() > index) {
 			Element e = (Element) elementList.get(index);
 			if (e instanceof SpecialElement) {
@@ -43,14 +44,14 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				e.normalize(index, elementList, session);
 				addSpecialElement(e);
 			}
-			else if (e instanceof VariableElement) {
-				// dynamics variable path
-				if (null == pattern) {
-					pattern = new StringBuffer();
-					pattern.append(getPattern());
-				}
-				pattern.append(e);
-			}
+//			else if (e instanceof VariableElement) {
+//				// dynamics variable path
+//				if (null == pattern) {
+//					pattern = new StringBuffer();
+//					pattern.append(getPattern());
+//				}
+//				pattern.append(e);
+//			}
 			else if (isShouldEvaluateSeparators() && e instanceof GroupElement) {
 				elementList.remove(index);
 				if (null == pattern) {
@@ -78,11 +79,11 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 						continue;
 					}
 					else {
-						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable sequence '" + pattern + "'");
+						throw new ParseException(this, "Invalid variable sequence '" + pattern + "'");
 					}
 				}
 				else {
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable sequence '" + pattern + "'");
+					throw new ParseException(this, "Invalid variable sequence '" + pattern + "'");
 				}
 
 			}

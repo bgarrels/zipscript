@@ -47,4 +47,8 @@ public class CommentElement implements Element {
 
 	public void setElementPosition(long position) {
 	}
+
+	public List getChildren() {
+		return null;
+	}
 }

@@ -71,8 +71,7 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 			number = new BigDecimal(numberPart);
 		}
 		else
-			throw new ParseException(
-					ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid number identifier '" + type + "'");
+			throw new ParseException(this, "Invalid number identifier '" + type + "'");
 	}
 
 	public static char determineType (String numberPart, Locale locale) {
@@ -120,5 +119,9 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 
 	public String getTokenValue() {
 		return tokenValue;
+	}
+
+	public List getChildren() {
+		return null;
 	}
 }

@@ -31,4 +31,8 @@ public class IdentifierElement extends AbstractElement {
 	public String getTokenValue() {
 		return toString();
 	}
+
+	public List getChildren() {
+		return null;
+	}
 }

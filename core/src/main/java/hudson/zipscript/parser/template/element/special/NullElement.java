@@ -37,4 +37,8 @@ public class NullElement extends AbstractElement implements SpecialElement {
 	public ElementIndex normalize(int index, List elementList, ParsingSession session) throws ParseException {
 		return SpecialElementNormalizer.normalizeSpecialElement(this, index, elementList, session);
 	}
+
+	public List getChildren() {
+		return null;
+	}
 }

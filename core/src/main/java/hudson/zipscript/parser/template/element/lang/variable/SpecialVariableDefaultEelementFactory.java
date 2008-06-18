@@ -17,6 +17,8 @@ public class SpecialVariableDefaultEelementFactory implements DefaultElementFact
 		SpecialVariableElementImpl element = new SpecialVariableElementImpl(
 				false, text, session, contentPosition);
 		element.setShouldEvaluateSeparators(false);
+		element.setElementPosition(contentPosition);
+		element.setElementLength(text.length());
 		return element;
 	}
 

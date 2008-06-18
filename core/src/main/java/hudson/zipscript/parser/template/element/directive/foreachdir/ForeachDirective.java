@@ -55,16 +55,17 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	private void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		try {
-			if (elements.get(0) instanceof SpecialStringElement) {
+			Element e = (Element) elements.get(0);
+			if (e instanceof SpecialStringElement) {
 				this.varName = ((SpecialStringElement) elements.get(0)).getTokenValue();
 				elements.remove(0);
 			}
 			else {
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting variable name");
+				throw new ParseException(e, "Invalid sequence.  Expecting variable name");
 			}
-			if (!(elements.remove(0) instanceof InElement))
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: 'in' should be second token");
+			e = (Element) elements.remove(0);
+			if (!(e instanceof InElement))
+				throw new ParseException(e, "Improperly formed for expression: 'in' should be second token '" + this + "'");
 			if (elements.size() == 1 && elements.get(0) instanceof ListElement) {
 				// bypass element parsing
 				this.listElement = (Element) elements.get(0);
@@ -74,7 +75,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed for expression: must have at least 3 tokens");
+			throw new ParseException(contentPosition, "Improperly formed for expression: must have at least 3 tokens");
 		}
 	}
 
@@ -247,6 +248,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	}
 
 	public String toString() {
-		return "[#foreach " + varName + " in " + listElement + "]";
+		if (null != listElement)
+			return "[#foreach " + varName + " in " + listElement + "]";
+		else
+			return "[#foreach " + varName + " in ?]";
 	}
 }

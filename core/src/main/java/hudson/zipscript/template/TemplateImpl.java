@@ -9,7 +9,9 @@ import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
+import java.awt.geom.Line2D;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,12 +20,12 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 	private Element element;
 	private List elements;
 	private ParsingSession parsingSession;
-	private ParsingResult result;
+	private ParsingResult parsingResult;
 
 	public TemplateImpl (List elements, ParsingSession parsingSession, ParsingResult result) {
 		this.elements = elements;
 		this.parsingSession = parsingSession;
-		this.result = result;
+		this.parsingResult = result;
 	}
 
 	public TemplateImpl (Element element) {
@@ -59,7 +61,7 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 			}
 		}
 		catch (ExecutionException e) {
-			e.setParsingResult(result);
+			e.setParsingResult(parsingResult);
 			throw (e);
 		}
 	}
@@ -71,7 +73,7 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 						context);
 			}
 			catch (ExecutionException e) {
-				e.setParsingResult(result);
+				e.setParsingResult(parsingResult);
 				throw (e);
 			}
 		else
@@ -85,7 +87,7 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 						context);
 			}
 			catch (ExecutionException e) {
-				e.setParsingResult(result);
+				e.setParsingResult(parsingResult);
 				throw (e);
 			}
 		else
@@ -115,5 +117,32 @@ public class TemplateImpl implements Template, EvaluationTemplate, Element {
 		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj);
 		context.setParsingSession(parsingSession);
 		return context;
+	}
+
+	public ParsingSession getParsingSession() {
+		return parsingSession;
+	}
+
+	public ParsingResult getParsingResult() {
+		return parsingResult;
+	}
+
+	public Element getElement() {
+		return element;
+	}
+
+	public List getElements() {
+		return elements;
+	}
+
+	public List getChildren() {
+		if (null != elements)
+			return elements;
+		else if (null != element) {
+			elements = new ArrayList();
+			elements.add(element);
+			return elements;
+		}
+		else return null;
 	}
 }

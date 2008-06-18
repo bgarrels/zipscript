@@ -15,7 +15,7 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 	private Element executeElement;
 	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 			throws ParseException {
-		if (elementList.size() >= index) {
+		if (elementList.size() > index) {
 			executeElement = (Element) elementList.remove(index);
 			if (executeElement instanceof SpecialVariableElementImpl)
 				((SpecialVariableElementImpl) executeElement).setShouldEvaluateSeparators(true);
@@ -23,7 +23,7 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 			return null;
 		}
 		else {
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Default elements must have a value '" + this + "'");
+			throw new ParseException(this, "Default elements must have a value");
 		}
 	}
 

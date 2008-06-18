@@ -28,4 +28,6 @@ public interface Element {
 
 	public ElementIndex normalize (
 			int index, List elementList, ParsingSession session) throws ParseException;
+
+	public List getChildren();
 }

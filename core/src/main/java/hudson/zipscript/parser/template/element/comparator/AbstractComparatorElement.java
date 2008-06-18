@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -122,6 +123,16 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 	 */
 	public void setRightHandSide(Element rightHandSide) {
 		this.rightHandSide = rightHandSide;
+	}
+
+	List children = null;
+	public List getChildren() {
+		if (null == children) {
+			children = new ArrayList();
+			children.add(getLeftHandSide());
+			children.add(getRightHandSide());
+		}
+		return children;
 	}
 
 	public String toString () {

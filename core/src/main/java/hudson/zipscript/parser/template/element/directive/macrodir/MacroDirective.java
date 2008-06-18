@@ -35,7 +35,7 @@ public class MacroDirective extends NestableElement {
 	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		if (elements.size() == 0)
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Macro name was not specified");
+			throw new ParseException(this, "Macro name was not specified");
 		Element e;
 		e = (Element) elements.remove(0);
 		if (e instanceof SpecialStringElement)
@@ -44,7 +44,7 @@ public class MacroDirective extends NestableElement {
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid macro name '" + name + "'");
+				throw new ParseException(this, "Invalid macro name '" + name + "'");
 		}
 
 		// look for attributes
@@ -77,16 +77,11 @@ public class MacroDirective extends NestableElement {
 		else if (e instanceof TextElement)
 			name = ((TextElement) e).getText();
 		else
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
-		// validate name
-//		if (name.startsWith("*")) {
-//			required = true;
-//			name = name.substring(1, name.length());
-//		}
+			throw new ParseException(this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid macro attribute name '" + name + "'");
+				throw new ParseException(this, "Invalid macro attribute name '" + name + "'");
 		}
 
 		// attribute properties
@@ -95,13 +90,13 @@ public class MacroDirective extends NestableElement {
 			if (e instanceof AssignmentElement) {
 				elements.remove(0);
 				if (elements.size() == 0) {
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected content '" + e + "'");
+					throw new ParseException(this, "Unexpected content '" + e + "'");
 				}
 				else {
 					// default
 					e = (Element) elements.get(0);
 					if (e instanceof AssignmentElement) {
-						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected content '" + e + "'");
+						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
 						defaultVal = e;

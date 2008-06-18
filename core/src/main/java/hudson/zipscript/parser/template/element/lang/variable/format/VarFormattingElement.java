@@ -23,7 +23,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 	public ElementIndex normalize(
 			int index, List elementList, ParsingSession session)
 			throws ParseException {
-		if (elementList.size() >= index) {
+		if (elementList.size() > index) {
 			Element e = (Element) elementList.remove(index);
 			if (e instanceof SpecialVariableElementImpl) {
 				formatFunction = ((SpecialVariableElementImpl) e).getTokenValue();
@@ -34,9 +34,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			return null;
 		}
 		else {
-			throw new ParseException(
-					ParseException.TYPE_UNEXPECTED_CHARACTER, this,
-						"Default elements must have a value '" + this + "'");
+			throw new ParseException(this, "A formatting element was detected with no value");
 		}
 	}
 

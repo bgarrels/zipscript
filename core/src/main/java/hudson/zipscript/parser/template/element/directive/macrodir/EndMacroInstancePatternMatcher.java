@@ -25,7 +25,7 @@ public class EndMacroInstancePatternMatcher implements PatternMatcher {
 		while (reader.hasRemaining()) {
 			char c = reader.get();
 			if (c == '[') {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, null, "Unexpted content '['");
+				throw new ParseException(reader.position(), "Unexpected content '['");
 			}
 			else if (c == ']') {
 				// check for new line

@@ -44,7 +44,7 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 
 	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 			throws ParseException {
-		if (elementList.size() >= index) {
+		if (elementList.size() > index) {
 			Element e = (Element) elementList.remove(index);
 			e.normalize(index, elementList, session);
 			if (e instanceof SpecialVariableElementImpl)
@@ -61,7 +61,7 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			return null;
 		}
 		else {
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Default elements must have a value '" + this + "'");
+			throw new ParseException(this, "Default element detected with no value");
 		}
 	}
 
