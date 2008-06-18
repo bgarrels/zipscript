@@ -48,4 +48,8 @@ public class TextElement extends AbstractElement implements Element {
 	public String getText() {
 		return text;
 	}
+
+	public List getChildren() {
+		return null;
+	}
 }

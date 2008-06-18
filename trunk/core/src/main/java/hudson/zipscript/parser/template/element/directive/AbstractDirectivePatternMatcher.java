@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.template.element.directive;
 
+import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 
@@ -12,12 +14,11 @@ public abstract class AbstractDirectivePatternMatcher extends AbstractPatternMat
 	public char[] getStartToken() {
 		if (null == startToken) {
 			if (!onlyAllowEmpty() && !allowEmpty()) {
-				startToken = new char[3 + getDirectiveName().length()];
+				startToken = new char[2 + getDirectiveName().length()];
 				startToken[0] = '[';
 				startToken[1] = '#';
 				System.arraycopy(
 						getDirectiveName().toCharArray(), 0, startToken, 2, getDirectiveName().length());
-				startToken[startToken.length-1] = ' ';
 			}
 			else {
 				startToken = new char[2 + getDirectiveName().length()];

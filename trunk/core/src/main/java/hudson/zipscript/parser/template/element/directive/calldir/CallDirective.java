@@ -47,19 +47,19 @@ public class CallDirective extends AbstractDirective {
 			}
 			else {
 				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting variable name");
+						this, "Invalid sequence.  Expecting variable name");
 			}
 			if (!(elements.remove(0) instanceof WithElement))
 				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting 'with'");
+						this, "Invalid sequence.  Expecting 'with'");
 			if (elements.size() > 1)
 				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Improperly formed set expression");
+						this, "Invalid sequence.  Improperly formed set expression");
 			else
 				this.withElement = (Element) elements.get(0);
 		}
 		catch (IndexOutOfBoundsException e) {
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed set expression: must have at least 3 tokens");
+			throw new ParseException(this, "Improperly formed set expression: must have at least 3 tokens");
 		}
 	}
 
@@ -95,6 +95,10 @@ public class CallDirective extends AbstractDirective {
 
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
+		return null;
+	}
+
+	public List getChildren() {
 		return null;
 	}
 

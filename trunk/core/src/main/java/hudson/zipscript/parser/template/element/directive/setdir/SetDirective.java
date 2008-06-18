@@ -29,20 +29,17 @@ public class SetDirective extends AbstractDirective {
 				this.varName = ((SpecialStringElement) elements.remove(0)).getTokenValue();
 			}
 			else {
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting variable name");
+				throw new ParseException(this, "Invalid sequence.  Expecting variable name");
 			}
 			if (!(elements.remove(0) instanceof AssignmentElement))
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Expecting '='");
+				throw new ParseException(this, "Invalid sequence.  Expecting '='");
 			if (elements.size() > 1)
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid sequence.  Improperly formed set expression");
+				throw new ParseException(this, "Invalid sequence.  Improperly formed set expression");
 			else
 				this.setElement = (Element) elements.get(0);
 		}
 		catch (IndexOutOfBoundsException e) {
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Improperly formed set expression: must have at least 3 tokens");
+			throw new ParseException(this, "Improperly formed set expression: must have at least 3 tokens");
 		}
 	}
 
@@ -53,6 +50,10 @@ public class SetDirective extends AbstractDirective {
 
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
+		return null;
+	}
+
+	public List getChildren() {
 		return null;
 	}
 }

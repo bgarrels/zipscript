@@ -29,7 +29,7 @@ public class ListElement extends NestableElement {
 			if (e instanceof WhitespaceElement) continue;
 			if (waslastEntryComma) {
 				if (e instanceof CommaElement) {
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected Comma");
+					throw new ParseException(this, "Unexpected Comma");
 				}
 				else {
 					waslastEntryComma = false;
@@ -38,7 +38,7 @@ public class ListElement extends NestableElement {
 			}
 			else {
 				if (!(e instanceof CommaElement))
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Expecting comma but found '" + e.toString() + "'");
+					throw new ParseException(this, "Expecting comma but found '" + e.toString() + "'");
 				else {
 					waslastEntryComma = true;
 				}

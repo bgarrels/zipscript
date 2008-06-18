@@ -23,16 +23,18 @@ public class ParsingResult {
 	}
 
 	public LinePosition getLinePosition (long position) {
-		int lineCount = 0;
+		int lineCount = 1;
 		long lineBreakPosition = 0;
 		for (int i=0; lineBreaks.length > i; i++) {
-			if (lineBreaks[i] < position)
+			if (lineBreaks[i] <= position)
 				lineBreakPosition = lineBreaks[i];
 			else
 				break;
 			lineCount ++;
 		}
-		return new LinePosition(lineCount, (int) (position - lineBreakPosition));
+		int lbpos = (int) (position - lineBreakPosition);
+		if (lbpos > 0) lbpos--;
+		return new LinePosition(lineCount, lbpos);
 	}
 
 	public ParsingSession getParsingSession() {

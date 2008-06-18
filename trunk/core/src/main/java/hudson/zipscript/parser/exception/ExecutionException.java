@@ -41,4 +41,14 @@ public class ExecutionException extends RuntimeException {
 	public void setElement(Element element) {
 		this.element = element;
 	}
+
+	public int getLine () {
+		if (null == parsingResult) return 0;
+		return parsingResult.getLinePosition(element.getElementPosition()).line;
+	}
+
+	public int getPosition () {
+		if (null == parsingResult) return 0;
+		return parsingResult.getLinePosition(element.getElementPosition()).position;
+	}
 }

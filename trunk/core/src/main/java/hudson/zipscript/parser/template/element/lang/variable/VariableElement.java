@@ -37,6 +37,8 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public VariableElement (
 			boolean silence, String pattern, ParsingSession session, int contentIndex) throws ParseException {
+		setElementPosition(contentIndex);
+		setElementLength(pattern.length());
 		this.silence = silence;
 		setPattern(pattern, session, contentIndex);
 	}
@@ -52,8 +54,7 @@ public class VariableElement extends AbstractElement implements Element {
 		this.children.clear();
 		if (!quickScan(pattern)) {
 			if (session.isVariablePatternRecognized(pattern))
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid variable reference '" + pattern + "'");
+				throw new ParseException(this, "Invalid variable reference '" + pattern + "'");
 			session.setReferencedVariable(pattern);
 			ParseParameters parameters = new ParseParameters(false, true);
 			ParseParameters currentParameters = session.getParameters();
@@ -196,7 +197,8 @@ public class VariableElement extends AbstractElement implements Element {
 		return sb.toString();
 	}
 
-	private List parse (List elements, ParsingSession session) throws ParseException {
+	private List parse (
+			List elements, ParsingSession session) throws ParseException {
 		List children = new ArrayList();
 		boolean started = false;
 		boolean wasWhitespace = false;
@@ -216,9 +218,9 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			else if (e instanceof SpecialElement) {
 				if (wasWhitespace)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid whitespace");
+					throw new ParseException(e, "Invalid whitespace");
 				if (!wasSeparator && children.size() > 0)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after sparator '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid sequence after sparator '" + e.toString() + "'");
 				wasWhitespace = false;
 				wasSeparator = false;
 				if (children.size() == 0)
@@ -228,9 +230,9 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			else if (e instanceof SpecialStringElement) {
 				if (wasWhitespace)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid whitespace");
+					throw new ParseException(e, "Invalid whitespace");
 				if (!wasSeparator && children.size() > 0)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after sparator '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid sequence after sparator '" + e.toString() + "'");
 				wasWhitespace = false;
 				wasSeparator = false;
 				addChildProperty(((SpecialStringElement) e).getTokenValue(), children);
@@ -244,9 +246,9 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			else if (e instanceof TextElement) {
 				if (wasWhitespace)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid whitespace");
+					throw new ParseException(e, "Invalid whitespace");
 				if (!wasSeparator && children.size() > 0)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after sparator '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid sequence after sparator '" + e.toString() + "'");
 				wasWhitespace = false;
 				wasSeparator = false;
 				if (children.size() == 0) {
@@ -269,21 +271,21 @@ public class VariableElement extends AbstractElement implements Element {
 						return ((VariableElement) e).children;
 					}
 					else {
-						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid dynamic variable element '" + e.toString() + "'.  This must be the first token or follow a separator");
+						throw new ParseException(e, "Invalid dynamic variable element '" + e.toString() + "'.  This must be the first token or follow a separator");
 					}
 				}
 			}
 			else if (e instanceof GroupElement) {
 				if (children.size() == 0)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid element '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid element '" + e.toString() + "'");
 				else if (wasWhitespace)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after whitespace '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid sequence after whitespace '" + e.toString() + "'");
 				else if (wasSeparator)
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence after separator '" + e.toString() + "'");
+					throw new ParseException(e, "Invalid sequence after separator '" + e.toString() + "'");
 				else {
 					VariableChild child = (VariableChild) children.remove(children.size()-1);
 					if (null == child.getPropertyName())
-						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid sequence '" + e.toString() + "'");
+						throw new ParseException(e, "Invalid sequence '" + e.toString() + "'");
 					List parameters = getMethodParameters((GroupElement) e, session);
 					children.add(new MethodChild(child.getPropertyName(), parameters, this));
 				}
@@ -307,7 +309,7 @@ public class VariableElement extends AbstractElement implements Element {
 				children.add(new ElementWrapperChild(e));
 			}
 			else {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, e, "Invalid element detected '" + e.toString() + "'");
+				throw new ParseException(e, "Invalid element detected '" + e.toString() + "'");
 			}
 		}
 		return children;
@@ -347,7 +349,7 @@ public class VariableElement extends AbstractElement implements Element {
 		for (int i=0; i<t.size(); i++)
 			if (!(t.get(i) instanceof WhitespaceElement)) whitespaceOnly = false;
 		if (whitespaceOnly && null != lastSeparator)
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, lastSeparator, "Invalid sequence '" + lastSeparator.toString() + "'");
+			throw new ParseException(lastSeparator, "Invalid sequence '" + lastSeparator.toString() + "'");
 		if (!whitespaceOnly) {
 			Element mpe = getMethodParameterElement(t, parseData);
 			if (null != mpe)
@@ -377,5 +379,9 @@ public class VariableElement extends AbstractElement implements Element {
 	protected void addSpecialElement (Element e) {
 		if (null == specialElements) specialElements = new ArrayList(1);
 		specialElements.add(e);
+	}
+
+	public List getChildren() {
+		return null;
 	}
 }

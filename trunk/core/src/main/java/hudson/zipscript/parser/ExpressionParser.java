@@ -72,10 +72,13 @@ public class ExpressionParser {
 		
 		if (data.getElements().size() == 1)
 			return (Element) data.getElements().get(0);
-		else
-			return null;
+		else if (data.getElements().size() == 0) {
+			throw new ParseException(null, "Invlalid expression detected '" + contents + "'");
+		}
+		else {
+			throw new ParseException((Element) data.getElements().get(1), "Invlalid element detected '" + data.getElements().get(1) + "'");
+		}
 	}
-			
 
 	public ParsingResult parse (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
@@ -90,7 +93,8 @@ public class ExpressionParser {
 			CharBuffer buffer, StartTokenEntry[] startTokens, DefaultElementFactory defaultElementFactory, ParsingSession session, int startPosition) 
 	throws ParseException {
 		List elements = new ArrayList();
-		List lineBreaks = new ArrayList();
+		List lineBreaks = loadLineBreaks(buffer);
+		buffer.position(0);
 		StringBuffer unmatchedChars = new StringBuffer();
 		StartTokenEntry startTokenEntry = null;
 		try {
@@ -98,7 +102,6 @@ public class ExpressionParser {
 			while (buffer.hasRemaining()) {
 				boolean match = false;
 				char c = buffer.get();
-				if (c == '\n') lineBreaks.add(new Long(buffer.position()));
 				for (int i=0; i<startTokens.length; i++) {
 					if (c == startTokens[i].startToken[0]) {
 						// possible start token match
@@ -116,7 +119,7 @@ public class ExpressionParser {
 								e.setElementPosition(position + startPosition);
 								e.setElementLength((int) (buffer.position()-position));
 								unmatchedChars = recordUnmatchedChars(
-										buffer.position(), unmatchedChars, elements, session, defaultElementFactory);
+										buffer.position() + startPosition, unmatchedChars, elements, session, defaultElementFactory);
 								elements.add(e);
 								match = true;
 
@@ -135,7 +138,7 @@ public class ExpressionParser {
 					unmatchedChars.append(c);
 				}
 			}
-			recordUnmatchedChars(buffer.position(), unmatchedChars, elements, session, defaultElementFactory);
+			recordUnmatchedChars(buffer.position() + startPosition, unmatchedChars, elements, session, defaultElementFactory);
 	
 			ElementNormalizer.normalize(elements, session, true);
 			return getParsingResult(elements, lineBreaks, session);
@@ -148,6 +151,16 @@ public class ExpressionParser {
 			e.setParsingResult(getParsingResult(elements, lineBreaks, session));
 			throw e;
 		}
+	}
+
+	private List loadLineBreaks (CharBuffer buffer) {
+		List lineBreaks = new ArrayList();
+		for (long i=0; buffer.hasRemaining(); i++) {
+			char c = buffer.get();
+			if (c == '\n')
+				lineBreaks.add(new Long(i+1));
+		}
+		return lineBreaks;
 	}
 
 	private ParsingResult getParsingResult (List elements, List lineBreaks, ParsingSession parsingSession) {

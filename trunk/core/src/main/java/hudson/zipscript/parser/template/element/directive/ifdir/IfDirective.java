@@ -26,7 +26,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 	private void parseContents (String contents, int contentIindex) throws ParseException {
 		ifElement = parseElement(contents, contentIindex);
 		if (null == ifElement) throw new ParseException(
-				ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid element syntax '" + contents + "'");
+				this, "Invalid element syntax '" + contents + "'");
 	}
 
 	protected boolean isTopLevelElement(Element e) {

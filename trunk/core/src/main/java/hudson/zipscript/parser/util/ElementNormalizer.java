@@ -22,7 +22,7 @@ public class ElementNormalizer {
 				session.getNestingStack().push(e);
 				ei = e.normalize(i, elements, session);
 				if (e != session.getNestingStack().pop()) {
-					throw new ParseException(0, e, "Bad Nesting Stack");
+					throw new ParseException(e, "Bad Nesting Stack");
 				}
 			}
 			else {

@@ -42,4 +42,8 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 	public boolean booleanValue(ZSContext context) {
 		return value.booleanValue();
 	}
+
+	public List getChildren() {
+		return null;
+	}
 }

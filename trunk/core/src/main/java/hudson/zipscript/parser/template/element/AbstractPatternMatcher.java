@@ -21,6 +21,7 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 	protected int findMatch (
 			CharBuffer contents, char[] startChars, char[] endChars, char[] stopChars, boolean allowEscape)
 	throws ParseException {
+		int position = contents.position() - startChars.length;
 		int nesting = 1;
 		if (!isNestingApplicable()) nesting = 0;
 		char startMatchStart = startChars[0];
@@ -28,7 +29,7 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		int length = 0;
 		while (true) {
 			if (!contents.hasRemaining()) {
-				throw new ParseException(ParseException.TYPE_EOF, null,
+				throw new ParseException(position,
 						"Unexpected end of file reached while looking for '" + new String(getEndChars()) + "'");
 			}
 			char c = contents.get();
@@ -48,25 +49,29 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 					}
 					if (match) {
 						if (length == 0 && !allowEmpty() && !onlyAllowEmpty()) {
-							throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, length + contents.length());
+							char[] arr = new char[length];
+							contents.get(arr);
+							throw new ParseException(position, length + contents.length(), "Missing content for '" + new String(startChars) + new String(getEndChars()) + "'");
 						}
 						if (length > 0 && onlyAllowEmpty()) {
-							throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, length + contents.length());
+							char[] arr = new char[length];
+							contents.get(arr);
+							throw new ParseException(position, length + contents.length(), "No content is allowed inside '" + new String(startChars) + new String(getEndChars()) + "'");
 						}
 						length += endChars.length;
 						return length;
 					}
 				}
 				else {
-					throw new ParseException(ParseException.TYPE_EOF, this, length + contents.length());
+					// we really shouldn't get here
+					throw new ParseException(position, length + contents.length(), "Undetermined processing error");
 				}
 			}
 			else if (c == startMatchStart) {
 				if (isNestingApplicable())nesting ++;
 			}
 			else if (isMatch(c, stopChars)) {
-				throw new ParseException(
-						ParseException.TYPE_UNEXPECTED_CHARACTER, this, length);
+				throw new ParseException(position, length, "Invalid character '" + c + "'");
 			}
 			length ++;
 		}

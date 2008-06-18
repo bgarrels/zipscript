@@ -39,7 +39,7 @@ public class MacroInstanceDirective extends NestableElement {
 	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		if (elements.size() == 0)
-			throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Macro name was not specified");
+			throw new ParseException(this, "Macro name was not specified");
 		Element e;
 		e = (Element) elements.remove(0);
 		if (e instanceof SpecialStringElement)
@@ -48,7 +48,7 @@ public class MacroInstanceDirective extends NestableElement {
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid macro name '" + name + "'");
+				throw new ParseException(this, "Invalid macro name '" + name + "'");
 		}
 
 		// determine parameter type
@@ -84,7 +84,7 @@ public class MacroInstanceDirective extends NestableElement {
 		if (isOrdinal) {
 			Element e = (Element) elements.remove(0);
 			if (e instanceof AssignmentElement)
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected token '=' found when parsing ordinal macro attributes");
+				throw new ParseException(this, "Unexpected token '=' found when parsing ordinal macro attributes");
 			return new MacroAttribute(null, e, false);
 		}
 		else {
@@ -98,12 +98,12 @@ public class MacroInstanceDirective extends NestableElement {
 			else if (e instanceof TextElement)
 				name = ((TextElement) e).getText();
 			else
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
+				throw new ParseException(this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
 			// validate name
 			for (int i=0; i<name.length(); i++) {
 				char c = name.charAt(i);
 				if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Invalid macro attribute name '" + name + "'");
+					throw new ParseException(this, "Invalid macro attribute name '" + name + "'");
 			}
 
 			// attribute properties
@@ -112,13 +112,13 @@ public class MacroInstanceDirective extends NestableElement {
 				if (e instanceof AssignmentElement) {
 					elements.remove(0);
 					if (elements.size() == 0) {
-						throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected content '" + e + "'");
+						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
 						// value
 						e = (Element) elements.remove(0);
 						if (e instanceof AssignmentElement) {
-							throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected content '" + e + "'");
+							throw new ParseException(this, "Unexpected content '" + e + "'");
 						}
 						else {
 							MacroAttribute attribute = new MacroAttribute(
@@ -128,12 +128,11 @@ public class MacroInstanceDirective extends NestableElement {
 					}
 				}
 				else {
-					throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Unexpected element, expecting '='.  Found '" + e + "'");
+					throw new ParseException(this, "Unexpected element, expecting '='.  Found '" + e + "'");
 				}
 			}
 			else {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this,
-						"Missing macro value for '" + name + "' in " + this.toString());
+				throw new ParseException(this, "Missing macro value for '" + name + "' in " + this.toString());
 			}
 		}
 	}
@@ -174,10 +173,10 @@ public class MacroInstanceDirective extends NestableElement {
 				}
 			}
 			else  {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "The template defined parameter '" + getName() + "' can have only named parameters");
+				throw new ParseException(this, "The template defined parameter '" + getName() + "' can have only named parameters");
 			}
 			if (!isTDP) {
-				throw new ParseException(ParseException.TYPE_UNEXPECTED_CHARACTER, this, "Undefined macro name '" + getName() + "'");
+				throw new ParseException(this, "Undefined macro name '" + getName() + "'");
 			}
 		}
 		return rtn;
