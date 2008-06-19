@@ -46,7 +46,7 @@ import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.Resource;
 import hudson.zipscript.resource.ResourceLoader;
 import hudson.zipscript.resource.StringResourceLoader;
-import hudson.zipscript.template.EvaluationTemplate;
+import hudson.zipscript.template.Evaluator;
 import hudson.zipscript.template.Template;
 import hudson.zipscript.template.TemplateImpl;
 
@@ -157,7 +157,7 @@ public class ZipEngine {
 		}
 	}
 
-	public EvaluationTemplate getTemplateForEvaluation (String contents) throws ParseException {
+	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
 					contents, VARIABLE_MATCHERS, evalElementFactory, 0);

@@ -47,6 +47,6 @@ public class ListTestCase extends TestCase {
 
 	private Object eval (String s, Object context)
 	throws ParseException, ExecutionException {
-		return ZipEngine.getInstance().getTemplateForEvaluation(s).objectValue(context);
+		return ZipEngine.getInstance().getEvaluator(s).objectValue(context);
 	}
 }

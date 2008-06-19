@@ -34,7 +34,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		context.put("str", "http://www.google.com?a=b&d=e");
 		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge("str?url", context));
 		context.put("str", "com.foo.bar");
-		String[] arr = (String[]) ZipEngine.getInstance().getTemplateForEvaluation(
+		String[] arr = (String[]) ZipEngine.getInstance().getEvaluator(
 				"str?split('.')").objectValue(context);
 		assertEquals(3, arr.length);
 		assertEquals("com", arr[0]);
@@ -71,13 +71,13 @@ public class SpecialMethodsTestCase extends TestCase {
 		map.put("foo", "foo_value");
 		map.put("bar", "bar_value");
 		context.put("myMap", map);
-		Collection c = (Collection) ZipEngine.getInstance().getTemplateForEvaluation(
+		Collection c = (Collection) ZipEngine.getInstance().getEvaluator(
 				"myMap?keys").objectValue(context);
 		assertEquals(2, c.size());
 		assertEquals("foo", c.toArray()[0]);
 		assertEquals("bar", c.toArray()[1]);
 
-		c = (Collection) ZipEngine.getInstance().getTemplateForEvaluation(
+		c = (Collection) ZipEngine.getInstance().getEvaluator(
 				"myMap?values").objectValue(context);
 		assertEquals(2, c.size());
 		assertEquals("foo_value", c.toArray()[0]);
@@ -86,7 +86,7 @@ public class SpecialMethodsTestCase extends TestCase {
 
 	private String merge (String contents, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.getInstance().getTemplateForEvaluation(
+		return ZipEngine.getInstance().getEvaluator(
 				contents).objectValue(context).toString();
 	}
 }
