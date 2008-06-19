@@ -29,14 +29,21 @@ public class MacroInstanceDirective extends NestableElement {
 	Map attributeMap;
 	MacroDirective macro;
 
+	// private ParsingSession parsingSession;
+	private int contentPosition;
+
 	public MacroInstanceDirective (
-			String contents, boolean isFlat, ParsingSession session, int contentPosition) throws ParseException {
+			String contents, boolean isFlat, ParsingSession parsingSession, int contentPosition) throws ParseException {
 		this.contents = contents;
 		this.isFlat = isFlat;
-		parseContents(contents, session, contentPosition);
+		// this.parsingSession = parsingSession;
+		this.contentPosition = contentPosition;
+		parseContents(contents, parsingSession, contentPosition);
 	}
 
-	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+	protected void parseContents (
+			String contents, ParsingSession session, int contentPosition)
+	throws ParseException {
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		if (elements.size() == 0)
 			throw new ParseException(this, "Macro name was not specified");
@@ -48,7 +55,7 @@ public class MacroInstanceDirective extends NestableElement {
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-				throw new ParseException(this, "Invalid macro name '" + name + "'");
+				throw new ParseException(contentPosition, "Invalid macro name '" + name + "'");
 		}
 
 		// determine parameter type
@@ -67,6 +74,70 @@ public class MacroInstanceDirective extends NestableElement {
 				else {
 					this.attributes.add(attribute);
 					if (!isOrdinal) attributeMap.put(attribute.getName(), attribute);
+				}
+			}
+		}
+	}
+
+	private void loadTDPs (Element e, Map map) {
+		if (e instanceof MacroInstanceDirective) {
+			map.put(((MacroInstanceDirective) e).getName(), e);
+		}
+		else if (e instanceof MacroInstanceAware) {
+			for (Iterator i=e.getChildren().iterator(); i.hasNext(); ) {
+				loadTDPs((Element) i.next(), map);
+			}
+		}
+	}
+
+	private void validate (ParsingSession session) throws ParseException {
+		Map tdps = new HashMap();
+		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+			loadTDPs((Element) i.next(), tdps);
+		}
+		
+		// find macro in session
+		macro = session.getMacroDirective(getName());
+		if (null == macro) {
+			// maybe a template defined parameter
+			boolean isTDP = false;
+			if (!isOrdinal || this.getAttributes().size() == 0) {
+				for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+					Element e = (Element) i.next();
+					if (e instanceof MacroInstanceDirective) {
+						// assume that maybe this is a TDP
+						// this issue with this is that it will show up as an execution error
+						// as opposed to a parsing error
+						isTDP = true;
+						break;
+					}
+				}
+			}
+			else  {
+				throw new ParseException(this, "The template defined parameter '" + getName() + "' can have only named parameters");
+			}
+			if (!isTDP) {
+				throw new ParseException(this, "Undefined macro name '" + getName() + "'");
+			}
+		}
+		else {
+			if (!isOrdinal) {
+				// make sure all attributes are defined
+				for (int i=0; i<attributes.size(); i++) {
+					MacroAttribute attribute = (MacroAttribute) attributes.get(i);
+					if (null == macro.getAttribute(attribute.getName())) {
+						throw new ParseException(contentPosition, "Undefined macro attribute '" + attribute.getName() + "'");
+					}
+				}
+				// make sure we're passing all non-required attributes
+				for (int i=0; i<macro.getAttributes().size(); i++) {
+					MacroAttribute attribute = (MacroAttribute) macro.getAttributes().get(i);
+					if (null == attribute.getDefaultValue()) {
+						// it's required
+						if (null == attributeMap.get(attribute.getName()) && null == tdps.get(attribute.getName())) {
+							throw new ParseException(contentPosition, "Undefined required macro attriute '" + attribute.getName() + "'");
+						}
+					}
 				}
 			}
 		}
@@ -155,30 +226,7 @@ public class MacroInstanceDirective extends NestableElement {
 			}
 		}
 
-		// find macro in session
-		macro = session.getMacroDirective(getName());
-		if (null == macro) {
-			// maybe a template defined parameter
-			boolean isTDP = false;
-			if (!isOrdinal || this.getAttributes().size() == 0) {
-				for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
-					Element e = (Element) i.next();
-					if (e instanceof MacroInstanceDirective) {
-						// assume that maybe this is a TDP
-						// this issue with this is that it will show up as an execution error
-						// as opposed to a parsing error
-						isTDP = true;
-						break;
-					}
-				}
-			}
-			else  {
-				throw new ParseException(this, "The template defined parameter '" + getName() + "' can have only named parameters");
-			}
-			if (!isTDP) {
-				throw new ParseException(this, "Undefined macro name '" + getName() + "'");
-			}
-		}
+		validate(session);
 		return rtn;
 	}
 

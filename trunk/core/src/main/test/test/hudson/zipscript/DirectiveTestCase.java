@@ -18,15 +18,16 @@ import junit.framework.TestSuite;
 
 public class DirectiveTestCase extends TestCase {
 
-	public static TestSuite suite () {
-		TestSuite suite = new TestSuite();
-		suite.addTest(new DirectiveTestCase("testForeach"));
-		suite.addTest(new DirectiveTestCase("testWhile"));
-		suite.addTest(new DirectiveTestCase("testIf"));
-		suite.addTest(new DirectiveTestCase("testSet"));
-		suite.addTest(new DirectiveTestCase("testComment"));
-		return suite;
-	}
+//	public static TestSuite suite () {
+//		TestSuite suite = new TestSuite();
+//		suite.addTest(new DirectiveTestCase("testForeach"));
+//		suite.addTest(new DirectiveTestCase("testWhile"));
+//		suite.addTest(new DirectiveTestCase("testIf"));
+//		suite.addTest(new DirectiveTestCase("testSet"));
+//		suite.addTest(new DirectiveTestCase("testComment"));
+//		suite.addTest(new DirectiveTestCase("testMacro"));
+//		return suite;
+//	}
 
 	public DirectiveTestCase () {}
 
@@ -106,10 +107,6 @@ public class DirectiveTestCase extends TestCase {
 	public void testComment () throws Exception {
 		String mergeTemplate = "templates/comment_test.zs";
 		String resultFile = "/templates/comment_result.txt";
-		evalResult(mergeTemplate, resultFile, null);
-
-		mergeTemplate = "templates/macro_nesting_test.zs";
-		resultFile = "/templates/macro_nesting_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
