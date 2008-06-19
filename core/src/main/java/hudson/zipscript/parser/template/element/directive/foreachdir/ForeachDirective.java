@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.group.ListElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
@@ -85,7 +86,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 
 
 
-	public void getMacroInstances(ZSContext context, List macroInstanceList) {
+	public void getMacroInstances(ZSContext context, List macroInstanceList, MacroDirective macro) {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
 			if (list instanceof Object[]) {
@@ -99,7 +100,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					while (i<arr.length) {
 						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						context.put(varName, arr[i]);
-						appendMacroInstances(getChildren(), context, macroInstanceList);
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
 				}
@@ -114,7 +115,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
 						context.put(varName, iter.next());
 						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList);
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
 				}
@@ -129,7 +130,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					while (iter.hasNext()) {
 						context.put(varName, iter.next());
 						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList);
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
 				}
@@ -144,7 +145,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					while (enum.hasMoreElements()) {
 						context.put(varName, enum.nextElement());
 						if (enum.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList);
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
 				}
@@ -155,7 +156,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				context.put(TOKEN_INDEX, new Integer(0));
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
 				context.put(varName, list);
-				appendMacroInstances(getChildren(), context, macroInstanceList);
+				appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.StringWriter;
@@ -39,14 +40,14 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	}
 
 	public void getMacroInstances(
-			ZSContext context, List macroInstanceList) throws ExecutionException {
+			ZSContext context, List macroInstanceList, MacroDirective macro) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context);
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
 			if (i > MAX_LOOPS)
 				throw new ExecutionException("Max loops limit reached", this);
-			appendMacroInstances(getChildren(), context, macroInstanceList);
+			appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 			context.put(TOKEN_INDEX, new Integer(++i));
 		}
 	}

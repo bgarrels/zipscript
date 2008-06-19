@@ -1,7 +1,5 @@
 package hudson.zipscript.parser.template.element.directive;
 
-import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 

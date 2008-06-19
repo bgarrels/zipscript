@@ -1,11 +1,11 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
+import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
-import hudson.zipscript.parser.context.ZSContext;
-import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
-import hudson.zipscript.parser.template.element.Element;
 
 public class SplitSpecialMethod implements SpecialMethod {
 

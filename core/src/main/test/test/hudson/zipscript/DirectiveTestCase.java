@@ -11,10 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import test.hudson.zipscript.model.Person;
-
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import test.hudson.zipscript.model.Person;
 
 public class DirectiveTestCase extends TestCase {
 

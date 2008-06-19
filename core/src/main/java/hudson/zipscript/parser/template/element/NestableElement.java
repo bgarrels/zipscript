@@ -7,6 +7,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.HeaderElementList;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
@@ -110,16 +111,26 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected void appendMacroInstances (
-			List children, ZSContext context, List macroInstanceList) {
+			List children, ZSContext context, List macroInstanceList, MacroDirective macro) {
 		for (Iterator j=children.iterator(); j.hasNext(); ) {
 			Element e = (Element) j.next();
-			if (e instanceof MacroInstanceDirective)
-				macroInstanceList.add(
-						new MacroInstanceEntity(
-								(MacroInstanceDirective) e, context));
-			else if (e instanceof MacroInstanceAware)
+			if (e instanceof MacroInstanceDirective) {
+				MacroInstanceDirective mid = (MacroInstanceDirective) e;
+				if (null != macro.getAttribute(mid.getName())) {
+					macroInstanceList.add(new MacroInstanceEntity(
+							(MacroInstanceDirective) e, context));
+				}
+				else {
+					// macro that might contain TDPs
+					if (null != mid.getMacroDefinition())
+						mid.getMacroDefinition().getMacroInstances(
+								context, macroInstanceList, macro);
+				}
+			}
+			else if (e instanceof MacroInstanceAware) {
 				((MacroInstanceAware) e).getMacroInstances(
-						context, macroInstanceList);
+						context, macroInstanceList, macro);
+			}
 		}
 	}
 

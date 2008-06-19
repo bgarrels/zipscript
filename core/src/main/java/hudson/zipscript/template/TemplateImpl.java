@@ -9,7 +9,6 @@ import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
-import java.awt.geom.Line2D;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;

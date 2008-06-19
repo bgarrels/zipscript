@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MacroInstanceAware {
 
-	public void getMacroInstances (ZSContext context, List list); 
+	public void getMacroInstances (ZSContext context, List list, MacroDirective macro); 
 }
