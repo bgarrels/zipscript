@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TemplateImpl implements Template, EvaluationTemplate, Element {
+public class TemplateImpl implements Template, Evaluator, Element {
 
 	private Element element;
 	private List elements;

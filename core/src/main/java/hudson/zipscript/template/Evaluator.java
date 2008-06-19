@@ -2,7 +2,7 @@ package hudson.zipscript.template;
 
 import hudson.zipscript.parser.exception.ExecutionException;
 
-public interface EvaluationTemplate {
+public interface Evaluator {
 
 	public boolean booleanValue (Object context) throws ExecutionException;
 

@@ -4,7 +4,7 @@ import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.util.IOUtil;
-import hudson.zipscript.template.EvaluationTemplate;
+import hudson.zipscript.template.Evaluator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ import test.hudson.zipscript.model.Obj3;
 public class VariableTestCase extends TestCase {
 
 	public void testSeparatedPathVariables () throws Exception {
-		EvaluationTemplate template = null;
-		template = ZipEngine.getInstance().getTemplateForEvaluation(
+		Evaluator template = null;
+		template = ZipEngine.getInstance().getEvaluator(
 				"${'foo.bar'}");
 		Map context = new HashMap();
 		context.put("foo.bar", "black sheep");
 		assertEquals("black sheep", template.objectValue(context));
-		template = ZipEngine.getInstance().getTemplateForEvaluation(
+		template = ZipEngine.getInstance().getEvaluator(
 				"foo.bar");
 		assertEquals("black sheep", template.objectValue(context));
 	}

@@ -3,7 +3,7 @@ package test.hudson.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.template.EvaluationTemplate;
+import hudson.zipscript.template.Evaluator;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class VariableDefaultsTestCase extends TestCase {
 
 	private Object eval (String s, Object context)
 	throws ParseException, ExecutionException {
-		EvaluationTemplate t = ZipEngine.getInstance().getTemplateForEvaluation(s);
+		Evaluator t = ZipEngine.getInstance().getEvaluator(s);
 		return t.objectValue(context);
 	}
 }
