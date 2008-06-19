@@ -99,6 +99,7 @@ public class MacroDirective extends NestableElement {
 						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
+						elements.remove(0);
 						defaultVal = e;
 					}
 				}

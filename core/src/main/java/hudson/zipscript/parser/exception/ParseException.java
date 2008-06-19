@@ -11,6 +11,7 @@ public class ParseException extends Exception {
 	private int length;
 	private ParsingResult parseData;
 	private Element element;
+	private String resource;
 
 	public ParseException (long position, String message) {
 		this(null, position, Integer.MIN_VALUE, message);
@@ -43,12 +44,15 @@ public class ParseException extends Exception {
 	}
 
 	public String getMessage() {
-		if (null == parseData)
-			return super.getMessage();
-		else {
+		StringBuffer sb = new StringBuffer();
+		if (null != resource)
+			sb.append ("[" + resource + "] ");
+		if (null != parseData) {
 			LinePosition lp = parseData.getLinePosition(absolutePosition);
-			return "(line " + lp.line + ", position " + lp.position + ") " + super.getMessage();
+			sb.append("(line " + lp.line + ", position " + lp.position + ") ");
 		}
+		sb.append(super.getMessage());
+		return sb.toString();
 	}
 
 	public int getLine () {
@@ -59,5 +63,13 @@ public class ParseException extends Exception {
 	public int getPosition () {
 		if (null == parseData) return 0;
 		return parseData.getLinePosition(absolutePosition).position;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
 	}
 }

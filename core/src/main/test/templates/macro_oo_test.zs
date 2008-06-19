@@ -6,7 +6,7 @@
 	[/#if]
 [/@grid]
 
-[@tab id="myId" title="Tab Title 1"]
+[@tab id="myId" title="Tab Title 1" callMacro=false]
 	[@page id="page1" title="Page 1" selected=true]
 		This is the page 1 contents
 	[/@page]

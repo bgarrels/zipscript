@@ -8,6 +8,7 @@ public class ExecutionException extends RuntimeException {
 
 	private Element element;
 	ParsingResult parsingResult;
+	private String resource;
 
 	public ExecutionException(
 			String message, Element element) {
@@ -26,12 +27,15 @@ public class ExecutionException extends RuntimeException {
 	}
 
 	public String getMessage() {
-		if (null == parsingResult)
-			return super.getMessage();
-		else {
+		StringBuffer sb = new StringBuffer();
+		if (null != resource)
+			sb.append ("[" + resource + "] ");
+		if (null != element) {
 			LinePosition lp = parsingResult.getLinePosition(element.getElementPosition());
-			return "(line " + lp.line + ", position " + lp.position + ") " + super.getMessage();
+			sb.append("(line " + lp.line + ", position " + lp.position + ") ");
 		}
+		sb.append(super.getMessage());
+		return sb.toString();
 	}
 
 	public Element getElement() {
@@ -50,5 +54,13 @@ public class ExecutionException extends RuntimeException {
 	public int getPosition () {
 		if (null == parsingResult) return 0;
 		return parsingResult.getLinePosition(element.getElementPosition()).position;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
 	}
 }

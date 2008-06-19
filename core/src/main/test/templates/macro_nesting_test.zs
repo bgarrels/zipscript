@@ -1,4 +1,4 @@
-[#macro test doIt foo]
+[#macro test callCommonMacro foo]
 Suff at top
 [#if callCommonMacro]
 	Here's the list

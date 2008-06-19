@@ -140,21 +140,33 @@ public class ZipEngine {
 	private Map resourceMap = new HashMap();
 
 	public Template getTemplate (String source) throws ParseException {
-		TemplateResource tr = (TemplateResource) resourceMap.get(source);
-		if (null == tr) {
-			tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false));
+		try {
+			TemplateResource tr = (TemplateResource) resourceMap.get(source);
+			if (null == tr) {
+				tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false));
+			}
+			if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
+				// reload the resource
+				tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false));
+			}
+			return tr.template;
 		}
-		if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
-			// reload the resource
-			tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false));
+		catch (ParseException e) {
+			e.setResource(source);
+			throw e;
 		}
-		return tr.template;
 	}
 
 	public EvaluationTemplate getTemplateForEvaluation (String contents) throws ParseException {
-		Element element = ExpressionParser.getInstance().parseToElement(
-				contents, VARIABLE_MATCHERS, evalElementFactory, 0);
-		return new TemplateImpl(element);
+		try {
+			Element element = ExpressionParser.getInstance().parseToElement(
+					contents, VARIABLE_MATCHERS, evalElementFactory, 0);
+			return new TemplateImpl(element);
+		}
+		catch (ParseException e) {
+			e.setResource(contents);
+			throw e;
+		}
 	}
 
 	protected TemplateResource loadTemplate (

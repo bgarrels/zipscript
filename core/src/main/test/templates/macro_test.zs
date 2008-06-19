@@ -1,4 +1,13 @@
-[#macro test doIt foo]
+[#macro foo abc="def" baz bar]
+	abc=${abc}
+	baz=$!{baz}
+	bar=${bar}
+- ${body}
+[#set abc="jibjab"/]
+- ${body}
+[/#macro]
+
+[#macro test doit foo]
 [#if test1]
 	[#foreach foo in foo]
 		${foo.body}
@@ -11,15 +20,6 @@
 	--
 	${body}
 	--
-[/#macro]
-
-[#macro foo abc="def" baz bar]
-	abc=${abc}
-	baz=$!{baz}
-	bar=${bar}
-- ${body}
-[#set abc="jibjab"/]
-- ${body}
 [/#macro]
 
 [@test doit=true]
