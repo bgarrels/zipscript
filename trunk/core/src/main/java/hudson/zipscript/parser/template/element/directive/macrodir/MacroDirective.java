@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroDirective extends NestableElement {
+public class MacroDirective extends NestableElement implements MacroInstanceAware {
 
 	private String contents;
 	private String name;
@@ -148,7 +148,7 @@ public class MacroDirective extends NestableElement {
 
 		// add template defined parameters
 		List tdp = new ArrayList();
-		appendMacroInstances(nestedContent.getChildren(), context, tdp);
+		appendMacroInstances(nestedContent.getChildren(), context, tdp, this);
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 			MacroInstanceEntity mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(mie.getMacroInstance().getName());
@@ -173,6 +173,11 @@ public class MacroDirective extends NestableElement {
 		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
 			((Element) i.next()).merge(context, sw);
 		}
+	}
+
+	public void getMacroInstances(ZSContext context, List macroInstanceList,
+			MacroDirective macro) {
+		appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 	}
 
 	protected boolean isStartElement(Element e) {

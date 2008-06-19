@@ -3,18 +3,7 @@ package test.hudson.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
-import hudson.zipscript.parser.template.data.LinePosition;
-import hudson.zipscript.parser.template.data.ParsingResult;
-import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.resource.StringResourceLoader;
 import hudson.zipscript.template.Template;
-import hudson.zipscript.template.TemplateImpl;
-
-import java.awt.geom.Line2D;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
 import junit.framework.TestCase;
 
 public class ErrorTestCase extends TestCase {

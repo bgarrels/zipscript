@@ -23,6 +23,13 @@ public class MacroTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
+	public void testCommonTDOMacro () throws Exception {
+		Map context = new HashMap();
+		String mergeTemplate = "templates/macro_common_test.zs";
+		String resultFile = "/templates/macro_common_result.txt";
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
 	public void testNestingMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_nesting_test.zs";

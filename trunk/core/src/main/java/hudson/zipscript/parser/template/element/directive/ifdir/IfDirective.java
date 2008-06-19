@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.HeaderElementList;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.StringWriter;
@@ -68,23 +69,24 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 	}
 
 	public void getMacroInstances(
-			ZSContext context, List macroInstanceList) throws ExecutionException {
+			ZSContext context, List macroInstanceList, MacroDirective macro) throws ExecutionException {
 		boolean done = false;
 		if (ifElement.booleanValue(context)) {
-			appendMacroInstances(getChildren(), context, macroInstanceList);
+			appendMacroInstances(getChildren(), context, macroInstanceList, macro);
 			done = true;
 		}
 		if (null != elseifScenarios) {
 			for (int i=0; i<elseifScenarios.size() && !done; i++) {
 				HeaderElementList elements = (HeaderElementList) elseifScenarios.get(i);
 				if (elements.getHeader().booleanValue(context)) {
-					appendMacroInstances(elements.getChildren(), context, macroInstanceList);
+					appendMacroInstances(
+							elements.getChildren(), context, macroInstanceList, macro);
 					done = true;
 				}
 			}
 		}
 		if (!done && null != elseElements) { 
-			appendMacroInstances(elseElements, context, macroInstanceList);
+			appendMacroInstances(elseElements, context, macroInstanceList, macro);
 		}
 	}
 

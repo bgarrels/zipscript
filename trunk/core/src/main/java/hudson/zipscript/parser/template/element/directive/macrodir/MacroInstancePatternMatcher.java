@@ -38,6 +38,7 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 				if (nesting == 0) {
 					if (previousChar == '/') {
 						isFlat = true;
+						sb.deleteCharAt(sb.length()-1);
 					}
 					// check for new line
 					if (reader.hasRemaining()) {

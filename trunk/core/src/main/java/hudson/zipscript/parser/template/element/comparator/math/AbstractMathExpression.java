@@ -13,6 +13,8 @@ public abstract class AbstractMathExpression extends AbstractComparatorElement {
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {
+		if (null == getLeftHandSide() || null == getRightHandSide())
+			throw new ExecutionException("Invalid expression", this);
 		Object lhs = getLeftHandSide().objectValue(context);
 		Object rhs = getRightHandSide().objectValue(context);
 		if (null == lhs) return rhs;

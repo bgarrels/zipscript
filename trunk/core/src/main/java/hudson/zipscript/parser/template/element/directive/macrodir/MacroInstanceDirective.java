@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroInstanceDirective extends NestableElement {
+public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware {
 
 	private boolean isFlat = false;
 	private boolean isOrdinal = true;
@@ -80,8 +80,16 @@ public class MacroInstanceDirective extends NestableElement {
 	}
 
 	private void loadTDPs (Element e, Map map) {
+		if (null == e) return;
 		if (e instanceof MacroInstanceDirective) {
-			map.put(((MacroInstanceDirective) e).getName(), e);
+			MacroInstanceDirective dir = (MacroInstanceDirective) e;
+			if (!isOrdinal() && null != getMacroDefinition() && null != getMacroDefinition().getAttribute(dir.getName())) {
+				// this is a template defined parameter
+				map.put(dir.getName(), e);
+			}
+			else {
+				loadTDPs(dir.getMacroDefinition(), map);
+			}
 		}
 		else if (e instanceof MacroInstanceAware) {
 			for (Iterator i=e.getChildren().iterator(); i.hasNext(); ) {
@@ -91,13 +99,16 @@ public class MacroInstanceDirective extends NestableElement {
 	}
 
 	private void validate (ParsingSession session) throws ParseException {
-		Map tdps = new HashMap();
-		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
-			loadTDPs((Element) i.next(), tdps);
-		}
-		
 		// find macro in session
 		macro = session.getMacroDirective(getName());
+
+		Map tdps = new HashMap();
+		if (null != getChildren()) {
+			for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+				loadTDPs((Element) i.next(), tdps);
+			}
+		}
+
 		if (null == macro) {
 			// maybe a template defined parameter
 			boolean isTDP = false;
@@ -132,7 +143,7 @@ public class MacroInstanceDirective extends NestableElement {
 				// make sure we're passing all non-required attributes
 				for (int i=0; i<macro.getAttributes().size(); i++) {
 					MacroAttribute attribute = (MacroAttribute) macro.getAttributes().get(i);
-					if (null == attribute.getDefaultValue()) {
+					if (null == attribute.getDefaultValue() && null==tdps.get(attribute.getName())) {
 						// it's required
 						if (null == attributeMap.get(attribute.getName()) && null == tdps.get(attribute.getName())) {
 							throw new ParseException(contentPosition, "Undefined required macro attriute '" + attribute.getName() + "'");
@@ -215,14 +226,16 @@ public class MacroInstanceDirective extends NestableElement {
 		else rtn = super.normalize(index, elementList, session);
 
 		// check for end new line
-		if (getChildren().size() > 0) {
-			Element e = (Element) getChildren().get(getChildren().size()-1);
-			if (e instanceof TextElement) {
-				TextElement te = (TextElement) e;
-				if (te.getText().endsWith("\r\n"))
-					te.setText(te.getText().substring(0, te.getText().length()-2));
-				else if (te.getText().endsWith("\n"))
-					te.setText(te.getText().substring(0, te.getText().length()-1));
+		if (null != getChildren()) {
+			if (getChildren().size() > 0) {
+				Element e = (Element) getChildren().get(getChildren().size()-1);
+				if (e instanceof TextElement) {
+					TextElement te = (TextElement) e;
+					if (te.getText().endsWith("\r\n"))
+						te.setText(te.getText().substring(0, te.getText().length()-2));
+					else if (te.getText().endsWith("\n"))
+						te.setText(te.getText().substring(0, te.getText().length()-1));
+				}
 			}
 		}
 
@@ -288,5 +301,15 @@ public class MacroInstanceDirective extends NestableElement {
 
 	public boolean isFlat() {
 		return isFlat;
+	}
+
+	public void appendMacroInstances(ZSContext context,
+			List macroInstanceList, MacroDirective macro) {
+		super.appendMacroInstances(getChildren(), context, macroInstanceList, macro);
+	}
+
+	public void getMacroInstances(ZSContext context, List macroInstanceList,
+			MacroDirective macro) {
+		super.appendMacroInstances(getChildren(), context, macroInstanceList, macro);	
 	}
 }
