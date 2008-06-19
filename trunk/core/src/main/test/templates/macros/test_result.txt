@@ -1,0 +1,13 @@
+
+	<div id="foo" class="tab">
+								<div class="page">
+				Page 1 contents
+	
+	</div>
+		This is a test
+						<div class="page">
+				Page 2 contents
+	
+	</div>
+		This is a test
+			</div>

@@ -12,6 +12,7 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.util.ElementNormalizer;
+import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.nio.CharBuffer;
 import java.util.ArrayList;
@@ -27,10 +28,11 @@ public class ExpressionParser {
 	private ExpressionParser () {}
 
 	public ParsingResult parse (
-			String contents, Component[] components, DefaultElementFactory defaultElementFactory, int startPosition)
+			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
+			int startPosition, MacroManager macroManager)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(false, false);
-		ParsingSession session = new ParsingSession(parameters);
+		ParsingSession session = new ParsingSession(parameters, macroManager);
 		return parse(
 				CharBuffer.wrap(contents.toCharArray()),
 				getStartTokens(components),
@@ -38,10 +40,11 @@ public class ExpressionParser {
 	}
 
 	public Element parseToElement (
-			String contents, Component[] components, DefaultElementFactory defaultElementFactory, int startPosition)
+			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
+			int startPosition, MacroManager macroManager)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(true, true);
-		ParsingSession session = new ParsingSession(parameters);
+		ParsingSession session = new ParsingSession(parameters, macroManager);
 		ParsingResult data = parse(
 				CharBuffer.wrap(contents), getStartTokens(components), defaultElementFactory, session, startPosition);
 		if (data.getElements().size() == 1)
@@ -51,10 +54,11 @@ public class ExpressionParser {
 	}
 
 	public Element parseToElement (
-			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory, int startPosition)
+			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
+			int startPosition, MacroManager macroManager)
 	throws ParseException {
 		ParseParameters parameters = new ParseParameters(true, true);
-		ParsingSession session = new ParsingSession(parameters);
+		ParsingSession session = new ParsingSession(parameters, macroManager);
 		ParsingResult data = parse(
 				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session, startPosition);
 		

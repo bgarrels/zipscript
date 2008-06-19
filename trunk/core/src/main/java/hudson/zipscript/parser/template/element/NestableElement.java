@@ -74,7 +74,7 @@ public abstract class NestableElement extends AbstractDirective {
 			if (isTopLevelElement(element)) {
 				if (null != topLevelElement) {
 					ElementNormalizer.normalize(l, session, false);
-					setTopLevelElements(new HeaderElementList(topLevelElement, l));
+					setTopLevelElements(new HeaderElementList(topLevelElement, l), session);
 				}
 				else {
 					ElementNormalizer.normalize(l, session, false);
@@ -97,7 +97,7 @@ public abstract class NestableElement extends AbstractDirective {
 			ElementNormalizer.normalize(l, session, false);
 			if (null != topLevelElement) {
 				setTopLevelElements(
-						new HeaderElementList(topLevelElement, l));
+						new HeaderElementList(topLevelElement, l), session);
 			}
 			else {
 				setChildren(l);
@@ -112,24 +112,26 @@ public abstract class NestableElement extends AbstractDirective {
 
 	protected void appendMacroInstances (
 			List children, ZSContext context, List macroInstanceList, MacroDirective macro) {
-		for (Iterator j=children.iterator(); j.hasNext(); ) {
-			Element e = (Element) j.next();
-			if (e instanceof MacroInstanceDirective) {
-				MacroInstanceDirective mid = (MacroInstanceDirective) e;
-				if (null != macro.getAttribute(mid.getName())) {
-					macroInstanceList.add(new MacroInstanceEntity(
-							(MacroInstanceDirective) e, context));
+		if (null != children) {
+			for (Iterator j=children.iterator(); j.hasNext(); ) {
+				Element e = (Element) j.next();
+				if (e instanceof MacroInstanceDirective) {
+					MacroInstanceDirective mid = (MacroInstanceDirective) e;
+					if (null != macro.getAttribute(mid.getName())) {
+						macroInstanceList.add(new MacroInstanceEntity(
+								(MacroInstanceDirective) e, context));
+					}
+					else {
+						// macro that might contain TDPs
+						if (null != mid.getMacroDefinition())
+							mid.getMacroDefinition().getMacroInstances(
+									context, macroInstanceList, macro);
+					}
 				}
-				else {
-					// macro that might contain TDPs
-					if (null != mid.getMacroDefinition())
-						mid.getMacroDefinition().getMacroInstances(
-								context, macroInstanceList, macro);
+				else if (e instanceof MacroInstanceAware) {
+					((MacroInstanceAware) e).getMacroInstances(
+							context, macroInstanceList, macro);
 				}
-			}
-			else if (e instanceof MacroInstanceAware) {
-				((MacroInstanceAware) e).getMacroInstances(
-						context, macroInstanceList, macro);
 			}
 		}
 	}
@@ -142,7 +144,9 @@ public abstract class NestableElement extends AbstractDirective {
 		return false;
 	}
 
-	protected void setTopLevelElements (HeaderElementList elements) throws ParseException {
+	protected void setTopLevelElements (
+			HeaderElementList elements, ParsingSession parsingSession)
+	throws ParseException {
 	}
 
 	protected boolean allowSelfNesting () {

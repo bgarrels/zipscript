@@ -5,6 +5,7 @@ import java.io.File;
 
 public class StringResourceLoader extends AbstractResourceLoader {
 
+	public static StringResourceLoader INSTANCE = new StringResourceLoader();
 	private String path;
 	private File sourceFile;
 

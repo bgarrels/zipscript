@@ -4,6 +4,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.HeaderElementList;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
@@ -20,12 +21,14 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 	private List elseifScenarios;
 	private List elseElements;
 
-	public IfDirective (String contents, int contentIindex) throws ParseException {
-		parseContents(contents, contentIindex);
+	public IfDirective (String contents, int contentIindex, ParsingSession parsingSession)
+	throws ParseException {
+		parseContents(contents, contentIindex, parsingSession);
 	}
 
-	private void parseContents (String contents, int contentIindex) throws ParseException {
-		ifElement = parseElement(contents, contentIindex);
+	private void parseContents (
+			String contents, int contentIindex, ParsingSession parsingSession) throws ParseException {
+		ifElement = parseElement(contents, contentIindex, parsingSession);
 		if (null == ifElement) throw new ParseException(
 				this, "Invalid element syntax '" + contents + "'");
 	}
@@ -34,12 +37,14 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 		return (e instanceof ElseIfDirective || e instanceof ElseDirective);
 	}
 
-	protected void setTopLevelElements(HeaderElementList elements) throws ParseException {
+	protected void setTopLevelElements(HeaderElementList elements, ParsingSession parsingSession)
+	throws ParseException {
 		if (elements.getHeader() instanceof ElseIfDirective) {
 			if (null == elseifScenarios)
 				elseifScenarios = new ArrayList();
 			ElseIfDirective directive = (ElseIfDirective) elements.getHeader();
-			Element element = parseElement(directive.getContents(), (int) elements.getHeader().getElementPosition());
+			Element element = parseElement(directive.getContents(),
+					(int) elements.getHeader().getElementPosition(), parsingSession);
 			elements.setHeader(element);
 			elseifScenarios.add(elements);
 		}
