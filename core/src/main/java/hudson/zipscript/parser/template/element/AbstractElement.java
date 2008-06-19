@@ -43,10 +43,12 @@ public abstract class AbstractElement implements Element {
 		this.elementLength = elementLength;
 	}
 
-	protected Element parseElement (String contents, int startPosition) throws ParseException {
+	protected Element parseElement (
+			String contents, int startPosition, ParsingSession parsingSession)
+	throws ParseException {
 		return ExpressionParser.getInstance().parseToElement(
 				contents, getContentParsingPatternMatchers(),
-				getContentParsingDefaultElementFactory(), startPosition);
+				getContentParsingDefaultElementFactory(), startPosition, parsingSession.getMacroManager());
 	}
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {

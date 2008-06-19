@@ -16,6 +16,7 @@ public class TestSuite extends junit.framework.TestSuite {
 		suite.addTestSuite(SpecialMethodsTestCase.class);
 		suite.addTestSuite(MacroTestCase.class);
 		suite.addTestSuite(ErrorTestCase.class);
+		suite.addTestSuite(MacroLibTestCase.class);
 		return suite;
 	}
 }

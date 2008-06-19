@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Iterator;
 import java.util.Locale;
@@ -21,4 +22,8 @@ public interface ZSContext {
 	public void setParsingSession (ParsingSession session);
 
 	public Locale getLocale ();
+
+	public MacroManager getMacroManager ();
+
+	public void setMacroManager (MacroManager macroManager);
 }

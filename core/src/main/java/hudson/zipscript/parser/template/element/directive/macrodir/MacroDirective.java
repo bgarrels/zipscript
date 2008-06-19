@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.resource.macrolib.MacroLibrary;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	private String name;
 	private List attributes = new ArrayList();
 	private Map attributeMap = new HashMap();
+	private MacroLibrary macroLibrary;
 	
 
 	public MacroDirective (String contents, ParsingSession session, int contentPosition) throws ParseException {
@@ -213,5 +215,13 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 
 	public Map getAttributeMap() {
 		return attributeMap;
+	}
+
+	public MacroLibrary getMacroLibrary() {
+		return macroLibrary;
+	}
+
+	public void setMacroLibrary(MacroLibrary macroLibrary) {
+		this.macroLibrary = macroLibrary;
 	}
 }

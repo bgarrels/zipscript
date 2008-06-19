@@ -8,6 +8,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	private List elements;
 	private ParsingSession parsingSession;
 	private ParsingResult parsingResult;
+	private MacroManager macroManager;
 
 	public TemplateImpl (List elements, ParsingSession parsingSession, ParsingResult result) {
 		this.elements = elements;
@@ -114,6 +116,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 
 	private ZSContext getContext (Object obj) {
 		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj);
+		context.setMacroManager(macroManager);
 		context.setParsingSession(parsingSession);
 		return context;
 	}
@@ -143,5 +146,13 @@ public class TemplateImpl implements Template, Evaluator, Element {
 			return elements;
 		}
 		else return null;
+	}
+
+	public MacroManager getMacroManager() {
+		return macroManager;
+	}
+
+	public void setMacroManager(MacroManager macroManager) {
+		this.macroManager = macroManager;
 	}
 }

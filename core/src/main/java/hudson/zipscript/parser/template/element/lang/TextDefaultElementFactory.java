@@ -6,6 +6,8 @@ import hudson.zipscript.parser.template.element.Element;
 
 public class TextDefaultElementFactory implements DefaultElementFactory {
 
+	public static TextDefaultElementFactory INSTANCE = new TextDefaultElementFactory();
+
 	public Element createDefaultElement(
 			String text, ParsingSession session, int currentPosition) {
 		TextElement element = new TextElement(text);

@@ -54,7 +54,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		// validate name
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
-			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
+			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == '.'))
 				throw new ParseException(contentPosition, "Invalid macro name '" + name + "'");
 		}
 
@@ -100,7 +100,8 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	private void validate (ParsingSession session) throws ParseException {
 		// find macro in session
-		macro = session.getMacroDirective(getName());
+		macro = session.getMacroManager().getMacro(
+				getName(), session);
 
 		Map tdps = new HashMap();
 		if (null != getChildren()) {
@@ -262,6 +263,13 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+		if (null == macro) {
+			// we might need to lazy load
+			macro = context.getMacroManager().getMacro(getName(), context.getParsingSession());
+		}
+		if (null == macro) {
+			throw new ExecutionException("Undefined macro '" + getName() + "'", this);
+		}
 		macro.executeMacro(
 				context, isOrdinal(), getAttributes(), new MacroInstanceExecutor(
 						this, context), sw);

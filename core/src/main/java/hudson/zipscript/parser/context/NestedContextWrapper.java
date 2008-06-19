@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,5 +48,13 @@ public class NestedContextWrapper implements ZSContext {
 
 	public Locale getLocale () {
 		return context.getLocale();
+	}
+
+	public MacroManager getMacroManager() {
+		return context.getMacroManager();
+	}
+
+	public void setMacroManager (MacroManager macroManager) {
+		context.setMacroManager(macroManager);
 	}
 }

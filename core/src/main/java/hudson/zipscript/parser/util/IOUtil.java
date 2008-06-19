@@ -14,6 +14,7 @@ public class IOUtil {
 		    for (int n; (n = in.read(b)) != -1;) {
 		        out.append(new String(b, 0, n));
 		    }
+		    in.close();
 		    return out.toString();
 		}
 		catch (IOException e) {

@@ -43,7 +43,9 @@ public class CallDirective extends AbstractDirective {
 		try {
 			if (elements.get(0) instanceof SpecialStringElement) {
 				macroName = ((SpecialStringElement) elements.remove(0)).getTokenValue();
-				this.macroDirective = session.getMacroDirective(macroName);
+				this.macroDirective = session.getMacroManager().getMacro(
+						macroName, session);
+				this.macroDirective = session.getMacro(macroName);
 			}
 			else {
 				throw new ParseException(
@@ -81,7 +83,8 @@ public class CallDirective extends AbstractDirective {
 	protected MacroDirective getMacroDirective (ParsingSession session) {
 		if (null == macroDirective) {
 			// we might have to lazy load
-			macroDirective = session.getMacroDirective(macroName);
+			macroDirective = session.getMacroManager().getMacro(
+					macroName, session);
 		}
 		if (null == macroDirective) {
 			throw new ExecutionException("Unknown macro '" + macroName + "'", this);
