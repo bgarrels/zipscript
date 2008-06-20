@@ -42,6 +42,12 @@ public class ParsingSession implements MacroProvider {
 		unknownVariablePatterns.put(pattern, Boolean.TRUE);
 	}
 
+	public void markValidVariablePattern (String pattern) {
+		if (null != unknownVariablePatterns) {
+			unknownVariablePatterns.remove(pattern);
+		}
+	}
+
 	public void addInlineMacroDefinition (MacroDirective directive) {
 		if (null == inlineMacroDefinitions)
 			inlineMacroDefinitions = new HashMap();

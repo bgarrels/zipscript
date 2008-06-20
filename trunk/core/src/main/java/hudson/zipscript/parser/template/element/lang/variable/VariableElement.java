@@ -64,17 +64,21 @@ public class VariableElement extends AbstractElement implements Element {
 					session, contentIndex).getElements();
 			session.setParameters(currentParameters);
 			this.children = parse(elements, session);
+			session.markValidVariablePattern(pattern);
 		}
 	}
 
 	private static final char[] normalChars = new char[] {'_','-'};
-	private boolean quickScan (String pattern) {
+	private boolean quickScan (String pattern) throws ParseException {
 		int trimIndex = 0;
 		if (pattern.startsWith("$")) trimIndex ++;
 		if (pattern.indexOf('!') == trimIndex) trimIndex ++;
 		if (pattern.indexOf('{') == trimIndex) trimIndex ++;
 		if (trimIndex > 0) {
-			pattern = pattern.substring(trimIndex, pattern.length()-1);
+			if (pattern.length() > 1)
+				pattern = pattern.substring(trimIndex, pattern.length()-1);
+			else
+				throw new ParseException(this, "Invalid variable reference '" + this + "'");
 		}
 		
 		for (int i=0; i<pattern.length(); i++) {
