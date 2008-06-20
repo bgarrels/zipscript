@@ -12,7 +12,7 @@ public class StringPatternMatcher extends AbstractPatternMatcher {
 
 	protected Element createElement(
 			char[] startToken, String s, int contentIndex, ParsingSession session) {
-		return new TextElement(s);
+		return new TextElement(s, true);
 	}
 
 	public Element match(
