@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware {
 
-	private boolean isFlat = false;
 	private boolean isOrdinal = true;
 	private String contents;
 	private String name;
@@ -35,7 +34,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	public MacroInstanceDirective (
 			String contents, boolean isFlat, ParsingSession parsingSession, int contentPosition) throws ParseException {
 		this.contents = contents;
-		this.isFlat = isFlat;
+		setFlat(isFlat);
 		// this.parsingSession = parsingSession;
 		this.contentPosition = contentPosition;
 		parseContents(contents, parsingSession, contentPosition);
@@ -223,7 +222,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
 		ElementIndex rtn = null;
-		if (isFlat) rtn = null;
+		if (isFlat()) rtn = null;
 		else rtn = super.normalize(index, elementList, session);
 
 		// check for end new line
@@ -305,10 +304,6 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	public void setOrdinal(boolean isOrdinal) {
 		this.isOrdinal = isOrdinal;
-	}
-
-	public boolean isFlat() {
-		return isFlat;
 	}
 
 	public void appendMacroInstances(ZSContext context,

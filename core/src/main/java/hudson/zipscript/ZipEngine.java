@@ -20,6 +20,7 @@ import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroComponent;
+import hudson.zipscript.parser.template.element.directive.setdir.GlobalComponent;
 import hudson.zipscript.parser.template.element.directive.setdir.SetComponent;
 import hudson.zipscript.parser.template.element.directive.whiledir.WhileComponent;
 import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
@@ -82,6 +83,7 @@ public class ZipEngine {
 			new MacroComponent(),
 			new VariableComponent(),
 			new SetComponent(),
+			new GlobalComponent(),
 			new CallComponent()
 	};
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {

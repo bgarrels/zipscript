@@ -8,4 +8,6 @@ public interface VariableChild {
 	public Object execute (Object parent, ZSContext context) throws ExecutionException;
 
 	public String getPropertyName ();
+
+	public boolean shouldReturnSomething();
 }

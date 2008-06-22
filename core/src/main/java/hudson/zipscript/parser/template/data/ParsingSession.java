@@ -71,4 +71,8 @@ public class ParsingSession implements MacroProvider {
 	public void setMacroManager(MacroManager macroManager) {
 		this.macroManager = macroManager;
 	}
+
+	public boolean isDebug () {
+		return false;
+	}
 }

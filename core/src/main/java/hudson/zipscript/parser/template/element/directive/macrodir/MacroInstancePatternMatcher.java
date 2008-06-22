@@ -10,7 +10,6 @@ import java.nio.CharBuffer;
 
 public class MacroInstancePatternMatcher implements PatternMatcher {
 
-	boolean isFlat = false;
 	public char[] getStartToken() {
 		return "[@".toCharArray();
 	}
@@ -21,6 +20,7 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 
 	public Element match(char previousChar, char[] startChars,
 			CharBuffer reader, ParsingSession session) throws ParseException {
+		boolean isFlat = false;
 		int nesting = 1;
 		previousChar = Character.MIN_VALUE;
 		StringBuffer sb = new StringBuffer();

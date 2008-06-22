@@ -19,6 +19,10 @@ public class ElementWrapperChild implements VariableChild {
 		return element.toString();
 	}
 
+	public boolean shouldReturnSomething() {
+		return true;
+	}
+
 	public String toString() {
 		return element.toString();
 	}

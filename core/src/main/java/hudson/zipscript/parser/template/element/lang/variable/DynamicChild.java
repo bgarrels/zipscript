@@ -46,6 +46,10 @@ public class DynamicChild implements VariableChild {
 		return children;
 	}
 
+	public boolean shouldReturnSomething() {
+		return true;
+	}
+
 	public String getPropertyName() {
 		return evaluator.toString();
 	}

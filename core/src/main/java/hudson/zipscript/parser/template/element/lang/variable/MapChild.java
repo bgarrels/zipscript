@@ -62,6 +62,10 @@ public class MapChild implements VariableChild {
 		return null;
 	}
 
+	public boolean shouldReturnSomething() {
+		return true;
+	}
+
 	public String toString () {
 		StringBuffer sb = new StringBuffer();
 		sb.append('[');

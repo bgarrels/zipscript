@@ -37,4 +37,10 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			else return obj;
 		}
 	}
+
+	public String toString() {
+		if (null != macroInstance)
+			return macroInstance.toString();
+		else return super.toString();
+	}
 }

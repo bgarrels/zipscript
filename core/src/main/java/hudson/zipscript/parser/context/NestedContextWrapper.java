@@ -11,23 +11,35 @@ public class NestedContextWrapper implements ZSContext {
 
 	private ZSContext context;
 	private HashMap map = new HashMap(4);
+	private boolean travelUp = true;
 
 	public NestedContextWrapper (ZSContext context) {
 		this.context = context;
 	}
 
+	public NestedContextWrapper (ZSContext context, boolean travelUp) {
+		this.context = context;
+		this.travelUp = travelUp;
+	}
+
 	public Object get(String key) {
 		Object obj = map.get(key);
-		if (null == obj) obj = context.get(key);
-		return obj;
+		if (null == obj && travelUp)
+			return context.get(key);
+		else
+			return obj;
 	}
 
 	public Iterator getKeys() {
-		return context.getKeys();
+		return map.keySet().iterator();
 	}
 
 	public void put(String key, Object value) {
 		map.put(key, value);
+	}
+
+	public void putGlobal(String key, Object value) {
+		context.putGlobal(key, value);
 	}
 
 	public Object remove(String key) {
@@ -56,5 +68,9 @@ public class NestedContextWrapper implements ZSContext {
 
 	public void setMacroManager (MacroManager macroManager) {
 		context.setMacroManager(macroManager);
+	}
+
+	public ZSContext getRootContext () {
+		return context.getRootContext();
 	}
 }

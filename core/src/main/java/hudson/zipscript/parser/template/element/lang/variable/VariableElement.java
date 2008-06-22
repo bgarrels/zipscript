@@ -109,10 +109,13 @@ public class VariableElement extends AbstractElement implements Element {
 	public Object objectValue(ZSContext context) throws ExecutionException {
 		Object rtn = null;
 		int count = 0;
+		boolean isNullAllowed = false;
 		if (null == pattern) {
 			count ++;
 			for (Iterator i=children.iterator(); i.hasNext(); ) {
-				rtn = ((VariableChild) i.next()).execute(rtn, context);
+				VariableChild child = (VariableChild) i.next();
+				rtn = child.execute(rtn, context);
+				if (!child.shouldReturnSomething()) isNullAllowed = true;
 				if (null == rtn) {
 					break;
 				}
@@ -122,6 +125,7 @@ public class VariableElement extends AbstractElement implements Element {
 			// bypass path and get the full path from the context
 			rtn = context.get(pattern);
 		}
+		if (isNullAllowed && null == rtn) return "";
 		if (null == rtn && count == 1) {
 			StringBuffer sb = new StringBuffer();
 			for (Iterator i=children.iterator(); i.hasNext(); ) {
