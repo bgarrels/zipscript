@@ -1,5 +1,5 @@
 [#macro table id entries column]
-[#if global.addImportHeaders]
+[#if global.addImportHeaders!=null]
 ${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", true)}
 ${global.scriptIncludes.put("datasource/datasource-beta-min.js", true)}
 ${global.scriptIncludes.put("datatable/datatable-beta-min.js", true)}

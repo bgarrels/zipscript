@@ -13,7 +13,7 @@
 [/#macro]
 
 [#macro view id node]
-[#if global.addImportHeaders]
+[#if global.addImportHeaders!=null]
 ${global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", true)}
 ${global.scriptIncludes.put("treeview/treeview-min.js", true)}
 [/#if]
