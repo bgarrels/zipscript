@@ -59,10 +59,10 @@ public class WidgetTestCase extends TestCase {
 
 	private void evalResult (String mergeTemplate, String resultFile, Map context)
 	throws ParseException, ExecutionException, IOException {
+		context.put("addImportHeaders", Boolean.TRUE);
 		context.put("cssIncludes", new HashMap(3));
 		context.put("scriptIncludes", new HashMap(3));
 		String body = merge(mergeTemplate, context);
-		System.out.println(context.get("cssIncludes"));
 		if (null == layoutTemplate)
 			layoutTemplate = engine.getTemplate("layout.zs");
 		context.put("screen_placeholder", body);

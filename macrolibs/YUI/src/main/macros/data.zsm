@@ -1,7 +1,9 @@
 [#macro table id entries column]
+[#if global.addImportHeaders]
 ${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", true)}
 ${global.scriptIncludes.put("datasource/datasource-beta-min.js", true)}
 ${global.scriptIncludes.put("datatable/datatable-beta-min.js", true)}
+[/#if]
 [#set dataName = "${id}_model"/]
 [#set columnDefName = "${id}_columns"/]
 [#set tableFunction = "${id}_table"/]
