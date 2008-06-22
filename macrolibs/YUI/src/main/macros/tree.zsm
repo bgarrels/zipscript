@@ -1,14 +1,12 @@
-[#macro treeNode id parent label icon=null isClosed=false node=null]
+[#macro treeNode id parent label icon=null isClosed=false node=null href=null tooltip=null]
 [#set nodeId="${id}_node"/]
-[#if node == null]
-#** Child node **#
-		${nodeId} = new YAHOO.widget.HTMLNode("${label?js}", ${parent}, ${isClosed!false});
-[#else]
-#** Parent node **#
-		${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false});
+[#if node!=null]
+${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false});
 [#foreach node in node]
 [#call treeNode with node | parent=nodeId/]
 [/#foreach]
+[#else]
+		${nodeId} = new YAHOO.widget.HTMLNode("[#if href!=null]<a href='${href?js}'>[/#if][#if tooltip!=null]<span title='${tooltip?js}'>[/#if]${label?js}[#if tooltip!=null]</span>[/#if][#if href!=null]</a>[/#if]", ${parent}, ${isClosed!false});
 [/#if]
 [/#macro]
 
