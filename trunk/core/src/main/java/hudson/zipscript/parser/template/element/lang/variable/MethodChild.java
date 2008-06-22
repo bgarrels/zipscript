@@ -51,6 +51,10 @@ public class MethodChild implements VariableChild {
 		return null;
 	}
 
+	public boolean shouldReturnSomething() {
+		return false;
+	}
+
 	public String toString () {
 		StringBuffer sb = new StringBuffer();
 		sb.append(methodName);

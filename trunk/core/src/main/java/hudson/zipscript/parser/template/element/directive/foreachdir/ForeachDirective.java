@@ -49,11 +49,14 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	private String varName;
 	private Element listElement;
 
-	public ForeachDirective (String contents, ParsingSession parseData, int contentPosition) throws ParseException {
-		parseContents(contents, parseData, contentPosition);
+	public ForeachDirective (String contents, ParsingSession session, int contentPosition)
+	throws ParseException {
+		setParsingSession(session);
+		parseContents(contents, session, contentPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
+	private void parseContents (String contents, ParsingSession session, int contentPosition)
+	throws ParseException {
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		try {
 			Element e = (Element) elements.get(0);
@@ -83,8 +86,6 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
 		return SpecialVariableDefaultEelementFactory.getInstance();
 	}
-
-
 
 	public void getMacroInstances(ZSContext context, List macroInstanceList, MacroDirective macro) {
 		Object list = listElement.objectValue(context);
@@ -173,6 +174,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					int checkNum = arr.length-1;
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (i<arr.length) {
+						if (getParsingSession().isDebug()) {
+							System.out.println("Executing: " + this.toString() + " (" + i + ")");
+						}
 						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						context.put(varName, arr[i]);
 						appendElements(getChildren(), context, sw);
@@ -188,6 +192,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
+						if (getParsingSession().isDebug()) {
+							System.out.println("Executing: " + this.toString() + " (" + i + ")");
+						}
 						context.put(varName, iter.next());
 						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
@@ -203,6 +210,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (iter.hasNext()) {
+						if (getParsingSession().isDebug()) {
+							System.out.println("Executing: " + this.toString() + " (" + i + ")");
+						}
 						context.put(varName, iter.next());
 						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
@@ -218,6 +228,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (enum.hasMoreElements()) {
+						if (getParsingSession().isDebug()) {
+							System.out.println("Executing: " + this.toString() + " (" + i + ")");
+						}
 						context.put(varName, enum.nextElement());
 						if (enum.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
@@ -227,12 +240,18 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			}
 			else {
 				// just put the object in the context and loop 1 time
+				if (getParsingSession().isDebug()) {
+					System.out.println("Executing: " + this.toString() + " (0)");
+				}
 				context = new NestedContextWrapper(context);
 				context.put(TOKEN_INDEX, new Integer(0));
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
 				context.put(varName, list);
 				appendElements(getChildren(), context, sw);
 			}
+		}
+		if (getParsingSession().isDebug()) {
+			System.out.println("Completed:" + this.toString());
 		}
 	}
 

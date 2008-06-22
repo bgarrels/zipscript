@@ -27,4 +27,8 @@ public class MacroInstanceExecutor implements ToStringWithContextElement {
 	public String toString(ZSContext context) {
 		return macroInstance.getNestedContent(context);
 	}
+
+	public MacroInstanceDirective getMacroInstance() {
+		return macroInstance;
+	}
 }

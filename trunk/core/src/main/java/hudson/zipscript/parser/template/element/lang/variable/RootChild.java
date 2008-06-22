@@ -18,6 +18,10 @@ public class RootChild implements VariableChild {
 		return name;
 	}
 
+	public boolean shouldReturnSomething() {
+		return true;
+	}
+
 	public String toString() {
 		return name;
 	}

@@ -37,4 +37,8 @@ public class MacroAttribute {
 	public void setRequired(boolean isRequired) {
 		this.isRequired = isRequired;
 	}
+
+	public String toString() {
+		return "macro attribute: " + name + " = " + getDefaultValue();
+	}
 }

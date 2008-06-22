@@ -23,6 +23,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 
 	public IfDirective (String contents, int contentIindex, ParsingSession parsingSession)
 	throws ParseException {
+		setParsingSession(parsingSession);
 		parseContents(contents, contentIindex, parsingSession);
 	}
 
@@ -55,20 +56,27 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
 		boolean done = false;
+		boolean isDebug = getParsingSession().isDebug();
+		if (isDebug) System.out.println("Executing: If: " + ifElement);
 		if (ifElement.booleanValue(context)) {
+			if (isDebug) System.out.println("Executing: If: " + ifElement + "; Evaluation Successful");
 			appendElements(getChildren(), context, sw);
 			done = true;
 		}
-		if (null != elseifScenarios) {
+		if (!done && null != elseifScenarios) {
 			for (int i=0; i<elseifScenarios.size() && !done; i++) {
 				HeaderElementList elements = (HeaderElementList) elseifScenarios.get(i);
+				if (isDebug) System.out.println("Executing: ElseIf: " + elements.getHeader());
 				if (elements.getHeader().booleanValue(context)) {
+					if (isDebug) System.out.println("Executing: ElseIf: " + elements.getHeader() + "; Evaluation Successful");
 					appendElements(elements.getChildren(), context, sw);
 					done = true;
+					break;
 				}
 			}
 		}
-		if (!done && null != elseElements) { 
+		if (!done && null != elseElements) {
+			if (isDebug) System.out.println("Executing: Else");
 			appendElements(elseElements, context, sw);
 		}
 	}

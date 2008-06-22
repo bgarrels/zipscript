@@ -15,6 +15,8 @@ public interface ZSContext {
 
 	public void put (String key, Object value);
 
+	public void putGlobal (String key, Object value);
+
 	public Iterator getKeys ();
 
 	public ParsingSession getParsingSession();
@@ -26,4 +28,6 @@ public interface ZSContext {
 	public MacroManager getMacroManager ();
 
 	public void setMacroManager (MacroManager macroManager);
+
+	public ZSContext getRootContext ();
 }

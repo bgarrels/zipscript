@@ -9,22 +9,28 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
+import hudson.zipscript.parser.template.element.lang.AssignmentElement;
+import hudson.zipscript.parser.template.element.lang.TextElement;
+import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.template.element.special.WithElement;
 import hudson.zipscript.parser.template.element.special.WithPatternMatcher;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CallDirective extends AbstractDirective {
 
 	private String macroName;
-	MacroDirective macroDirective;
+	private MacroDirective macroDirective;
 	private Element withElement;
+	private List additionalAttributes;
 
 	private static PatternMatcher[] MATCHERS;
 	static {
@@ -34,48 +40,156 @@ public class CallDirective extends AbstractDirective {
 		MATCHERS[0] = new WithPatternMatcher();
 	}
 
-	public CallDirective (String contents, ParsingSession session, int contentStartPosition) throws ParseException {
+	public CallDirective (String contents, ParsingSession session, int contentStartPosition)
+	throws ParseException {
+		setParsingSession(session);
 		parseContents(contents, session, contentStartPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session, int contentStartPosition) throws ParseException {
-		java.util.List elements = parseElements(contents, session, contentStartPosition);
-		try {
-			if (elements.get(0) instanceof SpecialStringElement) {
-				macroName = ((SpecialStringElement) elements.remove(0)).getTokenValue();
-				this.macroDirective = session.getMacroManager().getMacro(
-						macroName, session);
-				this.macroDirective = session.getMacro(macroName);
+	private void parseContents (String contents, ParsingSession session, int contentStartPosition)
+	throws ParseException {
+		StringBuffer sb = new StringBuffer();
+		List mainElements = new ArrayList();
+		List additionalParameters = null;
+		// I know I could use a tokenizer but I wanted to get all whitespace
+		for (int i=0; i<contents.length(); i++) {
+			char c = contents.charAt(i);
+			if (Character.isWhitespace(c)) {
+				if (sb.length() > 0) {
+					mainElements.add(sb.toString());
+					sb = new StringBuffer();
+				}
+			}
+			else if (c == '|') {
+				if (mainElements.size() != 3) {
+					throw new ParseException(contentStartPosition + i, "Invalid character '|'");
+				}
+				else {
+					String s = contents.substring(i+1, contents.length());
+					additionalParameters = parseElements(s, session, contentStartPosition + i + 1);
+					break;
+				}
+			}
+			else sb.append(c);
+		}
+		if (sb.length() > 0)
+			mainElements.add(sb.toString());
+		
+		if (mainElements.size() != 3) {
+			throw new ParseException(contentStartPosition, "Invalid call directive.  Should be [#call macroName with macroVariable/]");
+		}
+		else {
+			macroName = mainElements.get(0).toString();
+			this.macroDirective = session.getMacroManager().getMacro(macroName, session);
+			if (null == macroDirective) {
+				// allow for lazy loading
+				// throw new ParseException(contentStartPosition, "Unknown macro '" + macroName + "'");
+			}
+			if (!mainElements.get(1).equals("with"))
+				throw new ParseException(contentStartPosition, "Invalid call directive.  Should be [#call macroName with macroVariable/]");
+
+			withElement = new VariableElement(false, (String) mainElements.get(2), session, contentStartPosition);
+		}
+
+		if (null != additionalParameters) {
+			this.additionalAttributes = new ArrayList();
+			MacroAttribute attribute = getAttribute(additionalParameters, session);
+			while (null != attribute) {
+				additionalAttributes.add(attribute);
+				attribute = getAttribute(additionalParameters, session);
+			}
+		}
+
+		if (getParsingSession().isDebug()) {
+			System.out.println("Parsed: " + this.toString());
+			if (null != additionalAttributes) {
+				for (Iterator i=additionalAttributes.iterator(); i.hasNext(); ) {
+					System.out.println("\t" + i.next());
+				}
+			}
+		}
+	}
+
+	protected MacroAttribute getAttribute(List elements, ParsingSession session)
+	throws ParseException {
+		if (elements.size() == 0) return null;
+
+		String name = null;
+		Element e;
+		e = (Element) elements.remove(0);
+		if (e instanceof SpecialStringElement)
+			name = ((SpecialStringElement) e).getTokenValue();
+		else if (e instanceof TextElement)
+			name = ((TextElement) e).getText();
+		else
+			throw new ParseException(this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
+		// validate name
+		for (int i=0; i<name.length(); i++) {
+			char c = name.charAt(i);
+			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
+				throw new ParseException(this, "Invalid macro attribute name '" + name + "'");
+		}
+
+		// attribute properties
+		if (elements.size() > 0) {
+			e = (Element) elements.get(0);
+			if (e instanceof AssignmentElement) {
+				elements.remove(0);
+				if (elements.size() == 0) {
+					throw new ParseException(this, "Unexpected content '" + e + "'");
+				}
+				else {
+					// value
+					e = (Element) elements.remove(0);
+					if (e instanceof AssignmentElement) {
+						throw new ParseException(this, "Unexpected content '" + e + "'");
+					}
+					else {
+						MacroAttribute attribute = new MacroAttribute(
+								name, e, true);
+						return attribute;
+					}
+				}
 			}
 			else {
-				throw new ParseException(
-						this, "Invalid sequence.  Expecting variable name");
+				throw new ParseException(this, "Unexpected element, expecting '='.  Found '" + e + "'");
 			}
-			if (!(elements.remove(0) instanceof WithElement))
-				throw new ParseException(
-						this, "Invalid sequence.  Expecting 'with'");
-			if (elements.size() > 1)
-				throw new ParseException(
-						this, "Invalid sequence.  Improperly formed set expression");
-			else
-				this.withElement = (Element) elements.get(0);
 		}
-		catch (IndexOutOfBoundsException e) {
-			throw new ParseException(this, "Improperly formed set expression: must have at least 3 tokens");
+		else {
+			throw new ParseException(this, "Missing macro value for '" + name + "' in " + this.toString());
 		}
 	}
 
 	public void merge(ZSContext context, StringWriter sw)
 			throws ExecutionException {
+		if (getParsingSession().isDebug()) {
+			System.out.println("Executing: " + this.toString());
+			if (null != additionalAttributes) {
+				for (Iterator i=additionalAttributes.iterator(); i.hasNext(); ) {
+					System.out.println("\t" + i.next());
+				}
+			}
+		}
+		
 		Object obj = withElement.objectValue(context);
 		if (obj instanceof MacroInstanceEntity) {
 			MacroInstanceEntity callInput = (MacroInstanceEntity) obj;
 			MacroInstanceDirective macroInstance = callInput.getMacroInstance();
 			MacroInstanceExecutor executor = new MacroInstanceExecutor(macroInstance, context);
-			getMacroDirective(context.getParsingSession()).executeMacro(
-					context, macroInstance.isOrdinal(), macroInstance.getAttributes(), executor, sw);
+			if (null == additionalAttributes) {
+				getMacroDirective(context.getParsingSession()).executeMacro(
+						context, macroInstance.isOrdinal(), macroInstance.getAttributes(), executor, sw);
+			}
+			else {
+				List l = new ArrayList(additionalAttributes.size() + macroInstance.getAttributes().size());
+				l.addAll(additionalAttributes);
+				l.addAll(macroInstance.getAttributes());
+				getMacroDirective(context.getParsingSession()).executeMacro(
+						context, macroInstance.isOrdinal(), l, executor, sw);
+			}
 		}
 		else {
+			System.out.println("The object is: " + obj);
 			throw new ExecutionException("Invalid call: a macro instance must be passed", this);
 		}
 	}

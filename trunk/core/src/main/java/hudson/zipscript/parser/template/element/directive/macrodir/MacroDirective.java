@@ -28,8 +28,10 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	private MacroLibrary macroLibrary;
 	
 
-	public MacroDirective (String contents, ParsingSession session, int contentPosition) throws ParseException {
+	public MacroDirective (
+			String contents, ParsingSession session, int contentPosition) throws ParseException {
 		this.contents = contents;
+		setParsingSession(session);
 		parseContents(contents, session, contentPosition);
 		session.addInlineMacroDefinition(this);
 	}
@@ -116,13 +118,21 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			ZSContext context, boolean isOrdinal, List attributes,
 			MacroInstanceExecutor nestedContent, StringWriter sw)
 	throws ExecutionException {
-		context = new NestedContextWrapper(context);
+		if (getParsingSession().isDebug()) {
+			System.out.println("Executing: macro '" + getName() + "'");
+			for (Iterator i=attributes.iterator(); i.hasNext(); ) {
+				System.out.println("\t" + i.next());
+			}
+		}
+		
+		ZSContext parentContext = context;
+		context = new NestedContextWrapper(context, false);
 		// add attributes to context
 		if (isOrdinal) {
 			for (int i=0; i<attributes.size(); i++) {
 				MacroAttribute defAttribute = (MacroAttribute) getAttributes().get(i);
 				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
-				Object val = instAttribute.getDefaultValue().objectValue(context);
+				Object val = instAttribute.getDefaultValue().objectValue(parentContext);
 				if (null == val) {
 					
 					// do we default
@@ -135,7 +145,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		else {
 			for (int i=0; i<attributes.size(); i++) {
 				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
-				Object val = instAttribute.getDefaultValue().objectValue(context);
+				Object val = instAttribute.getDefaultValue().objectValue(parentContext);
 				if (null == val) {
 					MacroAttribute defAttribute = (MacroAttribute) attributeMap.get(instAttribute.getName());
 					// do we default
@@ -147,10 +157,20 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		
 		context.put("body", nestedContent);
+		context.put("global", parentContext.getRootContext());
 
 		// add template defined parameters
+		if (getParsingSession().isDebug()) {
+			System.out.println("Preparing: " + nestedContent.getMacroInstance() + " Substructure");
+		}
 		List tdp = new ArrayList();
 		appendMacroInstances(nestedContent.getChildren(), context, tdp, this);
+		if (getParsingSession().isDebug()) {
+			for (Iterator i=tdp.iterator(); i.hasNext(); ) {
+				System.out.println("\t" + i.next());
+			}
+		}
+
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 			MacroInstanceEntity mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(mie.getMacroInstance().getName());

@@ -22,6 +22,7 @@ import java.util.List;
 public abstract class NestableElement extends AbstractDirective {
 
 	private List children;
+	private boolean isFlat;
 
 	/**
 	 * @return the children
@@ -44,7 +45,9 @@ public abstract class NestableElement extends AbstractDirective {
 		for (int i=index; i<elementList.size(); i++) {
 			element = (Element) elementList.get(i);
 			if (isStartElement(element)) {
-				nestedIndex ++;
+				if (element instanceof NestableElement && !((NestableElement) element).isFlat()) {
+					nestedIndex ++;
+				}
 			}
 			else if (isEndElement(element)) {
 				nestedIndex --;
@@ -161,5 +164,13 @@ public abstract class NestableElement extends AbstractDirective {
 				((Element) i.next()).merge(context, sw);
 			}
 		}
+	}
+
+	public boolean isFlat() {
+		return isFlat;
+	}
+
+	public void setFlat(boolean isFlat) {
+		this.isFlat = isFlat;
 	}
 }

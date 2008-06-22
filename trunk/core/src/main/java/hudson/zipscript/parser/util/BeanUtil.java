@@ -12,7 +12,6 @@ public class BeanUtil {
             throw new IllegalArgumentException("No name specified for bean class '" +
                     bean.getClass() + "'");
         }
-
         Class clazz = bean.getClass();
         if (null == parameters || parameters.length == 0) {
         	// simple getter
@@ -36,16 +35,38 @@ public class BeanUtil {
         	return m;
         }
         else {
-        	Class[] parameterTypes = new Class[parameters.length];
-        	for (int i=0; i<parameters.length; i++)
-        		parameterTypes[i] = (null != parameters[i])? parameters[i].getClass() : Object.class;
-        	// we have to find a real method match
-        	try {
-        		return clazz.getMethod(name, parameterTypes);
-        	}
-        	catch (NoSuchMethodException e) {
-        		return null;
-        	}
+            for (int i=0; i<clazz.getMethods().length; i++) {
+            	Method m = clazz.getMethods()[i];
+            	if (m.getName().equals(name) && m.getParameterTypes().length == parameters.length) {
+            		// probably a good fit
+            		boolean isOk = true;
+            		for (int j=0; j<parameters.length; j++) {
+            			if (null != parameters[j])
+            				isOk = isOk && doesParameterFit(parameters[j].getClass(), m.getParameterTypes()[j]);
+            			if (!isOk) break;
+            		}
+            		if (isOk)
+            			return m;
+            	}
+            }
+            return null;
         }
+    }
+
+    private static boolean doesParameterFit (Class obj, Class type) {
+    	if (null == obj) return true;
+    	else if (obj.equals(type)) return true;
+    	else {
+    		// check super classes
+    		Class parent = obj.getSuperclass();
+    		if (null != parent) {
+    			if (doesParameterFit(parent, type)) return true;
+    		}
+    		// check interfaces
+    		for (int i=0; i<obj.getInterfaces().length; i++) {
+    			if (doesParameterFit(obj.getInterfaces()[i], type)) return true;
+    		}
+    		return false;
+    	}
     }
 }

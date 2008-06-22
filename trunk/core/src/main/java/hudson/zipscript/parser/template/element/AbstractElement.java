@@ -14,8 +14,13 @@ import java.util.List;
 
 public abstract class AbstractElement implements Element {
 
-	long elementPosition;
-	int elementLength;
+	private long elementPosition;
+	private int elementLength;
+	private ParsingSession parsingSession;
+
+	public AbstractElement() {
+		this.parsingSession = parsingSession;
+	}
 
 	public String toString() {
 		if (this instanceof SpecialElement) {
@@ -67,5 +72,13 @@ public abstract class AbstractElement implements Element {
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory () {
 		return DefaultVariablePatternMatcher.getInstance();
+	}
+
+	public ParsingSession getParsingSession() {
+		return parsingSession;
+	}
+
+	public void setParsingSession(ParsingSession parsingSession) {
+		this.parsingSession = parsingSession;
 	}
 }

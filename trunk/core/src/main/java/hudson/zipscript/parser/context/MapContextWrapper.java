@@ -31,11 +31,19 @@ public class MapContextWrapper extends AbstractContext {
 		map.put(key, value);
 	}
 
+	public void putGlobal(String key, Object value) {
+		put(key, value);
+	}
+
 	public Iterator getKeys() {
 		return map.keySet().iterator();
 	}
 
 	public Locale getLocale () {
 		return locale;
+	}
+
+	public ZSContext getRootContext() {
+		return this;
 	}
 }

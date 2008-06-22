@@ -126,7 +126,6 @@ public class ExpressionParser {
 										buffer.position() + startPosition, unmatchedChars, elements, session, defaultElementFactory);
 								elements.add(e);
 								match = true;
-
 								buffer.position(buffer.position()-1);
 								previousChar = buffer.get();
 								break;
@@ -140,6 +139,7 @@ public class ExpressionParser {
 				}
 				if (!match && defaultElementFactory.doAppend(c)) {
 					unmatchedChars.append(c);
+					previousChar = c;
 				}
 			}
 			recordUnmatchedChars(buffer.position() + startPosition, unmatchedChars, elements, session, defaultElementFactory);
