@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/test"/>
+	<classpathentry kind="src" path="src/main/macros"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Joe Hudson/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZipScript"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
