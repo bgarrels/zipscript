@@ -68,13 +68,22 @@ public abstract class NestableElement extends AbstractDirective {
 		Element topLevelElement = null;
 		boolean foundEndelement = false;
 		Element element = null;
+		int nesting = 0;
 		for (int i=startIndex; i<elementList.size(); i++) {
 			element = (Element) elementList.get(i);
 			if (element == endMatch) {
 				foundEndelement = true;
 				break;
 			}
-			if (isTopLevelElement(element)) {
+			else if (isStartElement(element)) {
+				nesting ++;
+				l.add(element);
+			}
+			else if (isEndElement(element)) {
+				nesting --;
+				l.add(element);
+			}
+			else if (nesting == 0 && isTopLevelElement(element)) {
 				if (null != topLevelElement) {
 					ElementNormalizer.normalize(l, session, false);
 					setTopLevelElements(new HeaderElementList(topLevelElement, l), session);

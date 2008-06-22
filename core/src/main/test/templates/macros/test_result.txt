@@ -1,5 +1,6 @@
 
 	<div id="foo" class="tab">
+					<label>My Tab</label>
 								<div class="page">
 				Page 1 contents
 	
