@@ -14,8 +14,8 @@
 
 [#macro view id node]
 [#if global.addImportHeaders!=null]
-${global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", true)}
-${global.scriptIncludes.put("treeview/treeview-min.js", true)}
+${global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")}
+${global.scriptIncludes.put("treeview/treeview-min.js", "YUI")}
 [/#if]
 [#set componentId = "${id}_component"/]
 	<div id="${id}"> </div>
