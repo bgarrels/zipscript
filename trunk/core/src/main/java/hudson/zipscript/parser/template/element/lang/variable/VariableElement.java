@@ -111,7 +111,6 @@ public class VariableElement extends AbstractElement implements Element {
 		int count = 0;
 		boolean isNullAllowed = false;
 		if (null == pattern) {
-			count ++;
 			for (Iterator i=children.iterator(); i.hasNext(); ) {
 				VariableChild child = (VariableChild) i.next();
 				rtn = child.execute(rtn, context);
@@ -119,6 +118,7 @@ public class VariableElement extends AbstractElement implements Element {
 				if (null == rtn) {
 					break;
 				}
+				count ++;
 			}
 		}
 		else {
@@ -126,7 +126,7 @@ public class VariableElement extends AbstractElement implements Element {
 			rtn = context.get(pattern);
 		}
 		if (isNullAllowed && null == rtn) return "";
-		if (null == rtn && count == 1) {
+		if (null == rtn && count == 0) {
 			StringBuffer sb = new StringBuffer();
 			for (Iterator i=children.iterator(); i.hasNext(); ) {
 				if (sb.length() > 0) sb.append('.');

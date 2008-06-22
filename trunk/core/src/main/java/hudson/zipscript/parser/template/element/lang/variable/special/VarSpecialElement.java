@@ -10,6 +10,8 @@ import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
+import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateTimeSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.map.KeysSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.map.ValuesSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.CeilingSpecialMethod;
@@ -19,6 +21,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.sequence.F
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.ContainsSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HTMLSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.HumpbackCaseSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.JSSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.LPadSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerCaseSpecialMethod;
@@ -33,6 +36,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.string.XML
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +104,8 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 				return LowerFirstSpecialMethod.INSTANCE;
 			else if (method.equals("lowerCase"))
 				return LowerCaseSpecialMethod.INSTANCE;
+			else if (method.equals("humpbackCase"))
+				return HumpbackCaseSpecialMethod.INSTANCE;
 			else if (method.equals("upperCase"))
 				return UpperCaseSpecialMethod.INSTANCE;
 			else if (method.equals("html"))
@@ -131,6 +137,13 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 				return FloorSpecialMethod.INSTANCE;
 			else
 				return null;
+		}
+		else if (source instanceof Date) {
+			if (method.equals("jsDate"))
+				return JSDateSpecialMethod.INSTANCE;
+			if (method.equals("jsDateTime"))
+				return JSDateTimeSpecialMethod.INSTANCE;
+			else return null;
 		}
 		else if (source instanceof Map) {
 			if (method.equals("keys"))

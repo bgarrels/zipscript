@@ -43,4 +43,8 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			return macroInstance.toString();
 		else return super.toString();
 	}
+
+	public void put (String key, Object value) {
+		values.put(key, value);
+	}
 }

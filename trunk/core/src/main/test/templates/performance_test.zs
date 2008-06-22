@@ -22,7 +22,7 @@
 	[#if header != null]
 		<tr>
 		[#foreach header in header]
-			<th [#if header.class]class="${header.class}" [/#if]>${header.body}</th>
+			<th [#if header.class!=null]class="${header.class}" [/#if]>${header.body}</th>
 		[/#foreach]
 		</tr>
 		[#foreach entry in data]
