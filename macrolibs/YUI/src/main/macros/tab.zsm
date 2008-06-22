@@ -1,8 +1,8 @@
 [#macro pane id page]
 [#if global.addImportHeaders!=null]
-${global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", true)}
-${global.scriptIncludes.put("tabview/tabview-min.js", true)}
-${global.scriptIncludes.put("datatable/datatable-beta-min.js", true)}
+${global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", "YUI")}
+${global.scriptIncludes.put("tabview/tabview-min.js", "YUI")}
+${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")}
 [/#if]
 [#set componentId = "${id}_tab"/]
 	<div id="${id}"></div>
