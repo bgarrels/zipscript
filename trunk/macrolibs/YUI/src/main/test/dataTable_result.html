@@ -17,17 +17,25 @@
 	<script language="javascript">
 		myTable_model = {
     		data: [
-				{firstName: "John", lastName: "Doe"},
-				{firstName: "Billy", lastName: "Bob"}
+				{firstName: "Bill", lastName: "Cosby", birthday: new Date(1995, 12, 03)},
+				{firstName: "Bill", lastName: "Clinton", birthday: new Date(1989, 12, 03)},
+				{firstName: "Bill", lastName: "Bixby", birthday: new Date(1975, 03, 29)},
+				{firstName: "Clark", lastName: "Kent", birthday: new Date(1982, 05, 11)}
 		]};
 		myTable_columns = [
-			{key: "firstName", label: "First Name", sortable: true, resizable: true},
-			{key: "lastName", label: "Last Name", sortable: true, resizable: true}
+			{key: "firstName", label: "First Name", sortable: true, resizeable: true},
+			{key: "lastName", label: "Last Name", sortable: true, resizeable: true},
+			{key: "birthday", label: "Birthday", sortable: true, resizeable: true, formatter: YAHOO.widget.DataTable.formatDate}
 		];
 		dataSource = new YAHOO.util.DataSource(myTable_model.data);
 		dataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-        dataSource.responseSchema = {fields: ["firstName", "lastName"]};
-        new YAHOO.widget.DataTable("myTable", myTable_columns, dataSource);
+        dataSource.responseSchema = {fields: ["firstName", "lastName", "birthday"]};
+        dataTable = new YAHOO.widget.DataTable("myTable", myTable_columns, dataSource);
+		dataTable.subscribe("rowMouseoverEvent", dataTable.onEventHighlightRow); 
+		dataTable.subscribe("rowMouseoutEvent", dataTable.onEventUnhighlightRow);
+ 
+
+
 	</script>
 
 	</body>

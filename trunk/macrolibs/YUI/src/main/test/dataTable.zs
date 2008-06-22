@@ -1,4 +1,5 @@
 [@data.table id="myTable" entries=people]
-	[@column key="firstName" title="First Name"]${entry.firstName}[/@column]
-	[@column key="lastName" title="Last Name"]${entry.lastName}[/@column]
+	[@column title="First Name"]${entry.firstName}[/@column]
+	[@column title="Last Name"]${entry.lastName}[/@column]
+	[@column title="Birthday" format="date"]${entry.birthday?jsDate}[/@column]
 [/@data.table]
