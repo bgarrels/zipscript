@@ -1,5 +1,5 @@
 [#macro pane id page]
-[#if global.addImportHeaders]
+[#if global.addImportHeaders!=null]
 ${global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", true)}
 ${global.scriptIncludes.put("tabview/tabview-min.js", true)}
 ${global.scriptIncludes.put("datatable/datatable-beta-min.js", true)}
