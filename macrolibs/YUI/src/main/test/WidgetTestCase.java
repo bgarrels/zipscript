@@ -20,8 +20,10 @@ public class WidgetTestCase extends TestCase {
 	public void testDataTableWidget () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
-		l.add(new Person("John", "Doe", "12/03/95"));
-		l.add(new Person("Billy", "Bob", "12/03/95"));
+		l.add(new Person("Bill", "Cosby", "12/03/95"));
+		l.add(new Person("Bill", "Clinton", "12/03/89"));
+		l.add(new Person("Bill", "Bixby", "3/29/75"));
+		l.add(new Person("Clark", "Kent", "5/11/82"));
 		context.put("people", l);
 		String mergeTemplate = "dataTable.zs";
 		String resultFile = "/dataTable_result.html";
