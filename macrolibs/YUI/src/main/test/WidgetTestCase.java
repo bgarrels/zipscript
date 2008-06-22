@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 
 public class WidgetTestCase extends TestCase {
 
-	public void _testDataTableWidget () throws Exception {
+	public void testDataTableWidget () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add(new Person("John", "Doe", "12/03/95"));
@@ -28,7 +28,7 @@ public class WidgetTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testTabWidget () throws Exception {
+	public void testTabWidget () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "tab.zs";
 		String resultFile = "/tab_result.html";
@@ -46,8 +46,8 @@ public class WidgetTestCase extends TestCase {
 	static {
 		try {
 			engine = new ZipEngine();
-//			engine.addMacroLibrary("data", "data.zsm");
-//			engine.addMacroLibrary("tab", "tab.zsm");
+			engine.addMacroLibrary("data", "data.zsm");
+			engine.addMacroLibrary("tab", "tab.zsm");
 			engine.addMacroLibrary("tree", "tree.zsm");
 		}
 		catch (ParseException e) {
