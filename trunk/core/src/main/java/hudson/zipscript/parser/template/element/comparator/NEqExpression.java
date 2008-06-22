@@ -9,7 +9,7 @@ public class NEqExpression extends AbstractComparatorElement {
 			if (null != rhs && getLeftHandSide() instanceof NullElement) {
 				return true;
 			}
-			else if (null != rhs && getLeftHandSide() instanceof NullElement) {
+			else if (null != lhs && getRightHandSide() instanceof NullElement) {
 				return true;
 			}
 			else return false;
