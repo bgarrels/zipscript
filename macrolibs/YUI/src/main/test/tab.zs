@@ -12,7 +12,7 @@
 	[/#while]
 	[#foreach item in {"A","B","C"}]
 		[@page label='Page "${item}"' item=item]
-			This is the contents of page "${item!"Unknown item"}"
+			This is the contents of page "${item}"
 		[/@page]
 	[/#foreach]
 [/@tab.pane]
