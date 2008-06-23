@@ -20,10 +20,6 @@ public class MacroInstanceExecutor implements ToStringWithContextElement {
 		return macroInstance.getChildren();
 	}
 
-	public String toString() {
-		return macroInstance.getNestedContent(context);
-	}
-
 	public String toString(ZSContext context) {
 		return macroInstance.getNestedContent(context);
 	}

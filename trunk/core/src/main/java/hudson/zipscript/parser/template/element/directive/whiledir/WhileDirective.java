@@ -7,13 +7,14 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.directive.LoopingDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.StringWriter;
 import java.util.List;
 
-public class WhileDirective extends NestableElement implements MacroInstanceAware {
+public class WhileDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
 
 	public static final String TOKEN_INDEX = "i";
 
@@ -33,7 +34,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 
 	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
 		int i = 0;
-		context = new NestedContextWrapper(context);
+		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
 			if (i > MAX_LOOPS)
@@ -46,7 +47,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	public void getMacroInstances(
 			ZSContext context, List macroInstanceList, MacroDirective macro) throws ExecutionException {
 		int i = 0;
-		context = new NestedContextWrapper(context);
+		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
 			if (i > MAX_LOOPS)
