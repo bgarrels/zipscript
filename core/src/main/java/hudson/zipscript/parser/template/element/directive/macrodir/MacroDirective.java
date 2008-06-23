@@ -126,7 +126,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		
 		ZSContext parentContext = context;
-		context = new NestedContextWrapper(context, false);
+		context = new NestedContextWrapper(context, this, false);
 		// add attributes to context
 		if (isOrdinal) {
 			for (int i=0; i<attributes.size(); i++) {

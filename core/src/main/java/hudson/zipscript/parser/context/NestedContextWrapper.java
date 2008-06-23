@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.HashMap;
@@ -9,25 +10,28 @@ import java.util.Locale;
 
 public class NestedContextWrapper implements ZSContext {
 
-	private ZSContext context;
+	private ZSContext parentContext;
 	private HashMap map = new HashMap(4);
 	private boolean travelUp = true;
+	private Element scopedElement;
 
-	public NestedContextWrapper (ZSContext context) {
-		this.context = context;
+	public NestedContextWrapper (ZSContext parentContext, Element scopedElement) {
+		this.parentContext = parentContext;
+		this.scopedElement = scopedElement;
 	}
 
-	public NestedContextWrapper (ZSContext context, boolean travelUp) {
-		this.context = context;
-		this.travelUp = travelUp;
+	public NestedContextWrapper (
+			ZSContext parentContext, Element scopedElement, boolean travelUp) {
+		this.parentContext = parentContext;
+		this.scopedElement = scopedElement;
+		this.travelUp = true;
 	}
 
 	public Object get(String key) {
 		Object obj = map.get(key);
 		if (null == obj && travelUp)
-			return context.get(key);
-		else
-			return obj;
+			obj = parentContext.get(key);
+		return obj;
 	}
 
 	public Iterator getKeys() {
@@ -39,7 +43,7 @@ public class NestedContextWrapper implements ZSContext {
 	}
 
 	public void putGlobal(String key, Object value) {
-		context.putGlobal(key, value);
+		parentContext.putGlobal(key, value);
 	}
 
 	public Object remove(String key) {
@@ -47,30 +51,42 @@ public class NestedContextWrapper implements ZSContext {
 	}
 
 	public Object getSuper () {
-		return context;
+		return parentContext;
 	}
 
 	public ParsingSession getParsingSession() {
-		return context.getParsingSession();
+		return parentContext.getParsingSession();
 	}
 
 	public void setParsingSession(ParsingSession session) {
-		context.setParsingSession(session);
+		parentContext.setParsingSession(session);
 	}
 
 	public Locale getLocale () {
-		return context.getLocale();
+		return parentContext.getLocale();
 	}
 
 	public MacroManager getMacroManager() {
-		return context.getMacroManager();
+		return parentContext.getMacroManager();
 	}
 
 	public void setMacroManager (MacroManager macroManager) {
-		context.setMacroManager(macroManager);
+		parentContext.setMacroManager(macroManager);
 	}
 
 	public ZSContext getRootContext () {
-		return context.getRootContext();
+		return parentContext.getRootContext();
+	}
+
+	public Element getScopedElement() {
+		return scopedElement;
+	}
+
+	public ZSContext getParentContext() {
+		return parentContext;
+	}
+
+	public HashMap getMap() {
+		return map;
 	}
 }

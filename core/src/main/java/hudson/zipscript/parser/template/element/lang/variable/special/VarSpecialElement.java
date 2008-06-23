@@ -6,12 +6,15 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
 import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateTimeSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.macroinstance.BooleanValueSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.macroinstance.ObjectValueSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.map.KeysSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.map.ValuesSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.CeilingSpecialMethod;
@@ -97,7 +100,14 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 
 	protected SpecialMethod initializeSpecialMethod (
 			Object source, ZSContext context) {
-		if (source instanceof String) {
+		if (source instanceof MacroInstanceExecutor) {
+			if (method.equals("objectValue"))
+				return new ObjectValueSpecialMethod();
+			else if (method.equals("booleanValue"))
+				return new BooleanValueSpecialMethod();
+			else return null;
+		}
+		else if (source instanceof String) {
 			if (method.equals("upperFirst"))
 				return UpperFirstSpecialMethod.INSTANCE;
 			else if (method.equals("lowerFirst"))

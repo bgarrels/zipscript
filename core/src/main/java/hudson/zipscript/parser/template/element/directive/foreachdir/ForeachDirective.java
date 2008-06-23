@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.directive.LoopingDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.group.ListElement;
@@ -26,7 +27,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-public class ForeachDirective extends NestableElement implements MacroInstanceAware {
+public class ForeachDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
@@ -94,7 +95,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Object[] arr = (Object[]) list;
 				if (arr.length > 0) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					int checkNum = arr.length-1;
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
@@ -110,7 +111,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Collection c = (Collection) list;
 				if (c.size() > 0) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
@@ -125,7 +126,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Iterator iter = (Iterator) list;
 				if (iter.hasNext()) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (iter.hasNext()) {
@@ -140,7 +141,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Enumeration enum = (Enumeration) list;
 				if (enum.hasMoreElements()) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (enum.hasMoreElements()) {
@@ -153,7 +154,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			}
 			else {
 				// just put the object in the context and loop 1 time
-				context = new NestedContextWrapper(context);
+				context = new NestedContextWrapper(context, this);
 				context.put(TOKEN_INDEX, new Integer(0));
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
 				context.put(varName, list);
@@ -169,7 +170,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Object[] arr = (Object[]) list;
 				if (arr.length > 0) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					int checkNum = arr.length-1;
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
@@ -188,7 +189,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Collection c = (Collection) list;
 				if (c.size() > 0) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
@@ -206,7 +207,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Iterator iter = (Iterator) list;
 				if (iter.hasNext()) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (iter.hasNext()) {
@@ -224,7 +225,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Enumeration enum = (Enumeration) list;
 				if (enum.hasMoreElements()) {
 					int i=0;
-					context = new NestedContextWrapper(context);
+					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (enum.hasMoreElements()) {
@@ -243,7 +244,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (getParsingSession().isDebug()) {
 					System.out.println("Executing: " + this.toString() + " (0)");
 				}
-				context = new NestedContextWrapper(context);
+				context = new NestedContextWrapper(context, this);
 				context.put(TOKEN_INDEX, new Integer(0));
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
 				context.put(varName, list);
