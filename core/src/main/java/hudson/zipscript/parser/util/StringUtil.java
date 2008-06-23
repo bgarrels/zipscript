@@ -25,18 +25,20 @@ public class StringUtil {
 		boolean doUpper = false;
 		for (int i=0; i<s.length(); i++) {
 			char c = s.charAt(i);
-			while (Character.isWhitespace(c)) {
+			while (Character.isWhitespace(c) || c == '_' || c == '-') {
 				doUpper = true;
 				if (s.length() > i)
 					c = s.charAt(++i);
 				else
 					return sb.toString();
 			}
-			if (doUpper && sb.length() > 0)
-				sb.append(Character.toUpperCase(c));
-			else
-				sb.append(Character.toLowerCase(c));
-			doUpper = false;
+			if (Character.isLetterOrDigit(c)) {
+				if (doUpper && sb.length() > 0)
+					sb.append(Character.toUpperCase(c));
+				else
+					sb.append(Character.toLowerCase(c));
+				doUpper = false;
+			}
 		}
 		return sb.toString();
 	}
