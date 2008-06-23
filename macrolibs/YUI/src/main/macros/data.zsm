@@ -19,7 +19,7 @@ ${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")}
 		]};
 		${columnDefName} = [
 [#foreach column in column]
-			{key: "${column.key}", label: "${column.title}", sortable: ${column.sortable!true}, resizeable: ${resizeable!true}[#if column.format!=null&&column.format!="string"], formatter: [#if column.format=="date"]YAHOO.widget.DataTable.formatDate[#elseif column.format=="currency"]YAHOO.widget.DataTable.formatCurrency[#elseif column.format=="number"]YAHOO.widget.DataTable.formatNumber[#else]${column.format}[/#if][/#if]}[#if hasNext],[/#if]
+			{key: "${column.key}", label: "${column.title}", sortable: ${column.sortable!true}, resizeable: ${resizeable!true}[#if column.hidden!=null], hidden: ${column.hidden}[/#if][#if column.selected!=null], selected: ${column.selected}[/#if][#if column.width!=null], width: ${column.width}[/#if][#if column.format!=null&&column.format!="string"], formatter: [#if column.format=="date"]YAHOO.widget.DataTable.formatDate[#elseif column.format=="currency"]YAHOO.widget.DataTable.formatCurrency[#elseif column.format=="number"]YAHOO.widget.DataTable.formatNumber[#else]${column.format}[/#if][/#if]}[#if hasNext],[/#if]
 
 [/#foreach]
 		];
