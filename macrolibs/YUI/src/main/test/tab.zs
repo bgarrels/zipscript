@@ -1,8 +1,18 @@
 [@tab.pane id="myTab"]
-	[@page label="Page 1" active=true]
-		This is the contents of page 1
+	[@page label="Some Page" active=true]
+		These are the contents of some page...
+		<p>
+			Blah blah blah...
+		</p> 
 	[/@page]
-	[@page label="Page 2"]
-		This is the contents of page 2
-	[/@page]
+	[#while i<2]
+		[@page label="Page ${i+1}"]
+			This is the contents of page ${i+1}
+		[/@page]
+	[/#while]
+	[#foreach item in {"A","B","C"}]
+		[@page label='Page "${item}"' item=item]
+			This is the contents of page "${item!"Unknown item"}"
+		[/@page]
+	[/#foreach]
 [/@tab.pane]
