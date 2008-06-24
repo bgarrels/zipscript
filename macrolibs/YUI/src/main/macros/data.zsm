@@ -1,8 +1,8 @@
 [#macro table id entries column rowHighlight=true]
 [#if global.addImportHeaders!=null]
-${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")}
-${global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")}
-${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")}
+${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
+${global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
+${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
 [/#if]
 [#foreach column in column]${column.put("key", column.title?humpbackCase)}[/#foreach]
 [#set dataName = "${id}_model"/]
