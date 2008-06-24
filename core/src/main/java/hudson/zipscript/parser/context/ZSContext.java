@@ -5,6 +5,7 @@ import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 
 public interface ZSContext {
@@ -30,4 +31,6 @@ public interface ZSContext {
 	public void setMacroManager (MacroManager macroManager);
 
 	public ZSContext getRootContext ();
+
+	public void appendMacroNestedAttributes (Map m);
 }

@@ -13,6 +13,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstance
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class IfDirective extends NestableElement implements MacroInstanceAware {
@@ -82,10 +83,11 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 	}
 
 	public void getMacroInstances(
-			ZSContext context, List macroInstanceList, MacroDirective macro) throws ExecutionException {
+			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries)
+	throws ExecutionException {
 		boolean done = false;
 		if (ifElement.booleanValue(context)) {
-			appendMacroInstances(getChildren(), context, macroInstanceList, macro);
+			appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			done = true;
 		}
 		if (null != elseifScenarios) {
@@ -93,13 +95,14 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 				HeaderElementList elements = (HeaderElementList) elseifScenarios.get(i);
 				if (elements.getHeader().booleanValue(context)) {
 					appendMacroInstances(
-							elements.getChildren(), context, macroInstanceList, macro);
+							elements.getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 					done = true;
 				}
 			}
 		}
 		if (!done && null != elseElements) { 
-			appendMacroInstances(elseElements, context, macroInstanceList, macro);
+			appendMacroInstances(
+					elseElements, context, macroInstanceList, macro, additionalContextEntries);
 		}
 	}
 

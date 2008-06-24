@@ -23,6 +23,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	private boolean isOrdinal = true;
 	private String contents;
 	private String name;
+	boolean isInMacroDefinition;
 
 	List attributes = new ArrayList();
 	Map attributeMap;
@@ -90,7 +91,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 				loadTDPs(dir.getMacroDefinition(), map);
 			}
 		}
-		else if (e instanceof MacroInstanceAware) {
+		else if (e instanceof MacroInstanceAware && null != e.getChildren()) {
 			for (Iterator i=e.getChildren().iterator(); i.hasNext(); ) {
 				loadTDPs((Element) i.next(), map);
 			}
@@ -98,6 +99,14 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	private void validate (ParsingSession session) throws ParseException {
+		// see if we are in a macro definition
+		for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+			if (i.next() instanceof MacroDirective) {
+				isInMacroDefinition = true;
+				break;
+			}
+		}
+
 		// find macro in session
 		macro = session.getMacroManager().getMacro(
 				getName(), session);
@@ -270,8 +279,8 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			throw new ExecutionException("Undefined macro '" + getName() + "'", this);
 		}
 		macro.executeMacro(
-				context, isOrdinal(), getAttributes(), new MacroInstanceExecutor(
-						this, context), sw);
+				context, isOrdinal(), getAttributes(),
+				new MacroInstanceExecutor(this, context), sw);
 	}
 
 	public String getNestedContent (ZSContext context) throws ExecutionException {
@@ -307,12 +316,17 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	public void appendMacroInstances(ZSContext context,
-			List macroInstanceList, MacroDirective macro) {
-		super.appendMacroInstances(getChildren(), context, macroInstanceList, macro);
+			List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
+		super.appendMacroInstances(
+				getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 	}
 
-	public void getMacroInstances(ZSContext context, List macroInstanceList,
-			MacroDirective macro) {
-		super.appendMacroInstances(getChildren(), context, macroInstanceList, macro);	
+	public void getMacroInstances(
+			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
+		super.appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);	
+	}
+
+	public boolean isInMacroDefinition() {
+		return isInMacroDefinition;
 	}
 }

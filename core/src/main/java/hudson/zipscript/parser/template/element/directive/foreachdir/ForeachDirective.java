@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class ForeachDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
 
@@ -49,6 +50,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 
 	private String varName;
 	private Element listElement;
+	private boolean isInMacroDefinition;
 
 	public ForeachDirective (String contents, ParsingSession session, int contentPosition)
 	throws ParseException {
@@ -56,8 +58,17 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 		parseContents(contents, session, contentPosition);
 	}
 
-	private void parseContents (String contents, ParsingSession session, int contentPosition)
+	private void parseContents (
+			String contents, ParsingSession session, int contentPosition)
 	throws ParseException {
+		// see if we are in a macro definition
+		for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+			if (i.next() instanceof MacroDirective) {
+				isInMacroDefinition = true;
+				break;
+			}
+		}
+
 		java.util.List elements = parseElements(contents, session, contentPosition);
 		try {
 			Element e = (Element) elements.get(0);
@@ -88,7 +99,8 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 		return SpecialVariableDefaultEelementFactory.getInstance();
 	}
 
-	public void getMacroInstances(ZSContext context, List macroInstanceList, MacroDirective macro) {
+	public void getMacroInstances(
+			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
 			if (list instanceof Object[]) {
@@ -96,14 +108,23 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (arr.length > 0) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
+					Integer int0 = new Integer(0);
+					additionalContextEntries.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0);
 					int checkNum = arr.length-1;
+					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (i<arr.length) {
-						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						if (i >= checkNum) {
+							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						}
+						additionalContextEntries.put(varName, arr[i]);
 						context.put(varName, arr[i]);
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						Integer index = new Integer(++i);
+						additionalContextEntries.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index);
 					}
 				}
 			}
@@ -112,13 +133,23 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (c.size() > 0) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
+					Integer int0 = new Integer(0);
+					additionalContextEntries.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0);
+					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
-						context.put(varName, iter.next());
-						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						Object nextVal = iter.next();
+						additionalContextEntries.put(varName, nextVal);
+						context.put(varName, nextVal);
+						if (!iter.hasNext()) {
+							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						}
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						Integer index = new Integer(++i);
+						additionalContextEntries.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index);
 					}
 				}
 			}
@@ -127,13 +158,23 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (iter.hasNext()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
+					Integer int0 = new Integer(0);
+					additionalContextEntries.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0);
+					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (iter.hasNext()) {
-						context.put(varName, iter.next());
-						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						Object nextVal = iter.next();
+						additionalContextEntries.put(varName, nextVal);
+						context.put(varName, nextVal);
+						if (!iter.hasNext()) {
+							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						}
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						Integer index = new Integer(++i);
+						additionalContextEntries.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index);
 					}
 				}
 			}
@@ -142,23 +183,37 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (enum.hasMoreElements()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
+					Integer int0 = new Integer(0);
+					additionalContextEntries.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0);
+					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
 					while (enum.hasMoreElements()) {
-						context.put(varName, enum.nextElement());
-						if (enum.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						Object nextVal = enum.nextElement();
+						additionalContextEntries.put(varName, nextVal);
+						context.put(varName, nextVal);
+						if (enum.hasMoreElements()) {
+							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						}
+						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						Integer index = new Integer(++i);
+						additionalContextEntries.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index);
 					}
 				}
 			}
 			else {
 				// just put the object in the context and loop 1 time
+				Integer int0 = new Integer(0);
 				context = new NestedContextWrapper(context, this);
-				context.put(TOKEN_INDEX, new Integer(0));
+				additionalContextEntries.put(TOKEN_INDEX, int0);
+				context.put(TOKEN_INDEX, int0);
+				additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
+				additionalContextEntries.put(varName, list);
 				context.put(varName, list);
-				appendMacroInstances(getChildren(), context, macroInstanceList, macro);
+				appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			}
 		}
 	}
@@ -273,5 +328,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			return "[#foreach " + varName + " in " + listElement + "]";
 		else
 			return "[#foreach " + varName + " in ?]";
+	}
+
+	public boolean isInMacroDefinition() {
+		return isInMacroDefinition;
 	}
 }
