@@ -45,6 +45,31 @@ public class WidgetTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
+	public void testAllWidgets () throws Exception {
+		Map context = new HashMap();
+		List l = new ArrayList();
+		l.add(new Person("Bill", "Cosby", "12/03/95", 8, new BigDecimal(1429978.76)));
+		l.add(new Person("Bill", "Clinton", "12/03/89", 4, new BigDecimal(2875635.21)));
+		l.add(new Person("Bill", "Bixby", "3/29/75", 3, new BigDecimal(192879.78)));
+		l.add(new Person("Clark", "Kent", "5/11/82", 1, new BigDecimal(43987.19)));
+		context.put("people", l);
+		String mergeTemplate = "allWidgets.zs";
+		String resultFile = "/allWidgets_result.html";
+
+		evalResult(mergeTemplate, resultFile, context);
+
+		Template template = engine.getTemplate(mergeTemplate);
+		long currentMilis = System.currentTimeMillis();
+		int numRuns = 1000;
+		for (int i=0; i<numRuns; i++) {
+			template.merge(context);
+		}
+		long diff = System.currentTimeMillis() - currentMilis;
+		float currentSeconds =  ((float) diff / (float) 1000);
+		System.out.println(numRuns + " merges in " + currentSeconds + " seconds");
+		assertTrue("Performance test failed!", (currentSeconds < 2));
+	}
+
 	private static ZipEngine engine = null;
 	static {
 		try {
@@ -62,20 +87,26 @@ public class WidgetTestCase extends TestCase {
 
 	private void evalResult (String mergeTemplate, String resultFile, Map context)
 	throws ParseException, ExecutionException, IOException {
+		Template bodyTemplate = engine.getTemplate(mergeTemplate);
+		String result = mergeWithLayout(bodyTemplate, context);
+		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
+		assertEquals(expectedResult, result);
+	}
+
+	private String mergeWithLayout (Template template, Map context)
+	throws ParseException, ExecutionException, IOException {
 		context.put("addImportHeaders", Boolean.TRUE);
 		context.put("cssIncludes", new HashMap(3));
 		context.put("scriptIncludes", new HashMap(3));
-		String body = merge(mergeTemplate, context);
+		String body = merge(template, context);
 		if (null == layoutTemplate)
 			layoutTemplate = engine.getTemplate("layout.zs");
 		context.put("screen_placeholder", body);
-		String actualResult = layoutTemplate.merge(context);		
-		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
-		assertEquals(expectedResult, actualResult);
+		return layoutTemplate.merge(context);
 	}
 
-	private String merge (String template, Object context)
+	private String merge (Template template, Map context)
 	throws ParseException, ExecutionException, IOException {
-		return engine.getTemplate(template).merge(context);
+		return template.merge(context);
 	}
 }
