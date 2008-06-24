@@ -20,6 +20,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.map.Values
 import hudson.zipscript.parser.template.element.lang.variable.special.number.CeilingSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.FloorSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.RoundSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.ContainsSpecialMethod;
@@ -100,7 +101,11 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 
 	protected SpecialMethod initializeSpecialMethod (
 			Object source, ZSContext context) {
-		if (source instanceof MacroInstanceExecutor) {
+		// object methods
+		if (method.equals("void")) {
+			return VoidSpecialMethod.INSTANCE;
+		}
+		else if (source instanceof MacroInstanceExecutor) {
 			if (method.equals("objectValue"))
 				return new ObjectValueSpecialMethod();
 			else if (method.equals("booleanValue"))
