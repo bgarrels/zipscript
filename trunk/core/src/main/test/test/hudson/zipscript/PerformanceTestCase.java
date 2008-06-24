@@ -42,6 +42,6 @@ public class PerformanceTestCase extends TestCase {
 		long diff = System.currentTimeMillis() - currentMilis;
 		float currentSeconds =  ((float) diff / (float) 1000);
 		System.out.println(numRuns + " merges in " + currentSeconds + " seconds");
-		assertTrue("Performance test failed!", (currentSeconds < 1));
+		assertTrue("Performance test failed!", (currentSeconds < 2));
 	}
 }

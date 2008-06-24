@@ -1,15 +1,15 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.macroinstance;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ObjectValueSpecialMethod implements SpecialMethod {
 

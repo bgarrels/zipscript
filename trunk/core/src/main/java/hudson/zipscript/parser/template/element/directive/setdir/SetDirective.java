@@ -7,13 +7,16 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
 
-public class SetDirective extends AbstractDirective {
+public class SetDirective extends AbstractDirective implements MacroInstanceAware {
 
 	private String varName;
 	private Element setElement;
@@ -55,5 +58,10 @@ public class SetDirective extends AbstractDirective {
 
 	public List getChildren() {
 		return null;
+	}
+
+	public void getMacroInstances(ZSContext context, List list,
+			MacroDirective macro, Map additionalContextEntries) {
+		additionalContextEntries.put(varName, setElement.objectValue(context));	
 	}
 }

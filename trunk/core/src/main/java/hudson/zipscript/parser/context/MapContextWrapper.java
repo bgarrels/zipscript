@@ -46,4 +46,9 @@ public class MapContextWrapper extends AbstractContext {
 	public ZSContext getRootContext() {
 		return this;
 	}
+
+	public void appendMacroNestedAttributes(Map m) {
+		// if we are using this context we are at the top level
+		// and not in a macro definition
+	}
 }

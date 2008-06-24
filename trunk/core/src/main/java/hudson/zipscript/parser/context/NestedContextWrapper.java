@@ -2,11 +2,13 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 public class NestedContextWrapper implements ZSContext {
 
@@ -24,7 +26,7 @@ public class NestedContextWrapper implements ZSContext {
 			ZSContext parentContext, Element scopedElement, boolean travelUp) {
 		this.parentContext = parentContext;
 		this.scopedElement = scopedElement;
-		this.travelUp = true;
+		this.travelUp = travelUp;
 	}
 
 	public Object get(String key) {
@@ -88,5 +90,12 @@ public class NestedContextWrapper implements ZSContext {
 
 	public HashMap getMap() {
 		return map;
+	}
+
+	public void appendMacroNestedAttributes(Map m) {
+		m.putAll(map);
+		if (!(getScopedElement() instanceof MacroDirective)) {
+			parentContext.appendMacroNestedAttributes(m);
+		}
 	}
 }

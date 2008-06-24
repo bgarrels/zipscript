@@ -1,10 +1,10 @@
 package hudson.zipscript.resource.macrolib;
 
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 
 public class MacroLibrary implements MacroProvider {
 

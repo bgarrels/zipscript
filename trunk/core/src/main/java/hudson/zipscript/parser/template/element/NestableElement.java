@@ -17,6 +17,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public abstract class NestableElement extends AbstractDirective {
@@ -123,7 +124,8 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected void appendMacroInstances (
-			List children, ZSContext context, List macroInstanceList, MacroDirective macro) {
+			List children, ZSContext context, List macroInstanceList,
+			MacroDirective macro, Map additionalContextEntries) {
 		if (null != children) {
 			for (Iterator j=children.iterator(); j.hasNext(); ) {
 				Element e = (Element) j.next();
@@ -131,18 +133,18 @@ public abstract class NestableElement extends AbstractDirective {
 					MacroInstanceDirective mid = (MacroInstanceDirective) e;
 					if (null != macro.getAttribute(mid.getName())) {
 						macroInstanceList.add(new MacroInstanceEntity(
-								(MacroInstanceDirective) e, context));
+								(MacroInstanceDirective) e, context, additionalContextEntries));
 					}
 					else {
 						// macro that might contain TDPs
 						if (null != mid.getMacroDefinition())
 							mid.getMacroDefinition().getMacroInstances(
-									context, macroInstanceList, macro);
+									context, macroInstanceList, macro, additionalContextEntries);
 					}
 				}
 				else if (e instanceof MacroInstanceAware) {
 					((MacroInstanceAware) e).getMacroInstances(
-							context, macroInstanceList, macro);
+							context, macroInstanceList, macro, additionalContextEntries);
 				}
 			}
 		}
