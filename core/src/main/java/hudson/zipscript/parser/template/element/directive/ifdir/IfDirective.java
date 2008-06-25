@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 		}
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		boolean done = false;
 		boolean isDebug = getParsingSession().isDebug();
 		if (isDebug) System.out.println("Executing: If: " + ifElement);

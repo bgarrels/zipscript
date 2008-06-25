@@ -21,8 +21,10 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -89,14 +91,15 @@ public class VariableElement extends AbstractElement implements Element {
 		return true;
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		Object obj = objectValue(context);
 		if (null != obj) {
 			if (obj instanceof ToStringWithContextElement) {
-				sw.write(((ToStringWithContextElement) obj).toString(context));
+				StringUtil.append(
+						((ToStringWithContextElement) obj).toString(context), sw);
 			}
 			else {
-				sw.write(obj.toString());
+				StringUtil.append(obj.toString(), sw);
 			}
 		}
 		else {

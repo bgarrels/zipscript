@@ -2,14 +2,14 @@ package hudson.zipscript.resource;
 
 import hudson.zipscript.parser.exception.InitializationException;
 
-import org.apache.commons.configuration.Configuration;
+import java.util.Map;
 
 public abstract class AbstractResourceLoader implements ResourceLoader {
 
 	private String pathPrefix;
 
-	public void config(Configuration config) throws InitializationException {
-		pathPrefix = config.getString("pathPrefix");
+	public void config(Map properties) throws InitializationException {
+		pathPrefix = (String) properties.get("pathPrefix");
 	}
 
 	protected String getRealPath (String path) {

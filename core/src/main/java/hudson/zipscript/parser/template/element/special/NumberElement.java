@@ -8,8 +8,10 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.util.LocaleUtil;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
@@ -101,8 +103,8 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 		return null;
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
-		sw.write(number.toString());
+	public void merge(ZSContext context, Writer sw) {
+		StringUtil.append(number.toString(), sw);
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {

@@ -5,6 +5,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
 
 import java.io.StringWriter;
+import java.io.Writer;
 
 public class EndIfDirective extends NestableDirective {
 
@@ -18,7 +19,7 @@ public class EndIfDirective extends NestableDirective {
 		return "[/#if]";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		throw new ExecutionException("Invalid if directive", this);
 	}
 }

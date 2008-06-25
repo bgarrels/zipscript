@@ -13,8 +13,10 @@ import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementP
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,14 +65,14 @@ public class TextElement extends AbstractElement implements Element {
 		return false;
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
+	public void merge(ZSContext context, Writer sw) {
 		if (evaluateText) {
 			for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
 				((Element) i.next()).merge(context, sw);
 			}
 		}
 		else if (null != text) {
-			sw.write(text);
+			StringUtil.append(text, sw);
 		}
 	}
 

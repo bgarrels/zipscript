@@ -59,9 +59,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.MapConfiguration;
-
 public class ZipEngine {
 
 	private ResourceLoader templateResourceloader = new ClasspathResourceLoader();
@@ -117,12 +114,12 @@ public class ZipEngine {
 	}
 
 	public void init (Properties properties) {
-		init (new MapConfiguration(properties));
+		init ((Map) properties);
 	}
 	
-	public void init (Configuration configuration) {
+	public void init (Map properties) {
 		// get the default resource loader
-		String s = configuration.getString("templateResourceLoader.class");
+		String s = (String) properties.get("templateResourceLoader.class");
 		if (null != s) {
 			try {
 				this.templateResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
@@ -131,7 +128,7 @@ public class ZipEngine {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 			}
 		}
-		s = configuration.getString("macroLibResourceLoader.class");
+		s = (String) properties.get("macroLibResourceLoader.class");
 		if (null != s) {
 			try {
 				this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
@@ -140,7 +137,7 @@ public class ZipEngine {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 			}
 		}
-		s = configuration.getString("evalResourceLoader.class");
+		s = (String) properties.get("evalResourceLoader.class");
 		if (null != s) {
 			try {
 				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);

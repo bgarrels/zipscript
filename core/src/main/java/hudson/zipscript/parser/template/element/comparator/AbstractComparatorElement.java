@@ -10,7 +10,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 
 	protected abstract String getComparatorString ();
 
-	public void merge (ZSContext context, StringWriter sw)
+	public void merge (ZSContext context, Writer sw)
 	throws ExecutionException {
 		Object rtn = objectValue(context);
 		if (null != rtn) {

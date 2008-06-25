@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ListElement extends NestableElement {
 		return rtn;
 	}
 
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
 		throw new ExecutionException("Lists can not be merged directly", this);
 	}

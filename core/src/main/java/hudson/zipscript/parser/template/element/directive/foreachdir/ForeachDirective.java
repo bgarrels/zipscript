@@ -22,6 +22,7 @@ import hudson.zipscript.parser.template.element.special.InPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -218,7 +219,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 		}
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
 			if (list instanceof Object[]) {

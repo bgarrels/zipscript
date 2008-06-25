@@ -1,6 +1,30 @@
 package hudson.zipscript.parser.util;
 
+import hudson.zipscript.parser.exception.ExecutionException;
+
+import java.io.IOException;
+import java.io.Writer;
+
 public class StringUtil {
+
+	public static void append (char c, Writer writer) {
+		try {
+			writer.append(c);
+		}
+		catch (IOException e) {
+			throw new ExecutionException(e.getMessage(), null, e);
+		}
+	}
+
+	public static void append (String s, Writer writer) {
+		try {
+			for (int i=0; i<s.length(); i++)
+				writer.append(s.charAt(i));
+		}
+		catch (IOException e) {
+			throw new ExecutionException(e.getMessage(), null, e);
+		}
+	}
 
 	public static String firstLetterUpperCase (String s) {
 		if (null == s|| s.length() == 1) return s;

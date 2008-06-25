@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.context;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,13 +14,16 @@ public class ContextWrapperFactory {
 	}
 
 	public ZSContext wrap (Object obj) {
+		ZSContext context = null;
 		if (null == obj)
-			return new MapContextWrapper(new HashMap(2));
+			context = new MapContextWrapper(new HashMap(2));
 		if (obj instanceof ZSContext)
-			return (ZSContext) obj;
+			context = (ZSContext) obj;
 		else if (obj instanceof Map)
-			return new MapContextWrapper((Map) obj);
+			context = new MapContextWrapper((Map) obj);
 		else
-			return null;
+			context = new ObjectContextWrapper(obj);
+		context.put("now", new Date());
+		return context;
 	}
 }

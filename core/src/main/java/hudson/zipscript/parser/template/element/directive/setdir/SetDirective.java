@@ -13,6 +13,7 @@ import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 		}
 	}
 
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
 		context.put(varName, setElement.objectValue(context));
 	}

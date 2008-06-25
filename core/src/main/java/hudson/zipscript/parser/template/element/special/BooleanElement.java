@@ -6,8 +6,10 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class BooleanElement extends AbstractElement implements SpecialElement {
@@ -35,8 +37,8 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 		return value;
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
-		sw.write(value.toString());
+	public void merge(ZSContext context, Writer sw) {
+		StringUtil.append(value.toString(), sw);
 	}
 
 	public boolean booleanValue(ZSContext context) {
