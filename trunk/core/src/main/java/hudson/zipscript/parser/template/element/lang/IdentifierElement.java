@@ -8,11 +8,12 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class IdentifierElement extends AbstractElement {
 
-	public void merge(ZSContext context, StringWriter sw) {
+	public void merge(ZSContext context, Writer sw) {
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {

@@ -3,13 +3,14 @@ package hudson.zipscript.parser.template.element.group;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
+import hudson.zipscript.parser.util.StringUtil;
 
-import java.io.StringWriter;
+import java.io.Writer;
 
 public class EndGroupElement extends NestableDirective {
 
-	public void merge(ZSContext context, StringWriter sw) {
-		sw.write(')');
+	public void merge(ZSContext context, Writer sw) {
+		StringUtil.append(')', sw);
 	}
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {

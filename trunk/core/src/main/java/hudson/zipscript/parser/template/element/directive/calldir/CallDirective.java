@@ -21,6 +21,7 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.WithPatternMatcher;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -160,7 +161,7 @@ public class CallDirective extends AbstractDirective {
 		}
 	}
 
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
 		if (getParsingSession().isDebug()) {
 			System.out.println("Executing: " + this.toString());

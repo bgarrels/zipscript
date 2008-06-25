@@ -12,6 +12,7 @@ import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -270,7 +271,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		return "[@" + contents + "]";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		if (null == macro) {
 			// we might need to lazy load
 			macro = context.getMacroManager().getMacro(getName(), context.getParsingSession());

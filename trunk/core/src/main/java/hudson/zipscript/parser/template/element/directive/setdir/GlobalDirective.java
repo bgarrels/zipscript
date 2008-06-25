@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class GlobalDirective extends AbstractDirective {
@@ -43,7 +44,7 @@ public class GlobalDirective extends AbstractDirective {
 		}
 	}
 
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
 		context.put(varName, setElement.objectValue(context));
 	}

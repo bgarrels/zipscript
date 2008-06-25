@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,13 +49,13 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		return sw.toString();
 	}
 
-	public void merge(Object context, StringWriter sw) throws ExecutionException {
+	public void merge(Object context, Writer sw) throws ExecutionException {
 		merge(getContext(context), sw);
 	}
 
 
 	/** Element Methods **/
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 	throws ExecutionException {
 		try {
 			for (Iterator i=elements.iterator(); i.hasNext(); ) {

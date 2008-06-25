@@ -7,7 +7,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
 
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class EndMacroInstanceDirective extends NestableDirective {
@@ -22,7 +22,7 @@ public class EndMacroInstanceDirective extends NestableDirective {
 		return "[/#macro]";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		throw new ExecutionException("Invalid macro directive", this);
 	}
 

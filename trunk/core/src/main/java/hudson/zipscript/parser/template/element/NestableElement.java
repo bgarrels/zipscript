@@ -13,7 +13,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstance
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -168,7 +168,7 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected void appendElements (
-			List elements, ZSContext context, StringWriter sw)
+			List elements, ZSContext context, Writer sw)
 	throws ExecutionException {
 		if (null != elements) {
 			for (Iterator i=elements.iterator(); i.hasNext(); ) {

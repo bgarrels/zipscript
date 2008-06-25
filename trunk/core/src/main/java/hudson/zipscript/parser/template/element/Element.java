@@ -6,7 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 
@@ -24,7 +24,7 @@ public interface Element {
 
 	public boolean booleanValue (ZSContext context) throws ExecutionException;
 
-	public void merge (ZSContext context, StringWriter sw) throws ExecutionException;
+	public void merge (ZSContext context, Writer sw) throws ExecutionException;
 
 	public ElementIndex normalize (
 			int index, List elementList, ParsingSession session) throws ParseException;

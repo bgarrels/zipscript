@@ -8,6 +8,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class CommentElement implements Element {
@@ -34,7 +35,7 @@ public class CommentElement implements Element {
 		return null;
 	}
 
-	public void merge(ZSContext context, StringWriter sw)
+	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
 	}
 

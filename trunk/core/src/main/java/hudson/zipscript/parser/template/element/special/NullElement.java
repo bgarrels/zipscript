@@ -8,6 +8,7 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
 
 public class NullElement extends AbstractElement implements SpecialElement {
@@ -23,7 +24,7 @@ public class NullElement extends AbstractElement implements SpecialElement {
 		return "null";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
+	public void merge(ZSContext context, Writer sw) {
 	}
 
 	public boolean booleanValue(ZSContext context) {

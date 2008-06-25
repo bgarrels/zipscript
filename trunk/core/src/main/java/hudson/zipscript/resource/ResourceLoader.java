@@ -2,11 +2,11 @@ package hudson.zipscript.resource;
 
 import hudson.zipscript.parser.exception.InitializationException;
 
-import org.apache.commons.configuration.Configuration;
+import java.util.Map;
 
 public interface ResourceLoader {
 
-	public void config (Configuration config) throws InitializationException;
+	public void config (Map properties) throws InitializationException;
 
 	public Resource getResource(String path);
 }

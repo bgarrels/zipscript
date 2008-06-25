@@ -12,6 +12,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class WhileDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
 
 	public static final String TOKEN_INDEX = "i";
-	public static final int MAX_LOOPS = 5000;
+//	public static final int MAX_LOOPS = 200000;
 
 	private Element whileElement;
 	private boolean isInMacroDefinition;
@@ -43,13 +44,13 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		whileElement = parseElement(s, contentIndex, session);
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
-			if (i > MAX_LOOPS)
-				throw new ExecutionException("Max loops limit reached", this);
+//			if (i > MAX_LOOPS)
+//				throw new ExecutionException("Max loops limit reached", this);
 			appendElements(getChildren(), context, sw);
 			context.put(TOKEN_INDEX, new Integer(++i));
 		}
@@ -63,8 +64,8 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		additionalContextEntries.put(TOKEN_INDEX, int0);
 		context.put(TOKEN_INDEX, int0);
 		while (whileElement.booleanValue(context)) {
-			if (i > MAX_LOOPS)
-				throw new ExecutionException("Max loops limit reached", this);
+//			if (i > MAX_LOOPS)
+//				throw new ExecutionException("Max loops limit reached", this);
 			appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			Integer index = new Integer(++i);
 			additionalContextEntries.put(TOKEN_INDEX, index);

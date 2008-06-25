@@ -5,6 +5,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
 
 import java.io.StringWriter;
+import java.io.Writer;
 
 public class EndForeachDirective extends NestableDirective {
 
@@ -18,7 +19,7 @@ public class EndForeachDirective extends NestableDirective {
 		return "[/#foreach]";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) throws ExecutionException {
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		throw new ExecutionException("Invalid foreach directive", this);
 	}
 }

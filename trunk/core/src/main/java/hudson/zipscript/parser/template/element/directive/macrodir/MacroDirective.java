@@ -13,6 +13,7 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -116,7 +117,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 
 	public void executeMacro (
 			ZSContext context, boolean isOrdinal, List attributes,
-			MacroInstanceExecutor nestedContent, StringWriter sw)
+			MacroInstanceExecutor nestedContent, Writer sw)
 	throws ExecutionException {
 		if (getParsingSession().isDebug()) {
 			System.out.println("Executing: macro '" + getName() + "'");
@@ -225,7 +226,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		return "[#macro " + contents + "]";
 	}
 
-	public void merge(ZSContext context, StringWriter sw) {
+	public void merge(ZSContext context, Writer sw) {
 	}
 
 	public String getContents() {
