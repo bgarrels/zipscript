@@ -4,6 +4,8 @@ import hudson.zipscript.ZipEngine;
 import hudson.zipscript.resource.FileResourceLoader;
 
 import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.HashMap;
 
 public class CommandLineUtil {
@@ -18,12 +20,14 @@ public class CommandLineUtil {
 		props.put("templateResourceLoader.class", FileResourceLoader.class.getName());
 		ZipEngine engine = new ZipEngine();
 		engine.init(props);
+		Writer fw = null;
 		try {
-			FileWriter fw = new FileWriter(args[0] + ".txt");
+			fw = new FileWriter(args[0] + ".txt");
 			engine.getTemplate(args[0]).merge(null, fw);
+			fw.close();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			if (null != fw) e.printStackTrace(new PrintWriter(fw));
 			System.exit(-1); 
 		}
 	}

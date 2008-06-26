@@ -9,7 +9,7 @@ public class StringUtil {
 
 	public static void append (char c, Writer writer) {
 		try {
-			writer.append(c);
+			writer.write(c);
 		}
 		catch (IOException e) {
 			throw new ExecutionException(e.getMessage(), null, e);
@@ -19,7 +19,7 @@ public class StringUtil {
 	public static void append (String s, Writer writer) {
 		try {
 			for (int i=0; i<s.length(); i++)
-				writer.append(s.charAt(i));
+				writer.write(s.charAt(i));
 		}
 		catch (IOException e) {
 			throw new ExecutionException(e.getMessage(), null, e);
