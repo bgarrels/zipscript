@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book>
+
+	<bookinfo>
+		<title>ZipScript User Guide</title>
+	</bookinfo>
+
+	<chapter>
+		<title>Variables</title>
+		<sec1>Overview</sec1>
+		<para>
+			Variables can be used to reference data from the context.  The standard
+			variable format is ${varName}.  This will assume that a context entry with
+			the key of "varName" exists.  To allow for a nonexisting context entry the
+			syntax that should be used is $!{varName}.
+		</para>
+		<para>
+			The escape character is \.  This character is not evaluated as an escape character unless
+		</para>
+		<para>
+			Assume the context value <emphasis>foo</emphasis> is equal to "abc"
+			<simplelist>
+				<member>${foo} will print <code>abc</code></member>
+				<member>${foo.length} will print <code>3</code></member>
+				<member>${foo.substring(1)} will print <code>oo</code></member>
+				<member>${foo.class.name} will print <code>java.lang.String</code></member>
+      		</simplelist>
+      		<simplelist>
+      			<member>${bar} will throw an ExecutionException (assuming no "bar" entry is in the context)</member>
+      			<member>$!{bar} will not print anything</member>
+      		</simplelist>
+		</para>
+		<para>
+			Variables can reference boolean or math operators.
+			Assume the context value <emphasis>foo</emphasis> is equal to the number 3
+			<simplelist>
+				<member>${foo+3} will print <code>6</code></member>
+				<member>${foo*3} will print <code>9</code></member>
+				<member>${foo/3} will print <code>1.0</code></member>
+				<member>${foo-3} will print <code>0</code></member>
+				<member>${foo%3} will print <code>0</code></member>
+				<member>${foo!=3} will print <code>false</code></member>
+				<member>${foo==3} will print <code>true</code></member>
+				<member>${foo&lt;4} will print <code>true</code></member>
+				<member>${foo&gt;=4} will print <code>false</code></member>
+			</simplelist>
+		</para>
+
+		<sec1>Default Values</sec1>
+		<para>
+			All variables can use the '!' token to provide a default value which will
+			be used if the requested context attribute is missing.
+		</para>
+		<para>
+			Assume the context value <emphasis>foo</emphasis> is missing and the
+			context value <emphasis>bar</emphasis> is equal to "Hello"
+			<simplelist>
+				<member>${foo!"Static Default Text"} will print <code>Static Default Text</code></member>
+				<member>${foo!bar} will print <code>Hello</code></member>
+				<member>${foo!somethingElseMissing!bar} will print <code>Hello</code></member>
+				<member>${foo!3} will print <code>3</code></member>
+				<member>${foo!true} will print <code>true</code></member>
+				<member>${foo!false} will print <code>false</code></member>
+			</simplelist>
+		</para>
+
+		<sec1>Formatting</sec1>
+		<para>
+			Some variables can use the '|' token to provide formatting options.
+		</para>
+		<sec2>Dates</sec2>
+		<para>
+			short/medium/long keywords are used for date formatting
+			<simplelist>
+				<member>${myDate|short} will print <code>01/01/2008</code></member>
+				<member>${myDate|medium} will print <code>Jan 01, 2008</code></member>
+				<member>${myDate|long} will print <code>January 01, 2008</code></member>
+			</simplelist>
+			t:short/t:medium/t:long are used for time formatting
+			<simplelist>
+				<member>${myDate|t:short} will print <code>10:37 AM</code></member>
+				<member>${myDate|t:medium} will print <code>10:37:18 AM</code></member>
+				<member>${myDate|t:long} will print <code>10:37:18 AM EDT</code></member>
+			</simplelist>
+			date &amp; time formatting can be used by appending formatting styles
+			<simplelist>
+				<member>${myDate|short:long} will print <code>01/01/2008 10:37:18 AM EDT</code></member>
+			</simplelist>
+			Custom formatting can also be used
+			<simplelist>
+				<member>${myDate|"yy-MM-dd"} will print <code>2008-01-01</code></member>
+			</simplelist>
+		</para>
+		
+		<sect2>Numbers</sect2>
+		<para>
+			number/currency/percent keywords are used for number formatting (using Locale)
+			<simplelist>
+				<member>${myNumber} will print <code>1234567.2</code></member>
+				<member>${myNumber|number} will print <code>1,234,567.2</code></member>
+				<member>${myNumber|currency} will print <code>$1,234,567.20</code></member>
+				<member>${myNumber|percent} will print <code>123456720%</code></member>
+			</simplelist>
+			Custom formatting can also be used
+			<simplelist>
+				<member>${myNumber|"#.000"} will print <code>1234567.200</code></member>
+			</simplelist>
+		</para>
+
+		<sec1>Special Methods</sec1>
+		<para>
+			All variables can use the '?' token to provide special functionality.
+		</para>
+		<sec2>Strings</sec2>
+		<para>
+			Assume the context value "myString" is "hello world!"
+			<simplelist>
+				<member>${myString?upperFirst} will print <code>Hello world!</code></member>
+				<member>${myString?lowerFirst} will print <code>hello world!</code></member>
+				<member>${myString?lowerCase} will print <code>hello world!</code></member>
+				<member>${myString?upperCase} will print <code>HELLO WORLD!</code></member>
+				<member>${myString?humpbackCase} will print <code>helloWorld</code></member>
+				<member>${myString?leftPad(2)} will print <code>  hello world!</code> (with 2 spaces on the left)</member>
+				<member>${myString?rightPad(2)} will print <code>hello world!  </code> (with 2 spaces on the right)</member>
+				<member>${myString?contains("ello")} will print <code>true</code> (or evaluate to true in an expression)</member>
+			</simplelist>
+			There are many convienance methods for dealing with text escaping
+			<simplelist>
+				<member>${myString?html} will escape HTML special characters</member>
+				<member>${myString?js} will escape javascript special characters</member>
+				<member>${myString?url} will escape URL special characters</member>
+				<member>${myString?xml} will escape XML special characters</member>
+			</simplelist>
+			Assume the context value "someClassName" is "java.lang.String"
+			<simplelist>
+				<member>${myString?split(".")} will return the equivalent of <code>{"java", "lang",  "String"}</code></member>
+			</simplelist>
+		</para>
+		<sec2>Numbers</sec2>
+		<para>
+			Assume the context value "myNumber" is 3.4
+			<simplelist>
+				<member>${myNumber?round} will print <code>3</code></member>
+				<member>${myString?ceiling} will print <code>4</code></member>
+				<member>${myString?floor} will print <code>3</code></member>
+			</simplelist>
+		</para>
+		<sec2>Dates</sec2>
+		<para>
+			Assume the context value "myDate" is the date "01/01/2008 10:37:18 AM EDT"
+			<member>${myDate?jsDate} will print <code>new Date(01, 01, 2008)</code></member>
+			<member>${myDate?jsDateTime} will print <code>new Date(1199163600000)</code></member>
+		</para>
+		<sec2>Object Is Methods</sec2>
+		<para>
+			<member>${obj?isDate} will be <code>true</code> if the value is a Date</member>
+			<member>${obj?isBoolean} will be <code>true</code> if the value is a boolean</member>
+			<member>${obj?isString} will be <code>true</code> if the value is a String</member>
+			<member>${obj?isNumber} will be <code>true</code> if the value is a Number</member>
+		</para>
+		<sec2>Macros</sec2>
+		<para>TODO: macro special methods</para>
+	</chapter>
+
+	<chapter>
+		<title>Directives</title>
+		<para>Directives overview.</para>
+
+		<sec1>If/Elseif/Else</sec1>
+		<para>TODO: If Directive</para>
+
+		<sec1>Foreach</sec1>
+		<para>TODO: Foreach Directive</para>
+
+		<sec1>While</sec1>
+		<para>TODO: While Directive</para>
+
+		<sec1>Set</sec1>
+		<para>TODO: Set Directive</para>
+
+		<sec1>Call</sec1>
+		<para>TODO: Call Directive</para>
+
+	</chapter>
+
+	<chapter>
+		<title>Macros</title>
+		<sect1>Basics</sect1>
+		<para>TODO: macro basics</para>
+
+		<sect1>Calling Macros</sect1>
+		<para>TODO: macro basics</para>
+
+		<sect1>Macro Parameters</sect1>
+		<para>TODO: macro parameters</para>
+		<sect2>Passed Parameters</sect2>
+		<para>TODO: passed parameters</para>
+		<sect2>Template-defined Parameters</sect2>
+		<para>TODO: template-defined parameters</para>
+
+		<sect1>Macro Definitions</sect1>
+		<para>TODO: macro basics</para>
+	</chapter>
+</book>
