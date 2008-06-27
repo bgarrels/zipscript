@@ -1,204 +1,374 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<?xml-stylesheet href="../docbook.xml.css" type="text/css"?>
 <book>
-
 	<bookinfo>
 		<title>ZipScript User Guide</title>
 	</bookinfo>
 
-	<chapter>
+	<chapter id="variables">
 		<title>Variables</title>
-		<sec1>Overview</sec1>
-		<para>
-			Variables can be used to reference data from the context.  The standard
-			variable format is ${varName}.  This will assume that a context entry with
-			the key of "varName" exists.  To allow for a nonexisting context entry the
-			syntax that should be used is $!{varName}.
-		</para>
-		<para>
-			The escape character is \.  This character is not evaluated as an escape character unless
-		</para>
-		<para>
-			Assume the context value <emphasis>foo</emphasis> is equal to "abc"
-			<simplelist>
-				<member>${foo} will print <code>abc</code></member>
-				<member>${foo.length} will print <code>3</code></member>
-				<member>${foo.substring(1)} will print <code>oo</code></member>
-				<member>${foo.class.name} will print <code>java.lang.String</code></member>
-      		</simplelist>
-      		<simplelist>
-      			<member>${bar} will throw an ExecutionException (assuming no "bar" entry is in the context)</member>
-      			<member>$!{bar} will not print anything</member>
-      		</simplelist>
-		</para>
-		<para>
-			Variables can reference boolean or math operators.
-			Assume the context value <emphasis>foo</emphasis> is equal to the number 3
-			<simplelist>
-				<member>${foo+3} will print <code>6</code></member>
-				<member>${foo*3} will print <code>9</code></member>
-				<member>${foo/3} will print <code>1.0</code></member>
-				<member>${foo-3} will print <code>0</code></member>
-				<member>${foo%3} will print <code>0</code></member>
-				<member>${foo!=3} will print <code>false</code></member>
-				<member>${foo==3} will print <code>true</code></member>
-				<member>${foo&lt;4} will print <code>true</code></member>
-				<member>${foo&gt;=4} will print <code>false</code></member>
-			</simplelist>
-		</para>
-
-		<sec1>Default Values</sec1>
-		<para>
-			All variables can use the '!' token to provide a default value which will
-			be used if the requested context attribute is missing.
-		</para>
-		<para>
-			Assume the context value <emphasis>foo</emphasis> is missing and the
-			context value <emphasis>bar</emphasis> is equal to "Hello"
-			<simplelist>
-				<member>${foo!"Static Default Text"} will print <code>Static Default Text</code></member>
-				<member>${foo!bar} will print <code>Hello</code></member>
-				<member>${foo!somethingElseMissing!bar} will print <code>Hello</code></member>
-				<member>${foo!3} will print <code>3</code></member>
-				<member>${foo!true} will print <code>true</code></member>
-				<member>${foo!false} will print <code>false</code></member>
-			</simplelist>
-		</para>
-
-		<sec1>Formatting</sec1>
-		<para>
-			Some variables can use the '|' token to provide formatting options.
-		</para>
-		<sec2>Dates</sec2>
-		<para>
-			short/medium/long keywords are used for date formatting
-			<simplelist>
-				<member>${myDate|short} will print <code>01/01/2008</code></member>
-				<member>${myDate|medium} will print <code>Jan 01, 2008</code></member>
-				<member>${myDate|long} will print <code>January 01, 2008</code></member>
-			</simplelist>
-			t:short/t:medium/t:long are used for time formatting
-			<simplelist>
-				<member>${myDate|t:short} will print <code>10:37 AM</code></member>
-				<member>${myDate|t:medium} will print <code>10:37:18 AM</code></member>
-				<member>${myDate|t:long} will print <code>10:37:18 AM EDT</code></member>
-			</simplelist>
-			date &amp; time formatting can be used by appending formatting styles
-			<simplelist>
-				<member>${myDate|short:long} will print <code>01/01/2008 10:37:18 AM EDT</code></member>
-			</simplelist>
-			Custom formatting can also be used
-			<simplelist>
-				<member>${myDate|"yy-MM-dd"} will print <code>2008-01-01</code></member>
-			</simplelist>
-		</para>
-		
-		<sect2>Numbers</sect2>
-		<para>
-			number/currency/percent keywords are used for number formatting (using Locale)
-			<simplelist>
-				<member>${myNumber} will print <code>1234567.2</code></member>
-				<member>${myNumber|number} will print <code>1,234,567.2</code></member>
-				<member>${myNumber|currency} will print <code>$1,234,567.20</code></member>
-				<member>${myNumber|percent} will print <code>123456720%</code></member>
-			</simplelist>
-			Custom formatting can also be used
-			<simplelist>
-				<member>${myNumber|"#.000"} will print <code>1234567.200</code></member>
-			</simplelist>
-		</para>
-
-		<sec1>Special Methods</sec1>
-		<para>
-			All variables can use the '?' token to provide special functionality.
-		</para>
-		<sec2>Strings</sec2>
-		<para>
-			Assume the context value "myString" is "hello world!"
-			<simplelist>
-				<member>${myString?upperFirst} will print <code>Hello world!</code></member>
-				<member>${myString?lowerFirst} will print <code>hello world!</code></member>
-				<member>${myString?lowerCase} will print <code>hello world!</code></member>
-				<member>${myString?upperCase} will print <code>HELLO WORLD!</code></member>
-				<member>${myString?humpbackCase} will print <code>helloWorld</code></member>
-				<member>${myString?leftPad(2)} will print <code>  hello world!</code> (with 2 spaces on the left)</member>
-				<member>${myString?rightPad(2)} will print <code>hello world!  </code> (with 2 spaces on the right)</member>
-				<member>${myString?contains("ello")} will print <code>true</code> (or evaluate to true in an expression)</member>
-			</simplelist>
-			There are many convienance methods for dealing with text escaping
-			<simplelist>
-				<member>${myString?html} will escape HTML special characters</member>
-				<member>${myString?js} will escape javascript special characters</member>
-				<member>${myString?url} will escape URL special characters</member>
-				<member>${myString?xml} will escape XML special characters</member>
-			</simplelist>
-			Assume the context value "someClassName" is "java.lang.String"
-			<simplelist>
-				<member>${myString?split(".")} will return the equivalent of <code>{"java", "lang",  "String"}</code></member>
-			</simplelist>
-		</para>
-		<sec2>Numbers</sec2>
-		<para>
-			Assume the context value "myNumber" is 3.4
-			<simplelist>
-				<member>${myNumber?round} will print <code>3</code></member>
-				<member>${myString?ceiling} will print <code>4</code></member>
-				<member>${myString?floor} will print <code>3</code></member>
-			</simplelist>
-		</para>
-		<sec2>Dates</sec2>
-		<para>
-			Assume the context value "myDate" is the date "01/01/2008 10:37:18 AM EDT"
-			<member>${myDate?jsDate} will print <code>new Date(01, 01, 2008)</code></member>
-			<member>${myDate?jsDateTime} will print <code>new Date(1199163600000)</code></member>
-		</para>
-		<sec2>Object Is Methods</sec2>
-		<para>
-			<member>${obj?isDate} will be <code>true</code> if the value is a Date</member>
-			<member>${obj?isBoolean} will be <code>true</code> if the value is a boolean</member>
-			<member>${obj?isString} will be <code>true</code> if the value is a String</member>
-			<member>${obj?isNumber} will be <code>true</code> if the value is a Number</member>
-		</para>
-		<sec2>Macros</sec2>
-		<para>TODO: macro special methods</para>
+		<section id="variable_overview">
+			<title>Overview</title>
+			<para>
+				Variables can be used to reference data from the context.  The standard
+				variable format is ${varName}.  This will assume that a context entry with
+				the key of "varName" exists.  To allow for a nonexisting context entry the
+				syntax that should be used is $!{varName}.
+			</para>
+			<para>
+				Assume the context value <emphasis>foo</emphasis> is equal to "abc"
+				<itemizedlist>
+					<listitem>${foo} will print <code>abc</code></listitem>
+					<listitem>${foo.length} will print <code>3</code></listitem>
+					<listitem>${foo.substring(1)} will print <code>oo</code></listitem>
+					<listitem>${foo.class.name} will print <code>java.lang.String</code></listitem>
+	      		</itemizedlist>
+	      		<itemizedlist>
+	      			<listitem>${bar} will throw an ExecutionException (assuming no "bar" entry is in the context)</listitem>
+	      			<listitem>$!{bar} will not print anything</listitem>
+	      		</itemizedlist>
+			</para>
+			<para>
+				Variables can reference boolean or math operators.
+				Assume the context value <emphasis>foo</emphasis> is equal to the number 3
+				<itemizedlist>
+					<listitem>${foo+3} will print <code>6</code></listitem>
+					<listitem>${foo*3} will print <code>9</code></listitem>
+					<listitem>${foo/3} will print <code>1.0</code></listitem>
+					<listitem>${foo-3} will print <code>0</code></listitem>
+					<listitem>${foo%3} will print <code>0</code></listitem>
+					<listitem>${foo!=3} will print <code>false</code></listitem>
+					<listitem>${foo==3} will print <code>true</code></listitem>
+					<listitem>${foo&lt;4} will print <code>true</code></listitem>
+					<listitem>${foo&gt;=4} will print <code>false</code></listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section id="variable_escape">
+			<title>Variable Escaping</title>
+			<para>
+				Variable references can be escaped by using the '\' prefix.  Escaping is only required if the character is next
+				to a variable or directive.  For example, assume the context value <emphasis>foo</emphasis> is equal to "ABC"
+				<itemizedlist>
+					<listitem>foo\test${foo} will print <code>foo\testABC</code></listitem>
+					<listitem>foo\\test${foo} will print <code>foo\\testABC</code></listitem>
+					<listitem>test\${foo} will print <code>test${foo}</code></listitem>
+					<listitem>test\\${foo} will print <code>test\ABC</code></listitem>
+					<listitem>test\\\${foo} will print <code>test\${foo}</code></listitem> 
+				</itemizedlist>
+			</para>
+		</section>
+		<section id="variable_default">
+			<title>Default Values</title>
+			<para>
+				All variables can use the '!' token to provide a default value which will
+				be used if the requested context attribute is missing.
+			</para>
+			<para>
+				Assume the context value <emphasis>foo</emphasis> is missing and the
+				context value <emphasis>bar</emphasis> is equal to "Hello"
+				<itemizedlist>
+					<listitem>${foo!"Static Default Text"} will print <code>Static Default Text</code></listitem>
+					<listitem>${foo!bar} will print <code>Hello</code></listitem>
+					<listitem>${foo!somethingElseMissing!bar} will print <code>Hello</code></listitem>
+					<listitem>${foo!3} will print <code>3</code></listitem>
+					<listitem>${foo!true} will print <code>true</code></listitem>
+					<listitem>${foo!false} will print <code>false</code></listitem>
+				</itemizedlist>
+			</para>
+		</section>
+		<section id="variable_format">
+			<title>Formatting</title>
+			<para>
+				Some variables can use the '|' token to provide formatting options.
+			</para>
+			<section id="variable_format_dates">
+				<title>Dates</title>
+				<para>
+					short/medium/long keywords are used for date formatting
+					<itemizedlist>
+						<listitem>${myDate|short} will print <code>01/01/2008</code></listitem>
+						<listitem>${myDate|medium} will print <code>Jan 01, 2008</code></listitem>
+						<listitem>${myDate|long} will print <code>January 01, 2008</code></listitem>
+					</itemizedlist>
+					t:short/t:medium/t:long are used for time formatting
+					<itemizedlist>
+						<listitem>${myDate|t:short} will print <code>10:37 AM</code></listitem>
+						<listitem>${myDate|t:medium} will print <code>10:37:18 AM</code></listitem>
+						<listitem>${myDate|t:long} will print <code>10:37:18 AM EDT</code></listitem>
+					</itemizedlist>
+					date &amp; time formatting can be used by appending formatting styles
+					<itemizedlist>
+						<listitem>${myDate|short:long} will print <code>01/01/2008 10:37:18 AM EDT</code></listitem>
+					</itemizedlist>
+					Custom formatting can also be used
+					<itemizedlist>
+						<listitem>${myDate|"yy-MM-dd"} will print <code>2008-01-01</code></listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="variable_format_numbers">
+				<title>Numbers</title>
+				<para>
+					number/currency/percent keywords are used for number formatting (using Locale)
+					<itemizedlist>
+						<listitem>${myNumber} will print <code>1234567.2</code></listitem>
+						<listitem>${myNumber|number} will print <code>1,234,567.2</code></listitem>
+						<listitem>${myNumber|currency} will print <code>$1,234,567.20</code></listitem>
+						<listitem>${myNumber|percent} will print <code>123456720%</code></listitem>
+					</itemizedlist>
+					Custom formatting can also be used
+					<itemizedlist>
+						<listitem>${myNumber|"#.000"} will print <code>1234567.200</code></listitem>
+					</itemizedlist>
+				</para>
+			</section>
+		</section>
+		<section id="variable_specialMethods">
+			<title>Special Methods</title>
+			<para>
+				All variables can use the '?' token to provide special functionality.
+			</para>
+			<section id="variable_specialMethods_strings">
+				<title>Strings</title>
+				<para>
+					Assume the context value "myString" is "hello world!"
+					<itemizedlist>
+						<listitem>${myString?upperFirst} will print <code>Hello world!</code></listitem>
+						<listitem>${myString?lowerFirst} will print <code>hello world!</code></listitem>
+						<listitem>${myString?lowerCase} will print <code>hello world!</code></listitem>
+						<listitem>${myString?upperCase} will print <code>HELLO WORLD!</code></listitem>
+						<listitem>${myString?humpbackCase} will print <code>helloWorld</code></listitem>
+						<listitem>${myString?leftPad(2)} will print <code>  hello world!</code> (with 2 spaces on the left)</listitem>
+						<listitem>${myString?rightPad(2)} will print <code>hello world!  </code> (with 2 spaces on the right)</listitem>
+						<listitem>${myString?contains("ello")} will print <code>true</code> (or evaluate to true in an expression)</listitem>
+					</itemizedlist>
+					There are many convienance methods for dealing with text escaping
+					<itemizedlist>
+						<listitem>${myString?html} will escape HTML special characters</listitem>
+						<listitem>${myString?js} will escape javascript special characters</listitem>
+						<listitem>${myString?url} will escape URL special characters</listitem>
+						<listitem>${myString?xml} will escape XML special characters</listitem>
+					</itemizedlist>
+					Assume the context value "someClassName" is "java.lang.String"
+					<itemizedlist>
+						<listitem>${myString?split(".")} will return the equivalent of <code>${{"java", "lang", "String"}}</code></listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="variable_specialMethods_numbers">
+				<title>Numbers</title>
+				<para>
+					Assume the context value "myNumber" is 3.4
+					<itemizedlist>
+						<listitem>${myNumber?round} will print <code>3</code></listitem>
+						<listitem>${myString?ceiling} will print <code>4</code></listitem>
+						<listitem>${myString?floor} will print <code>3</code></listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="variable_specialMethods_dates">
+				<title>Dates</title>
+				<para>
+					Assume the context value "myDate" is the date "01/01/2008 10:37:18 AM EDT"
+					<itemizedlist>
+						<listitem>${myDate?jsDate} will print <code>new Date(01, 01, 2008)</code></listitem>
+						<listitem>${myDate?jsDateTime} will print <code>new Date(1199163600000)</code></listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="variable_specialMethods_is">
+				<title>"Is" Methods</title>
+				<para>
+					<itemizedlist>
+						<listitem>${obj?isDate} will be <code>true</code> if the value is a Date</listitem>
+						<listitem>${obj?isBoolean} will be <code>true</code> if the value is a boolean</listitem>
+						<listitem>${obj?isString} will be <code>true</code> if the value is a String</listitem>
+						<listitem>${obj?isNumber} will be <code>true</code> if the value is a Number</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section>
+				<title>Macros</title>
+				<para>TODO: macro special methods</para>
+			</section>
+		</section>
 	</chapter>
-
-	<chapter>
+	<chapter id="directives">
 		<title>Directives</title>
 		<para>Directives overview.</para>
-
-		<sec1>If/Elseif/Else</sec1>
-		<para>TODO: If Directive</para>
-
-		<sec1>Foreach</sec1>
-		<para>TODO: Foreach Directive</para>
-
-		<sec1>While</sec1>
-		<para>TODO: While Directive</para>
-
-		<sec1>Set</sec1>
-		<para>TODO: Set Directive</para>
-
-		<sec1>Call</sec1>
-		<para>TODO: Call Directive</para>
-
+		<section id="directives_if">
+			<title>If  / Elseif / Else</title>
+			<para>
+				If directives can be used to conditionally include blocks of script.  Required elements are if and /if but elseif and else
+				elements are allowed to provide additional options.  The format is:
+				<orderedlist>
+					<listitem>[#if conditionalExpression]</listitem>
+					<listitem>[#elseif conditionalExpression]</listitem>
+					<listitem>[#else]</listitem>
+					<listitem>[#/if]</listitem>
+				</orderedlist>
+			</para>
+			<para>
+				Variables do not have to be referenced with ${} (although they can be) inside directive statements
+			</para>
+			<para>
+<programlisting>
+[#if foo==${bar}]
+	This section will print if the foo context variable is equal to the bar context variable.  Notice that variables
+	inside directive expressions do not need to be referenced with ${} (but they can be).
+[#elseif foo=="Joe's"]
+	This section will print if the foo context variable is equal to the string <code>Joe's</code>
+[#elseif foo!='Joe\'s']
+	This section will print if the foo context variable is equal to the string <code>Joe's</code>.  Notice that strings
+	can be referenced with the ' character or the " character.  This is useful if the string contains either
+	of these characters.
+[#elseif foo in {1, 2d, 3f}]
+	This is a handy way of checking to see if a value is in a list.  This section will print if the foo context variable
+	is equal to 1 (Integer) or 2 (Double) or 3 (Float).
+ [#elseif foo not in {"one", "two", "three"}]
+	This is a handy way of checking to see if a value is not in a list.  This section will print if the foo context variable
+	is equal to the string <code>one</code> or the string <code>two</code> or the string <code>three</code>.
+[#elseif foo &gt; 3]
+	This section will print if the foo context variable is greater than 3.
+[#elseif foo%2==0]
+	This section will print if foo is a number can be divided by 2 with a 0 remainder.
+[#else]
+	This section will print if none of the previous sections evaluate to true.
+[/#if]
+</programlisting>
+			</para>
+		</section>
+		<section id="directives_foreach">
+			<title>Foreach</title>
+			<para>
+				<indexterm><primary>foreach</primary></indexterm>
+				Syntax: <emphasis>[#foreach refItem in someList] ... [/#foreach]</emphasis>
+				<variablelist>
+					<varlistentry><term>refItem</term><listitem>This is the context key for the current list entry</listitem></varlistentry>
+					<varlistentry><term>someList</term><listitem>This can either be a variable name representing a sequence or an expression which will create a sequence</listitem></varlistentry>
+				</variablelist>
+			</para>
+			<para>
+				The foreach directive can be used to loop through a sequence.  The sequence could be a Collection, Iterator, Enumeration or Object
+				array.  When inside of a foreach directive some special variables can be used:
+				<variablelist>
+					<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
+					<varlistentry><term>hasNext</term><listitem>Boolean representing if there are any remaining entries in the list to be processed</listitem></varlistentry>
+					<varlistentry><term>super</term><listitem>If a loop is inside of another loop, super can be used to access loop elements in the parent scope</listitem></varlistentry>
+				</variablelist>
+			</para>
+			<para>
+<programlisting>
+[#set someList = {"D", "E", "F"}/]
+[#foreach item in {"a", "b", "c"}]
+[#foreach item in someList]
+	${super.item}.${item} (${super.i}.${i}) - ${hasNext} - ${super.hasNext}
+[/#foreach]
+[/#foreach]
+</programlisting>
+Will print
+<programlisting>
+a.D (0.0) - true - true
+a.E (0.1) - true - true
+a.F (0.2) - false - true
+b.D (1.0) - true - true
+b.E (1.1) - true - true
+b.F (1.2) - false - true
+c.D (2.0) - true - false
+c.E (2.1) - true - false
+c.F (2.2) - false - false
+</programlisting>
+			</para>
+		</section>
+		<section id="directives_while">
+			<title>While</title>
+			<para>
+				Syntax: <emphasis>[#while expression] ... [/#while]</emphasis>
+				<variablelist>
+					<varlistentry><term>expression</term><listitem>Any expression which can result in a boolean value</listitem></varlistentry>
+				</variablelist>
+			</para>
+			<para>
+				The while directive can be used to loop until a condition is met.  When inside of a foreach directive some special variables can be used:
+				<variablelist>
+					<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
+					<varlistentry><term>super</term><listitem>If inside of another looping struction, super can be used to access loop elements in the parent scope</listitem></varlistentry>
+				</variablelist>
+				<note>hasNext is not available for a while directive</note>
+			</para>
+			<para>
+<programlisting>
+[#foreach item in {"a", "b", "c"}]
+[#while i&lt;2]
+	${super.item}.${i+1} (${super.i}.${i}) - ${super.hasNext}
+[/#while]
+[/#foreach]
+</programlisting>
+Will print
+<programlisting>
+a.1 (0.0) - true
+a.2 (0.1) - true
+b.1 (1.0) - true
+b.2 (1.1) - true
+c.1 (2.0) - false
+c.2 (2.1) - false
+</programlisting>
+			</para>
+		</section>
+		<section id="directives_set">
+			<title>Set</title>
+			<para>
+				Syntax: <emphasis>[#set newVar = something/]</emphasis>
+				<variablelist>
+					<varlistentry><term>newVar</term><listitem>The context key that will be used to access the variable</listitem></varlistentry>
+					<varlistentry><term>something</term><listitem>An expression or variable reference that will be set in the context</listitem></varlistentry>
+				</variablelist>
+				The set directive is used to set a value in the context so it can be accessed later.
+			</para>
+			<para>
+				Examples:
+<programlisting>
+[#set myVar = "abc"/] - will set myVar to the string "abc"
+[#set myVar = 'abc'/] - will set myVar to the string "abc"
+[#set myVar = abc/] - will set myVar to the context variable with the key of "abc"
+[#set myVar = 4!=4/] - will set myVar to the context variable with false
+[#set myVar = 4==4/] - will set myVar to the context variable with true
+[#set myVar = {1,2,3}/] - will set myVar to the context variable with a list of element containing 1, 2, and 3
+</programlisting>
+			</para>
+		</section>
+		<section id="directives_call">
+			<title>Call</title>
+			<para>TODO: Call Directive</para>
+		</section>
 	</chapter>
-
-	<chapter>
+	<chapter id="macros">
 		<title>Macros</title>
-		<sect1>Basics</sect1>
-		<para>TODO: macro basics</para>
-
-		<sect1>Calling Macros</sect1>
-		<para>TODO: macro basics</para>
-
-		<sect1>Macro Parameters</sect1>
-		<para>TODO: macro parameters</para>
-		<sect2>Passed Parameters</sect2>
-		<para>TODO: passed parameters</para>
-		<sect2>Template-defined Parameters</sect2>
-		<para>TODO: template-defined parameters</para>
-
-		<sect1>Macro Definitions</sect1>
-		<para>TODO: macro basics</para>
+		<section id="macros_basics">
+			<title>Basics</title>
+			<para>TODO: macro basics</para>
+		</section>
+		<section id="macros_calling">
+			<title>Calling Macros</title>
+			<para>TODO: macro basics</para>
+		</section>
+		<section id="macros_parameters">
+			<title>Macro Parameters</title>
+			<para>TODO: macro parameters</para>
+			<section id="macros_parameters_passed">
+				<title>Passed Parameters</title>
+				<para>TODO: passed parameters</para>
+			</section>
+			<section id="macros_parameters_template">
+				<title>Template-defined Parameters</title>
+				<para>TODO: template-defined parameters</para>
+			</section>
+		</section>
+		<section id="macros_definitions">
+			<title>Macro Definitions</title>
+			<para>TODO: macro basics</para>
+		</section>
 	</chapter>
 </book>
