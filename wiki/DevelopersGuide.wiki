@@ -1,4 +1,5 @@
-#Guide to installing/using the ZipScript library to evaluate the zipscript expression language.
+#summary Guide to installing/using the ZipScript engine.
+#labels Featured
 
 = Introduction =
 
