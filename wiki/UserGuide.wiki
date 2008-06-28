@@ -1,4 +1,0 @@
-#labels Featured
-#Documentation of Zipscript syntax and functionality.
-
-[http://www.zipscript.org/docs/current/bk02.html Click here] to view the guide
