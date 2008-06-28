@@ -1,0 +1,4 @@
+#summary Guide for the impatient.
+#labels Featured
+
+[http://www.zipscript.org/docs/current/bk01.html Click here] to view the guide
