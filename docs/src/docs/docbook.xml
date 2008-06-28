@@ -662,7 +662,6 @@ templateResourceLoader.foo=bar
 					</para>
 				</section>
 			</section>
-			</section>
 			<section id="resourceLoading_templates">
 				<title>Templates</title>
 				<indexterm><primary>resource</primary><secondary>templates</secondary></indexterm>
