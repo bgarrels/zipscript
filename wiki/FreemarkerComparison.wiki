@@ -20,7 +20,6 @@
 ==Variables==
 *FM Implementation*
   * You must start properties with lowercase eg: foo.bar will reference getBar() on foo
-  * You can not reference objects in the session that contain a '.' in the key
   * FM wraps objects in context with FM implementations
   * Formatting variables is accomplished by using ?string.something
 
@@ -42,6 +41,9 @@
 *ZS Implementation*
   * ZS will let you call any property on the object class if it exists
   * ZS has the other special methods that are not handled by normal object property methods
+
+==JSP Support==
+FM has ZS beat here because I'm not sure that I plan to support JSP
 
 ==Macros==
 *FM Implementation*
