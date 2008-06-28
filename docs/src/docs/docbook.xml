@@ -1,11 +1,13 @@
 <?xml version='1.0'?>
-<?xml-stylesheet href="docbook-css-0.3/driver.css" type="text/css"?>
-<!--
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<?xml-stylesheet href="../docbook.xml.css" type="text/css"?>
--->
 <set id="zipscript">
 	<index/>
+	<book id="quickStart">
+		<bookinfo>
+			<title>Quick Start</title>
+		</bookinfo>
+	</book>
+
 	<book id="userGuide">
 		<bookinfo>
 			<title>ZipScript User Guide</title>
@@ -307,9 +309,9 @@
 					The if directive is a <link linkend="nested_directive_def">nested directive</link> with additional optional elements.
 					Aside from the [#if] [/#if], [#elseif] and [#else] can be used.
 					<variablelist>
-						<varlistentry ><term>[#if ...]</term><listitem>Used nested block if condition is true</listitem></varlistentry>
-						<varlistentry ><term>[#elseif ...]</term><listitem>(optional) Used nested block if condition is true and previous [#elseif] conditions are false and if condition is false</listitem></varlistentry>
-						<varlistentry ><term>[#else ...]</term><listitem>(optional) Use nested block if the if condition was false and all elseif conditions are false</listitem></varlistentry>
+						<varlistentry><term>[#if ...]</term><listitem>Used nested block if condition is true</listitem></varlistentry>
+						<varlistentry><term>[#elseif ...]</term><listitem>(optional) Used nested block if condition is true and previous [#elseif] conditions are false and if condition is false</listitem></varlistentry>
+						<varlistentry><term>[#else ...]</term><listitem>(optional) Use nested block if the if condition was false and all elseif conditions are false</listitem></varlistentry>
 					</variablelist>
 				</para>
 				<para>
@@ -455,14 +457,14 @@
 				</para>
 				<para>
 					Examples:
-	<programlisting>
-	[#set myVar = "abc"/] - will set myVar to the string "abc"
-	[#set myVar = 'abc'/] - will set myVar to the string "abc"
-	[#set myVar = abc/] - will set myVar to the <link linkend="context">context</link> variable with the key of "abc"
-	[#set myVar = 4!=4/] - will set myVar to the <link linkend="context">context</link> variable with false
-	[#set myVar = 4==4/] - will set myVar to the <link linkend="context">context</link> variable with true
-	[#set myVar = {1,2,3}/] - will set myVar to the <link linkend="context">context</link> variable with a list of element containing 1, 2, and 3
-	</programlisting>
+<programlisting>
+[#set myVar = "abc"/] - will set myVar to the string "abc"
+[#set myVar = 'abc'/] - will set myVar to the string "abc"
+[#set myVar = abc/] - will set myVar to the <link linkend="context">context</link> variable with the key of "abc"
+[#set myVar = 4!=4/] - will set myVar to the <link linkend="context">context</link> variable with false
+[#set myVar = 4==4/] - will set myVar to the <link linkend="context">context</link> variable with true
+[#set myVar = {1,2,3}/] - will set myVar to the <link linkend="context">context</link> variable with a list of element containing 1, 2, and 3
+</programlisting>
 				</para>
 				<note>
 					For more examples, check out:
@@ -510,12 +512,223 @@
 		<bookinfo>
 			<title>ZipScript Developers Guide</title>
 		</bookinfo>
-
-		<chapter id="developersGuide_quickStart">
-			<title>Quick Start</title>
+		<chapter id="developersGuide_templatesEvaluators">
+			<title>Templates and Evaluators</title>
+			<section id="te_overview">
+				<title>Overview</title>
+				<para>
+					With ZipScript, you can do more than just merge a data model with a
+					static template.  You can also evaluate expressions to retrieve boolean
+					or object values.
+				</para>
+				<para>
+					This can be useful in situations like storing conditional logic in static
+					properties files or representing runtime data with static templates.  Most
+					applications use properties files or xml which, with ZipScript, can be used
+					in a much more powerful and meaningful way.
+				</para>
+			</section>
+			<section id="te_merging">
+				<title>Merging</title>
+				<indexterm><primary>templates</primary><secondary>merging</secondary></indexterm>
+				<para>
+					Like other script engines, ZipScript can merge a static template with a data
+					model.  The syntax for this is as follows:
+<programlisting>
+import hudson.zipscript.ZipEngine;
+import hudson.zipscript.template.Template;
+...
+// initialize
+ZipEngine.getInstance().init(initProperties);
+// parse the resource and retrieve the template
+Template t = ZipEngine.getInstance().getTemplate("someTemplateName.zs");
+// create the context and execute
+Map context = new HashMap();
+context.put("foo", "bar");
+// merge the object model with the template
+String mergedResult = t.merge(context);
+</programlisting>
+				</para>
+			</section>
+			<section id="te_booleans">
+				<title>Evaluating Booleans</title>
+				<indexterm><primary>booleans</primary><secondary>evaluation</secondary></indexterm>
+				<para>
+					Boolean values can be evaluated from ZipScript expressions.  The syntax is as
+					follows:
+<programlisting>
+import hudson.zipscript.ZipEngine;
+import hudson.zipscript.template.Evaluator;
+...
+// initialize
+ZipEngine.getInstance().init(initProperties);
+// parse the resource and retrieve the template
+Evaluator e = ZipEngine.getInstance().getEvaluator(conditionalStatement);
+// create the context and execute
+Map context = new HashMap();
+context.put("foo", "bar");
+// merge the object model with the evaluator to get the boolean value
+boolean rtn = e.booleanValue(context);
+</programlisting>
+				</para>
+			</section>
+			<section id="te_objects">
+				<title>Evaluating Objects</title>
+				<indexterm><primary>objects</primary><secondary>evaluation</secondary></indexterm>
+				<para>
+					Java Objects can be evaluated from ZipScript expressions.  The syntax is as
+					follows:
+<programlisting>
+import hudson.zipscript.ZipEngine;
+import hudson.zipscript.template.Evaluator;
+...
+// initialize
+ZipEngine.getInstance().init(initProperties);
+// parse the resource and retrieve the template
+Evaluator e = ZipEngine.getInstance().getEvaluator(conditionalStatement);
+// create the context and execute
+Map context = new HashMap();
+context.put("foo", "bar");
+// merge the object model with the evaluator to get the object value
+Object rtn = e.objectValue(context);
+</programlisting>
+				</para>
+			</section>
+		</chapter>
+		<chapter id="developersGuide_resourceLoading">
+			<title>Resource Loading</title>
+			<indexterm><primary>resource</primary><secondary>loading</secondary></indexterm>
+			<section id="resourceLoading_overview">
+				<title>Overview</title>
+				<para>
+					The ZipScript engine will actually work in default mode if not initialized.
+					This mode consists of the following resource loaders:
+					<variablelist>
+						<varlistentry><term>Template merging</term><listitem>Classpath resource files are retrieved</listitem></varlistentry>
+						<varlistentry><term>Boolean evaluation</term><listitem>The parameter passed with ZipEngine.getEvaluator(String) is used as the actual ZipScript expression</listitem></varlistentry>
+						<varlistentry><term>Object evaluation</term><listitem>The parameter passed with ZipEngine.getEvaluator(String) is used as the actual ZipScript expression</listitem></varlistentry>
+					</variablelist>
+				</para>
+			</section>
+			<section id="developersGuide_resourceLoaders">
+				<title>Resource Loaders</title>
+				<para>
+					Resource loaders are used to retrieve the contents of a resource to create a Template or an Evaluator.  All resource loader properties must be prefixed with
+					the resource loader context.  For example, to specify a property <code>foo</code> for the template resource loader use:
+<programlisting>
+templateResourceLoader.foo=bar
+</programlisting>
+				</para>
+				<section>
+					<title>StringResourceLoader</title>
+					<para>
+						<code>hudson.zipscript.resource.StringResourceLoader</code>: Use the getTemplate/getEvaluator parameter directly as the resource
+					</para>
+				</section>
+				<section>
+					<title>ClasspathResourceLoader</title>
+					<para>
+						<code>hudson.zipscript.resource.ClasspathResourceLoader</code>: Loads a resource from the classpath.
+					</para>
+					<para>
+						Init properties:
+						<variablelist>
+							<varlistentry><term>pathPrefix</term><listitem>Prefix to append to all resourceses</listitem></varlistentry>
+						</variablelist>
+					</para>
+				</section>
+				<section>
+					<title>FileResourceLoader</title>
+					<para>
+						<code>hudson.zipscript.resource.FileResourceLoader</code>: Loads a resource from the filesystem.
+					</para>
+					<para>
+						Init properties:
+						<variablelist>
+							<varlistentry><term>pathPrefix</term><listitem>Prefix to append to all resourceses</listitem></varlistentry>
+						</variablelist>
+					</para>
+				</section>
+				<section>
+					<title>URLResourceLoader</title>
+					<para>
+						<code>hudson.zipscript.resource.URLResourceLoader</code>: Loads a resource from a URL.
+					</para>
+					<para>
+						Init properties:
+						<variablelist>
+							<varlistentry><term>pathPrefix</term><listitem>Prefix to append to all resourceses</listitem></varlistentry>
+						</variablelist>
+					</para>
+				</section>
+			</section>
+			</section>
+			<section id="resourceLoading_templates">
+				<title>Templates</title>
+				<indexterm><primary>resource</primary><secondary>templates</secondary></indexterm>
+				<para>
+					The following property can be used to set the template resource loader:
+					<varlistentry><term>templateResourceLoader.class</term><listitem>classname implementing hudson.zipscript.resource.ResourceLoader</listitem></varlistentry>
+				</para>
+			</section>
+			<section id="resourceLoading_evaluators">
+				<title>Evaluators</title>
+				<indexterm><primary>resource</primary><secondary>evaluator</secondary></indexterm>
+				<para>
+					The following property can be used to set the evaluator resource loader:
+					<varlistentry><term>evalResourceLoader.class</term><listitem>classname implementing hudson.zipscript.resource.ResourceLoader</listitem></varlistentry>
+				</para>
+			</section>
+			<section id="resourceLoading_macros">
+				<title>Macros</title>
+				<indexterm><primary>resource</primary><secondary>macros</secondary></indexterm>
+				<para>
+					By default, the macro resource loader will be the same as the template resource loader.  The following property can be used to set the macro resource loader:
+					<varlistentry><term>macroLibResourceLoader.class</term><listitem>classname implementing hudson.zipscript.resource.ResourceLoader</listitem></varlistentry>
+				</para>
+			</section>
 		</chapter>
 		<chapter id="context">
 			<title>Context</title>
+			<section id="context_overview">
+				<title>Overview</title>
+				A context is used to contain data referenced with the ZipScript template.  The context can literally be anything as the parameter type is java.lang.Object.
+			</section>
+			<section id="context_map">
+				<title>Map Context</title>
+				Using a <code>java.util.map</code> as the context will allow variable references to retrieved data from the map with the matching key.  Since the '.' character
+				is normally used to represent a separation of object and property a separate naming procedure must be used for Map keys that contain this character.  Assuming
+				a map entry with the key of 'foo.bar' exists, this can be retrieved using the variable format ${'foo.bar'}.
+			</section>
+			<section id="context_xml">
+				<title>XML DOM Context</title>
+				This is not implemented yet but will be soon.
+			</section>
+			<section id="context_object">
+				<title>Object</title>
+				The object getter methods can be referenced directly with variables.  For example if an object with a getFoo() method was used as the context, the variable
+				${foo} can be used to access this property.  The set directive will try to find a set method to match.  If none is found, a separate datastore is used to
+				contain the value.
+			</section>
+			<section id="context_custom">
+				<title>Implemting Your Own</title>
+				To provide your own context functionality, you need to use an object which implements <code>hudson.zipscript.parser.context</code>.  It is a good idea to extend
+				from hudson.zipscript.parser.context.AbstractContext as this will contain functionality you need not reproduce.
+			</section>
+		</chapter>
+		<chapter id="properties">
+			<title>Properties</title>
+			<para>
+				Listed below are all the properties that affect ZipScript operation
+				<variablelist>
+					<varlistentry><term>templateResourceLoader.class</term><listitem>default: hudson.zipscript.resource.ClasspathResourceLoader</listitem></varlistentry>
+					<varlistentry><term>evalResourceLoader.class</term><listitem>default: hudson.zipscript.resource.StringResourceLoader</listitem></varlistentry>
+					<varlistentry><term>macroLibResourceLoader.class</term><listitem>default: hudson.zipscript.resource.StringResourceLoader</listitem></varlistentry>
+					<varlistentry><term>variable.nonSilencedNullError</term><listitem>default: true</listitem></varlistentry>
+					<varlistentry><term>encoding.url</term><listitem>default: UTF-8</listitem></varlistentry>
+					<varlistentry><term>resource.checkModification</term><listitem>default: true</listitem></varlistentry>
+				</variablelist>
+			</para>
 		</chapter>
 	</book>
 </set>
