@@ -1,14 +1,4 @@
 #summary Guide to installing/using the ZipScript engine.
 #labels Featured
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+[http://www.zipscript.org/docs/current/bk03.html Click here] to view the guide
