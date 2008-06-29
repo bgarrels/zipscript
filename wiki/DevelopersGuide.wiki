@@ -1,4 +1,4 @@
 #summary Guide to installing/using the ZipScript engine.
 #labels Featured
 
-[http://www.zipscript.org/docs/current/bk03.html Click here] to view the guide
+[http://www.zipscript.org/docs/current/bk02.html Click here] to view the guide
