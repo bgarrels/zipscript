@@ -1,6 +1,6 @@
 #summary Guide of syntax and functionality.
 #labels Featured
 
-[http://www.zipscript.org/docs/current/bk01.html Click here] to view the guide
+[http://www.zipscript.org/http://www.zipscript.org/layout/frameset.html?docs/current/bk01.html Click here] to view the guide
 
 Or, add any documentation comments below...
