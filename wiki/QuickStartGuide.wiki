@@ -11,7 +11,8 @@ String expression = "foo != null && bar > 10"; // get the expression to evaluate
 Map context = new HashMap();
 // add business data to the context
 try {
-    boolean val = ZipEngine.getInstance().getEvaluator(expression).booleanValue(context);
+    Evaluator e = ZipEngine.getInstance().getEvaluator(expression);
+    boolean val = e.booleanValue(context);
 }
 catch (ParseException e) {
 // the expression was invalid
@@ -24,7 +25,8 @@ String expression = "{foo, bar, baz}"; // get the expression to evaluate - examp
 Map context = new HashMap();
 // add business data to the context
 try {
-    Object obj = ZipEngine.getInstance().getEvaluator(expression).objectValue(context);
+    Evaluator e = ZipEngine.getInstance().getEvaluator(expression);
+    Object obj = e.objectValue(context);
     // in this example obj will be a java.util.List
 }
 catch (ParseException e) {
