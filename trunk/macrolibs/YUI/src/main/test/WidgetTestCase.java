@@ -95,7 +95,6 @@ public class WidgetTestCase extends TestCase {
 
 	private String mergeWithLayout (Template template, Map context)
 	throws ParseException, ExecutionException, IOException {
-		context.put("addImportHeaders", Boolean.TRUE);
 		context.put("cssIncludes", new HashMap(3));
 		context.put("scriptIncludes", new HashMap(3));
 		String body = merge(template, context);
