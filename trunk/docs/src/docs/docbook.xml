@@ -2,12 +2,6 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <set id="zipscript">
 	<index/>
-	<book id="quickStart">
-		<bookinfo>
-			<title>Quick Start</title>
-		</bookinfo>
-	</book>
-
 	<book id="userGuide">
 		<bookinfo>
 			<title>ZipScript User Guide</title>
@@ -315,30 +309,30 @@
 					</variablelist>
 				</para>
 				<para>
-	<programlisting>
-	[#if foo==${bar}]
-		This section will print if the foo <link linkend="context">context</link> variable is equal to the bar <link linkend="context">context</link> variable.  Notice that variables
-		inside directive expressions do not need to be referenced with ${} (but they can be).
-	[#elseif foo=="Joe's"]
-		This section will print if the foo <link linkend="context">context</link> variable is equal to the string <code>Joe's</code>
-	[#elseif foo!='Joe\'s']
-		This section will print if the foo <link linkend="context">context</link> variable is equal to the string <code>Joe's</code>.  Notice that strings
-		can be referenced with the ' character or the " character.  This is useful if the string contains either
-		of these characters.
-	[#elseif foo in {1, 2d, 3f}]
-		This is a handy way of checking to see if a value is in a list.  This section will print if the foo <link linkend="context">context</link> variable
-		is equal to 1 (Integer) or 2 (Double) or 3 (Float).
-	 [#elseif foo not in {"one", "two", "three"}]
-		This is a handy way of checking to see if a value is not in a list.  This section will print if the foo <link linkend="context">context</link> variable
-		is equal to the string <code>one</code> or the string <code>two</code> or the string <code>three</code>.
-	[#elseif foo &gt; 3]
-		This section will print if the foo <link linkend="context">context</link> variable is greater than 3.
-	[#elseif foo%2==0]
-		This section will print if foo is a number can be divided by 2 with a 0 remainder.
-	[#else]
-		This section will print if none of the previous sections evaluate to true.
-	[/#if]
-	</programlisting>
+<programlisting>
+[#if foo==${bar}]
+	This section will print if the foo <link linkend="context">context</link> variable is equal to the bar <link linkend="context">context</link> variable.  Notice that variables
+	inside directive expressions do not need to be referenced with ${} (but they can be).
+[#elseif foo=="Joe's"]
+	This section will print if the foo <link linkend="context">context</link> variable is equal to the string <code>Joe's</code>
+[#elseif foo!='Joe\'s']
+	This section will print if the foo <link linkend="context">context</link> variable is equal to the string <code>Joe's</code>.  Notice that strings
+	can be referenced with the ' character or the " character.  This is useful if the string contains either
+	of these characters.
+[#elseif foo in {1, 2d, 3f}]
+	This is a handy way of checking to see if a value is in a list.  This section will print if the foo <link linkend="context">context</link> variable
+	is equal to 1 (Integer) or 2 (Double) or 3 (Float).
+ [#elseif foo not in {"one", "two", "three"}]
+	This is a handy way of checking to see if a value is not in a list.  This section will print if the foo <link linkend="context">context</link> variable
+	is equal to the string <code>one</code> or the string <code>two</code> or the string <code>three</code>.
+[#elseif foo &gt; 3]
+	This section will print if the foo <link linkend="context">context</link> variable is greater than 3.
+[#elseif foo%2==0]
+	This section will print if foo is a number can be divided by 2 with a 0 remainder.
+[#else]
+	This section will print if none of the previous sections evaluate to true.
+[/#if]
+</programlisting>
 				</para>
 				<note>
 					For more examples, check out:
@@ -369,26 +363,26 @@
 					</variablelist>
 				</para>
 				<para>
-	<programlisting>
-	[#set someList = {"D", "E", "F"}/]
-	[#foreach item in {"a", "b", "c"}]
-	[#foreach item in someList]
-		${super.item}.${item} (${super.i}.${i}) - ${hasNext} - ${super.hasNext}
-	[/#foreach]
-	[/#foreach]
-	</programlisting>
-	Will print
-	<programlisting>
-	a.D (0.0) - true - true
-	a.E (0.1) - true - true
-	a.F (0.2) - false - true
-	b.D (1.0) - true - true
-	b.E (1.1) - true - true
-	b.F (1.2) - false - true
-	c.D (2.0) - true - false
-	c.E (2.1) - true - false
-	c.F (2.2) - false - false
-	</programlisting>
+<programlisting>
+[#set someList = {"D", "E", "F"}/]
+[#foreach item in {"a", "b", "c"}]
+[#foreach item in someList]
+	${super.item}.${item} (${super.i}.${i}) - ${hasNext} - ${super.hasNext}
+[/#foreach]
+[/#foreach]
+</programlisting>
+Will print
+<programlisting>
+a.D (0.0) - true - true
+a.E (0.1) - true - true
+a.F (0.2) - false - true
+b.D (1.0) - true - true
+b.E (1.1) - true - true
+b.F (1.2) - false - true
+c.D (2.0) - true - false
+c.E (2.1) - true - false
+c.F (2.2) - false - false
+</programlisting>
 				</para>
 				<note>
 					For more examples, check out:
@@ -418,22 +412,22 @@
 					<note>hasNext is not available for a while directive</note>
 				</para>
 				<para>
-	<programlisting>
-	[#foreach item in {"a", "b", "c"}]
-	[#while i&lt;2]
-		${super.item}.${i+1} (${super.i}.${i}) - ${super.hasNext}
-	[/#while]
-	[/#foreach]
-	</programlisting>
-	Will print
-	<programlisting>
-	a.1 (0.0) - true
-	a.2 (0.1) - true
-	b.1 (1.0) - true
-	b.2 (1.1) - true
-	c.1 (2.0) - false
-	c.2 (2.1) - false
-	</programlisting>
+<programlisting>
+[#foreach item in {"a", "b", "c"}]
+[#while i&lt;2]
+	${super.item}.${i+1} (${super.i}.${i}) - ${super.hasNext}
+[/#while]
+[/#foreach]
+</programlisting>
+Will print
+<programlisting>
+a.1 (0.0) - true
+a.2 (0.1) - true
+b.1 (1.0) - true
+b.2 (1.1) - true
+c.1 (2.0) - false
+c.2 (2.1) - false
+</programlisting>
 				</para>
 				<note>
 					For more examples, check out:
@@ -484,27 +478,118 @@
 			<title>Macros</title>
 			<section id="macros_basics">
 				<title>Basics</title>
-				<para>TODO: macro basics</para>
+				<para>
+					There are 2 parts to a macro:
+					<itemizedlist>
+						<listitem>Macro Definition</listitem>
+						<listitem>Macro Reference</listitem>
+					</itemizedlist>
+					Macro definitions can occur in the template that the macro instance is called or, if they are common, can be published in a macro library.
+				</para>
 			</section>
-			<section id="macros_calling">
-				<title>Calling Macros</title>
-				<para>TODO: macro basics</para>
-			</section>
-			<section id="macros_parameters">
-				<title>Macro Parameters</title>
-				<para>TODO: macro parameters</para>
-				<section id="macros_parameters_passed">
-					<title>Passed Parameters</title>
-					<para>TODO: passed parameters</para>
-				</section>
-				<section id="macros_parameters_template">
-					<title>Template-defined Parameters</title>
-					<para>TODO: template-defined parameters</para>
-				</section>
-			</section>
-			<section id="macros_definitions">
+			<section id="macros_definition">
 				<title>Macro Definitions</title>
-				<para>TODO: macro basics</para>
+				<para>
+					The syntax for a macro definition is <code>[#macro macroName ...] macro body content [/#macro].
+				</para>
+				<para>
+					<itemizedlist>
+						<listitem>All parameters to be used within the macro should be referenced after the macro name in the definition.</listitem>
+						<listitem>Parameters must either be required or supply a default value (which can be null).</listitem>
+						<listitem>Default parameter values use the '=' characer to assign the default value</listitem>
+						<listitem>Any parameters referenced in the macro definition will be available in the context.  See example below:</listitem>
+						<listitem>All required parameters must be listed first (leftmost) with optional parameters listed last (rightmost)</listitem>
+						<listitem>Parameters must be separated by spaces</listitem>
+					</itemizedlist>
+					See example:
+<programlisting>
+[#macro myMacro requiredParam1 requiredParam2 optionalStringParam="abc" optionalNumberParam=3 optionalListParam={1,2,3} optionalContextParam=foo]
+	The first parameter is ${requiredParam1}
+	The second parameter is ${requiredParam2}
+	The third optional parameter (with default) is ${optionalStringParam|"def"}
+	The fourth optional parameter (with silence) is $!{optionalNumberParam}
+	[#if optionalListParam!=null]
+		[#foreach entry in optionalListParam]
+			the list value is ${entry}
+		[/#foreach]
+	[/#if]
+	The last param is ${optionalContextParam} <-- an ExecutionException will be thrown if this value is null
+
+	The nested content of the macro reference is ${body}
+[/#macro]
+See the next section to understand how to reference this macro
+</programlisting>
+				</para>
+			</section>
+			<section id="macros_referencing">
+				<title>Macro Referencing</title>
+				<para>
+					Unlike other directives, macros are referenced using the '@' character instead of the '#' character.
+					Macros references can pass parameters ordinally or by name (more like an XML format).
+<emphasis>Reference with named parameters</emphasis>
+<programlisting>
+[@myMacro requiredParam1=someContextVar requiredParam2="foo" optionalStringParam="bar" optionalContextParam=someVar]
+	The content here can be referenced in the definition using the ${body} variable
+[/@myMacro]
+</programlisting>
+<emphasis>Reference with ordinal parameters</emphasis>
+<programlisting>
+[@myMacro someContextVar "foo" "bar" null null someVar]
+	The content here can be referenced in the definition using the ${body} variable
+[/@myMacro]
+</programlisting>
+				</para>
+				<section id="macros_parameters_template">
+					<title>Template Defined Parameters</title>
+					<para>
+						The real power of the macros is the ability to provide object-oriented parameters that are defined within the body of the
+						macro reference.  This is done using the following example syntax:
+<programlisting>
+[@myMacro requiredParam1=someContextVar requiredParam2="foo" optionalStringParam="bar" optionalContextParam=someVar]
+	The content here can be referenced in the definition using the ${body} variable
+	
+	[@innerParam abc="foo" def="bar"]
+		this is the inner param body content
+	[/@innerParam]
+[/@myMacro]
+</programlisting>
+						Obviously, the macro would have to deal with this parameter.  This is definied just as a normal parameter would be as well as referenced
+						how a normal parameter would be.  See the example below:
+<programlisting>
+[#macro myMacro innerParam ...]
+	...
+	If we know there is only 1
+	${innerParam.abc} ${innerParam.def} and the body content is ${innerParam.body}
+	If there could be more than 1
+	[#foreach innerParam in innerParam]
+		${innerParam.abc} ${innerParam.def} and the body content is ${innerParam.body}
+	[/#foreach]
+[/#macro]
+</programlisting>
+					</para>
+				</section>
+			</section>
+			<section id="macros_libraries">
+				<title>Macro Libraries</title>
+				<para>
+					Macro libraries can group similar macros in the same namespace.  A macro library is a file (usually ending with .zsm) which only contains
+					macro definitions.  These macro libraries can be imported using the API using the following syntax:
+<programlisting>
+ZipEngine engine = new ZipEngine();
+engine.addMacroLibrary(namespace, resourceName);
+</programlisting>
+or
+<programlisting>
+ZipEngine engine = new ZipEngine();
+engine.addMacroLibrary(new File("path to resource or directory"));
+</programlisting>
+				</para>
+				Referencing macros defined in a macro library requires the namespace to be added to the reference name.  For example, if the "foo" macro 
+				was defined in a macro library imported to the "abc" namespace, a reference to that macro would use the following syntax:
+<programlisting>
+[@abc.foo ...] [/@abc.foo]
+</programlisting>
+				Any macros that are defined within a macro library do not need to refer to any other macros defined in the same library with a namespace.
 			</section>
 		</chapter>
 	</book>
