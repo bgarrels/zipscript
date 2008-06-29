@@ -1,6 +1,8 @@
 [#macro table id entries column rowHighlight=true]
-[#if global.addImportHeaders!=null]
+[#if global.cssIncludes!=null]
 ${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
+[/#if]
+[#if global.scriptIncludes!=null]
 ${global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
 ${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
 [/#if]
