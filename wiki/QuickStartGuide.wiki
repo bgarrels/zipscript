@@ -1,4 +1,33 @@
 #summary Guide for the impatient.
 #labels Featured
 
-[http://www.zipscript.org/docs/current/bk01.html Click here] to view the guide
+If you want to get up and running quickly, this is for you.  After this, you might want to take a look at the UserGuide and DeveloperGuide.
+
+No dependencies are required so it is as simple as include the zipscript jar in your classpath.  There are 3 different ways Zipscript can be used:
+
+==Evaluating external config text as booleans==
+{{{
+String expression = "foo != null && bar > 10"; // get the expression to evaluate
+Map context = new HashMap();
+// add business data to the context
+try {
+    boolean val = ZipEngine.getInstance().getEvaluator(expression).booleanValue(context);
+}
+catch (ParseException e) {
+// the expression was invalid
+}
+}}}
+
+==Retrieving runtime objects from external config text==
+{{{
+String expression = "{foo, bar, baz}"; // get the expression to evaluate - example represents a list
+Map context = new HashMap();
+// add business data to the context
+try {
+    Object obj = ZipEngine.getInstance().getEvaluator(expression).objectValue(context);
+    // in this example obj will be a java.util.List
+}
+catch (ParseException e) {
+// the expression was invalid
+}
+}}}
