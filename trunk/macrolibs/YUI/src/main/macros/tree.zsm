@@ -11,8 +11,10 @@ ${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false
 [/#macro]
 
 [#macro view id node]
-[#if global.addImportHeaders!=null]
+[#if global.cssIncludes!=null]
 ${global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")?void}
+[/#if]
+[#if global.scriptIncludes!=null]
 ${global.scriptIncludes.put("treeview/treeview-min.js", "YUI")?void}
 [/#if]
 [#set componentId = "${id}_component"/]
