@@ -1,0 +1,4 @@
+#summary Zipscript Javadocs
+#labels Featured
+
+[http://www.zipscript.org/docs/current/javadoc/index.html Click here] to view the Javadocs.
