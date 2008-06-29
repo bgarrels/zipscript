@@ -110,9 +110,6 @@ public class ZipEngine {
 	private MacroManager macroManager = new MacroManager();
 
 
-	public void init () throws InitializationException {
-	}
-
 	public void init (Properties properties) {
 		init ((Map) properties);
 	}
