@@ -33,3 +33,19 @@ catch (ParseException e) {
 // the expression was invalid
 }
 }}}
+
+==Merging static templates with runtime data==
+{{{
+
+String templateName = ... // represents a resource from the classpath by default
+Map context = new HashMap();
+// add business data to the context
+try {
+    Template t = ZipEngine.getInstance().getTemplate(templateName);
+    // there are other merging options as well
+    String result = t.merge(context);
+}
+catch (ParseException e) {
+// the expression was invalid
+}
+}}}
