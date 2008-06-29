@@ -5,7 +5,7 @@ If you want to get up and running quickly, this is for you.  After this, you mig
 
 No dependencies are required so it is as simple as include the zipscript jar in your classpath.  There are 3 different ways Zipscript can be used:
 
-==Evaluating external config text as booleans==
+==Evaluating static cinfig entries as booleans==
 {{{
 String expression = "foo != null && bar > 10"; // get the expression to evaluate
 Map context = new HashMap();
@@ -19,7 +19,7 @@ catch (ParseException e) {
 }
 }}}
 
-==Retrieving runtime objects from external config text==
+==Retrieving runtime objects using static config entries==
 {{{
 String expression = "{foo, bar, baz}"; // get the expression to evaluate - example represents a list
 Map context = new HashMap();
