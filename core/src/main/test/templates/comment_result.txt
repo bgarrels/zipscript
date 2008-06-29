@@ -1,3 +1,0 @@
-This should show up
-#*We should see this*#
-The end
