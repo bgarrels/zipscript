@@ -59,6 +59,42 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * Utility class used to retrieve templates and evaluators for the ZipScript expression language.  This can be retrieved
+ * as a singleton <code>ZipEngine.getInstance()...</code> or as a unique instance
+ * <code>ZipEngine engine = new ZipEngine()</code>.
+ * <p>
+ * The default behavior (if not initialized) is to load template and macro resources from the classpath and evaluate the
+ * string source directly that is passed to the getEvaluator(String) method.  Properties can be set to alter the behavior
+ * of the resource locators and other functionality.  Reference all available properties <a href="http://www.zipscript.org/docs/current/bk02ch04.html">here</a>.
+ * </p>
+ * <p>
+ * // standard usage
+ * <pre>
+ * ZipEngine engine = new ZipEngine();
+ * Properties props = new Properties();
+ * // set properties
+ * engine.init(props);
+
+ * Map context = new HashMap();
+ * // load the context
+ * 
+ * // performing template merging
+ * Template t = engine.getTemplate("myResource.zs");
+ * String mergeResults = t.merge(context);
+ * 
+ * // performing boolean evaluation
+ * Evaluator e = engine.getEvaluator("foo > bar");
+ * boolean evalResult = e.booleanValue(context);
+ * 
+ * // object retrieval
+ * Evaluator e = engine.getEvaluator("foo");
+ * Object result = e.objectValue(context);
+ * </pre>
+ * </p>
+ * 
+ * @author Joe Hudson
+ */
 public class ZipEngine {
 
 	private ResourceLoader templateResourceloader = new ClasspathResourceLoader();
@@ -66,6 +102,9 @@ public class ZipEngine {
 	private ResourceLoader evalResourceLoader = new StringResourceLoader();
 
 	private static ZipEngine instance;
+	/**
+	 * Use ZipEngine as a singletion
+	 */
 	public static ZipEngine getInstance ()  {
 		if (null == instance)
 			instance = new ZipEngine();
@@ -109,11 +148,18 @@ public class ZipEngine {
 	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
 	private MacroManager macroManager = new MacroManager();
 
-
+	/**
+	 * Initialize with property map
+	 * @param properties
+	 */
 	public void init (Properties properties) {
 		init ((Map) properties);
 	}
-	
+
+	/**
+	 * Initialize with property map
+	 * @param properties
+	 */
 	public void init (Map properties) {
 		// get the default resource loader
 		String s = (String) properties.get("templateResourceLoader.class");
@@ -145,11 +191,23 @@ public class ZipEngine {
 		}
 	}
 
+	/**
+	 * Add a reference to a macro library
+	 * @param namespace the namespace reference for macros within this resource
+	 * @param resourcePath the resource path for the macro library resource
+	 * @throws ParseException
+	 */
 	public void addMacroLibrary (String namespace, String resourcePath) throws ParseException {
 		macroManager.addMacroLibrary(
 				namespace, resourcePath, macroLibResourceloader);
 	}
 
+	/**
+	 * Add a reference to a macro library file (or add a macro lib directory).  All macro lib resource must end with '.zsm'
+	 * @param file the file or directory name
+	 * @throws FileNotFoundException
+	 * @throws ParseException
+	 */
 	public void addMacroLibrary (File file) throws FileNotFoundException, ParseException {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
@@ -169,6 +227,14 @@ public class ZipEngine {
 	// internal cache
 	private Map resourceMap = new HashMap();
 
+	/**
+	 * Return a template used for merging static data with an object model.  This template will be cached as long
+	 * as the same instance of the ZipEngine is used for template retrieval.  The template resource loader will
+	 * be used to load the template.  This can be modified using the 'templateResourceLoader.class' init property.
+	 * @param source the template resource source path & name
+	 * @return the Template
+	 * @throws ParseException
+	 */
 	public Template getTemplate (String source) throws ParseException {
 		try {
 			TemplateResource tr = (TemplateResource) resourceMap.get(source);
@@ -188,6 +254,13 @@ public class ZipEngine {
 		}
 	}
 
+	/**
+	 * Return an expression evaluator.  The expression resource loader will be used to load the template.
+	 * This can be modified using the 'evalResourceLoader.class' init property.
+	 * @param contents the expression or resource reference (depending on resource loader)
+	 * @return the evaluator
+	 * @throws ParseException
+	 */
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
@@ -202,6 +275,15 @@ public class ZipEngine {
 		}
 	}
 
+	/**
+	 * Load a template
+	 * @param source the source
+	 * @param components all components for pattern matching
+	 * @param patternMatchers all pattern matchers
+	 * @param parseParameters parsing parameters
+	 * @return the template
+	 * @throws ParseException
+	 */
 	protected TemplateResource loadTemplate (
 			String source, Component[] components, PatternMatcher[] patternMatchers, ParseParameters parseParameters)
 	throws ParseException {
