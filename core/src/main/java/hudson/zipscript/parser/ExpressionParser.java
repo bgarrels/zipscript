@@ -27,6 +27,15 @@ public class ExpressionParser {
 	}
 	private ExpressionParser () {}
 
+	/**
+	 * Parse the given expression using the components for pattern matching
+	 * @param contents the template expression contents
+	 * @param components pattern matcher components
+	 * @param defaultElementFactory factory to provide elements for non-matching elements
+	 * @param startPosition the start position for element positioning (0 for a new document)
+	 * @param macroManager the macro manager
+	 * @throws ParseException
+	 */
 	public ParsingResult parse (
 			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
 			int startPosition, MacroManager macroManager)
@@ -39,6 +48,15 @@ public class ExpressionParser {
 				defaultElementFactory, session, startPosition);
 	}
 
+	/**
+	 * Parse the given expression to a unique element
+	 * @param contents the template expression contents
+	 * @param components pattern matcher components
+	 * @param defaultElementFactory defaultElementFactory factory to provide elements for non-matching elements
+	 * @param startPosition defaultElementFactory factory to provide elements for non-matching elements
+	 * @param macroManager the macro manager
+	 * @throws ParseException if parsing error or the document can not be boiled down to a single element
+	 */
 	public Element parseToElement (
 			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
 			int startPosition, MacroManager macroManager)
@@ -53,6 +71,15 @@ public class ExpressionParser {
 			return null;
 	}
 
+	/**
+	 * Parse the given expression using the pattern matchers for pattern matching
+	 * @param contents the template expression contents
+	 * @param matchers pattern matchers
+	 * @param defaultElementFactory factory to provide elements for non-matching elements
+	 * @param startPosition the start position for element positioning (0 for a new document)
+	 * @param macroManager the macro manager
+	 * @throws ParseException
+	 */
 	public Element parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
 			int startPosition, MacroManager macroManager)

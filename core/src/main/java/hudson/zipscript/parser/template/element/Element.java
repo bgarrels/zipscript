@@ -12,22 +12,65 @@ import java.util.List;
 
 public interface Element {
 
+	/**
+	 * Set the absolute start position index for this element within it's containg resource
+	 * @param position
+	 */
 	public void setElementPosition (long position);
 
+	/**
+	 * Return the absolute element start position
+	 */
 	public long getElementPosition ();
 
+	/**
+	 * Set the number of characters used by this element
+	 * @param length the length
+	 */
 	public void setElementLength (int length);
 
+	/**
+	 * Return the number of characters used by this element
+	 * @return
+	 */
 	public int getElementLength ();
 
+	/**
+	 * Return the object value reference by this element and it's nested structure
+	 * @param context the data context
+	 * @throws ExecutionException
+	 */
 	public Object objectValue (ZSContext context) throws ExecutionException;
 
+	/**
+	 * Return a boolean value referenced by this element and it's nested structure
+	 * @param context the data context
+	 * @throws ExecutionException
+	 */
 	public boolean booleanValue (ZSContext context) throws ExecutionException;
 
+	/**
+	 * Merge this element and it's nested structure into the provided writer
+	 * @param context the data context
+	 * @param sw the Writer
+	 * @throws ExecutionException
+	 */
 	public void merge (ZSContext context, Writer sw) throws ExecutionException;
 
+	/**
+	 * Allow this element to evaluate the parsed document structure to self-contain all
+	 * nested elements if applicable
+	 * @param index the starting index in the element list (minus this element)
+	 * @param elementList the document element list (minus this element)
+	 * @param session the parsing session
+	 * @return null if this element is to be added back to this list and an ElementIndex for more complex behavior
+	 * @throws ParseException
+	 */
 	public ElementIndex normalize (
 			int index, List elementList, ParsingSession session) throws ParseException;
 
+	/**
+	 * Return all children of this element or null if N/A
+	 */
 	public List getChildren();
 }
