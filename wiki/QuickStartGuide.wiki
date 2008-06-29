@@ -1,7 +1,7 @@
 #summary Guide for the impatient.
 #labels Featured
 
-If you want to get up and running quickly, this is for you.  After this, you might want to take a look at the UserGuide and DeveloperGuide.
+If you want to get up and running quickly, this is for you.  After this, you might want to take a look at the UserGuide and DevelopersGuide.
 
 No dependencies are required so it is as simple as include the zipscript jar in your classpath.  There are 3 different ways Zipscript can be used:
 
