@@ -1,6 +1,6 @@
 #summary Zipscript Javadocs
 #labels Featured
 
-[http://www.zipscript.org/docs/current/javadoc/index.html Click here] to view the Javadocs.
+[http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/javadoc/index.html Click here] to view the Javadocs.
 
 Or, add any documentation comments below...
