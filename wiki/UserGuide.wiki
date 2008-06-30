@@ -4,3 +4,5 @@
 [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk01.html Click here] to view the guide
 
 Or, add any documentation comments below...
+
+Additionally - I would really appreciate anyone that would be interested in helping with documentation as it is really not a strong area of mine.
