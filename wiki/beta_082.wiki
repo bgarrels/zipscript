@@ -1,0 +1,5 @@
+#summary Zipscript beta release - 0.8.2.
+
+Community feedback would be greatly appreciated in evaluating a new template engine / expression language.  For more details, visit http://www.zipscript.org.
+
+Open source doesn't get better without community participation :)  Thanks.
