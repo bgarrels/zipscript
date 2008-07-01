@@ -7,12 +7,12 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,21 +54,21 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 
 		// look for attributes
 		while (true) {
-			MacroAttribute attribute = getAttribute(elements, session);
+			MacroDefinitionAttribute attribute = getAttribute(elements, session);
 			if (null == attribute) break;
 			else this.attributes.add(attribute);
 		}
 		for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
-			MacroAttribute attr = (MacroAttribute) i.next();
+			MacroDefinitionAttribute attr = (MacroDefinitionAttribute) i.next();
 			attributeMap.put(attr.getName(), attr);
 		}
 	}
 
-	public MacroAttribute getAttribute (String name) {
-		return (MacroAttribute) attributeMap.get(name);
+	public MacroDefinitionAttribute getAttribute (String name) {
+		return (MacroDefinitionAttribute) attributeMap.get(name);
 	}
 
-	protected MacroAttribute getAttribute(List elements, ParsingSession session)
+	protected MacroDefinitionAttribute getAttribute(List elements, ParsingSession session)
 	throws ParseException {
 		String name = null;
 		Element defaultVal = null;
@@ -92,7 +92,26 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		// attribute properties
 		if (elements.size() > 0) {
 			e = (Element) elements.get(0);
-			if (e instanceof AssignmentElement) {
+			if (e instanceof MapElement) {
+				elements.remove(0);
+				// it is a template defined parameter definition
+				List children = ((MapElement) e).getChildren();
+				if (null == children || children.size() == 0) {
+					return new MacroDefinitionAttribute(
+						name, new ArrayList(0), required);
+				}
+				else {
+					List tldAttributes = new ArrayList();
+					while (true) {
+						MacroDefinitionAttribute attribute = getAttribute(children, session);
+						if (null == attribute) break;
+						else tldAttributes.add(attribute);
+					}
+					return new MacroDefinitionAttribute(
+							name, tldAttributes, required);
+				}
+			}
+			else if (e instanceof AssignmentElement) {
 				elements.remove(0);
 				if (elements.size() == 0) {
 					throw new ParseException(this, "Unexpected content '" + e + "'");
@@ -110,7 +129,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 				}
 			}
 		}
-		MacroAttribute attribute = new MacroAttribute(
+		MacroDefinitionAttribute attribute = new MacroDefinitionAttribute(
 				name, defaultVal, required);
 		return attribute;
 	}
@@ -131,9 +150,9 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		// add attributes to context
 		if (isOrdinal) {
 			for (int i=0; i<attributes.size(); i++) {
-				MacroAttribute defAttribute = (MacroAttribute) getAttributes().get(i);
-				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
-				Object val = instAttribute.getDefaultValue().objectValue(parentContext);
+				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) getAttributes().get(i);
+				MacroInstanceAttribute instAttribute = (MacroInstanceAttribute) attributes.get(i);
+				Object val = instAttribute.getValue().objectValue(parentContext);
 				if (null == val) {
 					
 					// do we default
@@ -145,10 +164,10 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		else {
 			for (int i=0; i<attributes.size(); i++) {
-				MacroAttribute instAttribute = (MacroAttribute) attributes.get(i);
-				Object val = instAttribute.getDefaultValue().objectValue(parentContext);
+				MacroInstanceAttribute instAttribute = (MacroInstanceAttribute) attributes.get(i);
+				Object val = instAttribute.getValue().objectValue(parentContext);
 				if (null == val) {
-					MacroAttribute defAttribute = (MacroAttribute) attributeMap.get(instAttribute.getName());
+					MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) attributeMap.get(instAttribute.getName());
 					// do we default
 					if (null != defAttribute.getDefaultValue())
 						val = defAttribute.getDefaultValue();
@@ -156,7 +175,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 				if (null != val) context.put(instAttribute.getName(), val);
 			}
 			for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
-				MacroAttribute defAttribute = (MacroAttribute) i.next();
+				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) i.next();
 				if (null != defAttribute.getDefaultValue() && null == context.get(defAttribute.getName())) {
 					context.put(defAttribute.getName(), defAttribute.getDefaultValue().objectValue(context));
 				}
@@ -208,6 +227,29 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	public void getMacroInstances(
 			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+	}
+
+	public MacroDefinitionAttribute getTemplateDefinedParameterAttribute (String name) {
+		MacroDefinitionAttribute rtn = null;
+		for (Iterator i=attributes.iterator(); i.hasNext(); ) {
+			rtn = getTemplateDefinedParameterAttribute(name, (MacroDefinitionAttribute) i.next());
+			if (null != rtn) return rtn;
+		}
+		return null;
+	}
+
+	private MacroDefinitionAttribute getTemplateDefinedParameterAttribute (String name, MacroDefinitionAttribute attr) {
+		MacroDefinitionAttribute rtn = null;
+		if (attr.isTemplateDefinedParameter()) {
+			if (attr.getName().equals(name)) return attr;
+			else {
+				for (Iterator i=attr.getTDPAttributes().iterator(); i.hasNext(); ) {
+					rtn = getTemplateDefinedParameterAttribute(name, (MacroDefinitionAttribute) i.next());
+					if (null != rtn) return rtn;
+				}
+			}
+		}
+		return null;
 	}
 
 	protected boolean isStartElement(Element e) {

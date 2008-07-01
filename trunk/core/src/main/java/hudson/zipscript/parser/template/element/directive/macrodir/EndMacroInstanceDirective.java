@@ -19,7 +19,7 @@ public class EndMacroInstanceDirective extends NestableDirective {
 	}
 
 	public String toString() {
-		return "[/#macro]";
+		return "[/@" + getName() + "]";
 	}
 
 	public void merge(ZSContext context, Writer sw) throws ExecutionException {

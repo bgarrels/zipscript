@@ -73,4 +73,12 @@ public interface Element {
 	 * Return all children of this element or null if N/A
 	 */
 	public List getChildren();
+
+	/**
+	 * This is called after full parsing and normalization for any elements that might need to lazy load.
+	 * it is not required to call this on children as long as the getChildren method return all children.
+	 * @param session
+	 * @throws ParseException
+	 */
+	public void validate (ParsingSession session) throws ParseException;
 }

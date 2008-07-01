@@ -10,9 +10,9 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +20,7 @@ import java.util.Map;
 public class IfDirective extends NestableElement implements MacroInstanceAware {
 
 	public Element ifElement;
+	public List ifElements;
 	private List elseifScenarios;
 	private List elseElements;
 
@@ -56,13 +57,30 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 		}
 	}
 
+	public void setChildren(List children) {
+		this.ifElements = children;
+	}
+
+	public List getChildren() {
+		List children = new ArrayList();
+		if (null != ifElements) children.addAll(ifElements);
+		if (null != elseifScenarios) {
+			for (Iterator i=elseifScenarios.iterator(); i.hasNext(); ) {
+				HeaderElementList hel = (HeaderElementList) i.next();
+				children.addAll(hel.getChildren());
+			}
+		}
+		if (null != elseElements) children.addAll(elseElements);
+		return children;
+	}
+
 	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		boolean done = false;
 		boolean isDebug = getParsingSession().isDebug();
 		if (isDebug) System.out.println("Executing: If: " + ifElement);
 		if (ifElement.booleanValue(context)) {
 			if (isDebug) System.out.println("Executing: If: " + ifElement + "; Evaluation Successful");
-			appendElements(getChildren(), context, sw);
+			appendElements(ifElements, context, sw);
 			done = true;
 		}
 		if (!done && null != elseifScenarios) {

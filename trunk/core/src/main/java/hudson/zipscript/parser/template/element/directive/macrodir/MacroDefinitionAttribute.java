@@ -1,17 +1,28 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
+import java.util.List;
+
 import hudson.zipscript.parser.template.element.Element;
 
-public class MacroAttribute {
+public class MacroDefinitionAttribute {
 
 	private String name;
 	private Element defaultValue;
 	private boolean isRequired;
+	private boolean isTemplateDefinedParameter;
+	private List tdpAttributes;
 
-	public MacroAttribute (String name, Element defaultValue, boolean isRequired) {
+	public MacroDefinitionAttribute (String name, Element defaultValue, boolean isRequired) {
 		this.name = name;
 		this.defaultValue = defaultValue;
 		this.isRequired = isRequired;
+	}
+
+	public MacroDefinitionAttribute (String name, List tdpAttributes, boolean isRequired) {
+		this.name = name;
+		this.tdpAttributes = tdpAttributes;
+		this.isRequired = isRequired;
+		this.isTemplateDefinedParameter = true;
 	}
 
 	public String getName() {
@@ -40,5 +51,17 @@ public class MacroAttribute {
 
 	public String toString() {
 		return "macro attribute: " + name + " = " + getDefaultValue();
+	}
+
+	public boolean isTemplateDefinedParameter() {
+		return isTemplateDefinedParameter;
+	}
+
+	public void setTemplateDefinedParameter(boolean isTemplateDefinedParameter) {
+		this.isTemplateDefinedParameter = isTemplateDefinedParameter;
+	}
+
+	public List getTDPAttributes () {
+		return tdpAttributes;
 	}
 }

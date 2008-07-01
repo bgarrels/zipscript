@@ -81,4 +81,7 @@ public abstract class AbstractElement implements Element {
 	public void setParsingSession(ParsingSession parsingSession) {
 		this.parsingSession = parsingSession;
 	}
+
+	public void validate(ParsingSession session) throws ParseException {	
+	}
 }

@@ -13,6 +13,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
 	private MacroInstanceDirective macroInstance;
 	private MacroInstanceEntityContext context;
+	private boolean initialized = false;
 
 	public MacroInstanceEntity (
 			MacroInstanceDirective macroInstance, ZSContext context, Map additionalContextEntries) {
@@ -34,10 +35,13 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
 
 	public Object get(String key, ZSContext context) {
-		this.context.setPostMacroContext(context);
-		if (key.equals("body"))
+		// FIXME is there a better way to do this?
+		if (key.equals("body")) {
+			initialize(context, true);
 			return macroInstance.getNestedContent(this.context);
+		}
 		else {
+			initialize(context, false);
 			return this.context.get(key);
 		}
 	}
@@ -52,12 +56,14 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 		this.context.put(key, value);
 	}
 
-	private boolean isNested (ZSContext context) {
-		if (context instanceof NestedContextWrapper) return true;
-		else return false;
-	}
-
 	public MacroInstanceEntityContext getContext() {
 		return context;
+	}
+
+	private void initialize (ZSContext context, boolean force) {
+		if (!initialized || force) {
+			this.context.setPostMacroContext(context);
+			initialized = true;
+		}
 	}
 }
