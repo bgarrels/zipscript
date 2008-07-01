@@ -158,33 +158,39 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	protected void validateTemplateAttribute(MacroDefinitionAttribute attribute, MacroInstanceDirective mid) throws ParseException {
-		// make sure we have the parameter
-		List macroInstanceDirectives = new ArrayList();
-		loadTemplateDefinedAttributes(attribute.getName(), this, macroInstanceDirectives);
-		if (macroInstanceDirectives.size() == 0 && attribute.isRequired())
-			throw new ParseException(mid, "Missing template defined parameter '" + attribute.getName() + "'");
-		for (Iterator i=macroInstanceDirectives.iterator(); i.hasNext(); ) {
-			MacroInstanceDirective subMid = (MacroInstanceDirective) i.next();
-			for (Iterator j=attribute.getTDPAttributes().iterator(); j.hasNext(); ) {
-				MacroDefinitionAttribute mda = (MacroDefinitionAttribute) j.next();
-				if (mda.isTemplateDefinedParameter())  {
-					validateTemplateAttribute(mda, subMid);
+		if (attribute.isTemplateDefinedParameter()) {
+			// make sure we have the parameter
+			List macroInstanceDirectives = new ArrayList();
+			loadTemplateDefinedAttributes(attribute.getName(), mid, macroInstanceDirectives);
+			if (macroInstanceDirectives.size() == 0 && attribute.isRequired())
+				throw new ParseException(mid, "Missing template defined parameter '" + attribute.getName() + "'");
+			for (Iterator i=macroInstanceDirectives.iterator(); i.hasNext(); ) {
+				MacroInstanceDirective subMid = (MacroInstanceDirective) i.next();
+				for (Iterator j=attribute.getTDPAttributes().iterator(); j.hasNext(); ) {
+					MacroDefinitionAttribute mda = (MacroDefinitionAttribute) j.next();
+					if (mda.isTemplateDefinedParameter())  {
+						validateTemplateAttribute(mda, subMid);
+					}
 				}
 			}
+		}
+		else {
+			if (attribute.isRequired() && null == mid.getAttribute(attribute.getName()))
+				throw new ParseException(mid, "Missing template defined parameter attribute '" + attribute.getName() + "'");
 		}
 	}
 
 	protected void loadTemplateDefinedAttributes (String name, Element e, List l) {
-		if (e instanceof MacroInstanceDirective) {
-			MacroInstanceDirective mid = (MacroInstanceDirective) e;
-			if (null == mid.getNamespace() && mid.getName().equals(name)) l.add(mid);
-		}
-		else {
-			List children = e.getChildren();
-			if (null != e.getChildren())
-				for (Iterator i=children.iterator(); i.hasNext(); ) {
-					loadTemplateDefinedAttributes(name, (Element) i.next(), l);
+		List children = e.getChildren();
+		if (null != e.getChildren()) {
+			for (Iterator i=children.iterator(); i.hasNext(); ) {
+				Element subE = (Element) i.next();
+				if (subE instanceof MacroInstanceDirective) {
+					MacroInstanceDirective mid = (MacroInstanceDirective) subE;
+					if (null == mid.getNamespace() && mid.getName().equals(name)) l.add(mid);
 				}
+				else loadTemplateDefinedAttributes(name, subE, l);
+			}
 		}
 	}
 

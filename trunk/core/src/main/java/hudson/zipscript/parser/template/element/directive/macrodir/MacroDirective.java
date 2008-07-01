@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
+import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -7,9 +8,12 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
+import hudson.zipscript.parser.template.element.special.RequiredIdentifierElement;
+import hudson.zipscript.parser.template.element.special.RequiredIdentifierPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
 
@@ -22,12 +26,20 @@ import java.util.Map;
 
 public class MacroDirective extends NestableElement implements MacroInstanceAware {
 
+	private static PatternMatcher[] MATCHERS;
+	static {
+		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
+		MATCHERS = new PatternMatcher[matchers.length+1];
+		MATCHERS[0] = new RequiredIdentifierPatternMatcher();
+		System.arraycopy(matchers, 0, MATCHERS, 1, matchers.length);
+	}
+
 	private String contents;
 	private String name;
 	private List attributes = new ArrayList();
 	private Map attributeMap = new HashMap();
 	private MacroLibrary macroLibrary;
-	
+
 
 	public MacroDirective (
 			String contents, ParsingSession session, int contentPosition) throws ParseException {
@@ -64,6 +76,10 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 	}
 
+	protected PatternMatcher[] getContentParsingPatternMatchers() {
+		return MATCHERS;
+	}
+
 	public MacroDefinitionAttribute getAttribute (String name) {
 		return (MacroDefinitionAttribute) attributeMap.get(name);
 	}
@@ -77,6 +93,11 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			return null;
 		Element e;
 		e = (Element) elements.remove(0);
+		if (e instanceof RequiredIdentifierElement) {
+			// this attribute is required
+			required = true;
+			e = (Element) elements.remove(0);
+		}
 		if (e instanceof SpecialStringElement)
 			name = ((SpecialStringElement) e).getTokenValue();
 		else if (e instanceof TextElement)

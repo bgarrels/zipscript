@@ -1,4 +1,4 @@
-[#macro tab title page]
+[#macro tab *title *page[*title]]
 	The title is ${title}
 	[#foreach page in page]
 	-- ${page.title} --

@@ -70,10 +70,15 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 		Element lhs = null;
 		int i = 1;
 		while (null == lhs || lhs instanceof WhitespaceElement) {
-			lhs = (Element) elements.remove(index-i);
-			i ++;
-			returnIndex --;
-			checkIndex --;
+			if (index > 0) {
+				lhs = (Element) elements.remove(index-i);
+				i ++;
+				returnIndex --;
+				checkIndex --;
+			}
+			else {
+				throw new ParseException(this, "Improperly formed expression '" + this.toString() + "'");
+			}
 		}
 		setLeftHandSide(lhs);
 
