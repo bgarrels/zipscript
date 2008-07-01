@@ -8,7 +8,6 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 import hudson.zipscript.parser.util.StringUtil;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 

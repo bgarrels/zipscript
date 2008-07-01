@@ -7,7 +7,6 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 

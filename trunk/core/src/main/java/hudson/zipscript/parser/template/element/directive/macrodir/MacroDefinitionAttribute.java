@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import java.util.List;
-
 import hudson.zipscript.parser.template.element.Element;
+
+import java.util.List;
 
 public class MacroDefinitionAttribute {
 

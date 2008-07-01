@@ -10,7 +10,6 @@ import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 

@@ -7,7 +7,6 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.util.SpecialElementNormalizer;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 

@@ -20,7 +20,6 @@ import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.WithPatternMatcher;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
