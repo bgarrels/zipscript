@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,8 +96,9 @@ public class WidgetTestCase extends TestCase {
 
 	private String mergeWithLayout (Template template, Map context)
 	throws ParseException, ExecutionException, IOException {
-		context.put("cssIncludes", new HashMap(3));
-		context.put("scriptIncludes", new HashMap(3));
+		context.put("yuiIncludePrefix", "../yui_resources/build");
+		context.put("cssIncludes", new LinkedHashMap(3));
+		context.put("scriptIncludes", new LinkedHashMap(3));
 		String body = merge(template, context);
 		if (null == layoutTemplate)
 			layoutTemplate = engine.getTemplate("layout.zs");

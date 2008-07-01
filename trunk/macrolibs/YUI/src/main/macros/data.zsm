@@ -1,4 +1,4 @@
-[#macro table id entries column rowHighlight=true]
+[#macro table *id *entries *column[*title key=title?humpbackCase width format selected] rowHighlight=true]
 [#if global.cssIncludes!=null]
 ${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
 [/#if]
@@ -6,7 +6,6 @@ ${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void
 ${global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
 ${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
 [/#if]
-[#foreach column in column]${column.put("key", column.title?humpbackCase)}[/#foreach]
 [#set dataName = "${id}_model"/]
 [#set columnDefName = "${id}_columns"/]
 [#set tableFunction = "${id}_table"/]

@@ -1,4 +1,4 @@
-[#macro treeNode id parent label icon=null isClosed=false node=null href=null tooltip=null]
+[#macro treeNode id parent label icon=null isClosed=false node=null href=null tooltip=null node[]]
 [#set nodeId="${id}_node"/]
 [#if node!=null]
 ${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false});
@@ -10,7 +10,7 @@ ${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false
 [/#if]
 [/#macro]
 
-[#macro view id node]
+[#macro view id node[]]
 [#if global.cssIncludes!=null]
 ${global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")?void}
 [/#if]
