@@ -138,6 +138,9 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		return elements;
 	}
 
+	public void validate(ParsingSession session) throws ParseException {	
+	}
+
 	public List getChildren() {
 		if (null != elements)
 			return elements;

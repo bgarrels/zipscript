@@ -42,17 +42,14 @@ public class MacroManager {
 		}
 	}
 
-	public MacroDirective getMacro (String name, MacroProvider defaultMacroProvider) {
-		int index = name.indexOf('.');
-		if (index == -1) {
+	public MacroDirective getMacro (String name, String namespace, MacroProvider defaultMacroProvider) {
+		if (null == namespace) {
 			if (null != defaultMacroProvider) return defaultMacroProvider.getMacro(name);
 			else return null;
 		}
 		else {
-			String namespace = name.substring(0, index);
-			String macroName = name.substring(index+1, name.length());
 			MacroLibrary lib = (MacroLibrary) macroLibraries.get(namespace);
-			if (null != lib) return lib.getMacro(macroName);
+			if (null != lib) return lib.getMacro(name);
 			else return null;
 		}
 	}

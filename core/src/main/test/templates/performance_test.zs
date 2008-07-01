@@ -17,7 +17,7 @@
 	[/@grid]
 [/#while]
 
-[#macro grid title header data]
+[#macro grid title header[] data]
 	The grid title is ${title}
 	[#if header != null]
 		<tr>

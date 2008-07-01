@@ -2,7 +2,8 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroAttribute;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Iterator;
@@ -85,8 +86,8 @@ public class MacroInstanceEntityContext implements ZSContext {
 		if (null != macroAttributes) {
 			// save any specified attribute values
 			for (java.util.Iterator i=macroAttributes.iterator(); i.hasNext(); ) {
-				MacroAttribute attribute = (MacroAttribute) i.next();
-				Element val = attribute.getDefaultValue();
+				MacroInstanceAttribute attribute = (MacroInstanceAttribute) i.next();
+				Element val = attribute.getValue();
 				if (null != val) {
 					additionalContextEntries.put(attribute.getName(), val.objectValue(context));
 				}

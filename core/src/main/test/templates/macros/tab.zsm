@@ -1,4 +1,4 @@
-[#macro pane id title=null page]
+[#macro pane id title=null page[title selected=null]]
 	<div id="${id}" class="tab">
 		[#if title!=null]
 			<label>${title}</label>

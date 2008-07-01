@@ -52,4 +52,7 @@ public class CommentElement implements Element {
 	public List getChildren() {
 		return null;
 	}
+
+	public void validate(ParsingSession session) throws ParseException {	
+	}
 }

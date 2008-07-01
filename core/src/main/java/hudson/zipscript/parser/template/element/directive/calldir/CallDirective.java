@@ -9,7 +9,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroAttribute;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
@@ -29,6 +29,7 @@ import java.util.List;
 public class CallDirective extends AbstractDirective {
 
 	private String macroName;
+	private String macroNamespace;
 	private MacroDirective macroDirective;
 	private Element withElement;
 	private List additionalAttributes;
@@ -81,7 +82,13 @@ public class CallDirective extends AbstractDirective {
 		}
 		else {
 			macroName = mainElements.get(0).toString();
-			this.macroDirective = session.getMacroManager().getMacro(macroName, session);
+			int index = macroName.indexOf('.');
+			if (index > 0) {
+				String s = macroName;
+				macroNamespace = s.substring(0, index);
+				macroName = s.substring(index+1, s.length());
+			}
+			this.macroDirective = session.getMacroManager().getMacro(macroName, macroNamespace, session);
 			if (null == macroDirective) {
 				// allow for lazy loading
 				// throw new ParseException(contentStartPosition, "Unknown macro '" + macroName + "'");
@@ -94,7 +101,7 @@ public class CallDirective extends AbstractDirective {
 
 		if (null != additionalParameters) {
 			this.additionalAttributes = new ArrayList();
-			MacroAttribute attribute = getAttribute(additionalParameters, session);
+			MacroDefinitionAttribute attribute = getAttribute(additionalParameters, session);
 			while (null != attribute) {
 				additionalAttributes.add(attribute);
 				attribute = getAttribute(additionalParameters, session);
@@ -111,7 +118,7 @@ public class CallDirective extends AbstractDirective {
 		}
 	}
 
-	protected MacroAttribute getAttribute(List elements, ParsingSession session)
+	protected MacroDefinitionAttribute getAttribute(List elements, ParsingSession session)
 	throws ParseException {
 		if (elements.size() == 0) return null;
 
@@ -146,7 +153,7 @@ public class CallDirective extends AbstractDirective {
 						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
-						MacroAttribute attribute = new MacroAttribute(
+						MacroDefinitionAttribute attribute = new MacroDefinitionAttribute(
 								name, e, true);
 						return attribute;
 					}
@@ -200,7 +207,7 @@ public class CallDirective extends AbstractDirective {
 		if (null == macroDirective) {
 			// we might have to lazy load
 			macroDirective = session.getMacroManager().getMacro(
-					macroName, session);
+					macroName, macroNamespace, session);
 		}
 		if (null == macroDirective) {
 			throw new ExecutionException("Unknown macro '" + macroName + "'", this);

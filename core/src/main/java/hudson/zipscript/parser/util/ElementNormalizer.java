@@ -8,6 +8,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstance
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class ElementNormalizer {
@@ -48,6 +49,19 @@ public class ElementNormalizer {
 		}
 		else if (session.getParameters().trim) {
 			trim(elements);
+		}
+
+		for (Iterator i=elements.iterator(); i.hasNext(); ) {
+			validate((Element) i.next(), session);
+		}
+	}
+
+	private static void validate (Element e, ParsingSession session) throws ParseException {
+		e.validate(session);
+		List children = e.getChildren();
+		if (null != children) {
+			for (Iterator i=children.iterator(); i.hasNext(); )
+				validate((Element) i.next(), session);
 		}
 	}
 

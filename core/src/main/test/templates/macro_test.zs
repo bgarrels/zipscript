@@ -7,7 +7,7 @@
 - ${body}
 [/#macro]
 
-[#macro test doit foo]
+[#macro test doit foo[]]
 [#if test1]
 	[#foreach foo in foo]
 		${foo.body}

@@ -7,31 +7,31 @@
 [/@grid]
 
 [@tab id="myId" title="Tab Title 1" callMacro=false]
-	[@page id="page1" title="Page 1" selected=true]
-		This is the page 1 contents
+	[@page id="page1" title="Page 1-1" selected=true]
+		This is the page 1-1 contents
 	[/@page]
-	[@page id="page2" title="Page 2" selected=false]
+	[@page id="page2" title="Page -12" selected=false]
 		[@sectionHeader title=title]
 			section body
 		[/@sectionHeader]
-		This is the page 2 contents
+		This is the page 1-2 contents
 	[/@page]
 [/@tab]
 
-[@tab id="myId" title="Tab Title 2" callMacro=true]
-	[@page id="page1" title="Page 1" selected=true]
-		This is the page 1 contents
+[@tab id="myId" title="Tab Title 1" callMacro=true]
+	[@page id="page1" title="Page 2-1" selected=true]
+		This is the page 2-1 contents
 	[/@page]
-	[@page id="page2" title="Page 2" selected=false]
+	[@page id="page2" title="Page 2-2" selected=false]
 		[@sectionHeader title=title]
 			section body
 		[/@sectionHeader]
-		This is the page 2 contents
+		This is the page 2-2 contents
 	[/@page]
 [/@tab]
 
 
-[#macro grid id entries column]
+[#macro grid id entries column[title]]
 	The grid id is ${id}
 	<table>
 		<tr>
@@ -49,7 +49,7 @@
 	</table>
 [/#macro]
 
-[#macro tab id title page callMacro]
+[#macro tab id title callMacro page[id title selected=false]]
 --- Tab ---
 	Id: ${id}
 	Title: ${title}
@@ -72,4 +72,8 @@
 		Id: ${id}
 		Title: ${title}
 		Selected: ${selected}
+[/#macro]
+
+[#macro sectionHeader title]
+	This is a section - ${title}
 [/#macro]
