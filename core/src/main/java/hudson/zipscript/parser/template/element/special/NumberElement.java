@@ -10,7 +10,6 @@ import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.util.LocaleUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.List;

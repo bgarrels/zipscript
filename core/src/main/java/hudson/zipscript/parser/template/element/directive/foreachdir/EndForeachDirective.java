@@ -4,7 +4,6 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.directive.NestableDirective;
 
-import java.io.StringWriter;
 import java.io.Writer;
 
 public class EndForeachDirective extends NestableDirective {

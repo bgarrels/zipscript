@@ -21,7 +21,6 @@ import hudson.zipscript.parser.template.element.special.InElement;
 import hudson.zipscript.parser.template.element.special.InPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.Enumeration;

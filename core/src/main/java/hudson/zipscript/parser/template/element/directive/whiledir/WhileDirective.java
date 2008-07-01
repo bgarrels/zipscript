@@ -11,7 +11,6 @@ import hudson.zipscript.parser.template.element.directive.LoopingDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;

@@ -6,7 +6,6 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.util.StringUtil;
 
-import java.io.StringWriter;
 import java.io.Writer;
 
 public class GroupElement extends NestableElement {
