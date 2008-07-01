@@ -9,8 +9,8 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
@@ -100,7 +100,7 @@ public class CallDirective extends AbstractDirective {
 
 		if (null != additionalParameters) {
 			this.additionalAttributes = new ArrayList();
-			MacroDefinitionAttribute attribute = getAttribute(additionalParameters, session);
+			MacroInstanceAttribute attribute = getAttribute(additionalParameters, session);
 			while (null != attribute) {
 				additionalAttributes.add(attribute);
 				attribute = getAttribute(additionalParameters, session);
@@ -117,7 +117,7 @@ public class CallDirective extends AbstractDirective {
 		}
 	}
 
-	protected MacroDefinitionAttribute getAttribute(List elements, ParsingSession session)
+	protected MacroInstanceAttribute getAttribute(List elements, ParsingSession session)
 	throws ParseException {
 		if (elements.size() == 0) return null;
 
@@ -152,8 +152,8 @@ public class CallDirective extends AbstractDirective {
 						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
-						MacroDefinitionAttribute attribute = new MacroDefinitionAttribute(
-								name, e, true);
+						MacroInstanceAttribute attribute = new MacroInstanceAttribute(
+								name, e);
 						return attribute;
 					}
 				}

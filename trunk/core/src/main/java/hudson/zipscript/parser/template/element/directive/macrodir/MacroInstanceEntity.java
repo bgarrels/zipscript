@@ -25,7 +25,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			clonedEntries.put(entry.getKey(), entry.getValue());
 		}
 		this.context = new MacroInstanceEntityContext(
-				context, clonedEntries, macroInstance.getAttributes());
+				context, clonedEntries, macroInstance.getAttributes(), macroInstance.getMacroDefinitionAttributes());
 	}
 
 	public MacroInstanceDirective getMacroInstance() {

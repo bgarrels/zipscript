@@ -2,6 +2,7 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
@@ -16,12 +17,14 @@ public class MacroInstanceEntityContext implements ZSContext {
 	private ZSContext postMacroContext;
 	private Map additionalContextEntries;
 	private List macroAttributes;
+	private List macroDefinitionAttributes;
 
 	public MacroInstanceEntityContext (
-			ZSContext preMacroContext, Map additionalContextEntries, List macroAttributes) {
+			ZSContext preMacroContext, Map additionalContextEntries, List macroAttributes, List macroDefinitionAttributes) {
 		this.preMacroContext = preMacroContext;
 		this.additionalContextEntries = additionalContextEntries;
 		this.macroAttributes = macroAttributes;
+		this.macroDefinitionAttributes = macroDefinitionAttributes;
 	}
 
 	public Object get(String key) {
@@ -89,6 +92,17 @@ public class MacroInstanceEntityContext implements ZSContext {
 				Element val = attribute.getValue();
 				if (null != val) {
 					additionalContextEntries.put(attribute.getName(), val.objectValue(context));
+				}
+			}
+			if (null != macroDefinitionAttributes) {
+				for (Iterator i=macroDefinitionAttributes.iterator(); i.hasNext(); ) {
+					MacroDefinitionAttribute attribute = (MacroDefinitionAttribute) i.next();
+					if (null != attribute.getDefaultValue() && null == additionalContextEntries.get(attribute.getName())) {
+						Object val = attribute.getDefaultValue().objectValue(this);
+						if (null != val) {
+							additionalContextEntries.put(attribute.getName(), val);
+						}
+					}
 				}
 			}
 		}

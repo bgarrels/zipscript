@@ -121,6 +121,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			}
 			else {
 				// it is a template defined parameter
+				this.templateDefinedParameterDefinition = attr;
 				List attributes = attr.getTDPAttributes();
 				// make sure all required and/or defaulted attributes are defined
 				for (int i=0; i<attributes.size(); i++) {
@@ -384,5 +385,15 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	public String getFullName () {
 		if (null == namespace) return name;
 		else return namespace + '.' + name;
+	}
+
+	public List getMacroDefinitionAttributes () {
+		if (null != templateDefinedParameterDefinition) {
+			return templateDefinedParameterDefinition.getTDPAttributes();
+		}
+		else if (null != macro) {
+			return macro.getAttributes();
+		}
+		else return baseMacroDefinition.getAttributes();
 	}
 }
