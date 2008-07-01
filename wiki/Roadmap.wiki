@@ -1,0 +1,5 @@
+#summary What will be in the next release and when will it be?
+
+The next release 0.8.3 should be around July 6th
+
+The following features/issues will be addressed: [http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.8.3&can=1 Click here for details]
