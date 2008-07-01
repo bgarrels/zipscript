@@ -180,8 +180,8 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				}
 			}
 			else if (list instanceof Enumeration) {
-				Enumeration enum = (Enumeration) list;
-				if (enum.hasMoreElements()) {
+				Enumeration enumeration = (Enumeration) list;
+				if (enumeration.hasMoreElements()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
 					Integer int0 = new Integer(0);
@@ -189,11 +189,11 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context.put(TOKEN_INDEX, int0);
 					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
-					while (enum.hasMoreElements()) {
-						Object nextVal = enum.nextElement();
+					while (enumeration.hasMoreElements()) {
+						Object nextVal = enumeration.nextElement();
 						additionalContextEntries.put(varName, nextVal);
 						context.put(varName, nextVal);
-						if (enum.hasMoreElements()) {
+						if (enumeration.hasMoreElements()) {
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
 							context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						}
@@ -278,18 +278,18 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				}
 			}
 			else if (list instanceof Enumeration) {
-				Enumeration enum = (Enumeration) list;
-				if (enum.hasMoreElements()) {
+				Enumeration enumeration = (Enumeration) list;
+				if (enumeration.hasMoreElements()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
 					context.put(TOKEN_INDEX, new Integer(0));
 					context.put(TOKEN_HASNEXT, Boolean.TRUE);
-					while (enum.hasMoreElements()) {
+					while (enumeration.hasMoreElements()) {
 						if (getParsingSession().isDebug()) {
 							System.out.println("Executing: " + this.toString() + " (" + i + ")");
 						}
-						context.put(varName, enum.nextElement());
-						if (enum.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						context.put(varName, enumeration.nextElement());
+						if (enumeration.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						appendElements(getChildren(), context, sw);
 						context.put(TOKEN_INDEX, new Integer(++i));
 					}
