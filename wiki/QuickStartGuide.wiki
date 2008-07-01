@@ -2,7 +2,7 @@
 #labels Featured
 
 =Things You Should Know=
-  * No dependencies are required so all you have to do is add the zipscript-core jar to your classpath.
+  * No dependencies are required so all you have to do is add zipscript-core.jar to your classpath.
   * The default resource loading behavior is shown below can be modified: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]
   * The [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/javadoc/hudson/zipscript/ZipEngine.html ZipEngine] is used to retrieve templates or evaluators
 
