@@ -42,7 +42,7 @@ catch (ParseException e) {
 ==Merging static templates with runtime data==
 _the default template resource loader will retrieve the template resource from the classpath_
 {{{
-String templateName = ... // represents a resource from the classpath by default
+String templateName = ... 
 Map context = new HashMap();
 // add business data to the context
 try {
