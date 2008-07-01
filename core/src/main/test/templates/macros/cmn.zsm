@@ -1,4 +1,4 @@
-[#macro page title selected=false]
+[#macro page *title selected=false]
 	<div class="page">
 		${body}
 	</div>

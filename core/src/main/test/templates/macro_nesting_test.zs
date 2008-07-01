@@ -1,4 +1,4 @@
-[#macro test callCommonMacro foo[flipflop bar[title]]]
+[#macro test *callCommonMacro *foo[*flipflop bar[title]]]
 Suff at top
 [#if callCommonMacro]
 	Here's the list
