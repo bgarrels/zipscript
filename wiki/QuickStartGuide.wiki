@@ -1,7 +1,11 @@
 #summary Guide for the impatient.
 #labels Featured
 
-No dependencies are required so all you have to do is add the zipscript-core jar to your classpath.  There are 3 different ways Zipscript can be used:
+  * No dependencies are required so all you have to do is add the zipscript-core jar to your classpath.  There are 3 different ways Zipscript can be used:
+  * Zipscript can be initialized with properties but will work by default, the resource loading behavior is shown below but can be modified: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]
+  * The [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/javadoc/hudson/zipscript/ZipEngine.html ZipEngine] is used to retrieve templates or evaluators
+
+
 
 ==Evaluating static config entries as booleans==
 _the default boolean evaluation resource loader assumes the expression is passed to the getEvaluator method: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]_
