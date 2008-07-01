@@ -2,13 +2,13 @@
 #labels Featured
 
   * No dependencies are required so all you have to do is add the zipscript-core jar to your classpath.  There are 3 different ways Zipscript can be used:
-  * Zipscript can be initialized with properties but will work by default, the resource loading behavior is shown below but can be modified: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]
+  * The default resource loading behavior is shown below can be modified: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]
   * The [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/javadoc/hudson/zipscript/ZipEngine.html ZipEngine] is used to retrieve templates or evaluators
 
 
 
 ==Evaluating static config entries as booleans==
-_the default boolean evaluation resource loader assumes the expression is passed to the getEvaluator method: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]_
+_the default boolean evaluation resource loader assumes the expression is passed to the getEvaluator method_
 {{{
 String expression = "foo != null && bar > 10"; // get the expression to evaluate
 Map context = new HashMap();
@@ -23,7 +23,7 @@ catch (ParseException e) {
 }}}
 
 ==Retrieving runtime objects using static config entries==
-_the default object evaluation resource loader assumes the expression is passed to the getEvaluator method: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]_
+_the default object evaluation resource loader assumes the expression is passed to the getEvaluator method_
 {{{
 String expression = "{foo, bar, baz}"; // get the expression to evaluate - example represents a list
 Map context = new HashMap();
@@ -39,7 +39,7 @@ catch (ParseException e) {
 }}}
 
 ==Merging static templates with runtime data==
-_the default template resource loader will retrieve the template resource from the classpath: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]_
+_the default template resource loader will retrieve the template resource from the classpath_
 {{{
 String templateName = ... // represents a resource from the classpath by default
 Map context = new HashMap();
