@@ -49,8 +49,8 @@
     </copy>
     <junit>
       <classpath refid="classpath.test" />
-      <formatter type="brief" usefile="false" />
-      <test haltonerror="true" outfile="${dist}/src/test/results.txt" name="test.hudson.zipscript.TestSuite" />
+      <formatter type="brief" />
+      <test haltonerror="true" outfile="dist/src/test/test-results" name="test.hudson.zipscript.TestSuite" />
     </junit>
   </target>
 
