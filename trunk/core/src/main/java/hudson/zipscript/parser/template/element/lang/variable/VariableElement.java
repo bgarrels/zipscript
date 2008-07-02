@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -21,13 +22,13 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.util.SessionUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 
 public class VariableElement extends AbstractElement implements Element {
 
@@ -36,12 +37,15 @@ public class VariableElement extends AbstractElement implements Element {
 	private String pattern;
 	private List specialElements;
 
+	private boolean suppressNullErrors;
+
 	public VariableElement (
 			boolean silence, String pattern, ParsingSession session, int contentIndex) throws ParseException {
 		setElementPosition(contentIndex);
 		setElementLength(pattern.length());
 		this.silence = silence;
 		setPattern(pattern, session, contentIndex);
+		this.suppressNullErrors = SessionUtil.getProperty(Constants.SUPPRESS_NULL_ERRORS, false, session);
 	}
 
 	public VariableElement (List elements, ParsingSession session) throws ParseException {
@@ -103,7 +107,10 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 		else {
 			if (!silence) {
-				throw new ExecutionException("Value evaluated as null " + this.toString(), this);
+				if (suppressNullErrors)
+					StringUtil.append(toString(), sw);
+				else
+					throw new ExecutionException("Value evaluated as null " + this.toString(), this);
 			}
 		}
 	}
