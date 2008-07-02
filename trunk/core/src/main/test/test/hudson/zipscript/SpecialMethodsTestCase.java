@@ -7,9 +7,11 @@ import hudson.zipscript.parser.exception.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipInputStream;
 
 import junit.framework.TestCase;
 
@@ -84,6 +86,25 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals(2, c.size());
 		assertEquals("foo_value", c.toArray()[0]);
 		assertEquals("bar_value", c.toArray()[1]);
+	}
+
+	public void testObjectMethods () throws Exception {
+		assertIsMethod("isBoolean", Boolean.TRUE, "not it");
+		assertIsMethod("isDate", new Date(), "not it");
+		assertIsMethod("isNumber", new Integer(1), "not it");
+		assertIsMethod("isString", "this is it", Boolean.TRUE);
+		assertIsMethod("isSequence", new Object[1], "not it");
+		assertIsMethod("isMap", new HashMap(), "not it");
+	}
+
+	private void assertIsMethod(String sm, Object matchVal, Object noMatchVal) throws ParseException {
+		Map context = new HashMap();
+		context.put("shouldMatch", matchVal);
+		context.put("shouldNotMatch", noMatchVal);
+		String query = "shouldMatch?" + sm;
+		assertEquals(true, ZipEngine.getInstance().getEvaluator(query).booleanValue(context));
+		query = "shouldNotMatch?" + sm;
+		assertEquals(false, ZipEngine.getInstance().getEvaluator(query).booleanValue(context));
 	}
 
 	private String merge (String contents, Object context)
