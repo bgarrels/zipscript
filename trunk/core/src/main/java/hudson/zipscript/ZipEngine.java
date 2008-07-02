@@ -101,6 +101,11 @@ public class ZipEngine {
 	private ResourceLoader macroLibResourceloader = templateResourceloader;
 	private ResourceLoader evalResourceLoader = new StringResourceLoader();
 
+	/**
+	 * getInstance should be used
+	 */
+	private ZipEngine () {}
+
 	private static ZipEngine instance;
 	/**
 	 * Use ZipEngine as a singletion
@@ -109,6 +114,16 @@ public class ZipEngine {
 		if (null == instance)
 			instance = new ZipEngine();
 		return instance;
+	}
+
+	public static ZipEngine getInstance (Properties properties) {
+		return getInstance((Map) properties);
+	}
+
+	public static ZipEngine getInstance (Map properties) {
+		ZipEngine zipEngine = new ZipEngine();
+		zipEngine.init(properties);
+		return zipEngine;
 	}
 
 	public static final Component[] TEMPLATE_COMPONENTS = new Component[] {
@@ -152,15 +167,7 @@ public class ZipEngine {
 	 * Initialize with property map
 	 * @param properties
 	 */
-	public void init (Properties properties) {
-		init ((Map) properties);
-	}
-
-	/**
-	 * Initialize with property map
-	 * @param properties
-	 */
-	public void init (Map properties) {
+	private void init (Map properties) {
 		// get the default resource loader
 		String s = (String) properties.get("templateResourceLoader.class");
 		if (null != s) {
