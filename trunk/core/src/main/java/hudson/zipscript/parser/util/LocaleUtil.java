@@ -6,6 +6,6 @@ import java.util.Locale;
 public class LocaleUtil {
 
 	public static char getDecimalSeparator (Locale locale) {
-		return DecimalFormatSymbols.getInstance(locale).getDecimalSeparator();
+		return new DecimalFormatSymbols(locale).getDecimalSeparator();
 	}
 }
