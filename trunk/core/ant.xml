@@ -7,11 +7,13 @@
   <property name="src" location="src/main/java"/>
   <property name="src-test" location="src/main/test"/>
   <property name="build" location="build"/>
+  <property name="build-test" location="build-test"/>
   <property name="dist"  location="dist"/>
 
   <path id="classpath.test">
     <pathelement location="../lib/junit-4.4.jar" />
     <pathelement location="${build}" />
+  	<pathelement location="${build-test}" />
   </path>
 
 
@@ -20,7 +22,7 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
-    <mkdir dir="${dist}"/>
+  	<mkdir dir="${build-test}"/>
     <mkdir dir="${dist}/src/test"/>
     <mkdir dir="${dist}/src/java"/>
     <mkdir dir="${dist}/docs/api"/>
@@ -29,12 +31,9 @@
   <target name="compile-test" depends="compile"
         description="compile the source " >
     <!-- Compile the java test code from ${src-test} into ${build} -->
-    <javac srcdir="${src-test}" destdir="${build}">
+    <javac srcdir="${src-test}" destdir="${build-test}">
     	<classpath refid="classpath.test"/>
     </javac>
-    <copy todir="${build}/templates">
-    	<fileset dir="${src-test}/templates"/>
-    </copy>
   </target>
 
   <target name="compile" depends="init"
@@ -45,10 +44,13 @@
 
   <target name="test" depends="compile-test"
         description="test the source " >
+    <copy todir="${build-test}/templates">
+    	<fileset dir="${src-test}/templates"/>
+    </copy>
     <junit>
       <classpath refid="classpath.test" />
       <formatter type="brief" usefile="false" />
-      <test todir="${dist}/src/test" name="test.hudson.zipscript.TestSuite" />
+      <test haltonerror="true" outfile="${dist}/src/test/results.txt" name="test.hudson.zipscript.TestSuite" />
     </junit>
   </target>
 
@@ -68,6 +70,7 @@
 
   	<!-- cleanup -->
     <delete dir="${build}"/>
+  	<delete dir="${build-test}"/>
   	<delete dir="${dist}/docs"/>
   	<delete dir="${dist}/src"/>
   	<delete file="${dist}/${name}-${version}.jar"/>
