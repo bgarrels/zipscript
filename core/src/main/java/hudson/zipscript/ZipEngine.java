@@ -106,14 +106,11 @@ public class ZipEngine {
 	 */
 	private ZipEngine () {}
 
-	private static ZipEngine instance;
 	/**
 	 * Use ZipEngine as a singletion
 	 */
 	public static ZipEngine getInstance ()  {
-		if (null == instance)
-			instance = new ZipEngine();
-		return instance;
+		return new ZipEngine();
 	}
 
 	public static ZipEngine getInstance (Properties properties) {
