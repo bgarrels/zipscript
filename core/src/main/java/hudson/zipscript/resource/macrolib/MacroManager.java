@@ -28,7 +28,7 @@ public class MacroManager {
 		String contents = IOUtil.toString(resource.getInputStream());
 		ParsingResult pr = ExpressionParser.getInstance().parse(
 				contents, ZipEngine.TEMPLATE_COMPONENTS,
-				TextDefaultElementFactory.INSTANCE, 0, this);
+				TextDefaultElementFactory.INSTANCE, 0, this, null);
 		List l = pr.getElements();
 		MacroLibrary macroLibrary = new MacroLibrary(namespace);
 		for (Iterator i=l.iterator(); i.hasNext(); ) {

@@ -17,6 +17,7 @@ import hudson.zipscript.resource.macrolib.MacroManager;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class ExpressionParser {
@@ -38,9 +39,9 @@ public class ExpressionParser {
 	 */
 	public ParsingResult parse (
 			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
-			int startPosition, MacroManager macroManager)
+			int startPosition, MacroManager macroManager, Map initParameters)
 	throws ParseException {
-		ParseParameters parameters = new ParseParameters(false, false);
+		ParseParameters parameters = new ParseParameters(false, false, initParameters);
 		ParsingSession session = new ParsingSession(parameters, macroManager);
 		return parse(
 				CharBuffer.wrap(contents.toCharArray()),
@@ -82,9 +83,9 @@ public class ExpressionParser {
 	 */
 	public Element parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
-			int startPosition, MacroManager macroManager)
+			int startPosition, MacroManager macroManager, Map initParameters)
 	throws ParseException {
-		ParseParameters parameters = new ParseParameters(true, true);
+		ParseParameters parameters = new ParseParameters(true, true, initParameters);
 		ParsingSession session = new ParsingSession(parameters, macroManager);
 		ParsingResult data = parse(
 				CharBuffer.wrap(contents), getStartTokens(matchers), defaultElementFactory, session, startPosition);
