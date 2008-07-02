@@ -63,6 +63,8 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("ghi", merge("myList?last", context));
 		assertEquals("true", merge("myList?contains('def')", context));
 		assertEquals("false", merge("myList?contains('foo')", context));
+		Object obj = ZipEngine.getInstance().getEvaluator("myList?length").objectValue(context);
+		assertEquals(new Integer(3), obj);
 	}
 
 	public void testMapMethods () throws Exception {

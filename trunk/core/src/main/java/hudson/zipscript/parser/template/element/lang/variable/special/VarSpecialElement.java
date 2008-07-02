@@ -23,6 +23,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.number.Rou
 import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LengthSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.ContainsSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HTMLSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HumpbackCaseSpecialMethod;
@@ -170,7 +171,9 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		}
 		else if (source instanceof Object[]
 		        || source instanceof Collection) {
-			if (method.equals("first"))
+			if (method.equals("length"))
+				return new LengthSpecialMethod();
+			else if (method.equals("first"))
 				return new FirstSpecialMethod();
 			else if (method.equals("last"))
 				return new LastSpecialMethod();
