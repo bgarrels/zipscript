@@ -1,12 +1,11 @@
 <project name="MyProject" default="dist" basedir=".">
 
-  <property name="versionTag" location="0.8.3"/>
-  <property name="moduleName" location="zipscript-core"/>
+  <property name="version" value="0.8.3"/>
+  <property name="name" value="zipscript-core"/>
 
   <!-- set global properties for this build -->
   <property name="src" location="src/main/java"/>
   <property name="src-test" location="src/main/test"/>
-  
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
 
@@ -33,6 +32,9 @@
     <javac srcdir="${src-test}" destdir="${build}">
     	<classpath refid="classpath.test"/>
     </javac>
+    <copy todir="${build}/templates">
+    	<fileset dir="${src-test}/templates"/>
+    </copy>
   </target>
 
   <target name="compile" depends="init"
@@ -46,20 +48,29 @@
     <junit>
       <classpath refid="classpath.test" />
       <formatter type="brief" usefile="false" />
-      <test todir="${dist}/test" name="test.hudson.zipscript.BooleanTestCase" />
+      <test todir="${dist}/src/test" name="test.hudson.zipscript.TestSuite" />
     </junit>
   </target>
 
-  <target name="dist" depends="clean,compile,compile-test,javadoc"
+  <target name="dist" depends="clean,compile,test,javadoc"
         description="generate the distribution" >
-    <jar jarfile="${dist}/zipscript-core-0.8.3.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/${name}-${version}.jar" basedir="${build}"/>
     <copy todir="${dist}/src/java">
     	<fileset dir="${src}"/>
     </copy>
     <copy todir="${dist}/src/test">
     	<fileset dir="${src-test}"/>
     </copy>
+    <copy todir="${dist}/docs" flatten="true">
+    	<fileset dir="src/build"/>
+    </copy>
+  	<zip destfile="${dist}/${name}-${version}.zip" basedir="${dist}"/>
+
+  	<!-- cleanup -->
     <delete dir="${build}"/>
+  	<delete dir="${dist}/docs"/>
+  	<delete dir="${dist}/src"/>
+  	<delete file="${dist}/${name}-${version}.jar"/>
   </target>
 
   <target name="javadoc" depends="init">
