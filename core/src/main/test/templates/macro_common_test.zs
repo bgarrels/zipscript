@@ -8,12 +8,12 @@
 [/#macro]
 
 [#macro commonPages]
-	[@page title="foo"]
+	[.@page title="foo"]
 		foo contents
-	[/@page]
-	[@page title="bar"]
+	[/.@page]
+	[.@page title="bar"]
 		bar contents
-	[/@page]
+	[/.@page]
 [/#macro]
 
 [@tab title="abc"]

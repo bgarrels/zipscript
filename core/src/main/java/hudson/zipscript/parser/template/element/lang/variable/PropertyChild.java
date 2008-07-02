@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class PropertyChild implements VariableChild {
 
+	private static final Object[] NO_PARAMS = new Object[0];
+
 	private static final short TYPE_MAP = 1;
 	private static final short TYPE_CONTEXT = 2;
 	private static final short TYPE_CONTEXT_REQUIRED = 3;
@@ -61,7 +63,7 @@ public class PropertyChild implements VariableChild {
 				return ((ZSContext) parent).get(name);
 			}
 			else {
-				return accessorMethod.invoke(parent, null);
+				return accessorMethod.invoke(parent, NO_PARAMS);
 			}
 		}
 		catch (Exception e) {

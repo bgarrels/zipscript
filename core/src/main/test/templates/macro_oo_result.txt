@@ -27,7 +27,7 @@
 		Selected: true
 	--- Page ---
 		Id: page2
-		Title: Page -12
+		Title: Page 1-2
 		Selected: false
 
 --- Tab ---

@@ -12,6 +12,7 @@ import java.util.Map;
 public class ObjectContextWrapper extends AbstractContext {
 
 	private static final String SET = "SET";
+	private static final Object[] NO_PARAMS = new Object[0];
 
 	private Object object;
 	private Map setMap = new HashMap();
@@ -43,7 +44,7 @@ public class ObjectContextWrapper extends AbstractContext {
 		if (obj instanceof Method) {
 			try {
 				m = (Method) obj;
-				return m.invoke(object, null);
+				return m.invoke(object, NO_PARAMS);
 			}
 			catch (Exception e) {
 				throw new ExecutionException(

@@ -12,10 +12,16 @@ import java.util.List;
 
 public class EndMacroInstanceDirective extends NestableDirective {
 
-	public String name;
+	private String name;
+	private boolean isTemplateDefinedParameterInMacroDefinition;
 
 	public EndMacroInstanceDirective (String name) {
+		this(name, false);
+	}
+
+	public EndMacroInstanceDirective (String name, boolean isTemplateDefinedParameterInMacroDefinition) {
 		this.name = name;
+		this.isTemplateDefinedParameterInMacroDefinition = isTemplateDefinedParameterInMacroDefinition;
 	}
 
 	public String toString() {
@@ -33,5 +39,9 @@ public class EndMacroInstanceDirective extends NestableDirective {
 
 	public String getName() {
 		return name;
+	}
+
+	public boolean isTemplateDefinedParameterInMacroDefinition() {
+		return isTemplateDefinedParameterInMacroDefinition;
 	}
 }

@@ -10,7 +10,7 @@
 	[@page id="page1" title="Page 1-1" selected=true]
 		This is the page 1-1 contents
 	[/@page]
-	[@page id="page2" title="Page -12" selected=false]
+	[@page id="page2" title="Page 1-2" selected=false]
 		[@sectionHeader title=title]
 			section body
 		[/@sectionHeader]

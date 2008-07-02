@@ -101,26 +101,26 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 		}
 	}
 
-	public void getMacroInstances(
+	public void getMatchingTemplateDefinedParameters(
 			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries)
 	throws ExecutionException {
 		boolean done = false;
 		if (ifElement.booleanValue(context)) {
-			appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+			appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			done = true;
 		}
 		if (null != elseifScenarios) {
 			for (int i=0; i<elseifScenarios.size() && !done; i++) {
 				HeaderElementList elements = (HeaderElementList) elseifScenarios.get(i);
 				if (elements.getHeader().booleanValue(context)) {
-					appendMacroInstances(
+					appendTemplateDefinedParameters(
 							elements.getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 					done = true;
 				}
 			}
 		}
 		if (!done && null != elseElements) { 
-			appendMacroInstances(
+			appendTemplateDefinedParameters(
 					elseElements, context, macroInstanceList, macro, additionalContextEntries);
 		}
 	}

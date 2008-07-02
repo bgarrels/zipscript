@@ -19,7 +19,6 @@ import java.util.Map;
 public class WhileDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
 
 	public static final String TOKEN_INDEX = "i";
-//	public static final int MAX_LOOPS = 200000;
 
 	private Element whileElement;
 	private boolean isInMacroDefinition;
@@ -48,14 +47,12 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0));
 		while (whileElement.booleanValue(context)) {
-//			if (i > MAX_LOOPS)
-//				throw new ExecutionException("Max loops limit reached", this);
 			appendElements(getChildren(), context, sw);
 			context.put(TOKEN_INDEX, new Integer(++i));
 		}
 	}
 
-	public void getMacroInstances(
+	public void getMatchingTemplateDefinedParameters(
 			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
@@ -63,9 +60,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		additionalContextEntries.put(TOKEN_INDEX, int0);
 		context.put(TOKEN_INDEX, int0);
 		while (whileElement.booleanValue(context)) {
-//			if (i > MAX_LOOPS)
-//				throw new ExecutionException("Max loops limit reached", this);
-			appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+			appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			Integer index = new Integer(++i);
 			additionalContextEntries.put(TOKEN_INDEX, index);
 			context.put(TOKEN_INDEX, index);

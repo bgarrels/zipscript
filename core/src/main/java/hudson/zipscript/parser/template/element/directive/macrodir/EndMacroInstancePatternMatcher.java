@@ -12,11 +12,14 @@ public class EndMacroInstancePatternMatcher implements PatternMatcher {
 
 	boolean isFlat = false;
 	public char[] getStartToken() {
-		return "[/@".toCharArray();
+		return null;
 	}
 
 	public char[][] getStartTokens() {
-		return null;
+		return new char[][] {
+			"[/.@".toCharArray(),
+			"[/@".toCharArray()
+		};
 	}
 
 	public Element match(char previousChar, char[] startChars,
@@ -39,7 +42,10 @@ public class EndMacroInstancePatternMatcher implements PatternMatcher {
 							reader.get();
 					}
 				}
-				return new EndMacroInstanceDirective(sb.toString().trim());
+				if (startChars.length == 3)
+					return new EndMacroInstanceDirective(sb.toString().trim());
+				else
+					return new EndMacroInstanceDirective(sb.toString().trim(), true);
 			}
 			sb.append(c);
 		}

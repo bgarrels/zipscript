@@ -123,7 +123,7 @@ public abstract class NestableElement extends AbstractDirective {
 		}
 	}
 
-	protected void appendMacroInstances (
+	protected void appendTemplateDefinedParameters (
 			List children, ZSContext context, List macroInstanceList,
 			MacroDirective macro, Map additionalContextEntries) {
 		if (null != children) {
@@ -138,12 +138,12 @@ public abstract class NestableElement extends AbstractDirective {
 					else {
 						// macro that might contain TDPs
 						if (null != mid.getMacroDefinition())
-							mid.getMacroDefinition().getMacroInstances(
+							mid.getMacroDefinition().getMatchingTemplateDefinedParameters(
 									context, macroInstanceList, macro, additionalContextEntries);
 					}
 				}
 				else if (e instanceof MacroInstanceAware) {
-					((MacroInstanceAware) e).getMacroInstances(
+					((MacroInstanceAware) e).getMatchingTemplateDefinedParameters(
 							context, macroInstanceList, macro, additionalContextEntries);
 				}
 			}

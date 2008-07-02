@@ -60,7 +60,7 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 		return null;
 	}
 
-	public void getMacroInstances(ZSContext context, List list,
+	public void getMatchingTemplateDefinedParameters(ZSContext context, List list,
 			MacroDirective macro, Map additionalContextEntries) {
 		additionalContextEntries.put(varName, setElement.objectValue(context));	
 	}
