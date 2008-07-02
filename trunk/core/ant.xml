@@ -65,6 +65,9 @@
     </copy>
     <copy todir="${dist}/docs" flatten="true">
     	<fileset dir="src/build"/>
+	    <filterset>
+	      <filter token="VERSION" value="${version}"/>
+	    </filterset>
     </copy>
   	<zip destfile="${dist}/${name}-${version}.zip" basedir="${dist}"/>
 
