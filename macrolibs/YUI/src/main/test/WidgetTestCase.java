@@ -74,7 +74,7 @@ public class WidgetTestCase extends TestCase {
 	private static ZipEngine engine = null;
 	static {
 		try {
-			engine = new ZipEngine();
+			engine = ZipEngine.getInstance();
 			engine.addMacroLibrary("data", "data.zsm");
 			engine.addMacroLibrary("tab", "tab.zsm");
 			engine.addMacroLibrary("tree", "tree.zsm");
