@@ -20,6 +20,12 @@ import hudson.zipscript.parser.template.element.lang.variable.special.map.Values
 import hudson.zipscript.parser.template.element.lang.variable.special.number.CeilingSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.FloorSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.number.RoundSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsBooleanSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsDateSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsMapSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsNumberSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsSequenceSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.IsStringSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
@@ -103,9 +109,20 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 	protected SpecialMethod initializeSpecialMethod (
 			Object source, ZSContext context) {
 		// object methods
-		if (method.equals("void")) {
+		if (method.equals("void"))
 			return VoidSpecialMethod.INSTANCE;
-		}
+		else if (method.equals("isDate"))
+			return IsDateSpecialMethod.INSTANCE;
+		else if (method.equals("isNumber"))
+			return IsNumberSpecialMethod.INSTANCE;
+		else if (method.equals("isString"))
+			return IsStringSpecialMethod.INSTANCE;
+		else if (method.equals("isBoolean"))
+			return IsBooleanSpecialMethod.INSTANCE;
+		else if (method.equals("isSequence"))
+			return IsSequenceSpecialMethod.INSTANCE;
+		else if (method.equals("isMap"))
+			return IsMapSpecialMethod.INSTANCE;
 		else if (source instanceof MacroInstanceExecutor) {
 			if (method.equals("objectValue"))
 				return new ObjectValueSpecialMethod();
