@@ -18,8 +18,7 @@ public class CommandLineUtil {
 
 		HashMap props = new HashMap();
 		props.put("templateResourceLoader.class", FileResourceLoader.class.getName());
-		ZipEngine engine = new ZipEngine();
-		engine.init(props);
+		ZipEngine engine = ZipEngine.getInstance(props);
 		Writer fw = null;
 		try {
 			fw = new FileWriter(args[0] + ".txt");
