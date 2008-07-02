@@ -99,7 +99,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 		return SpecialVariableDefaultEelementFactory.getInstance();
 	}
 
-	public void getMacroInstances(
+	public void getMatchingTemplateDefinedParameters(
 			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
@@ -121,7 +121,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 						}
 						additionalContextEntries.put(varName, arr[i]);
 						context.put(varName, arr[i]);
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
 						context.put(TOKEN_INDEX, index);
@@ -146,7 +146,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
 							context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						}
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
 						context.put(TOKEN_INDEX, index);
@@ -171,7 +171,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
 							context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						}
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
 						context.put(TOKEN_INDEX, index);
@@ -196,7 +196,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
 							context.put(TOKEN_HASNEXT, Boolean.FALSE);
 						}
-						appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
 						context.put(TOKEN_INDEX, index);
@@ -213,7 +213,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				context.put(TOKEN_HASNEXT, Boolean.FALSE);
 				additionalContextEntries.put(varName, list);
 				context.put(varName, list);
-				appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+				appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			}
 		}
 	}

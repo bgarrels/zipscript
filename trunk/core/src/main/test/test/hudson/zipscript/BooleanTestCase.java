@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class BooleanTestCase extends TestCase {
 
-	public void _testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions () throws Exception {
 		assertEquals(true, eval("true"));
 		assertEquals(false, eval("false"));
 		assertEquals(false, eval("'true'"));

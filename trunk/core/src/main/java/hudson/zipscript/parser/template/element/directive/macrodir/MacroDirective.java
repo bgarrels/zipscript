@@ -211,7 +211,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			System.out.println("Preparing: " + nestedContent.getMacroInstance() + " Substructure");
 		}
 		List tdp = new ArrayList();
-		appendMacroInstances(
+		appendTemplateDefinedParameters(
 				nestedContent.getChildren(), context, tdp, this, new HashMap());
 		if (getParsingSession().isDebug()) {
 			for (Iterator i=tdp.iterator(); i.hasNext(); ) {
@@ -245,9 +245,9 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 	}
 
-	public void getMacroInstances(
+	public void getMatchingTemplateDefinedParameters(
 			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
-		appendMacroInstances(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+		appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 	}
 
 	public MacroDefinitionAttribute getTemplateDefinedParameterAttribute (String name) {

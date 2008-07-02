@@ -11,11 +11,14 @@ import java.nio.CharBuffer;
 public class MacroInstancePatternMatcher implements PatternMatcher {
 
 	public char[] getStartToken() {
-		return "[@".toCharArray();
+		return null;
 	}
 
 	public char[][] getStartTokens() {
-		return null;
+		return new char[][] {
+				"[.@".toCharArray(),
+				"[@".toCharArray()	
+		};
 	}
 
 	public Element match(char previousChar, char[] startChars,
@@ -51,8 +54,14 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 								reader.get();
 						}
 					}
-					return new MacroInstanceDirective(
-							sb.toString(), isFlat, session, reader.position());
+					if (startChars.length == 2) {
+						return new MacroInstanceDirective(
+								sb.toString(), isFlat, session, reader.position());
+					}
+					else {
+						return new MacroInstanceDirective(
+								sb.toString(), isFlat, true, session, reader.position());
+					}
 				}
 			}
 			else if (c == '\\') {

@@ -26,7 +26,7 @@ public class ErrorTestCase extends TestCase {
 		evalResult("variable1.zs", 2, 7, false);
 		evalResult("variable2.zs", 2, 7, false);
 		evalResult("variable3.zs", 2, 7, false);
-		evalResult("variable4.zs", 2, 7, true);
+		evalResult("variable4.zs", 2, 7, false);
 	}
 
 	public void testWhileDirective () {

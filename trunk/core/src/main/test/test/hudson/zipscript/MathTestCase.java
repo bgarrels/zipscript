@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class MathTestCase extends TestCase {
 
-	public void _testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions () throws Exception {
 		assertEquals(new Integer(8), eval("4+3*2-2"));
 		assertEquals(new Long(20), eval("(4+3*2l-2)+6*2"));
 		assertEquals(new Float(2), eval("(20-2*2f-2)-6*2"));
