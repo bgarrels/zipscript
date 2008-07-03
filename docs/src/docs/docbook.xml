@@ -626,20 +626,47 @@ c.2 (2.1) - false
 			</section>
 			<section id="directives_call">
 				<title>Call</title>
-				<para>TODO: Call Directive</para>
+				<para>TODO: Document call directive</para>
 			</section>
 		</chapter>
 		<chapter id="macros">
 			<title>Macros</title>
-			<section id="macros_basics">
-				<title>Basics</title>
+			<section id="macros_overview">
+				<title>What is a Macro?</title>
 				<para>
-					There are 2 parts to a macro:
+					Macros are pre-defined ZipScript code that can be referenced using a directive-like syntax.  They can be used in a few different ways
 					<itemizedlist>
-						<listitem>Macro Definition</listitem>
-						<listitem>Macro Reference</listitem>
+						<listitem>Flat macros: Simple code snippets that can accept parameter input</listitem>
+						<listitem>Nested macros: Code snippets definitions that can reference the nested content inside the macro reference using ${body}</listitem>
+						<listitem>Object-oriented macros: Macros defined as components which can inspect the internal data structure of the macro reference</listitem>
 					</itemizedlist>
-					Macro definitions can occur in the template that the macro instance is called or, if they are common, can be published in a macro library.
+				</para>
+				<para>
+					All macros have the ability to accept parameters.  All required parameters must be defined before (leftmost) all optional parameters.
+					<itemizedlist>
+						<listitem>Required parameters must be prefixed with *</listitem>
+						<listitem>Optional parameters <emphasis>can</emphasis> be assigned a default value using =</listitem>
+						<listitem>Multiple parameters should be separated by a space</listitem>
+					</itemizedlist>
+					Every macro would have a definition and one or more references.  The definition would have the following syntax:
+<programlisting>
+[#macro macroName *requiredParam1 optionalDefaultedParam1="abc" optionalNonDefaultedParam]
+    The macro parameters can be referenced like ${requiredParam1} ${optionalDefaultedParam1} ${optionalNonDefaultedParam!"Some default because param might be null"}
+    The macro body contents can be referenced with ${body} *this is not available for flat macro references*
+[/#macro]
+</programlisting>
+				</para>
+				<para>
+					The syntax of a flat macro reference is:
+<programlisting>
+[@someMacro requiredParam1="foo"/]  &lt;-- named attribute access
+</programlisting>
+					The syntax of a nested macro reference is:
+<programlisting>
+[@someMacro "foo"]  &lt;-- ordinal attribute access
+   This is the macro body
+[/@someMacro]
+</programlisting>
 				</para>
 			</section>
 			<section id="macros_definition">
@@ -695,31 +722,99 @@ See the next section to understand how to reference this macro
 </programlisting>
 				</para>
 				<section id="macros_parameters_template">
-					<title>Template Defined Parameters</title>
+					<title>Object Oriented Macros</title>
 					<para>
-						The real power of the macros is the ability to provide object-oriented parameters that are defined within the body of the
-						macro reference.  This is done using the following example syntax:
+						The real power of the macros is the ability to provide template-defined parameters that are defined within the body of the
+						macro reference which can be evaluated programatically inside the macro definition.  Template-defined parameters use the same
+						format as a standard macro reference.  So, how do you determine if an element is a macro reference or a template-defined parameter?
+						<itemizedlist>
+							<listitem>Template-defined parameters must be defined as parameters with the suffix of [...] for the macro definition.</listitem>
+							<listitem>Template-defined parameters must not have a namespace (no '.' in the macro name)</listitem>
+						</itemizedlist>
+						See the following macro reference:
 <programlisting>
-[@myMacro requiredParam1=someContextVar requiredParam2="foo" optionalStringParam="bar" optionalContextParam=someVar]
-	The content here can be referenced in the definition using the ${body} variable
-	
-	[@innerParam abc="foo" def="bar"]
-		this is the inner param body content
-	[/@innerParam]
-[/@myMacro]
+[@tab.pane id="myTab"]
+	[@page title="Page 1" visible=true]
+		Page 1 contents
+	[/@page]
+	[@page title="Page 2"]
+		Page 2 contents
+	[/@page]
+[/@tab.pane]
 </programlisting>
-						Obviously, the macro would have to deal with this parameter.  This is definied just as a normal parameter would be as well as referenced
-						how a normal parameter would be.  See the example below:
+						Notice that even though the pane macro is in the tab namespace, the page template-defined parameters do not reference the namespace.
+						Now, see the macro definition (which would be in the tab macro library) 
 <programlisting>
-[#macro myMacro innerParam ...]
-	...
-	If we know there is only 1
-	${innerParam.abc} ${innerParam.def} and the body content is ${innerParam.body}
-	If there could be more than 1
-	[#foreach innerParam in innerParam]
-		${innerParam.abc} ${innerParam.def} and the body content is ${innerParam.body}
-	[/#foreach]
+[#macro pane id *page[*title id=title?humpbackCase visible=false]]
+	&lt;div id="${id}" class="tab"&gt;
+		[#foreach page in page]
+			&lt;div id="${page.id}" class="page" [#if visible==false]style="display: none"[/#if]"&gt;
+				&lt;label&gt;${page.title}&lt;/label&gt;
+				$!{page.body}
+			&lt;/div&gt;
+		[/#foreach]
+	&lt;/div&gt;
 [/#macro]
+</programlisting>
+This is what the output would be (I've changed the spacing for readability)
+<programlisting>
+&lt;div id="myTab" class="tab"&gt;
+	&lt;div id="page1" class="page"&gt;
+		Page 1 contents
+	&lt;/div&gt;
+	&lt;div id="page2" class="page" style="display: none"&gt;
+		Page 2 contents
+	&lt;/div&gt;
+&lt;/div&gt;
+</programlisting>
+					</para>
+				</section>
+				<section>
+					<title>Common Template-defined Parameters</title>
+					<para>
+						With the introduction of template-defined parameters, it is beneficial to be able to externalize common template-defined parameters.  This can be
+						done by reference template-defined parameters in a macro with the <code>[.@...</code> syntax.
+					</para>
+					<para>
+						In this reference the commonPages macro is not a template-defined parameter but a standard macro reference with will include template defined parameters. 
+This is what the output would be (I've changed the spacing for readability)
+<programlisting>
+[@tab.pane id="myTab"]
+	[@tab.commonPages/]
+[/@tab.pane]
+</programlisting>
+						Notice that the pane macro has not changed since the previous example.  We have just added the commonPages macro to this library.
+<programlisting>
+[#macro pane id *page[*title id=title?humpbackCase visible=false]]
+	&lt;div id="${id}" class="tab"&gt;
+		[#foreach page in page]
+			&lt;div id="${page.id}" class="page" [#if visible==false]style="display: none"[/#if]"&gt;
+				&lt;label&gt;${page.title}&lt;/label&gt;
+				$!{page.body}
+			&lt;/div&gt;
+		[/#foreach]
+	&lt;/div&gt;
+[/#macro]
+
+[#macro commonPages]
+	[.@page title="Page 1" visible=true]
+		Page 1 contents
+	[/.@page]
+	[.@page title="Page 2"]
+		Page 2 contents
+	[/.@page]
+[/#macro]
+</programlisting>
+And, the output is the same as before
+<programlisting>
+&lt;div id="myTab" class="tab"&gt;
+	&lt;div id="page1" class="page"&gt;
+		Page 1 contents
+	&lt;/div&gt;
+	&lt;div id="page2" class="page" style="display: none"&gt;
+		Page 2 contents
+	&lt;/div&gt;
+&lt;/div&gt;
 </programlisting>
 					</para>
 				</section>
