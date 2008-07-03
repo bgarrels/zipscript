@@ -8,7 +8,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 
 	private String pathPrefix;
 
-	public void config(Map properties) throws InitializationException {
+	public void configure(Map properties) throws InitializationException {
 		pathPrefix = (String) properties.get("pathPrefix");
 	}
 

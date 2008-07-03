@@ -1,12 +1,9 @@
 package hudson.zipscript.resource;
 
-import hudson.zipscript.parser.exception.InitializationException;
+import hudson.zipscript.parser.Configurable;
 
-import java.util.Map;
 
-public interface ResourceLoader {
-
-	public void config (Map properties) throws InitializationException;
+public interface ResourceLoader extends Configurable {
 
 	public Resource getResource(String path);
 }
