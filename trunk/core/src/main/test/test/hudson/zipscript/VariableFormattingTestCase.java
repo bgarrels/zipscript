@@ -25,11 +25,11 @@ public class VariableFormattingTestCase extends TestCase {
 		assertEquals("7/21/75", eval("myDate|short", context));
 		assertEquals("Jul 21, 1975", eval("myDate|medium", context));
 		assertEquals("July 21, 1975", eval("myDate|long", context));
-		assertEquals("10:37 AM", eval("myDate|t:short", context));
-		assertEquals("10:37:18 AM", eval("myDate|t:medium", context));
-		assertEquals("10:37:18 AM EDT", eval("myDate|t:long", context));
-		assertEquals("7/21/75 10:37:18 AM EDT", eval("myDate|short:long", context));
-		assertEquals("Jul 21, 1975 10:37 AM", eval("myDate|medium:short", context));
+		assertEquals("10:37 AM", eval("myDate|t_short", context));
+		assertEquals("10:37:18 AM", eval("myDate|t_medium", context));
+		assertEquals("10:37:18 AM EDT", eval("myDate|t_long", context));
+		assertEquals("7/21/75 10:37:18 AM EDT", eval("myDate|short_long", context));
+		assertEquals("Jul 21, 1975 10:37 AM", eval("myDate|medium_short", context));
 		assertEquals("Jul 21, 1975", eval("myDate|'MMM dd, yyyy'", context));
 		assertEquals("12,345.67", eval("myNumber|'##,###.00'", context));
 		assertEquals("12,345.67", eval("myNumber|number", context));
