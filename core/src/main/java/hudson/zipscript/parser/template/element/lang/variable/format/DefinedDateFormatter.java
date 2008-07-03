@@ -15,6 +15,7 @@ public class DefinedDateFormatter implements Formatter {
 	private Locale locale;
 	private DateFormat formatter;
 	private Map localeFormatters;
+	private char separator = '_';
 
 	public DefinedDateFormatter (String format, Locale locale) {
 		this.format = format;
@@ -40,8 +41,8 @@ public class DefinedDateFormatter implements Formatter {
 	protected DateFormat getDateFormatter (String style, Locale locale) {
 		String p1 = null;
 		String p2 = null;
-		if (style.indexOf(':') > 0) {
-			int index = style.indexOf(':');
+		if (style.indexOf(separator) > 0) {
+			int index = style.indexOf(separator);
 			p1 = style.substring(0, index);
 			p2 = style.substring(index+1, style.length());
 		}
