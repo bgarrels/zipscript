@@ -9,7 +9,6 @@ import hudson.zipscript.parser.template.element.special.DefaultVariablePatternMa
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
-import java.util.HashMap;
 import java.util.List;
 
 

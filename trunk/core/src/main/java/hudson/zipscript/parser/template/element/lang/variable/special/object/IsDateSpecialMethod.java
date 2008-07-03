@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.object;
 
-import java.util.Date;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
+import java.util.Date;
 
 public class IsDateSpecialMethod implements SpecialMethod {
 

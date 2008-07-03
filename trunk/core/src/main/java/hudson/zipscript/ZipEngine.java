@@ -172,7 +172,8 @@ public class ZipEngine {
 		String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
 		if (null != s) {
 			try {
-				this.templateResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
+				this.templateResourceloader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
+						ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
 			}
 			catch (ClassCastException e) {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
@@ -181,7 +182,8 @@ public class ZipEngine {
 		s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
 		if (null != s) {
 			try {
-				this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
+				this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
+						ResourceLoader.class, templateResourceloader.getClass(), Constants.RESOURCE_LOADER_TYPES);
 			}
 			catch (ClassCastException e) {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
@@ -190,7 +192,8 @@ public class ZipEngine {
 		s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
 		if (null != s) {
 			try {
-				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadClass(s, "resource loader", null);
+				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
+						ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
 			}
 			catch (ClassCastException e) {
 				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);

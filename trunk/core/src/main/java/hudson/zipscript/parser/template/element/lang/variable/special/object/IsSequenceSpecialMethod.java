@@ -1,11 +1,11 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.object;
 
+import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
-
-import hudson.zipscript.parser.context.ZSContext;
-import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 public class IsSequenceSpecialMethod implements SpecialMethod {
 

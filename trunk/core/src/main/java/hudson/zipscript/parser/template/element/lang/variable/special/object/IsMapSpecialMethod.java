@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.object;
 
-import java.util.Map;
-
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
+import java.util.Map;
 
 public class IsMapSpecialMethod implements SpecialMethod {
 
