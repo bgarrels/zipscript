@@ -1,11 +1,145 @@
 <?xml version='1.0'?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"> -->
 <set id="zipscript">
 	<index/>
 	<book id="userGuide">
 		<bookinfo>
 			<title>ZipScript User Guide</title>
 		</bookinfo>
+		<chapter id="userGuideGettingStarted">
+			<title>Getting Started</title>
+			<para>
+				This guide is an introduction to writing templates and expression using the ZipScript language.
+			</para>
+			<section id="userGuideBasics">
+				<para>
+					If you need an HTML page that is similar to this:
+<programlisting>
+<html>
+	<head><title>My Page Title</title></head>
+	<body>
+		The error message is: "something bad happened"
+	</body>
+</html>
+</programlisting>
+					There are aspects of this output that could change depending on the situation like the title and message text.  Using the ZipScript
+					engine, you can handle situations like this by creating a template and reference context variables.  The template to reference the
+					output above would look something like this:
+<programlisting>
+<html>
+	<head><title>${title}</title></head>
+	<body>
+		The ${message.type} message is: "${message.text}"
+	</body>
+</html>
+</programlisting>
+				</para>
+				<para>
+					So what does <emphasis>${title}</emphasis>, and <emphasis>${message.type}</emphasis> and <emphasis>${message.text}</emphasis> mean?
+					When the ZipScript merge occurs, a context is used to contain the data model which will be accessed from the template.  The previous
+					template example assumes that the context has 2 entries:
+					<itemizedlist>
+						<listitem><emphasis>title</emphasis>: text equal to "My Page Title"</listitem>
+						<listitem><emphasis>message</emphasis>: A message object containing the following methods / map entries...
+							<itemizedlist>
+								<listitem><emphasis>method: getType() or map attribute: "type"</emphasis>: text equal to "error"</listitem>
+								<listitem><emphasis>method: getText() or map attribute: "text"</emphasis>: text equal to "something bad happened"</listitem>
+							</itemizedlist>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					The templates could be located anywhere including the filesystem or classpath or even remote URL's.  Several resource loaders are
+					included with ZipScript but new ones can be created if the default loaders are not adequate. 
+				</para>
+			</section>
+			<section id="userGuideDataModel">
+				<title>Data Model</title>
+				<para>
+					Assume the following data structure:
+<programlisting>
+&gt;
+ +- myCar
+ |  |
+ |  +- model = "Honda"
+ |  |
+ |  +- numTires = 4
+ |  |
+ |  +- engine
+ |  |  |
+ |  |  +- numCylinders = 4
+ |  |  |
+ |  |  +- horsePower = 135
+ |  |
+ |  +- milesPerGalon = 35
+ |
+ +- driver
+    |
+    +- firstName = "Joe"
+    |
+    +- lastName = "Hudson"
+    |
+    +- children
+       |
+       +- (1st)
+       |  |
+       |  +- firstName = "Clark"
+       |  |
+       |  +- lastName = "Kent"
+       |
+       +- (2nd)
+          |
+          +- firstName = "Bill"
+          |
+          +- lastName = "Bixby"
+</programlisting>
+				</para>
+				<para>
+					<itemizedlist>
+						<listitem>Directory variables (ex: myCar, driver) are called <emphasis>hashes</emphasis></listitem>
+						<listitem>Single-vlue variables (ex: model under myCar) are called <emphasis>scalars</emphasis></listitem>
+						<listitem>List variables (ex: children under driver) are called <emphasis>sequences</emphasis></listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					Variables can be referenced using the syntax <code>${...}</code>
+					To reference any variable in the template the path from the root must be specified.  Each path segment
+					must be separated by a dot.  Sequences allow for additional functionality.  Because they contain a list of
+					items, indexes can be references to retrieved individual sequence elements.  The index is referenced as [0-based number].
+				</para>
+				<para>
+					The following examples reference the previously defined data model.  Note the quotation marks are used to reference output and would not actually be printed.
+<programlisting>
+${myCar.model} will print "Honda"
+${myCar.engine.numCylinders} will print "4"
+${driver.firstName} will print "Joe"
+${driver.children[0].firstName} will print "Bill"
+</programlisting>
+				</para>
+				<para>
+					Scalars can be sub-divided into different groups with different special methods and formatting functions
+					<itemizedlist>
+						<listitem><emphasis>text</emphasis>: an arbitrary sequence of characters</listitem>
+						<listitem><emphasis>number</emphasis>: any type of number</listitem>
+						<listitem><emphasis>date</emphasis>: any type of date</listitem>
+						<listitem><emphasis>boolean</emphasis>: a true/false value</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="gettingStartedTemplateParts">
+				<title>Template Overview</title>
+				<para>
+					There are 5 syntax statements that can be used within a template which will be described in detail later in this guide:
+					<itemizedlist>
+						<listitem><emphasis>variable</emphasis>: Any variable reference</listitem>
+						<listitem><emphasis>comment</emphasis>: A ZipScript comment which would not be printed out in merged results</listitem>
+						<listitem><emphasis>directives</emphasis>: ZipScript instructions which allow conditional evaluation, looping, etc...</listitem>
+						<listitem><emphasis>macros</emphasis>: A nested or flat pre-defined bit of ZipScript language</listitem>
+						<listitem><emphasis>template defined macro parameters</emphasis>: Similar in structure to a macro definition but represents macro input</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+		</chapter>
 	
 		<chapter id="variables">
 			<title>Variables</title>
@@ -13,7 +147,7 @@
 				<title>Overview</title>
 				<para>
 					Variables can be used to reference data from the context.  The standard
-					variable format is ${varName}.  This will assume that a <link linkend="context">context</link> entry with
+					variable format is ${...}.  This will assume that a <link linkend="context">context</link> entry with
 					the key of "varName" exists.  To allow for a nonexisting <link linkend="context">context</link> entry the
 					syntax that should be used is $!{varName}.
 				</para>
@@ -116,19 +250,19 @@
 							<indexterm><primary>dates</primary><secondary>formatting (long)</secondary></indexterm>
 							<listitem>${myDate|long} will print <code>January 01, 2008</code></listitem>
 						</itemizedlist>
-						t:short/t:medium/t:long are used for time formatting
+						t_short/t_medium/t_long are used for time formatting
 						<itemizedlist>
 							<indexterm><primary>dates</primary><secondary>formatting (time short)</secondary></indexterm>
-							<listitem>${myDate|t:short} will print <code>10:37 AM</code></listitem>
+							<listitem>${myDate|t_short} will print <code>10:37 AM</code></listitem>
 							<indexterm><primary>dates</primary><secondary>formatting (time medium)</secondary></indexterm>
-							<listitem>${myDate|t:medium} will print <code>10:37:18 AM</code></listitem>
+							<listitem>${myDate|t_medium} will print <code>10:37:18 AM</code></listitem>
 							<indexterm><primary>dates</primary><secondary>formatting (time long)</secondary></indexterm>
-							<listitem>${myDate|t:long} will print <code>10:37:18 AM EDT</code></listitem>
+							<listitem>${myDate|t_long} will print <code>10:37:18 AM EDT</code></listitem>
 						</itemizedlist>
 						date &amp; time formatting can be used by appending formatting styles
 						<itemizedlist>
 							<indexterm><primary>dates</primary><secondary>formatting (date and time)</secondary></indexterm>
-							<listitem>${myDate|short:long} will print <code>01/01/2008 10:37:18 AM EDT</code></listitem>
+							<listitem>${myDate|short_long} will print <code>01/01/2008 10:37:18 AM EDT</code></listitem>
 						</itemizedlist>
 						Custom formatting can also be used
 						<itemizedlist>
@@ -245,8 +379,22 @@
 						</itemizedlist>
 					</para>
 				</section>
+				<section id="variable_specialMethods_sequences">
+					<title>Dates</title>
+					<para>
+						Assume the <link linkend="context">context</link> value "mySeq" is {"abc", "def", "ghi"}
+						<itemizedlist>
+							<indexterm><primary>sequences</primary><secondary>?contains</secondary></indexterm>
+							<listitem>${mySeq?contains("abc")} will print <code>true</code> (or evaluate to true)</listitem>
+							<indexterm><primary>sequences</primary><secondary>?first</secondary></indexterm>
+							<listitem>${mySeq?first} will print <code>abc</code></listitem>
+							<indexterm><primary>sequences</primary><secondary>?last</secondary></indexterm>
+							<listitem>${mySeq?last} will print <code>ghi</code></listitem>
+						</itemizedlist>
+					</para>
+				</section>
 				<section id="variable_specialMethods_is">
-					<title>"Is" Methods</title>
+					<title>Object Methods</title>
 					<para>
 						<itemizedlist>
 							<indexterm><primary>objects</primary><secondary>?isDate</secondary></indexterm>
@@ -261,8 +409,15 @@
 					</para>
 				</section>
 				<section>
-					<title>Macros</title>
-					<para>TODO: macro special methods</para>
+					<title>Template Defined Macro Parameters</title>
+					<para>
+						Assume the following macro reference:
+						[@foo]
+							${someNumber}
+						[/@foo]
+						<indexterm><primary>macros</primary><secondary>?objectValue</secondary></indexterm>
+						<listitem>${body?objectValue} (in the foo macro definition) will be the number that someNumber represents</listitem>
+					</para>
 				</section>
 			</section>
 		</chapter>
@@ -490,7 +645,7 @@ c.2 (2.1) - false
 			<section id="macros_definition">
 				<title>Macro Definitions</title>
 				<para>
-					The syntax for a macro definition is <code>[#macro macroName ...] macro body content [/#macro].
+					The syntax for a macro definition is <code>[#macro macroName ...]</code> macro body content [/#macro].
 				</para>
 				<para>
 					<itemizedlist>
@@ -513,7 +668,7 @@ c.2 (2.1) - false
 			the list value is ${entry}
 		[/#foreach]
 	[/#if]
-	The last param is ${optionalContextParam} <-- an ExecutionException will be thrown if this value is null
+	The last param is ${optionalContextParam} &lt;-- an ExecutionException will be thrown if this value is null
 
 	The nested content of the macro reference is ${body}
 [/#macro]
