@@ -11,7 +11,7 @@
   <property name="dist"  location="dist"/>
 
   <path id="classpath.test">
-    <pathelement location="../lib/junit-4.4.jar" />
+    <pathelement location="../lib/junit-3.8.2.jar" />
     <pathelement location="${build}" />
   	<pathelement location="${build-test}" />
   </path>
@@ -50,7 +50,20 @@
     <junit>
       <classpath refid="classpath.test" />
       <formatter type="brief" />
-      <test haltonerror="true" outfile="dist/src/test/test-results" name="test.hudson.zipscript.TestSuite" />
+		<test haltonerror="false" outfile="dist/src/test/BooleanTestCase-results" name="test.hudson.zipscript.BooleanTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/DirectiveTestCase-results" name="test.hudson.zipscript.DirectiveTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/ErrorTestCase-results" name="test.hudson.zipscript.ErrorTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/InitPropertiesTestCase-results" name="test.hudson.zipscript.InitPropertiesTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/ListTestCase-results" name="test.hudson.zipscript.ListTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/LogicTestCase-results" name="test.hudson.zipscript.LogicTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/MacroLibTestCase-results" name="test.hudson.zipscript.MacroLibTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/MacroTestCase-results" name="test.hudson.zipscript.MacroTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/MathTestCase-results" name="test.hudson.zipscript.MathTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/PerformanceTestCase-results" name="test.hudson.zipscript.PerformanceTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/SpecialMethodsTestCase-results" name="test.hudson.zipscript.SpecialMethodsTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/VariableDefaultsTestCase-results" name="test.hudson.zipscript.VariableDefaultsTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/VariableFormattingTestCase-results" name="test.hudson.zipscript.VariableFormattingTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/VariableTestCase-results" name="test.hudson.zipscript.VariableTestCase" />
     </junit>
   </target>
 
