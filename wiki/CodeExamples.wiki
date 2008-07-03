@@ -1,0 +1,97 @@
+#summary One-sentence summary of this page.
+#labels Featured
+
+=A Few Variable Examples=
+{{{
+   ${person.firstName}
+   ${person.age + 10}
+   ${person.children[0]!"No Children"}
+   ${person.birthDate|short}
+   ${person.firstName?upperCase}
+}}}
+
+=A Few Directive Examples=
+{{{
+[#if foo > bar && abc != "def"]
+   [#while i<5]
+      this will print 5 times ${i} is the 0-based index
+   [/#while]
+[#elseif someClassName?split('.')?length > 3]
+   [#foreach entry in {foo, bar, baz}]
+      this will loop through the list containing foo, bar and baz
+      ${i} is the index; ${hasNext} shows if there are more elements in the list
+      [#while someCondition]
+          ${super.i} is the index of the foreach list
+          ${i} is the index of the while list
+      [/#while]
+   [/#foreach]
+[#else]
+    [@someFlatMacro abc=def ghi="jkl" mno=3/]
+    [@someNestedMacro abc=def ghi="jkl" mno=3/]
+       This is the macro body content
+    [/@someNestedMacro]
+[/#if]
+}}}
+
+=YUI Macro Examples=
+I've create some reference macros to help show the power of this language.  These examples use macros created which wrap the Yahoo User Interface javascript components.
+
+*Data Table*
+{{{
+[@data.table id="myTable" entries=people]
+	[@column title="First Name" width=150]${entry.firstName}[/@column]
+	[@column title="Last Name" width=150]${entry.lastName}[/@column]
+	[@column title="Birthday" format="date"]${entry.birthday?jsDate}[/@column]
+	[@column title="# Accounts" format="number"]${entry.numAccounts}[/@column]
+	[@column title="Net Worth" format="currency"]${entry.netWorth}[/@column]
+	[@column title="Some Hidden Column" hidden=true]It doesn't matter what is here[/@column]
+[/@data.table]
+}}}
+  * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/datatable_result.html View output]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/data.zsm View referenced zipscript macro]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#21 view unit test producing these results]
+
+*Tab Pane*
+{{{
+[@tab.pane id="myTab"]
+	[@page label="Some Page" active=true]
+		These are the contents of some page...
+		<p>
+			Blah blah blah...
+		</p> 
+	[/@page]
+	[#while i<2]
+		[@page label="Page ${i+1}"]
+			This is the contents of page ${i+1}
+		[/@page]
+	[/#while]
+	[#foreach item in {"A","B","C"}]
+		[@page label='Page "${item}"']
+			This is the contents of page "${item}"
+		[/@page]
+	[/#foreach]
+[/@tab.pane]
+}}}
+  * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/tab_result.html View output]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/tab.zsm View referenced zipscript macro]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#34 view unit test producing these results]
+
+*Tree View* _Notice the recursive functionality_
+{{{
+[@tree.view id="myTree"]
+	[@node id="n1" label="Label 1" href="http://www.google.com"]
+		[@node id="n1_1" label="Label 1.1"/]
+		[@node id="n1_2" label="Label 1.2" tooltip="This is a tooltip"/]
+		[@node id="n1_3" label="Label 1.3" tooltip="This is another tooltip"]
+			[@node id="n1_3_1" label="Label 1.3.1"/]
+		[/@node]
+	[/@node]
+	[@node id="n2" label="Label 2"]
+		[@node id="n2_1" label="Label 2.1" href="http://www.google.com"/]
+	[/@node]
+	[@node id="n3" label="Label 3" href="http://www.google.com"/]
+[/@tree.view]
+}}}
+  * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/tree_result.html View output]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/tree.zsm View referenced zipscript macro]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#41 view unit test producing these results]
