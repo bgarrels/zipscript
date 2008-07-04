@@ -20,10 +20,11 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
 		Map clonedEntries = new HashMap();
 		// save any looping context values
-		for (Iterator i=additionalContextEntries.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry) i.next();
-			clonedEntries.put(entry.getKey(), entry.getValue());
-		}
+		if (null != additionalContextEntries)
+			for (Iterator i=additionalContextEntries.entrySet().iterator(); i.hasNext(); ) {
+				Map.Entry entry = (Map.Entry) i.next();
+				clonedEntries.put(entry.getKey(), entry.getValue());
+			}
 		this.context = new MacroInstanceEntityContext(
 				context, clonedEntries, macroInstance.getAttributes(), macroInstance.getMacroDefinitionAttributes());
 	}

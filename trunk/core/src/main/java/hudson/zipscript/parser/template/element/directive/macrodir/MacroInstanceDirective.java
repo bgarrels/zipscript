@@ -165,7 +165,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 						if (attribute.isTemplateDefinedParameter()) {
 							validateTemplateAttribute(attribute, this);
 						}
-						else if (null == attribute.getDefaultValue() && null == getAttribute(attribute.getName())) {
+						else if (attribute.isRequired() && null == attribute.getDefaultValue() && null == getAttribute(attribute.getName())) {
 							// it's required
 							throw new ParseException(contentPosition, "Undefined required macro attriute '" + attribute.getName() + "'");
 						}

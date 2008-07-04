@@ -40,7 +40,6 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	private Map attributeMap = new HashMap();
 	private MacroLibrary macroLibrary;
 
-
 	public MacroDirective (
 			String contents, ParsingSession session, int contentPosition) throws ParseException {
 		this.contents = contents;
@@ -204,6 +203,8 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		
 		context.put("body", nestedContent);
+		MacroInstanceEntity mie = new MacroInstanceEntity(nestedContent.getMacroInstance(), context, null);
+		context.put("this", mie);
 		context.put("global", parentContext.getRootContext());
 
 		// add template defined parameters
@@ -220,7 +221,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
-			MacroInstanceEntity mie = (MacroInstanceEntity) i.next();
+			mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(mie.getMacroInstance().getName());
 			if (null == obj) {
 				context.put(mie.getMacroInstance().getName(), mie);

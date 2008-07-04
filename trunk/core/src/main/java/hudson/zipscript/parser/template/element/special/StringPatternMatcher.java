@@ -41,4 +41,8 @@ public class StringPatternMatcher extends AbstractPatternMatcher {
 	protected char[] getEndChars() {
 		return null;
 	}
+
+	protected boolean allowEmpty() {
+		return true;
+	}
 }
