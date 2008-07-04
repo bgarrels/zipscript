@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class WidgetTestCase extends TestCase {
 
-	public void testDataTableWidget () throws Exception {
+	public void _testDataTableWidget () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add(new Person("Bill", "Cosby", "12/03/95", 8, new BigDecimal(1429978.76)));
@@ -32,21 +32,28 @@ public class WidgetTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testTabWidget () throws Exception {
+	public void _testTabWidget () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "tab.zs";
 		String resultFile = "/tab_result.html";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testTreeWidget () throws Exception {
+	public void _testTreeWidget () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "tree.zs";
 		String resultFile = "/tree_result.html";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testAllWidgets () throws Exception {
+	public void testAutoCompleteWidget () throws Exception {
+		Map context = new HashMap();
+		String mergeTemplate = "autoComplete.zs";
+		String resultFile = "/autoComplete_result.html";
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void _testAllWidgets () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add(new Person("Bill", "Cosby", "12/03/95", 8, new BigDecimal(1429978.76)));
@@ -75,9 +82,10 @@ public class WidgetTestCase extends TestCase {
 	static {
 		try {
 			engine = ZipEngine.getInstance();
-			engine.addMacroLibrary("data", "data.zsm");
-			engine.addMacroLibrary("tab", "tab.zsm");
-			engine.addMacroLibrary("tree", "tree.zsm");
+//			engine.addMacroLibrary("data", "data.zsm");
+//			engine.addMacroLibrary("tab", "tab.zsm");
+//			engine.addMacroLibrary("tree", "tree.zsm");
+			engine.addMacroLibrary("input", "input.zsm");
 		}
 		catch (ParseException e) {
 			e.printStackTrace();
