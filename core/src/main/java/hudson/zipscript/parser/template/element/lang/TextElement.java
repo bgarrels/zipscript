@@ -23,6 +23,7 @@ import java.util.List;
 
 public class TextElement extends AbstractElement implements Element {
 
+	private static final String EMPTY = "";
 	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] {
 		new VariablePatternMatcher(),
 		new VarDefaultElementPatternMatcher(),
@@ -53,7 +54,8 @@ public class TextElement extends AbstractElement implements Element {
 				return sw.toString();
 			}
 			else {
-				return ((Element) getChildren().get(0)).objectValue(context);
+				if (getChildren().size() == 0) return EMPTY;
+				else return ((Element) getChildren().get(0)).objectValue(context);
 			}
 		}
 		else {

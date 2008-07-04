@@ -19,6 +19,7 @@ import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.template.element.special.WithPatternMatcher;
+import hudson.zipscript.resource.macrolib.MacroProvider;
 
 import java.io.Writer;
 import java.util.ArrayList;
@@ -32,6 +33,10 @@ public class CallDirective extends AbstractDirective {
 	private MacroDirective macroDirective;
 	private Element withElement;
 	private List additionalAttributes;
+	private MacroDirective inMacroDirective;
+
+	private String contents;
+	private int contentStartPosition;
 
 	private static PatternMatcher[] MATCHERS;
 	static {
@@ -44,11 +49,21 @@ public class CallDirective extends AbstractDirective {
 	public CallDirective (String contents, ParsingSession session, int contentStartPosition)
 	throws ParseException {
 		setParsingSession(session);
-		parseContents(contents, session, contentStartPosition);
+		this.contents = contents;
+		this.contentStartPosition = contentStartPosition;
 	}
 
-	private void parseContents (String contents, ParsingSession session, int contentStartPosition)
-	throws ParseException {
+	public void validate(ParsingSession session) throws ParseException {
+		// we must be within a macro definition
+		for (int i=session.getNestingStack().size()-1; i>=0; i--) {
+			if (session.getNestingStack().get(i) instanceof MacroDirective) {
+				inMacroDirective = (MacroDirective) session.getNestingStack().get(i);
+				break;
+			}
+		}
+		if (null == inMacroDirective)
+			throw new ParseException(this, "[#call] directives can only used within a [#macro] directive");
+		
 		StringBuffer sb = new StringBuffer();
 		List mainElements = new ArrayList();
 		List additionalParameters = null;
@@ -88,10 +103,6 @@ public class CallDirective extends AbstractDirective {
 				macroName = s.substring(index+1, s.length());
 			}
 			this.macroDirective = session.getMacroManager().getMacro(macroName, macroNamespace, session);
-			if (null == macroDirective) {
-				// allow for lazy loading
-				// throw new ParseException(contentStartPosition, "Unknown macro '" + macroName + "'");
-			}
 			if (!mainElements.get(1).equals("with"))
 				throw new ParseException(contentStartPosition, "Invalid call directive.  Should be [#call macroName with macroVariable/]");
 
@@ -205,8 +216,11 @@ public class CallDirective extends AbstractDirective {
 	protected MacroDirective getMacroDirective (ParsingSession session) {
 		if (null == macroDirective) {
 			// we might have to lazy load
+			MacroProvider macroProvider = session;
+			if (null != inMacroDirective.getMacroLibrary())
+				macroProvider = inMacroDirective.getMacroLibrary();
 			macroDirective = session.getMacroManager().getMacro(
-					macroName, macroNamespace, session);
+					macroName, macroNamespace, macroProvider);
 		}
 		if (null == macroDirective) {
 			throw new ExecutionException("Unknown macro '" + macroName + "'", this);
