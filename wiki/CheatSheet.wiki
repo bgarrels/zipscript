@@ -8,7 +8,7 @@
 
 =Zipscript Usages=
 
-==Evaluating static config entries as booleans==
+==Evaluating config entries as booleans==
 _the default boolean evaluation resource loader assumes the expression is passed to the getEvaluator method_
 {{{
 String expression = "foo != null && bar > 10"; // get the expression to evaluate
@@ -23,7 +23,7 @@ catch (ParseException e) {
 }
 }}}
 
-==Retrieving runtime objects using static config entries==
+==Retrieving runtime objects using config entries==
 _the default object evaluation resource loader assumes the expression is passed to the getEvaluator method_
 {{{
 String expression = "{foo, bar, baz}"; // get the expression to evaluate - example represents a list
@@ -39,7 +39,7 @@ catch (ParseException e) {
 }
 }}}
 
-==Merging static templates with runtime data==
+==Merging templates with runtime data==
 _the default template resource loader will retrieve the template resource from the classpath_
 {{{
 String templateName = ... 
