@@ -98,6 +98,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 				}
 			}
 		}
+		else {
+			isOrdinal = false;
+		}
 	}
 
 	public void validate (ParsingSession session) throws ParseException {
