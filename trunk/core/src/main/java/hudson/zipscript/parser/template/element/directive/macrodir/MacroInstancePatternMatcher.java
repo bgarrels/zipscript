@@ -9,32 +9,21 @@ import java.nio.CharBuffer;
 import java.util.List;
 
 
-public class MacroInstanceHeaderFooterPatternMatcher implements PatternMatcher {
+public class MacroInstancePatternMatcher implements PatternMatcher {
 
 	public char[] getStartToken() {
-		return "[[".toCharArray();
+		return null;
 	}
 
 	public char[][] getStartTokens() {
-		return null;
+		return new char[][] {
+				"[.@".toCharArray(),
+				"[@".toCharArray()	
+		};
 	}
 
 	public Element match(char previousChar, char[] startChars, CharBuffer reader,
 			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
-		if (elements.size() > 0
-				&& elements.get(elements.size()-1) instanceof MacroInstanceDirective
-				&& unmatchedChars.toString().trim().length() == 0) {
-			int nesting = 1;
-			previousChar = Character.MIN_VALUE;
-			StringBuffer sb = new StringBuffer();
-			while (reader.hasRemaining()) {
-				
-			}
-			
-			
-		}
-		else return null;
-		
 		boolean isFlat = false;
 		int nesting = 1;
 		previousChar = Character.MIN_VALUE;
