@@ -5,9 +5,9 @@
 {{{
    ${person.firstName}  <-- standard variable reference
    ${person.age + 10}  <-- math can be performed inside variable references
-   ${person.children[0].fullName!"No Children"}  <-- variable defaults using {{{!'}}}
-   ${person.birthDate|short}  <-- variable formatting using {{{|}}}
-   ${person.firstName?upperCase}  <-- variable special methods using {{{?}}}
+   ${person.children[0].fullName!"No Children"}  <-- variable defaults using '!'
+   ${person.birthDate|short}  <-- variable formatting using '|'
+   ${person.firstName?upperCase}  <-- variable special methods using '?'
 }}}
 
 =A Few Directive Examples=
