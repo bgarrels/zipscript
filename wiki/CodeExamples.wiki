@@ -1,5 +1,4 @@
-#summary One-sentence summary of this page.
-#labels Featured
+#Examples of the Zipscript language.
 
 =A Few Variable Examples=
 {{{
