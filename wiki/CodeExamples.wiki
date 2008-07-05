@@ -5,7 +5,7 @@
 {{{
    ${person.firstName}  <-- standard variable reference
    ${person.age + 10}  <-- math can be performed inside variable references
-   ${person.children[0]!"No Children"}  <-- variable defaults
+   ${person.children[0].fullName!"No Children"}  <-- variable defaults
    ${person.birthDate|short}  <-- variable formatting
    ${person.firstName?upperCase}  <-- variable special methods
 }}}
