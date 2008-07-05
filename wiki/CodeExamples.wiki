@@ -1,4 +1,5 @@
-#Examples of the Zipscript language.
+#summary Examples of the Zipscript language.
+#labels Featured
 
 =A Few Variable Examples=
 {{{
