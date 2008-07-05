@@ -4,6 +4,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 
 public abstract class AbstractPatternMatcher implements PatternMatcher {
@@ -78,7 +79,8 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 	}
 
 	public Element match(
-			char previousChar, char[] startChars, CharBuffer contents, ParsingSession parseData) throws ParseException {
+			char previousChar, char[] startChars, CharBuffer contents,
+			ParsingSession parseData, List elements, StringBuffer unmatchedChars) throws ParseException {
 		int position = contents.position();
 		char[] endChars = getEndChars();
 		int length = findMatch (contents, startChars, endChars, getInvalidChars(), true);

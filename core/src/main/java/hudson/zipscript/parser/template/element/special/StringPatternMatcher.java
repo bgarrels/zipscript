@@ -7,6 +7,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class StringPatternMatcher extends AbstractPatternMatcher {
 
@@ -15,8 +16,8 @@ public class StringPatternMatcher extends AbstractPatternMatcher {
 		return new TextElement(s, true);
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer contents, ParsingSession parseData)
+	public Element match(char previousChar, char[] startChars, CharBuffer contents,
+			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
 	throws ParseException {
 		int position = contents.position();
 		char[] endChars = getEndChars();

@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class VarSpecialElementPatternMatcher implements PatternMatcher {
 
@@ -17,9 +18,8 @@ public class VarSpecialElementPatternMatcher implements PatternMatcher {
 		return null;
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
 		if (previousChar != ' ') {
 			return new VarSpecialElement();
 		}

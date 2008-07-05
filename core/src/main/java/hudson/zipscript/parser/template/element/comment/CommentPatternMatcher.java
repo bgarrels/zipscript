@@ -6,13 +6,14 @@ import hudson.zipscript.parser.template.element.AbstractPatternMatcher;
 import hudson.zipscript.parser.template.element.Element;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class CommentPatternMatcher extends AbstractPatternMatcher {
 
 	public Element match(char previousChar, char[] startChars,
-			CharBuffer contents, ParsingSession parseData)
+			CharBuffer contents, ParsingSession parseData, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
-		Element e = super.match(previousChar, startChars, contents, parseData);
+		Element e = super.match(previousChar, startChars, contents, parseData, elements, unmatchedChars);
 		if (null != e && contents.hasRemaining()) {
 			if (contents.charAt(0) == '\r')
 				contents.get();

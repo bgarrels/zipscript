@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 
 public class ListPatternMatcher implements PatternMatcher {
@@ -21,8 +22,8 @@ public class ListPatternMatcher implements PatternMatcher {
 		return null;
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer contents, ParsingSession session)
+	public Element match(char previousChar, char[] startChars, CharBuffer contents,
+			ParsingSession session, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
 		if (startChars[0] == '{')
 			return new ListElement();

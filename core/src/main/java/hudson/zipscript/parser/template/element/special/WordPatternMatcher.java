@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public abstract class WordPatternMatcher implements PatternMatcher {
 
@@ -19,8 +20,8 @@ public abstract class WordPatternMatcher implements PatternMatcher {
 		return getWord().toCharArray();
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars)
 	throws ParseException {
 		if (Character.isWhitespace(previousChar) || Character.MIN_VALUE == previousChar) {
 			if (reader.length() == 0 || Character.isWhitespace(reader.charAt(0))) {

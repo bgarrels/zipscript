@@ -4,6 +4,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 /**
  * Used for matching a expression resource pattern
@@ -25,13 +26,16 @@ public interface PatternMatcher {
 
 	/**
 	 * Called if the document matched this pattern mather's start token
-	 * @param previousChar
-	 * @param startChars
-	 * @param reader
-	 * @param parseData
-	 * @return
+	 * @param previousChar the previously read character (or Character.MIN_VALUE if first char)
+	 * @param startChars the start characters which executed this pattern matcher
+	 * @param reader the template contents
+	 * @param session the parsing session
+	 * @param elements previously matched elements
+	 * @param unmatched any characters after the last element in the list that do not belong to an element
+	 * @return an element match or null if no match
 	 * @throws ParseException
 	 */
 	public Element match (
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession parseData) throws ParseException;
+			char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException;
 }

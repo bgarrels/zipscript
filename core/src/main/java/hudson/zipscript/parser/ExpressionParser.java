@@ -145,7 +145,7 @@ public class ExpressionParser {
 							for (int j=1; j<startTokenEntry.startToken.length; j++)
 								buffer.get();
 							Element e = startTokenEntry.patternMatcher.match(
-									previousChar, startTokenEntry.startToken, buffer, session);
+									previousChar, startTokenEntry.startToken, buffer, session, elements, unmatchedChars);
 							
 							if (null != e) {
 								e.setElementPosition(position + startPosition);
