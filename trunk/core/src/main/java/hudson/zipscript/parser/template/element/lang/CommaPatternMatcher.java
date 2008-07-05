@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class CommaPatternMatcher implements PatternMatcher {
 
@@ -18,7 +19,8 @@ public class CommaPatternMatcher implements PatternMatcher {
 	}
 
 	public Element match(
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
+			char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
 		return new CommaElement();
 	}

@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class InComparatorPatternMatcher implements PatternMatcher {
 
@@ -20,7 +21,8 @@ public class InComparatorPatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader, ParsingSession parseData)
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
 		if (startChars.length == 4)
 			return new InExpression();

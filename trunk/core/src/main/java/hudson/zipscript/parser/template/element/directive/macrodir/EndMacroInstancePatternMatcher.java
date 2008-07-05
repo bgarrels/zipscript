@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 
 public class EndMacroInstancePatternMatcher implements PatternMatcher {
@@ -22,8 +23,8 @@ public class EndMacroInstancePatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars,
-			CharBuffer reader, ParsingSession session) throws ParseException {
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
 		StringBuffer sb = new StringBuffer();
 		while (reader.hasRemaining()) {
 			char c = reader.get();

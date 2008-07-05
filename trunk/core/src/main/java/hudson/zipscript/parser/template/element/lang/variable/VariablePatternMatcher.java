@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 
 public class VariablePatternMatcher implements PatternMatcher {
@@ -18,9 +19,8 @@ public class VariablePatternMatcher implements PatternMatcher {
 		return new char[][]{"${".toCharArray(), "$!{".toCharArray()};
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
 		StringBuffer sb = new StringBuffer();
 		int nesting = 1;
 		boolean inString = false;

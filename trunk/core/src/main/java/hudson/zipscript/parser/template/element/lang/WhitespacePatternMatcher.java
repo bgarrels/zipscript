@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class WhitespacePatternMatcher implements PatternMatcher {
 
@@ -22,8 +23,8 @@ public class WhitespacePatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(
-			char previousChar, char[] startChars, CharBuffer reader, ParsingSession session)
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
 		return new WhitespaceElementImpl();
 	}

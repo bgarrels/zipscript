@@ -6,23 +6,21 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 
-public class MacroInstancePatternMatcher implements PatternMatcher {
+public class MacroInstanceHeaderFooterPatternMatcher implements PatternMatcher {
 
 	public char[] getStartToken() {
-		return null;
+		return "[[".toCharArray();
 	}
 
 	public char[][] getStartTokens() {
-		return new char[][] {
-				"[.@".toCharArray(),
-				"[@".toCharArray()	
-		};
+		return null;
 	}
 
-	public Element match(char previousChar, char[] startChars,
-			CharBuffer reader, ParsingSession session) throws ParseException {
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
 		boolean isFlat = false;
 		int nesting = 1;
 		previousChar = Character.MIN_VALUE;

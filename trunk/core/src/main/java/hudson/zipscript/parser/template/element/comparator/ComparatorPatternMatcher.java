@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class ComparatorPatternMatcher implements PatternMatcher {
 
@@ -22,7 +23,8 @@ public class ComparatorPatternMatcher implements PatternMatcher {
 		};
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader, ParsingSession parseData)
+	public Element match(char previousChar, char[] startChars, CharBuffer reader,
+			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
 			throws ParseException {
 		if (startChars.length == 2) {
 			// we have the full pattern

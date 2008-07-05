@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 
 import java.nio.CharBuffer;
+import java.util.List;
 
 public class RequiredIdentifierPatternMatcher implements PatternMatcher {
 
@@ -17,8 +18,8 @@ public class RequiredIdentifierPatternMatcher implements PatternMatcher {
 		return null;
 	}
 
-	public Element match(char previousChar, char[] startChars,
-			CharBuffer reader, ParsingSession parseData) throws ParseException {
+	public Element match(char previousChar, char[] startChars,CharBuffer reader,
+			ParsingSession parseData, List elements, StringBuffer unmatchedChars) throws ParseException {
 		if (Character.isWhitespace(previousChar) || previousChar == '[') {
 			if (reader.hasRemaining()) {
 				char c = reader.charAt(0);
