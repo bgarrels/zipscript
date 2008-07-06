@@ -1,4 +1,5 @@
 #summary macro definition/reference cheat sheet
+#labels Featured
 {{{
 [@data.grid entries=people title="Interesting People"]
 [[
