@@ -22,4 +22,8 @@ public class ParseParameters {
 		if (null == initParameters) return null;
 		else return initParameters.get(key);
 	}
+
+	public Map getInitParameters () {
+		return initParameters;
+	}
 }

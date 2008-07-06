@@ -10,7 +10,8 @@ public class MacroComponent implements Component {
 			new MacroPatternMatcher(),
 			new EndMacroPatternMatcher(),
 			new MacroInstancePatternMatcher(),
-			new EndMacroInstancePatternMatcher()
+			new EndMacroInstancePatternMatcher(),
+			new MacroInstanceHeaderFooterPatternMatcher()
 		};
 	}
 }

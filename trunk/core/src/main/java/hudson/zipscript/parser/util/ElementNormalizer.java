@@ -33,8 +33,10 @@ public class ElementNormalizer {
 				elements.add(i, e);
 			}
 			else {
-				i = ei.getIndex();
-				elements.add(i, ei.getElement());
+				if (ei.getIndex() >= 0) {
+					elements.add(ei.getIndex(), ei.getElement());
+					i = ei.getIndex();
+				}
 			}
 		}
 

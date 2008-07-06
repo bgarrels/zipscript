@@ -97,8 +97,14 @@ public class ExpressionParser {
 				SpecialVariableElementImpl e = (SpecialVariableElementImpl) elements.remove(0);
 				e.setShouldEvaluateSeparators(true);
 				ElementIndex ei = e.normalize(0, elements, session);
-				if (null == ei) elements.add(0, e);
-				else elements.add(ei.getIndex(), ei.getElement());
+				if (null == ei) {
+					elements.add(0, e);
+				}
+				else {
+					int i = ei.getIndex();
+					if (i >= 0)
+						elements.add(i, ei.getElement());
+				}
 			}
 		}
 		
