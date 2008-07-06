@@ -1,7 +1,6 @@
 #summary macro definition/reference cheat sheet
 {{{
 [@data.grid entries=people title="Interesting People"]
-
 [[
 	#** The header can be referenced in the macro definition as ${header} **#
 	This is the header
