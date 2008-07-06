@@ -40,7 +40,7 @@
 
 
 #**
-	the macro name is grid and it is in the data macro library as you can see by the reference to "data.grid" above
+	the macro definition below has the name of "grid" and would be in the "data" macro library as you can see by the reference to "data.grid" above
 **#
 
 [#macro data *title *entries *column[*title size=100 hidden=false cssClass]]
