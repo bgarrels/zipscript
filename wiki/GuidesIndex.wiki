@@ -1,4 +1,3 @@
 #summary Index for both the user guide and developers guide.
-#labels Featured
 
 [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/index_only.html Click here] to view the index
