@@ -7,8 +7,8 @@
 ]]
 
 	#**
-		template-defined parameters (only string attributes should be enclosed in quotes)
-		the "entry" context value is added by the macro definition
+		- template-defined parameters (only string attributes should be enclosed in quotes)
+		- the "entry" context value is added by the macro definition
 			(see ...foreach entry in entries... in the macro definition below)
 	**#
 	[@column title="id" hidden=true] ${entry.id} [/@column]
@@ -21,8 +21,8 @@
 	[/#if]
 
 	#**
-		template-defined parameters can be externalized for powerful functionality
-		columnList (see below) would be added to the context before merging
+		- template-defined parameters can be externalized for powerful functionality
+		- columnList (see below) would be added to the context before merging
 	**#
 	[#foreach columnInfo in columnList]
 		#** properties can be access using [] (see below) when dealing with dynamic property names **#
@@ -40,8 +40,7 @@
 
 
 #**
-	Macro definition below
-	The macro name is grid and it is in the data macro library as you can see by the reference to "data.grid" above
+	the macro name is grid and it is in the data macro library as you can see by the reference to "data.grid" above
 **#
 
 [#macro data *title *entries *column[*title size=100 hidden=false cssClass]]
