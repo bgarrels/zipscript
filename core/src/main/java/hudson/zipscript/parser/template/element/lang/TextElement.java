@@ -9,10 +9,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
@@ -25,10 +22,7 @@ public class TextElement extends AbstractElement implements Element {
 
 	private static final String EMPTY = "";
 	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] {
-		new VariablePatternMatcher(),
-		new VarDefaultElementPatternMatcher(),
-		new VarSpecialElementPatternMatcher(),
-		new VarFormattingElementPatternMatcher()
+		new VariablePatternMatcher()
 	};
 
 	private boolean evaluateText;

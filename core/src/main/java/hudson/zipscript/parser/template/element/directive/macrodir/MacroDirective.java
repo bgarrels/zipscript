@@ -203,6 +203,10 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		
 		context.put("body", nestedContent);
+		if (null != nestedContent.getMacroInstance().getHeader())
+			context.put("header", nestedContent.getMacroInstance().getHeader());
+		if (null != nestedContent.getMacroInstance().getFooter())
+			context.put("footer", nestedContent.getMacroInstance().getFooter());
 		MacroInstanceEntity mie = new MacroInstanceEntity(nestedContent.getMacroInstance(), context, null);
 		context.put("this", mie);
 		context.put("global", parentContext.getRootContext());

@@ -40,6 +40,14 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			initialize(context, true);
 			return macroInstance.getNestedContent(this.context);
 		}
+		else if (key.equals("header")) {
+			initialize(context, false);
+			return macroInstance.getHeader();
+		}
+		else if (key.equals("footer")) {
+			initialize(context, false);
+			return macroInstance.getFooter();
+		}
 		else {
 			initialize(context, false);
 			return this.context.get(key);

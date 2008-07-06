@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -30,6 +31,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	private Map attributeMap;
 	private MacroDirective macro;
 
+	private MacroHeaderElement header;
+	private MacroFooterElement footer;
+
 	// for a template defined parameter
 	private MacroDirective baseMacroDefinition;
 	boolean isTemplateDefinedParameter;
@@ -37,6 +41,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	private MacroDefinitionAttribute templateDefinedParameterDefinition;
 	// for a template defined parameter reference inside a common macro
 	boolean isTemplateDefinedParameterInMacroDefinition;
+
+	// text normalization
+	TextElement previousTextElement;
 
 	// private ParsingSession parsingSession;
 	private int contentPosition;
@@ -140,6 +147,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 				}
 				else {
 					// it is a template defined parameter
+					this.isTemplateDefinedParameter = true;
 					this.templateDefinedParameterDefinition = attr;
 					List attributes = attr.getTDPAttributes();
 					// make sure all required and/or defaulted attributes are defined
@@ -147,6 +155,8 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 						MacroDefinitionAttribute attribute = (MacroDefinitionAttribute) attributes.get(i);
 						validateTemplateAttribute(attribute, this);
 					}
+					if (null != previousTextElement)
+						StringUtil.trimLastEmptyLine(previousTextElement);
 				}
 			}
 			else {
@@ -283,20 +293,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		ElementIndex rtn = null;
 		if (isFlat()) rtn = null;
 		else rtn = super.normalize(index, elementList, session);
-
-		// check for end new line
-		if (null != getChildren()) {
-			if (getChildren().size() > 0) {
-				Element e = (Element) getChildren().get(getChildren().size()-1);
-				if (e instanceof TextElement) {
-					TextElement te = (TextElement) e;
-					if (te.getText().endsWith("\r\n"))
-						te.setText(te.getText().substring(0, te.getText().length()-2));
-					else if (te.getText().endsWith("\n"))
-						te.setText(te.getText().substring(0, te.getText().length()-1));
-				}
-			}
-		}
+		StringUtil.trimLastEmptyLine(getChildren());
+		if (index > 0 && elementList.get(index-1) instanceof TextElement)
+			previousTextElement = (TextElement) elementList.get(index-1);
 		return rtn;
 	}
 
@@ -324,16 +323,18 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	public void merge(ZSContext context, Writer sw) throws ExecutionException {
-		if (null == macro) {
-			// we might need to lazy load
-			macro = context.getMacroManager().getMacro(getName(), getNamespace(), context.getParsingSession());
+		if (!isTemplateDefinedParameter) {
+			if (null == macro) {
+				// we might need to lazy load
+				macro = context.getMacroManager().getMacro(getName(), getNamespace(), context.getParsingSession());
+			}
+			if (null == macro) {
+				throw new ExecutionException("Undefined macro '" + getName() + "'", this);
+			}
+			macro.executeMacro(
+					context, isOrdinal(), getAttributes(),
+					new MacroInstanceExecutor(this, context), sw);
 		}
-		if (null == macro) {
-			throw new ExecutionException("Undefined macro '" + getName() + "'", this);
-		}
-		macro.executeMacro(
-				context, isOrdinal(), getAttributes(),
-				new MacroInstanceExecutor(this, context), sw);
 	}
 
 	public String getNestedContent (ZSContext context) throws ExecutionException {
@@ -429,5 +430,21 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	public boolean isTemplateDefinedParameterInMacroDefinition() {
 		return isTemplateDefinedParameterInMacroDefinition;
+	}
+
+	public MacroHeaderElement getHeader() {
+		return header;
+	}
+
+	public void setHeader(MacroHeaderElement header) {
+		this.header = header;
+	}
+
+	public MacroFooterElement getFooter() {
+		return footer;
+	}
+
+	public void setFooter(MacroFooterElement footer) {
+		this.footer = footer;
 	}
 }
