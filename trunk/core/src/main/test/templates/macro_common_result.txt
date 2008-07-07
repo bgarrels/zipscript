@@ -2,12 +2,12 @@
 
 	The title is abc
 		-- def --
-			def contents
+	def contents
 
 		-- foo --
-			foo contents
+	foo contents
 
 		-- bar --
-			bar contents
+	bar contents
 
 	

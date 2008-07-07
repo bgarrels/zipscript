@@ -10,27 +10,27 @@
                                         </tr>
                                         <tr><td colspan="5">This is the header</td></tr>
                                                         <tr>
-                                                        <td style="display: none; width: 100px">  611087768  </td>
-                                                        <td style=" width: 120px">  John  </td>
-                                                        <td style=" width: 140px">  Smith  </td>
-                                                        <td style=" width: 100px">  26  </td>
-                                                        <td style=" width: 100px">  Sun Mar 14 00:00:00 EST 1982  </td>
+                                                        <td style="display: none; width: 100px"> 611087768 </td>
+                                                        <td style=" width: 120px"> John </td>
+                                                        <td style=" width: 140px"> Smith </td>
+                                                        <td style=" width: 100px"> 26 </td>
+                                                        <td style=" width: 100px"> Sun Mar 14 00:00:00 EST 1982 </td>
                                                 </tr>
                                         <tr>
-                                                        <td style="display: none; width: 100px">  284269959  </td>
-                                                        <td style=" width: 120px">  Jimmy  </td>
-                                                        <td style=" width: 140px">  Carter  </td>
-                                                        <td style=" width: 100px">  45  </td>
-                                                        <td style=" width: 100px">  Tue Sep 03 00:00:00 EDT 1963  </td>
+                                                        <td style="display: none; width: 100px"> 284269959 </td>
+                                                        <td style=" width: 120px"> Jimmy </td>
+                                                        <td style=" width: 140px"> Carter </td>
+                                                        <td style=" width: 100px"> 45 </td>
+                                                        <td style=" width: 100px"> Tue Sep 03 00:00:00 EDT 1963 </td>
                                                 </tr>
                                         <tr>
-                                                        <td style="display: none; width: 100px">  -300634167  </td>
-                                                        <td style=" width: 120px">  Jerry  </td>
-                                                        <td style=" width: 140px">  Johnson  </td>
-                                                        <td style=" width: 100px">  29  </td>
-                                                        <td style=" width: 100px">  Wed Nov 21 00:00:00 EST 1979  </td>
+                                                        <td style="display: none; width: 100px"> -300634167 </td>
+                                                        <td style=" width: 120px"> Jerry </td>
+                                                        <td style=" width: 140px"> Johnson </td>
+                                                        <td style=" width: 100px"> 29 </td>
+                                                        <td style=" width: 100px"> Wed Nov 21 00:00:00 EST 1979 </td>
                                                 </tr>
-                                                        <tr><td colspan="5">	The body content of simple macro is:         	You can use macros/directives in the header/footer as well
+                                                        <tr><td colspan="5">	The body content of simple macro is: You can use macros/directives in the header/footer as well
 </td></tr>
                           
         </table>

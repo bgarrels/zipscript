@@ -15,7 +15,7 @@ stuff at bottom
 
 [#macro someCommonFooMacro flipflop bar]
 	common macro foo attribute: ${flipflop}
-	The number of bar parameters are ${bar.size()}
+	The number of bar parameters are ${bar?length}
 	[#foreach entry in bar]
 		The title is: $!{entry.title}
 	[/#foreach]

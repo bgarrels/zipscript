@@ -3,6 +3,7 @@ package hudson.zipscript.parser.util;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.comment.CommentElement;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
@@ -150,45 +151,61 @@ public class StringUtil {
 	}
 
 	public static void trim (List children) {
-		if (children.size() > 0) {
-			while (children.size() > 0) {
-				Element e = (Element) children.get(0);
-				if (e instanceof WhitespaceElement 
-						|| (e instanceof TextElement && ((TextElement) e).getText().trim().length() == 0)) {
-					children.remove(0);
-				}
-				else if (e instanceof CommentElement) {
-					children.remove(0);
-				}
-				else
+		if (null == children || children.size() == 0) return;
+		Element trimFirst = null;
+		Element trimLast = null;
+		for (int i=0; children.size() > i; ) {
+			Element e = (Element) children.get(i);
+			if (e instanceof WhitespaceElement 
+					|| (e instanceof TextElement && ((TextElement) e).getText().trim().length() == 0)) {
+				children.remove(i);
+			}
+			else if (e instanceof CommentElement) {
+				i++;
+			}
+			else if (e instanceof MacroInstanceDirective  && ((MacroInstanceDirective) e).isTemplateDefinedParameter()) {
+				i++;
+			}
+			else {
+				trimFirst = e;
+				break;
+			}
+		}
+		for (int i=children.size()-1; i>=0; ) {
+			Element e = (Element) children.get(i);
+			if (e instanceof WhitespaceElement 
+					|| (e instanceof TextElement && ((TextElement) e).getText().trim().length() == 0)) {
+				children.remove(i);
+				i--;
+			}
+			else if (e instanceof CommentElement) {
+				i--;
+			}
+			else if (e instanceof MacroInstanceDirective  && ((MacroInstanceDirective) e).isTemplateDefinedParameter()) {
+				i--;
+			}
+			else {
+				trimLast = e;
+				break;
+			}
+		}
+		if (trimFirst instanceof TextElement) {
+			String text = ((TextElement) trimFirst).getText();
+			for (int i=0; i<text.length(); i++) {
+				if (!Character.isWhitespace(text.charAt(i))) {
+					text = text.substring(i);
+					((TextElement) trimFirst).setText(text);
 					break;
-			}
-			for (int i=children.size()-1; i>=0; i--) {
-				if (children.get(i) instanceof WhitespaceElement)
-					children.remove(0);
-				else
-					break;
-			}
-			Element e = (Element) children.get(0);
-			if (e instanceof TextElement) {
-				String text = ((TextElement) e).getText();
-				for (int i=0; i<text.length(); i++) {
-					if (!Character.isWhitespace(text.charAt(i))) {
-						text = text.substring(i);
-						((TextElement) e).setText(text);
-						break;
-					}
 				}
 			}
-			e = (Element) children.get(children.size()-1);
-			if (e instanceof TextElement) {
-				String text = ((TextElement) e).getText();
-				for (int i=text.length()-1; i>=0; i--) {
-					if (!Character.isWhitespace(text.charAt(i))) {
-						text = text.substring(0, i+1);
-						((TextElement) e).setText(text);
-						break;
-					}
+		}
+		if (trimLast instanceof TextElement) {
+			String text = ((TextElement) trimLast).getText();
+			for (int i=text.length()-1; i>=0; i--) {
+				if (!Character.isWhitespace(text.charAt(i))) {
+					text = text.substring(0, i+1);
+					((TextElement) trimLast).setText(text);
+					break;
 				}
 			}
 		}
