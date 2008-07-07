@@ -58,7 +58,7 @@ public class MacroTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testEverythingMacro () throws Exception {
+	public void testFulltestMacro () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList(3);
 		l.add(new Person("John", "Smith", "03/14/82"));
@@ -69,8 +69,8 @@ public class MacroTestCase extends TestCase {
 		l.add(new ColumnInfo("Birthday", "birthday", 100, "date"));
 		context.put("columnList", l);
 		context.put("showAge", Boolean.TRUE);
-		String mergeTemplate = "templates/macro_everything_test.zs";
-		String resultFile = "/templates/macro_everything_result.txt";
+		String mergeTemplate = "templates/macro_fulltest_test.zs";
+		String resultFile = "/templates/macro_fulltest_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
