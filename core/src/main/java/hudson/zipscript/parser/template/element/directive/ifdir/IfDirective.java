@@ -9,6 +9,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
 import java.util.ArrayList;

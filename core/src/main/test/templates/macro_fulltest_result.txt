@@ -29,8 +29,8 @@
                                                         <td style=" width: 100px"> 29 </td>
                                                         <td style=" width: 100px"> Wed Nov 21 00:00:00 EST 1979 </td>
                                                 </tr>
-                                                        <tr><td colspan="5">	The body content of simple macro is: You can use macros/directives in the header/footer as well
-</td></tr>
+                                                        <tr><td colspan="5">	 See how you can evaluate nested content
+	</td></tr>
                           
         </table>
 
