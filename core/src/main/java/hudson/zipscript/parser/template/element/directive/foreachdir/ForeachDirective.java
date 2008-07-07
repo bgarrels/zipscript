@@ -110,21 +110,21 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context = new NestedContextWrapper(context, this);
 					Integer int0 = new Integer(0);
 					additionalContextEntries.put(TOKEN_INDEX, int0);
-					context.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0, false);
 					int checkNum = arr.length-1;
 					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (i<arr.length) {
 						if (i >= checkNum) {
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						}
 						additionalContextEntries.put(varName, arr[i]);
-						context.put(varName, arr[i]);
+						context.put(varName, arr[i], false);
 						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
-						context.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index, false);
 					}
 				}
 			}
@@ -135,21 +135,21 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context = new NestedContextWrapper(context, this);
 					Integer int0 = new Integer(0);
 					additionalContextEntries.put(TOKEN_INDEX, int0);
-					context.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0, false);
 					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
 						Object nextVal = iter.next();
 						additionalContextEntries.put(varName, nextVal);
-						context.put(varName, nextVal);
+						context.put(varName, nextVal, false);
 						if (!iter.hasNext()) {
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						}
 						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
-						context.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index, false);
 					}
 				}
 			}
@@ -160,21 +160,21 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context = new NestedContextWrapper(context, this);
 					Integer int0 = new Integer(0);
 					additionalContextEntries.put(TOKEN_INDEX, int0);
-					context.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0, false);
 					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (iter.hasNext()) {
 						Object nextVal = iter.next();
 						additionalContextEntries.put(varName, nextVal);
-						context.put(varName, nextVal);
+						context.put(varName, nextVal, false);
 						if (!iter.hasNext()) {
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						}
 						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
-						context.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index, false);
 					}
 				}
 			}
@@ -185,21 +185,21 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					context = new NestedContextWrapper(context, this);
 					Integer int0 = new Integer(0);
 					additionalContextEntries.put(TOKEN_INDEX, int0);
-					context.put(TOKEN_INDEX, int0);
+					context.put(TOKEN_INDEX, int0, false);
 					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (enumeration.hasMoreElements()) {
 						Object nextVal = enumeration.nextElement();
 						additionalContextEntries.put(varName, nextVal);
-						context.put(varName, nextVal);
+						context.put(varName, nextVal, false);
 						if (enumeration.hasMoreElements()) {
 							additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-							context.put(TOKEN_HASNEXT, Boolean.FALSE);
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						}
 						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 						Integer index = new Integer(++i);
 						additionalContextEntries.put(TOKEN_INDEX, index);
-						context.put(TOKEN_INDEX, index);
+						context.put(TOKEN_INDEX, index, false);
 					}
 				}
 			}
@@ -208,11 +208,11 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				Integer int0 = new Integer(0);
 				context = new NestedContextWrapper(context, this);
 				additionalContextEntries.put(TOKEN_INDEX, int0);
-				context.put(TOKEN_INDEX, int0);
+				context.put(TOKEN_INDEX, int0, false);
 				additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-				context.put(TOKEN_HASNEXT, Boolean.FALSE);
+				context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 				additionalContextEntries.put(varName, list);
-				context.put(varName, list);
+				context.put(varName, list, false);
 				appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			}
 		}
@@ -226,17 +226,17 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (arr.length > 0) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
+					context.put(TOKEN_INDEX, new Integer(0), false);
 					int checkNum = arr.length-1;
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (i<arr.length) {
 						if (getParsingSession().isDebug()) {
 							System.out.println("Executing: " + this.toString() + " (" + i + ")");
 						}
-						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE);
-						context.put(varName, arr[i]);
+						if (i >= checkNum) context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+						context.put(varName, arr[i], false);
 						appendElements(getChildren(), context, sw);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						context.put(TOKEN_INDEX, new Integer(++i), false);
 					}
 				}
 			}
@@ -245,16 +245,16 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (c.size() > 0) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_INDEX, new Integer(0), false);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					for (Iterator iter=c.iterator(); iter.hasNext(); ) {
 						if (getParsingSession().isDebug()) {
 							System.out.println("Executing: " + this.toString() + " (" + i + ")");
 						}
-						context.put(varName, iter.next());
-						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						context.put(varName, iter.next(), false);
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						appendElements(getChildren(), context, sw);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						context.put(TOKEN_INDEX, new Integer(++i), false);
 					}
 				}
 			}
@@ -263,16 +263,16 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (iter.hasNext()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_INDEX, new Integer(0), false);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (iter.hasNext()) {
 						if (getParsingSession().isDebug()) {
 							System.out.println("Executing: " + this.toString() + " (" + i + ")");
 						}
-						context.put(varName, iter.next());
-						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						context.put(varName, iter.next(), false);
+						if (!iter.hasNext()) context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						appendElements(getChildren(), context, sw);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						context.put(TOKEN_INDEX, new Integer(++i), false);
 					}
 				}
 			}
@@ -281,16 +281,16 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				if (enumeration.hasMoreElements()) {
 					int i=0;
 					context = new NestedContextWrapper(context, this);
-					context.put(TOKEN_INDEX, new Integer(0));
-					context.put(TOKEN_HASNEXT, Boolean.TRUE);
+					context.put(TOKEN_INDEX, new Integer(0), false);
+					context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
 					while (enumeration.hasMoreElements()) {
 						if (getParsingSession().isDebug()) {
 							System.out.println("Executing: " + this.toString() + " (" + i + ")");
 						}
-						context.put(varName, enumeration.nextElement());
-						if (enumeration.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE);
+						context.put(varName, enumeration.nextElement(), false);
+						if (enumeration.hasMoreElements()) context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 						appendElements(getChildren(), context, sw);
-						context.put(TOKEN_INDEX, new Integer(++i));
+						context.put(TOKEN_INDEX, new Integer(++i), false);
 					}
 				}
 			}
@@ -300,9 +300,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 					System.out.println("Executing: " + this.toString() + " (0)");
 				}
 				context = new NestedContextWrapper(context, this);
-				context.put(TOKEN_INDEX, new Integer(0));
-				context.put(TOKEN_HASNEXT, Boolean.FALSE);
-				context.put(varName, list);
+				context.put(TOKEN_INDEX, new Integer(0), false);
+				context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+				context.put(varName, list, false);
 				appendElements(getChildren(), context, sw);
 			}
 		}

@@ -179,7 +179,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 					if (null != defAttribute.getDefaultValue())
 						val = defAttribute.getDefaultValue();
 				}
-				if (null != val) context.put(defAttribute.getName(), val);
+				if (null != val) context.put(defAttribute.getName(), val, true);
 			}
 		}
 		else {
@@ -192,32 +192,41 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 					if (null != defAttribute.getDefaultValue())
 						val = defAttribute.getDefaultValue();
 				}
-				if (null != val) context.put(instAttribute.getName(), val);
+				if (null != val) context.put(instAttribute.getName(), val, true);
 			}
 			for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
 				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) i.next();
 				if (null != defAttribute.getDefaultValue() && null == context.get(defAttribute.getName())) {
-					context.put(defAttribute.getName(), defAttribute.getDefaultValue().objectValue(context));
+					context.put(defAttribute.getName(), defAttribute.getDefaultValue().objectValue(context), true);
 				}
 			}
 		}
 		
-		context.put("body", nestedContent);
+		context.put("body", nestedContent, true);
 		if (null != nestedContent.getMacroInstance().getHeader())
-			context.put("header", nestedContent.getMacroInstance().getHeader());
+			context.put("header", nestedContent.getMacroInstance().getHeader(), true);
 		if (null != nestedContent.getMacroInstance().getFooter())
-			context.put("footer", nestedContent.getMacroInstance().getFooter());
+			context.put("footer", nestedContent.getMacroInstance().getFooter(), true);
 		MacroInstanceEntity mie = new MacroInstanceEntity(nestedContent.getMacroInstance(), context, null);
-		context.put("this", mie);
-		context.put("global", parentContext.getRootContext());
+		context.put("this", mie, true);
+		context.put("global", parentContext.getRootContext(), true);
 
 		// add template defined parameters
 		if (getParsingSession().isDebug()) {
 			System.out.println("Preparing: " + nestedContent.getMacroInstance() + " Substructure");
 		}
 		List tdp = new ArrayList();
-		appendTemplateDefinedParameters(
-				nestedContent.getChildren(), context, tdp, this, new HashMap());
+		if (mie.getMacroInstance().isInMacroDefinition()) {
+			appendTemplateDefinedParameters(
+					nestedContent.getChildren(), context, tdp, this, new HashMap());
+		}
+		else {
+			// we are in the body of a macro which is in a normal template - simulate the context
+			((NestedContextWrapper) context).setTravelUp(true);
+			appendTemplateDefinedParameters(
+					nestedContent.getChildren(), context, tdp, this, new HashMap());
+			((NestedContextWrapper) context).setTravelUp(false);
+		}
 		if (getParsingSession().isDebug()) {
 			for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 				System.out.println("\t" + i.next());
@@ -228,7 +237,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(mie.getMacroInstance().getName());
 			if (null == obj) {
-				context.put(mie.getMacroInstance().getName(), mie);
+				context.put(mie.getMacroInstance().getName(), mie, true);
 			}
 			else if (obj instanceof List) {
 				((List) obj).add(mie);
@@ -237,10 +246,10 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 				List l = new ArrayList();
 				l.add(obj);
 				l.add(mie);
-				context.put(mie.getMacroInstance().getName(), l);
+				context.put(mie.getMacroInstance().getName(), l, true);
 			}
 			else {
-				context.put(mie.getMacroInstance().getName(), mie);
+				context.put(mie.getMacroInstance().getName(), mie, true);
 			}
 		}
 

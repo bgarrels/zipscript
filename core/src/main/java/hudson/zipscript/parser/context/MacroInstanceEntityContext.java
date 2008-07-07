@@ -27,7 +27,7 @@ public class MacroInstanceEntityContext implements ZSContext {
 		this.macroDefinitionAttributes = macroDefinitionAttributes;
 	}
 
-	public Object get(String key) {
+	public Object get(Object key) {
 		Object obj = additionalContextEntries.get(key);
 		if (null != postMacroContext && null == obj) obj = postMacroContext.get(key);
 		if (null == obj) obj = preMacroContext.get(key);
@@ -59,15 +59,15 @@ public class MacroInstanceEntityContext implements ZSContext {
 		return preMacroContext.getRootContext();
 	}
 
-	public void put(String key, Object value) {
+	public void put(Object key, Object value, boolean travelUp) {
 		additionalContextEntries.put(key, value);
 	}
 
-	public void putGlobal(String key, Object value) {
+	public void putGlobal(Object key, Object value) {
 		preMacroContext.putGlobal(key, value);
 	}
 
-	public Object remove(String key) {
+	public Object remove(Object key) {
 		return postMacroContext.remove(key);
 	}
 

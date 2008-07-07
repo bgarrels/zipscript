@@ -29,11 +29,12 @@ public class ObjectContextWrapper extends AbstractContext {
 		else this.locale = locale;
 	}
 
-	public Object get(String key) {
+	public Object get(Object key) {
+		if (null == key) return null;
 		Object obj = methodMap.get(key);
 		Method m = null;
 		if (null == obj) {
-			obj = BeanUtil.getPropertyMethod(object, key, null);
+			obj = BeanUtil.getPropertyMethod(object, key.toString(), null);
 			if (null == obj) {
 				methodMap.put(key, SET);
 			}
@@ -56,15 +57,15 @@ public class ObjectContextWrapper extends AbstractContext {
 		}
 	}
 
-	public Object remove(String key) {
+	public Object remove(Object key) {
 		return null;
 	}
 
-	public void put(String key, Object value) {
+	public void put(Object key, Object value, boolean travelUp) {
 		setMap.put(key, value);
 	}
 
-	public void putGlobal(String key, Object value) {
+	public void putGlobal(Object key, Object value) {
 		setMap.put(key, value);
 	}
 

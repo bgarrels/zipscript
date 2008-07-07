@@ -19,27 +19,28 @@ public interface ZSContext {
 	 * Return the object matching the key
 	 * @param key the key name
 	 */
-	public Object get (String key);
+	public Object get (Object key);
 
 	/**
 	 * Remove a value from the context matching the key
 	 * @param key the key name
 	 */
-	public Object remove (String key);
+	public Object remove (Object key);
 
 	/**
 	 * Put a value in the context
 	 * @param key the key name
 	 * @param value the value
+	 * @param if we can travel up, should we?
 	 */
-	public void put (String key, Object value);
+	public void put (Object key, Object value, boolean travelUp);
 
 	/**
 	 * Put a value in the context using the global namespace
 	 * @param key the key name
 	 * @param value the value
 	 */
-	public void putGlobal (String key, Object value);
+	public void putGlobal (Object key, Object value);
 
 	/**
 	 * Return all keys for this scoped context

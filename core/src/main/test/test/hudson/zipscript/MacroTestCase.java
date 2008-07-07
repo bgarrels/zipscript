@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import junit.framework.TestCase;
+import test.hudson.zipscript.model.ColumnInfo;
 import test.hudson.zipscript.model.Person;
 
 public class MacroTestCase extends TestCase {
@@ -51,8 +52,25 @@ public class MacroTestCase extends TestCase {
 		l.add(new Person("Jimmy", "Carter", "09/03/63"));
 		l.add(new Person("Jerry", null, "11/21/79"));
 		context.put("people", l);
+		context.put("doShowBirthday", Boolean.FALSE);
 		String mergeTemplate = "templates/macro_oo_test.zs";
 		String resultFile = "/templates/macro_oo_result.txt";
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void testEverythingMacro () throws Exception {
+		Map context = new HashMap();
+		List l = new ArrayList(3);
+		l.add(new Person("John", "Smith", "03/14/82"));
+		l.add(new Person("Jimmy", "Carter", "09/03/63"));
+		l.add(new Person("Jerry", "Johnson", "11/21/79"));
+		context.put("people", l);
+		l = new ArrayList(3);
+		l.add(new ColumnInfo("Birthday", "birthday", 100, "date"));
+		context.put("columnList", l);
+		context.put("showAge", Boolean.TRUE);
+		String mergeTemplate = "templates/macro_everything_test.zs";
+		String resultFile = "/templates/macro_everything_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 

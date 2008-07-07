@@ -48,7 +48,7 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 
 	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
-		context.put(varName, setElement.objectValue(context));
+		context.put(varName, setElement.objectValue(context), true);
 	}
 
 	public ElementIndex normalize(int index, List elementList,
