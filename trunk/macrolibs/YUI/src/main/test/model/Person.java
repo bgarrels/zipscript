@@ -23,7 +23,7 @@ public class Person {
 		this.numAccounts = numAccounts;
 		this.netWorth = netWorth;
 	}
-
+	
 	public String getFirstName() {
 		return firstName;
 	}
