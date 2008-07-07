@@ -2,11 +2,11 @@
 	<div id="foo" class="tab">
 					<label>My Tab</label>
 								<div class="page">
-				Page 1 contents
+		Page 1 contents
 	</div>
 		This is a test
 						<div class="page">
-				Page 2 contents
+		Page 2 contents
 	</div>
 		This is a test
 			</div>

@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
@@ -10,6 +11,7 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.util.SessionUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
@@ -192,6 +194,12 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			header.validate(session);
 		if (null != footer)
 			footer.validate(session);
+
+		if (null != getChildren() && SessionUtil.getProperty(
+				Constants.TRIM_MACRO_BODY, true, session)) {
+			// trim the body
+			StringUtil.trim(getChildren());
+		}
 	}
 
 	protected void validateTemplateAttribute(MacroDefinitionAttribute attribute, MacroInstanceDirective mid) throws ParseException {

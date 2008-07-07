@@ -1,11 +1,11 @@
 
 	The header is 'This is test header'
 	abc is 'ABC'
-	The body is '	This is test content
+	The body is 'This is test content
 		${body) - ABC
-	'
+'
 	foo.bar is 'baz'
 	foo header is 'This is foo header'
-	foo body is '		This is foo body'
+	foo body is 'This is foo body'
 	foo footer is 'This is foo footer'
 	The footer is 'This is test footer'
