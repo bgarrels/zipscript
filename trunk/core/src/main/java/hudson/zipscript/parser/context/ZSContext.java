@@ -4,6 +4,7 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -84,4 +85,10 @@ public interface ZSContext {
 	 * @param m the map to add the elements to using the macro name as the map key
 	 */
 	public void appendMacroNestedAttributes (Map m);
+
+	/**
+	 * Return all elements in the current execution scope
+	 * @return
+	 */
+	public void addToElementScope(List nestingStack);
 }

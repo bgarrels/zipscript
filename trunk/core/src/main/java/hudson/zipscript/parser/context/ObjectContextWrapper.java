@@ -6,6 +6,7 @@ import hudson.zipscript.parser.util.BeanUtil;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -84,5 +85,9 @@ public class ObjectContextWrapper extends AbstractContext {
 	public void appendMacroNestedAttributes(Map m) {
 		// if we are using this context we are at the top level
 		// and not in a macro definition
+	}
+
+	public void addToElementScope(List nestingStack) {
+		// this is a root element	
 	}
 }

@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -50,5 +51,9 @@ public class MapContextWrapper extends AbstractContext {
 	public void appendMacroNestedAttributes(Map m) {
 		// if we are using this context we are at the top level
 		// and not in a macro definition
+	}
+
+	public void addToElementScope(List nestingStack) {
+		// this is a root element	
 	}
 }

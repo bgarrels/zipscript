@@ -7,6 +7,7 @@ import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -108,5 +109,10 @@ public class NestedContextWrapper implements ZSContext {
 
 	public void setTravelUp(boolean travelUp) {
 		this.travelUp = travelUp;
+	}
+
+	public void addToElementScope(List nestingStack) {
+		parentContext.addToElementScope(nestingStack);
+		nestingStack.add(scopedElement);
 	}
 }
