@@ -31,7 +31,7 @@
         **#
         [#foreach columnInfo in columnList]
                 #** properties can be access using [] (see below) when dealing with dynamic property names **#
-                [@column title=columnInfo.title size=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
+                [@column title=columnInfo.title width=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
         [/#foreach]
 
         Any non template-defined parameter content inside the macro reference is the macro body and can
