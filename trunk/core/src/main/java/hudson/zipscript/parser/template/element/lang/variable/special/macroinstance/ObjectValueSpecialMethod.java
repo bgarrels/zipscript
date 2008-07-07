@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.macroinstance;
 
 import hudson.zipscript.parser.context.ZSContext;
-import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.template.element.CompositeElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
@@ -14,6 +14,11 @@ import java.util.List;
 public class ObjectValueSpecialMethod implements SpecialMethod {
 
 	private Element evaluatorElement;
+	private Element referenceElement;
+	
+	public ObjectValueSpecialMethod (Element referenceElement) {
+		this.referenceElement = referenceElement;
+	}
 
 	public Object execute(
 			Object source, ZSContext context) throws Exception {
@@ -26,7 +31,10 @@ public class ObjectValueSpecialMethod implements SpecialMethod {
 					nonWhitespaceChildren.add(e);
 			}
 			if (nonWhitespaceChildren.size() != 1) {
-				throw new ExecutionException("Invalid macro body object value", null);
+				evaluatorElement = new CompositeElement(nonWhitespaceChildren, referenceElement);
+			}
+			else {
+				evaluatorElement = (Element) nonWhitespaceChildren.get(0);
 			}
 		}
 		return evaluatorElement.objectValue(context);

@@ -30,9 +30,12 @@
         be referenced as ${body}
         
 [[
-        #** The footer can be referenced in the macro definition as ${footer} **#
+        #**
+        	- The footer can be referenced in the macro definition as ${footer}
+        	- You can use macros/directives in the header/footer as well
+        **#
         [@simpleMacro]
-        	You can use macros/directives in the header/footer as well
+        	footer content
         [/@simpleMacro]
 ]]
 [/@grid]
@@ -77,5 +80,7 @@
 [/#macro]
 
 [#macro simpleMacro]
-	The body content of simple macro is: ${body}
+	[#if body?objectValue == "footer content"] See how you can evaluate nested content
+	[#else] If we see this, something is broken
+	[/#if]
 [/#macro]

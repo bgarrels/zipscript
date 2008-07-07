@@ -39,7 +39,6 @@ public class MacroTestCase extends TestCase {
 	}
 
 	public void testHeaderFooterMacro () throws Exception {
-		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_headerfooter_test.zs";
 		String resultFile = "/templates/macro_headerfooter_result.txt";
 		evalResult(mergeTemplate, resultFile, null);

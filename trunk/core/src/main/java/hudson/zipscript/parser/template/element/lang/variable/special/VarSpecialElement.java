@@ -125,7 +125,7 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			return IsMapSpecialMethod.INSTANCE;
 		else if (source instanceof MacroInstanceExecutor) {
 			if (method.equals("objectValue"))
-				return new ObjectValueSpecialMethod();
+				return new ObjectValueSpecialMethod(this);
 			else if (method.equals("booleanValue"))
 				return new BooleanValueSpecialMethod();
 			else return null;
