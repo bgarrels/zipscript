@@ -1,5 +1,4 @@
 
-
         The title is Interesting People
         <table>
                 <tr>
@@ -33,7 +32,8 @@
                                                         <td style=" width: 100px">  Wed Nov 21 00:00:00 EST 1979  </td>
                                                 </tr>
                                                         <tr><td colspan="5">
-                This is the macro footer</td></tr>
+                	The body content of simple macro is:         	You can use macros/directives in the header/footer as well
+</td></tr>
                           
         </table>
 

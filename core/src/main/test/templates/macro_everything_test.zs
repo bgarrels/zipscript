@@ -1,4 +1,6 @@
-
+[#macro simpleMacro]
+	The body content of simple macro is: ${body}
+[/#macro]
 
 [@grid entries=people title="Interesting People"]
 [[
@@ -33,7 +35,9 @@
         
 [[
         #** The header can be referenced in the macro definition as ${footer} **#
-        This is the macro footer
+        [@simpleMacro]
+        	You can use macros/directives in the header/footer as well
+        [/@simpleMacro]
 ]]
 [/@grid]
 

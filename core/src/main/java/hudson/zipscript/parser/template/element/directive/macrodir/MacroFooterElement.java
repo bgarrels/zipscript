@@ -16,7 +16,8 @@ public class MacroFooterElement extends MacroHeaderElement {
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
 		// set element in macro
-		((MacroInstanceDirective) session.getNestingStack().get(session.getNestingStack().size()-1)).setFooter(this);
+		((MacroInstanceDirective) session.getNestingStack().get(session.getNestingStack().size()-1))
+			.setFooter(this);
 		return new ElementIndex(null, -1);
 	}
 }

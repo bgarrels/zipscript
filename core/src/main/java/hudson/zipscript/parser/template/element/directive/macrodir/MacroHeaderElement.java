@@ -23,12 +23,38 @@ import java.util.List;
 public class MacroHeaderElement extends AbstractElement implements ToStringWithContextElement {
 
 	private List children;
+	private String contents;
+	private int position;
 
 	public MacroHeaderElement(
 			String contents, ParsingSession session, int position) throws ParseException {
+		this.contents = contents;
+		this.position = position;
+	}
+
+	public List getChildren() {
+		return children;
+	}
+
+	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+		if (null != children) {
+			for (Iterator i=children.iterator(); i.hasNext(); ) {
+				((Element) i.next()).merge(context, sw);
+			}
+		}
+	}
+
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
+		// set element in macro
+		((MacroInstanceDirective) session.getNestingStack().get(session.getNestingStack().size()-1)).setHeader(this);
+		return new ElementIndex(null, -1);
+	}
+
+	public void validate(ParsingSession session) throws ParseException {
 		ParsingResult result = ExpressionParser.getInstance().parse(
 				contents, ZipEngine.TEMPLATE_COMPONENTS, TextDefaultElementFactory.INSTANCE,
-				position, session.getMacroManager(), session.getParameters().getInitParameters());
+				position, session);
 		children = result.getElements();
 		// trim
 		if (children.size() > 0) {
@@ -69,25 +95,7 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 				}
 			}
 		}
-	}
-
-	public List getChildren() {
-		return children;
-	}
-
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
-		if (null != children) {
-			for (Iterator i=children.iterator(); i.hasNext(); ) {
-				((Element) i.next()).merge(context, sw);
-			}
-		}
-	}
-
-	public ElementIndex normalize(int index, List elementList,
-			ParsingSession session) throws ParseException {
-		// set element in macro
-		((MacroInstanceDirective) session.getNestingStack().get(session.getNestingStack().size()-1)).setHeader(this);
-		return new ElementIndex(null, -1);
+		this.contents = null;
 	}
 
 	public Object objectValue(ZSContext context) throws ExecutionException {

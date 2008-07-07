@@ -36,7 +36,6 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
 
 	public Object get(String key, ZSContext context) {
-		// FIXME is there a better way to do this?
 		if (key.equals("body")) {
 			initialize(context, true);
 			return macroInstance.getNestedContent(this.context);
@@ -50,7 +49,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			return macroInstance.getFooter();
 		}
 		else {
-			initialize(context, true);
+			initialize(context, false);
 			return this.context.get(key);
 		}
 	}
