@@ -134,6 +134,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 		if (!isTemplateDefinedParameterInMacroDefinition) {
 			// find macro in session
+			// if we're in the header/footer - we can't validate until the whole template is parsed - how to do that?
 			macro = session.getMacroManager().getMacro(
 					getName(), getNamespace(), session);
 	
@@ -186,6 +187,11 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 				}
 			}
 		}
+
+		if (null != header)
+			header.validate(session);
+		if (null != footer)
+			footer.validate(session);
 	}
 
 	protected void validateTemplateAttribute(MacroDefinitionAttribute attribute, MacroInstanceDirective mid) throws ParseException {

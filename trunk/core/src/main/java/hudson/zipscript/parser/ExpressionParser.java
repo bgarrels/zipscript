@@ -50,6 +50,25 @@ public class ExpressionParser {
 	}
 
 	/**
+	 * Parse the given expression using the components for pattern matching
+	 * @param contents the template expression contents
+	 * @param components pattern matcher components
+	 * @param defaultElementFactory factory to provide elements for non-matching elements
+	 * @param startPosition the start position for element positioning (0 for a new document)
+	 * @param session the parsing session
+	 * @throws ParseException
+	 */
+	public ParsingResult parse (
+			String contents, Component[] components, DefaultElementFactory defaultElementFactory,
+			int startPosition, ParsingSession session)
+	throws ParseException {
+		return parse(
+				CharBuffer.wrap(contents.toCharArray()),
+				getStartTokens(components),
+				defaultElementFactory, session, startPosition);
+	}
+
+	/**
 	 * Parse the given expression to a unique element
 	 * @param contents the template expression contents
 	 * @param components pattern matcher components
