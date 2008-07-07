@@ -34,7 +34,7 @@
         be referenced as ${body}
         
 [[
-        #** The header can be referenced in the macro definition as ${footer} **#
+        #** The footer can be referenced in the macro definition as ${footer} **#
         [@simpleMacro]
         	You can use macros/directives in the header/footer as well
         [/@simpleMacro]
