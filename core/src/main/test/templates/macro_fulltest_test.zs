@@ -1,7 +1,3 @@
-[#macro simpleMacro]
-	The body content of simple macro is: ${body}
-[/#macro]
-
 [@grid entries=people title="Interesting People"]
 [[
         #** The header can be referenced in the macro definition as ${header} **#
@@ -78,4 +74,8 @@
 
 [#macro moreCommonColumns]
 	[.@column title="Last Name" width=140] ${entry.lastName} [/.@column]
+[/#macro]
+
+[#macro simpleMacro]
+	The body content of simple macro is: ${body}
 [/#macro]
