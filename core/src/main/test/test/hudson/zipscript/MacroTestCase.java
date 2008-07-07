@@ -17,35 +17,35 @@ import test.hudson.zipscript.model.Person;
 
 public class MacroTestCase extends TestCase {
 
-	public void _testSimpleMacro () throws Exception {
+	public void testSimpleMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_test.zs";
 		String resultFile = "/templates/macro_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testCommonTDOMacro () throws Exception {
+	public void testCommonTDOMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_common_test.zs";
 		String resultFile = "/templates/macro_common_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testNestingMacro () throws Exception {
+	public void testNestingMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_nesting_test.zs";
 		String resultFile = "/templates/macro_nesting_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
-	public void _testHeaderFooterMacro () throws Exception {
+	public void testHeaderFooterMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_headerfooter_test.zs";
 		String resultFile = "/templates/macro_headerfooter_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
-	public void _testObjectOrientedMacro () throws Exception {
+	public void testObjectOrientedMacro () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList(3);
 		l.add(new Person("John", "Smith", "03/14/82"));
