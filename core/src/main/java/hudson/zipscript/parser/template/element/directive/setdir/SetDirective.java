@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
@@ -16,7 +17,7 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-public class SetDirective extends AbstractDirective implements MacroInstanceAware {
+public class SetDirective extends AbstractDirective implements MacroInstanceAware, NonOutputElement {
 
 	private String varName;
 	private Element setElement;
@@ -63,5 +64,9 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 	public void getMatchingTemplateDefinedParameters(ZSContext context, List list,
 			MacroDirective macro, Map additionalContextEntries) {
 		additionalContextEntries.put(varName, setElement.objectValue(context));	
+	}
+
+	public boolean generatesOutput() {
+		return false;
 	}
 }

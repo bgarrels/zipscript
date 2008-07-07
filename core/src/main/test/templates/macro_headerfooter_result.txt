@@ -3,7 +3,7 @@
 	abc is 'ABC'
 	The body is 'This is test content
 		${body) - ABC
-'
+	'
 	foo.bar is 'baz'
 	foo header is 'This is foo header'
 	foo body is 'This is foo body'

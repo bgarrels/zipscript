@@ -6,11 +6,12 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.NonOutputElement;
 
 import java.io.Writer;
 import java.util.List;
 
-public class CommentElement implements Element {
+public class CommentElement implements Element, NonOutputElement {
 
 	private static CommentElement instance = new CommentElement();
 	public static CommentElement getInstance () {
@@ -53,5 +54,9 @@ public class CommentElement implements Element {
 	}
 
 	public void validate(ParsingSession session) throws ParseException {	
+	}
+
+	public boolean generatesOutput() {
+		return false;
 	}
 }
