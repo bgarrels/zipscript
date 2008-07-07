@@ -14,6 +14,7 @@ import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -57,45 +58,7 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 					contents, ZipEngine.TEMPLATE_COMPONENTS, TextDefaultElementFactory.INSTANCE,
 					position, session);
 			children = result.getElements();
-			// trim
-			if (children.size() > 0) {
-				for (int i=0; i<children.size(); ) {
-					if (children.get(i) instanceof WhitespaceElement)
-						children.remove(0);
-					else
-						break;
-				}
-				for (int i=children.size()-1; i>=0; i--) {
-					if (children.get(i) instanceof WhitespaceElement)
-						children.remove(0);
-					else
-						break;
-				}
-				Element e = (Element) children.get(0);
-				if (e instanceof TextElement) {
-					String text = ((TextElement) e).getText();
-					StringBuffer sb = new StringBuffer();
-					for (int i=0; i<text.length(); i++) {
-						if (!Character.isWhitespace(text.charAt(i))) {
-							text = text.substring(i);
-							((TextElement) e).setText(text);
-							break;
-						}
-					}
-				}
-				e = (Element) children.get(children.size()-1);
-				if (e instanceof TextElement) {
-					String text = ((TextElement) e).getText();
-					StringBuffer sb = new StringBuffer();
-					for (int i=text.length()-1; i>=0; i--) {
-						if (!Character.isWhitespace(text.charAt(i))) {
-							text = text.substring(0, i+1);
-							((TextElement) e).setText(text);
-							break;
-						}
-					}
-				}
-			}
+			StringUtil.trim(children);
 			this.contents = null;
 		}
 	}

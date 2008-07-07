@@ -8,8 +8,7 @@
                                                                                         <th >Age</th>
                                                                                         <th >Birthday</th>
                                         </tr>
-                                        <tr><td colspan="5">
-                This is the header</td></tr>
+                                        <tr><td colspan="5">This is the header</td></tr>
                                                         <tr>
                                                         <td style="display: none; width: 100px">  611087768  </td>
                                                         <td style=" width: 120px">  John  </td>
@@ -31,8 +30,7 @@
                                                         <td style=" width: 100px">  29  </td>
                                                         <td style=" width: 100px">  Wed Nov 21 00:00:00 EST 1979  </td>
                                                 </tr>
-                                                        <tr><td colspan="5">
-                	The body content of simple macro is:         	You can use macros/directives in the header/footer as well
+                                                        <tr><td colspan="5">	The body content of simple macro is:         	You can use macros/directives in the header/footer as well
 </td></tr>
                           
         </table>
