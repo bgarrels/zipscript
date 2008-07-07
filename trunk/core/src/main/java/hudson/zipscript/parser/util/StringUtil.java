@@ -2,6 +2,7 @@ package hudson.zipscript.parser.util;
 
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.comment.CommentElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.lang.TextElement;
@@ -150,24 +151,28 @@ public class StringUtil {
 		return null;
 	}
 
-	public static void trim (List children) {
-		if (null == children || children.size() == 0) return;
+	/**
+	 * Trim the element list (but leave elements that do not affect output in)
+	 * @param children
+	 * @return true if is empty and false if not
+	 */
+	public static boolean trim (List children) {
+		if (null == children || children.size() == 0) return true;
 		Element trimFirst = null;
 		Element trimLast = null;
+		boolean isEmpty = true;
 		for (int i=0; children.size() > i; ) {
 			Element e = (Element) children.get(i);
 			if (e instanceof WhitespaceElement 
 					|| (e instanceof TextElement && ((TextElement) e).getText().trim().length() == 0)) {
 				children.remove(i);
 			}
-			else if (e instanceof CommentElement) {
-				i++;
-			}
-			else if (e instanceof MacroInstanceDirective  && ((MacroInstanceDirective) e).isTemplateDefinedParameter()) {
+			else if (e instanceof NonOutputElement && !((NonOutputElement) e).generatesOutput()) {
 				i++;
 			}
 			else {
 				trimFirst = e;
+				isEmpty = false;
 				break;
 			}
 		}
@@ -178,14 +183,12 @@ public class StringUtil {
 				children.remove(i);
 				i--;
 			}
-			else if (e instanceof CommentElement) {
-				i--;
-			}
-			else if (e instanceof MacroInstanceDirective  && ((MacroInstanceDirective) e).isTemplateDefinedParameter()) {
+			else if (e instanceof NonOutputElement && !((NonOutputElement) e).generatesOutput()) {
 				i--;
 			}
 			else {
 				trimLast = e;
+				isEmpty = false;
 				break;
 			}
 		}
@@ -209,5 +212,6 @@ public class StringUtil {
 				}
 			}
 		}
+		return isEmpty;
 	}
 }

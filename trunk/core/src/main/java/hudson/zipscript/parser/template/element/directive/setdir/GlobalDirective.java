@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -13,7 +14,7 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import java.io.Writer;
 import java.util.List;
 
-public class GlobalDirective extends AbstractDirective {
+public class GlobalDirective extends AbstractDirective implements NonOutputElement {
 
 	private String varName;
 	private Element setElement;
@@ -55,5 +56,9 @@ public class GlobalDirective extends AbstractDirective {
 
 	public List getChildren() {
 		return null;
+	}
+
+	public boolean generatesOutput() {
+		return false;
 	}
 }

@@ -8,6 +8,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -22,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware {
+public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware, NonOutputElement {
 
 	private boolean isOrdinal = true;
 	private String contents;
@@ -474,5 +475,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	public void setFooter(MacroFooterElement footer) {
 		this.footer = footer;
+	}
+
+	public boolean generatesOutput() {
+		return (isTemplateDefinedParameter());
 	}
 }
