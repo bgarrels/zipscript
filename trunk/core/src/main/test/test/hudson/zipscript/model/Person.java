@@ -2,7 +2,9 @@ package test.hudson.zipscript.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Person {
 
@@ -19,6 +21,9 @@ public class Person {
 		this.birthday = sdf.parse(birthday);
 	}
 
+	public int getId () {
+		return hashCode();
+	}
 	public String getFirstName() {
 		return firstName;
 	}
@@ -36,5 +41,13 @@ public class Person {
 	}
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+	public int getAge () {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(birthday);
+		int year = cal.get(Calendar.YEAR);
+		cal.setTimeInMillis(System.currentTimeMillis());
+		int year2 = cal.get(Calendar.YEAR);
+		return year2 - year;
 	}
 }

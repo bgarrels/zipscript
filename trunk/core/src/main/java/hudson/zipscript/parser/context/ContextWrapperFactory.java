@@ -23,7 +23,8 @@ public class ContextWrapperFactory {
 			context = new MapContextWrapper((Map) obj);
 		else
 			context = new ObjectContextWrapper(obj);
-		context.put("now", new Date());
+		context.put("now", new Date(), false);
+		context.put("vars", context, false);
 		return context;
 	}
 }

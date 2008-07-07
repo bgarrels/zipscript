@@ -19,20 +19,20 @@ public class MapContextWrapper extends AbstractContext {
 		else this.locale = locale;
 	}
 
-	public Object get(String key) {
+	public Object get(Object key) {
 		return map.get(key);
 	}
 
-	public Object remove(String key) {
+	public Object remove(Object key) {
 		return map.remove(key);
 	}
 
-	public void put(String key, Object value) {
+	public void put(Object key, Object value, boolean travelUp) {
 		map.put(key, value);
 	}
 
-	public void putGlobal(String key, Object value) {
-		put(key, value);
+	public void putGlobal(Object key, Object value) {
+		put(key, value, true);
 	}
 
 	public Iterator getKeys() {

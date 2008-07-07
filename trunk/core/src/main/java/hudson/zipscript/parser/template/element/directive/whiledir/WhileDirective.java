@@ -45,10 +45,10 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	public void merge(ZSContext context, Writer sw) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
-		context.put(TOKEN_INDEX, new Integer(0));
+		context.put(TOKEN_INDEX, new Integer(0), false);
 		while (whileElement.booleanValue(context)) {
 			appendElements(getChildren(), context, sw);
-			context.put(TOKEN_INDEX, new Integer(++i));
+			context.put(TOKEN_INDEX, new Integer(++i), false);
 		}
 	}
 
@@ -58,12 +58,12 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		context = new NestedContextWrapper(context, this);
 		Integer int0 = new Integer(0);
 		additionalContextEntries.put(TOKEN_INDEX, int0);
-		context.put(TOKEN_INDEX, int0);
+		context.put(TOKEN_INDEX, int0, false);
 		while (whileElement.booleanValue(context)) {
 			appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 			Integer index = new Integer(++i);
 			additionalContextEntries.put(TOKEN_INDEX, index);
-			context.put(TOKEN_INDEX, index);
+			context.put(TOKEN_INDEX, index, false);
 		}
 	}
 

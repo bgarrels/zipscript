@@ -14,12 +14,11 @@ public class NestedContextWrapper implements ZSContext {
 
 	private ZSContext parentContext;
 	private HashMap map = new HashMap(4);
-	private boolean travelUp = true;
+	private boolean travelUp;
 	private Element scopedElement;
 
 	public NestedContextWrapper (ZSContext parentContext, Element scopedElement) {
-		this.parentContext = parentContext;
-		this.scopedElement = scopedElement;
+		this (parentContext, scopedElement, true);
 	}
 
 	public NestedContextWrapper (
@@ -27,9 +26,10 @@ public class NestedContextWrapper implements ZSContext {
 		this.parentContext = parentContext;
 		this.scopedElement = scopedElement;
 		this.travelUp = travelUp;
+		map.put("vars", this);
 	}
 
-	public Object get(String key) {
+	public Object get(Object key) {
 		Object obj = map.get(key);
 		if (null == obj && travelUp)
 			obj = parentContext.get(key);
@@ -40,15 +40,18 @@ public class NestedContextWrapper implements ZSContext {
 		return map.keySet().iterator();
 	}
 
-	public void put(String key, Object value) {
-		map.put(key, value);
+	public void put(Object key, Object value, boolean travelUp) {
+		if (travelUp && this.travelUp)
+			parentContext.put(key, value, true);
+		else
+			map.put(key, value);
 	}
 
-	public void putGlobal(String key, Object value) {
+	public void putGlobal(Object key, Object value) {
 		parentContext.putGlobal(key, value);
 	}
 
-	public Object remove(String key) {
+	public Object remove(Object key) {
 		return map.remove(key);
 	}
 
@@ -97,5 +100,13 @@ public class NestedContextWrapper implements ZSContext {
 		if (!(getScopedElement() instanceof MacroDirective)) {
 			parentContext.appendMacroNestedAttributes(m);
 		}
+	}
+
+	public boolean isTravelUp() {
+		return travelUp;
+	}
+
+	public void setTravelUp(boolean travelUp) {
+		this.travelUp = travelUp;
 	}
 }

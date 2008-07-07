@@ -45,7 +45,7 @@ public class GlobalDirective extends AbstractDirective {
 
 	public void merge(ZSContext context, Writer sw)
 			throws ExecutionException {
-		context.put(varName, setElement.objectValue(context));
+		context.putGlobal(varName, setElement.objectValue(context));
 	}
 
 	public ElementIndex normalize(int index, List elementList,
