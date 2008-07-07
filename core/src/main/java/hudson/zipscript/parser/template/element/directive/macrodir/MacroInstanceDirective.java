@@ -413,9 +413,23 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		else return namespace + '.' + name;
 	}
 
-	public List getMacroDefinitionAttributes () {
+	public List getMacroDefinitionAttributes (ZSContext context) {
 		if (isTemplateDefinedParameterInMacroDefinition()) {
-			return null;
+			// find the associated macro in the parsing session stack
+			List elements = new ArrayList();
+			context.addToElementScope(elements);
+			for (int i=0; i<elements.size(); i++) {
+				Element e = (Element) elements.get(i);
+				if (e instanceof MacroDirective) {
+					MacroDirective md = (MacroDirective) e;
+					// make sure we've got a match
+					MacroDefinitionAttribute attr = md.getAttribute(getName());
+					if (null != attr && attr.isTemplateDefinedParameter()) {
+						return attr.getTDPAttributes();
+					}
+				}
+			}
+			throw new ExecutionException("Unknown template=defined parameter '" + getName() + "'", this);
 		}
 		else {
 			if (null != templateDefinedParameterDefinition) {

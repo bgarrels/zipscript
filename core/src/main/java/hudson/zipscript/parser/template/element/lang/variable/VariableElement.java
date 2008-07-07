@@ -167,7 +167,8 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public boolean booleanValue(ZSContext context) throws ExecutionException {
 		Object obj = objectValue(context);
-		if (null == obj) throw new ExecutionException("The variable '" + this + "' is null and can not be evaluated to a boolean", this);
+		if (null == obj)
+			throw new ExecutionException("The variable '" + this + "' is null and can not be evaluated to a boolean", this);
 		else if (obj instanceof Boolean)
 			return ((Boolean) obj).booleanValue();
 		else

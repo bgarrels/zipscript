@@ -18,9 +18,10 @@ public class MacroInstanceEntityContext implements ZSContext {
 	private Map additionalContextEntries;
 	private List macroAttributes;
 	private List macroDefinitionAttributes;
+	private Element scopedElement;
 
 	public MacroInstanceEntityContext (
-			ZSContext preMacroContext, Map additionalContextEntries, List macroAttributes, List macroDefinitionAttributes) {
+			Element scopedElement, ZSContext preMacroContext, Map additionalContextEntries, List macroAttributes, List macroDefinitionAttributes) {
 		this.preMacroContext = preMacroContext;
 		this.additionalContextEntries = additionalContextEntries;
 		this.macroAttributes = macroAttributes;
@@ -106,5 +107,10 @@ public class MacroInstanceEntityContext implements ZSContext {
 				}
 			}
 		}
+	}
+
+	public void addToElementScope(List nestingStack) {
+		preMacroContext.addToElementScope(nestingStack);
+		nestingStack.add(scopedElement);
 	}
 }

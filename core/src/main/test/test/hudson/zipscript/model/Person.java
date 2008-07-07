@@ -22,7 +22,7 @@ public class Person {
 	}
 
 	public int getId () {
-		return hashCode();
+		return new String(getFirstName() + getLastName()).hashCode();
 	}
 	public String getFirstName() {
 		return firstName;

@@ -12,8 +12,7 @@
                         (see ...foreach entry in entries... in the macro definition below)
         **#
         [@column title="id" hidden=true] ${entry.id} [/@column]
-        [@column title="First Name" size=120] ${entry.firstName} [/@column]
-        [@column title="Last Name" size=140] ${entry.lastName} [/@column]
+		[@commonColumns/]
 
         #** template-defined parameters can be inside other directives **#
         [#if showAge]
@@ -55,7 +54,6 @@
                 [#if header!=null]
                         <tr><td colspan="${colSpan}">${header}</td></tr>
                 [/#if]
-                -
                 [#foreach entry in entries]
                         <tr>
                         [#foreach column in column]
@@ -63,10 +61,17 @@
                         [/#foreach]
                         </tr>
                 [/#foreach]
-                -
                 [#if footer!=null]
                         <tr><td colspan="${colSpan}">${footer}</td></tr>
                 [/#if]          
         </table>
 [/#macro]
 
+[#macro commonColumns]
+        [.@column title="First Name" width=120] ${entry.firstName} [/.@column]
+        [@moreCommonColumns/]
+[/#macro]
+
+[#macro moreCommonColumns]
+	[.@column title="Last Name" width=140] ${entry.lastName} [/.@column]
+[/#macro]

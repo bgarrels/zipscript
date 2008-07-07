@@ -25,8 +25,9 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 				Map.Entry entry = (Map.Entry) i.next();
 				clonedEntries.put(entry.getKey(), entry.getValue());
 			}
-		this.context = new MacroInstanceEntityContext(
-				context, clonedEntries, macroInstance.getAttributes(), macroInstance.getMacroDefinitionAttributes());
+		this.context = new MacroInstanceEntityContext(macroInstance,
+				context, clonedEntries, macroInstance.getAttributes(),
+				macroInstance.getMacroDefinitionAttributes(context));
 	}
 
 	public MacroInstanceDirective getMacroInstance() {
@@ -49,7 +50,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 			return macroInstance.getFooter();
 		}
 		else {
-			initialize(context, false);
+			initialize(context, true);
 			return this.context.get(key);
 		}
 	}
