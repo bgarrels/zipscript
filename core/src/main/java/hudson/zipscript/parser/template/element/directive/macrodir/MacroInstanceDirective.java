@@ -36,6 +36,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	private MacroHeaderElement header;
 	private MacroFooterElement footer;
+	private boolean isBodyEmpty;
 
 	// for a template defined parameter
 	private MacroDirective baseMacroDefinition;
@@ -199,7 +200,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		if (null != getChildren() && SessionUtil.getProperty(
 				Constants.TRIM_MACRO_BODY, true, session)) {
 			// trim the body
-			StringUtil.trim(getChildren());
+			this.isBodyEmpty = StringUtil.trim(getChildren());
 		}
 	}
 
@@ -479,5 +480,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 
 	public boolean generatesOutput() {
 		return (isTemplateDefinedParameter());
+	}
+
+	public boolean isBodyEmpty() {
+		return isBodyEmpty;
 	}
 }
