@@ -7,11 +7,16 @@ import junit.framework.TestCase;
 
 public class ContextTestCase extends TestCase {
 
-	public void testNoContextExpressions () throws Exception {
-		Object obj = eval("UniqueId");
-		assertNotNull(obj);
-		obj = eval("Now");
-		assertNotNull(obj);
+	public void testUniqueId () throws Exception {
+		assertNotNull(eval("UniqueId"));
+	}
+
+	public void testNow () throws Exception {
+		assertNotNull(eval("Now"));
+	}
+
+	public void testMath () throws Exception {
+		assertNotNull(eval("Math.random"));
 	}
 
 	private Object eval (String s)
