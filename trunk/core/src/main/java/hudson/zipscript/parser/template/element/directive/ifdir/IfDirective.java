@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.HeaderElementList;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class IfDirective extends NestableElement implements MacroInstanceAware {
+public class IfDirective extends NestableElement implements MacroInstanceAware, DebugElementContainerElement {
 
 	public Element ifElement;
 	public List ifElements;
@@ -30,6 +31,18 @@ public class IfDirective extends NestableElement implements MacroInstanceAware {
 		parseContents(contents, contentIindex, parsingSession);
 	}
 
+	public List getInternalElements() {
+		List list = new ArrayList();
+		list.add(ifElement);
+		if (null != elseifScenarios) {
+			for (Iterator i=elseifScenarios.iterator(); i.hasNext(); ) {
+				HeaderElementList hel = (HeaderElementList) i.next();
+				list.add(hel.getHeader());
+			}
+		}
+		return list;
+	}
+	
 	private void parseContents (
 			String contents, int contentIindex, ParsingSession parsingSession) throws ParseException {
 		ifElement = parseElement(contents, contentIindex, parsingSession);

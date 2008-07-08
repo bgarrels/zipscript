@@ -34,7 +34,7 @@ public class ParsingResult {
 		}
 		int lbpos = (int) (position - lineBreakPosition);
 		if (lbpos > 0) lbpos--;
-		return new LinePosition(lineCount, lbpos);
+		return new LinePosition(lineCount, lbpos, position);
 	}
 
 	public ParsingSession getParsingSession() {

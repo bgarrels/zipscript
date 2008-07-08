@@ -6,6 +6,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
@@ -28,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class ForeachDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
+public class ForeachDirective extends NestableElement implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
@@ -51,11 +52,16 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	private String varName;
 	private Element listElement;
 	private boolean isInMacroDefinition;
+	private List internalElements;
 
 	public ForeachDirective (String contents, ParsingSession session, int contentPosition)
 	throws ParseException {
 		setParsingSession(session);
 		parseContents(contents, session, contentPosition);
+	}
+
+	public List getInternalElements() {
+		return internalElements;
 	}
 
 	private void parseContents (
@@ -69,7 +75,8 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			}
 		}
 
-		java.util.List elements = parseElements(contents, session, contentPosition);
+		List elements = parseElements(contents, session, contentPosition);
+		this.internalElements = elements;
 		try {
 			Element e = (Element) elements.get(0);
 			if (e instanceof SpecialStringElement) {

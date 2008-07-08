@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.NonOutputElement;
@@ -23,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware, NonOutputElement {
+public class MacroInstanceDirective extends NestableElement implements MacroInstanceAware, NonOutputElement, DebugElementContainerElement {
 
 	private boolean isOrdinal = true;
 	private String contents;
@@ -52,6 +53,9 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	// private ParsingSession parsingSession;
 	private int contentPosition;
 
+	// debug
+	private List internalElements;
+
 	public MacroInstanceDirective (
 			String contents, boolean isFlat, ParsingSession parsingSession, int contentPosition) throws ParseException {
 		this(contents, isFlat, false, parsingSession, contentPosition);
@@ -61,16 +65,21 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			String contents, boolean isFlat, boolean isTemplateDefinedParamterInMacroDefinition, ParsingSession parsingSession, int contentPosition) throws ParseException {
 		this.contents = contents;
 		setFlat(isFlat);
-		// this.parsingSession = parsingSession;
 		this.contentPosition = contentPosition;
 		this.isTemplateDefinedParameterInMacroDefinition = isTemplateDefinedParamterInMacroDefinition;
 		parseContents(contents, parsingSession, contentPosition);
 	}
 
+	public List getInternalElements() {
+		return internalElements;
+	}
+
 	protected void parseContents (
 			String contents, ParsingSession session, int contentPosition)
 	throws ParseException {
-		java.util.List elements = parseElements(contents, session, contentPosition);
+		List elements = parseElements(contents, session, contentPosition);
+		this.internalElements = new ArrayList();
+		internalElements.addAll(elements);
 		if (elements.size() == 0)
 			throw new ParseException(this, "Macro name was not specified");
 		Element e;

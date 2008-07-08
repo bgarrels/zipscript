@@ -26,6 +26,7 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
 		boolean isFlat = false;
 		int nesting = 1;
+		int startPos = reader.position();
 		previousChar = Character.MIN_VALUE;
 		StringBuffer sb = new StringBuffer();
 		while (reader.hasRemaining()) {
@@ -57,11 +58,11 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 					}
 					if (startChars.length == 2) {
 						return new MacroInstanceDirective(
-								sb.toString(), isFlat, session, reader.position());
+								sb.toString(), isFlat, session, startPos);
 					}
 					else {
 						return new MacroInstanceDirective(
-								sb.toString(), isFlat, true, session, reader.position());
+								sb.toString(), isFlat, true, session, startPos);
 					}
 				}
 			}
