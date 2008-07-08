@@ -4,17 +4,16 @@ import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 
+import java.io.Writer;
 import java.util.List;
 
 public class MacroInstanceExecutor implements ToStringWithContextElement {
 
 	private MacroInstanceDirective macroInstance;
-	private ZSContext context;
 
 	public MacroInstanceExecutor (
-			MacroInstanceDirective macroInstance, ZSContext context) {
+			MacroInstanceDirective macroInstance) {
 		this.macroInstance = macroInstance;
-		this.context = context;
 	}
 
 	public List getChildren () {
@@ -25,6 +24,12 @@ public class MacroInstanceExecutor implements ToStringWithContextElement {
 		if (context instanceof MacroInstanceEntityContext)
 			((MacroInstanceEntityContext) context).setPostMacroContext(context);
 		return macroInstance.getNestedContent(context);
+	}
+
+	public void toString(ZSContext context, Writer writer) {
+		if (context instanceof MacroInstanceEntityContext)
+			((MacroInstanceEntityContext) context).setPostMacroContext(context);
+		macroInstance.writeNestedContent(context, writer);
 	}
 
 	public MacroInstanceDirective getMacroInstance() {

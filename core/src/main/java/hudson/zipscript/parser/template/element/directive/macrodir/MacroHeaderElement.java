@@ -71,7 +71,11 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 
 	public String toString(ZSContext context) {
 		StringWriter sw = new StringWriter();
-		merge(context, sw);
+		toString(context, sw);
 		return sw.toString();
+	}
+
+	public void toString(ZSContext context, Writer writer) {
+		merge(context, writer);
 	}
 }
