@@ -1,9 +1,9 @@
 [#macro pane *id *page[*label active=false]]
-[#if global.cssIncludes!=null]
-${global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", "YUI")?void}
+[#if Global.cssIncludes!=null]
+${Global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", "YUI")?void}
 [/#if]
-[#if global.scriptIncludes!=null]
-${global.scriptIncludes.put("tabview/tabview-min.js", "YUI")?void}
+[#if Global.scriptIncludes!=null]
+${Global.scriptIncludes.put("tabview/tabview-min.js", "YUI")?void}
 [/#if]
 [#set componentId = "${id}_tab"/]
 	<div id="${id}"></div>

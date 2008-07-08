@@ -1,10 +1,10 @@
 [#macro table *id *entries *column[*title key=title?humpbackCase width format selected] rowHighlight=true]
-[#if global.cssIncludes!=null]
-${global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
+[#if Global.cssIncludes!=null]
+${Global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
 [/#if]
-[#if global.scriptIncludes!=null]
-${global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
-${global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
+[#if Global.scriptIncludes!=null]
+${Global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
+${Global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
 [/#if]
 [#set dataName = "${id}_model"/]
 [#set columnDefName = "${id}_columns"/]
