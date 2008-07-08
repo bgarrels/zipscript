@@ -1,5 +1,10 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.Constants;
+import hudson.zipscript.parser.util.ClassUtil;
+import hudson.zipscript.parser.util.UniqueIdGenerator;
+import hudson.zipscript.parser.util.UniqueIdGeneratorImpl;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +18,7 @@ public class ContextWrapperFactory {
 		return instance;
 	}
 
-	public ZSContext wrap (Object obj) {
+	public ZSContext wrap (Object obj, Map params) {
 		ZSContext context = null;
 		if (null == obj)
 			context = new MapContextWrapper(new HashMap(2));
@@ -23,8 +28,11 @@ public class ContextWrapperFactory {
 			context = new MapContextWrapper((Map) obj);
 		else
 			context = new ObjectContextWrapper(obj);
-		context.put("now", new Date(), false);
-		context.put("vars", context, false);
+		context.put(Constants.NOW, new Date(), false);
+		context.put(Constants.VARS, context, false);
+		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
+				"uniqueIdGenerator", params, UniqueIdGenerator.class,
+				UniqueIdGeneratorImpl.class, null), false);
 		return context;
 	}
 }

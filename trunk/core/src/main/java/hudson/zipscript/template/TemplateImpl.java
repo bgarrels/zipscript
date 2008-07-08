@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class TemplateImpl implements Template, Evaluator, Element {
 
@@ -116,7 +117,10 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	}
 
 	private ZSContext getContext (Object obj) {
-		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj);
+		Map initParameters = null;
+		if (null != parsingSession && null != parsingSession.getParameters())
+			initParameters = parsingSession.getParameters().getInitParameters();
+		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj, initParameters);
 		context.setMacroManager(macroManager);
 		context.setParsingSession(parsingSession);
 		return context;

@@ -12,8 +12,6 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
-import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
