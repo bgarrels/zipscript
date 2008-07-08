@@ -34,7 +34,6 @@
 }}}
 
 =A Few Macros Wrapping YUI Javascript Components=
-I've create some reference macros to help show the power of this language.  These examples use macros created which wrap the Yahoo User Interface javascript components.
 
 *Data Table*
 {{{
@@ -49,7 +48,7 @@ I've create some reference macros to help show the power of this language.  Thes
 }}}
   * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/datatable_result.html View output]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/data.zsm View referenced zipscript macro]
-  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#21 view unit test producing these results]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#21 View unit test producing these results]
 
 *Tab Pane*
 {{{
@@ -74,7 +73,7 @@ I've create some reference macros to help show the power of this language.  Thes
 }}}
   * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/tab_result.html View output]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/tab.zsm View referenced zipscript macro]
-  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#34 view unit test producing these results]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#34 View unit test producing these results]
 
 *Tree View* _Notice the recursive functionality_
 {{{
@@ -94,4 +93,4 @@ I've create some reference macros to help show the power of this language.  Thes
 }}}
   * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/examples/tree_result.html View output]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/tree.zsm View referenced zipscript macro]
-  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#41 view unit test producing these results]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java?r=144#41 View unit test producing these results]
