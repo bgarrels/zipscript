@@ -64,6 +64,7 @@
     	<test haltonerror="false" outfile="dist/src/test/VariableDefaultsTestCase-results" name="test.hudson.zipscript.VariableDefaultsTestCase" />
     	<test haltonerror="false" outfile="dist/src/test/VariableFormattingTestCase-results" name="test.hudson.zipscript.VariableFormattingTestCase" />
     	<test haltonerror="false" outfile="dist/src/test/VariableTestCase-results" name="test.hudson.zipscript.VariableTestCase" />
+    	<test haltonerror="false" outfile="dist/src/test/ContextTestCase-results" name="test.hudson.zipscript.ContextTestCase" />
     </junit>
   </target>
 

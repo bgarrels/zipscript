@@ -13,12 +13,14 @@ public class ClassUtil {
 			String prefix, Map properties, Class expectedInterface, Class defaultClass, Map types) {
 		prefix = prefix + '.';
 		Map newProps = new HashMap();
-		for (Iterator i=properties.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry) i.next();
-			String key = entry.getKey().toString();
-			if (key.startsWith(prefix)) {
-				String keySub = key.substring(prefix.length());
-				newProps.put(keySub, entry.getValue());
+		if (null != properties) {
+			for (Iterator i=properties.entrySet().iterator(); i.hasNext(); ) {
+				Map.Entry entry = (Map.Entry) i.next();
+				String key = entry.getKey().toString();
+				if (key.startsWith(prefix)) {
+					String keySub = key.substring(prefix.length());
+					newProps.put(keySub, entry.getValue());
+				}
 			}
 		}
 		Class clazz = null;

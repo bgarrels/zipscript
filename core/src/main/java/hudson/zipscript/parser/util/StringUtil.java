@@ -3,8 +3,6 @@ package hudson.zipscript.parser.util;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NonOutputElement;
-import hudson.zipscript.parser.template.element.comment.CommentElement;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 
