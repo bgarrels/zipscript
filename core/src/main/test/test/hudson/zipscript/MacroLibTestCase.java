@@ -23,7 +23,7 @@ public class MacroLibTestCase extends TestCase {
 	private static ZipEngine engine = null;
 	static {
 		try {
-			engine = ZipEngine.getInstance();
+			engine = ZipEngine.createInstance();
 			engine.addMacroLibrary("cmn", "templates/macros/cmn.zsm");
 			engine.addMacroLibrary("tab", "templates/macros/tab.zsm");
 		}

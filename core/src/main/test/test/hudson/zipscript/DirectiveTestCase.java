@@ -36,7 +36,7 @@ public class DirectiveTestCase extends TestCase {
 	public void testSimple () throws Exception {
 		String mergeTemplate = "templates/simple_test.zs";
 		System.out.println(
-				ZipEngine.getInstance().getTemplate(mergeTemplate).merge(null));
+				ZipEngine.createInstance().getTemplate(mergeTemplate).merge(null));
 		
 	}
 	
@@ -117,7 +117,7 @@ public class DirectiveTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.getInstance().getTemplate(template)
+		return ZipEngine.createInstance().getTemplate(template)
 			.merge(context);
 	}
 }

@@ -35,7 +35,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		context.put("str", "http://www.google.com?a=b&d=e");
 		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge("str?url", context));
 		context.put("str", "com.foo.bar");
-		String[] arr = (String[]) ZipEngine.getInstance().getEvaluator(
+		String[] arr = (String[]) ZipEngine.createInstance().getEvaluator(
 				"str?split('.')").objectValue(context);
 		assertEquals(3, arr.length);
 		assertEquals("com", arr[0]);
@@ -64,7 +64,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("ghi", merge("myList?last", context));
 		assertEquals("true", merge("myList?contains('def')", context));
 		assertEquals("false", merge("myList?contains('foo')", context));
-		Object obj = ZipEngine.getInstance().getEvaluator("myList?length").objectValue(context);
+		Object obj = ZipEngine.createInstance().getEvaluator("myList?length").objectValue(context);
 		assertEquals(new Integer(3), obj);
 	}
 
@@ -74,13 +74,13 @@ public class SpecialMethodsTestCase extends TestCase {
 		map.put("foo", "foo_value");
 		map.put("bar", "bar_value");
 		context.put("myMap", map);
-		Collection c = (Collection) ZipEngine.getInstance().getEvaluator(
+		Collection c = (Collection) ZipEngine.createInstance().getEvaluator(
 				"myMap?keys").objectValue(context);
 		assertEquals(2, c.size());
 		assertEquals("foo", c.toArray()[0]);
 		assertEquals("bar", c.toArray()[1]);
 
-		c = (Collection) ZipEngine.getInstance().getEvaluator(
+		c = (Collection) ZipEngine.createInstance().getEvaluator(
 				"myMap?values").objectValue(context);
 		assertEquals(2, c.size());
 		assertEquals("foo_value", c.toArray()[0]);
@@ -101,14 +101,14 @@ public class SpecialMethodsTestCase extends TestCase {
 		context.put("shouldMatch", matchVal);
 		context.put("shouldNotMatch", noMatchVal);
 		String query = "shouldMatch?" + sm;
-		assertEquals(true, ZipEngine.getInstance().getEvaluator(query).booleanValue(context));
+		assertEquals(true, ZipEngine.createInstance().getEvaluator(query).booleanValue(context));
 		query = "shouldNotMatch?" + sm;
-		assertEquals(false, ZipEngine.getInstance().getEvaluator(query).booleanValue(context));
+		assertEquals(false, ZipEngine.createInstance().getEvaluator(query).booleanValue(context));
 	}
 
 	private String merge (String contents, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.getInstance().getEvaluator(
+		return ZipEngine.createInstance().getEvaluator(
 				contents).objectValue(context).toString();
 	}
 }

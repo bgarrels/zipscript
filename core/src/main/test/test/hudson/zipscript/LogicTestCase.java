@@ -42,6 +42,6 @@ public class LogicTestCase extends TestCase {
 
 	private boolean eval (String s, Object context)
 	throws ParseException, ExecutionException {
-		return ZipEngine.getInstance().getEvaluator(s).booleanValue(context);
+		return ZipEngine.createInstance().getEvaluator(s).booleanValue(context);
 	}
 }
