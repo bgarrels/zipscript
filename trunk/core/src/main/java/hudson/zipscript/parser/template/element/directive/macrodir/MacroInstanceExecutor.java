@@ -26,7 +26,7 @@ public class MacroInstanceExecutor implements ToStringWithContextElement {
 		return macroInstance.getNestedContent(context);
 	}
 
-	public void toString(ZSContext context, Writer writer) {
+	public void append(ZSContext context, Writer writer) {
 		if (context instanceof MacroInstanceEntityContext)
 			((MacroInstanceEntityContext) context).setPostMacroContext(context);
 		macroInstance.writeNestedContent(context, writer);

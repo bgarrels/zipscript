@@ -20,7 +20,7 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 		return Long.toString(uniqueId);
 	}
 
-	public void toString(ZSContext context, Writer writer) {
+	public void append(ZSContext context, Writer writer) {
 		StringUtil.append(toString(context), writer);
 	}
 

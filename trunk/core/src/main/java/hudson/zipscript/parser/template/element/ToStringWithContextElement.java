@@ -8,5 +8,5 @@ public interface ToStringWithContextElement {
 
 	public String toString (ZSContext context);
 
-	public void toString (ZSContext context, Writer writer);
+	public void append (ZSContext context, Writer writer);
 }
