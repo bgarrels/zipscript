@@ -5,6 +5,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.LoopingDirective;
@@ -12,11 +13,12 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class WhileDirective extends NestableElement implements MacroInstanceAware, LoopingDirective {
+public class WhileDirective extends NestableElement implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement {
 
 	public static final String TOKEN_INDEX = "i";
 
@@ -26,6 +28,12 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	public WhileDirective (String contents, int contentIndex, ParsingSession parsingSession)
 	throws ParseException {
 		parseContents(contents, contentIndex, parsingSession);
+	}
+
+	public List getInternalElements() {
+		List list = new ArrayList();
+		list.add(whileElement);
+		return list;
 	}
 
 	private void parseContents (

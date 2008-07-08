@@ -3,7 +3,16 @@ package test.hudson.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.LinePosition;
+import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
+import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.template.Template;
+import hudson.zipscript.template.TemplateImpl;
+
+import java.io.InputStream;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 public class ErrorTestCase extends TestCase {
@@ -63,13 +72,56 @@ public class ErrorTestCase extends TestCase {
 		assertTrue("The expected exception was not thrown", false);
 	}
 
-//	private void printChildInfo (Element e, ParsingResult pr, String prefix) {
-//		LinePosition lp = pr.getLinePosition(e.getElementPosition());
-//		System.out.println(prefix + e + " (Line: " + lp.line + ", Pos: " + lp.position + " - " + e.getElementPosition() + ")");
-//		if (null != e.getChildren()) {
-//			for (int i=0; i<e.getChildren().size(); i++) {
-//				printChildInfo((Element) e.getChildren().get(i), pr, prefix + "   ");
-//			}
-//		}
-//	}
+	public static void main(String[] args) throws Exception {
+		String templatePath = "templates/macro_fulltest_test.zs";
+		long checkPos = 511;
+		
+		TemplateImpl t = (TemplateImpl) ZipEngine.createInstance().getTemplate(templatePath);
+		printChildInfo(t, t.getParsingResult(), "");
+
+		System.out.println("\n\n----- Actual Line Numbers -----\n");
+		// print out the line break positions
+		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(templatePath);
+		long pos = 0;
+		int lineNum = 1;
+		int linePos = 0;
+		int i = is.read();
+		String checkPosContents = null;
+		while (i != -1) {
+			char c = (char) i;
+			
+			if (pos == checkPos) {
+				checkPosContents = "Position '" + checkPos + "' = '" + lineNum + ":" + linePos + " at char '" + c + "'";
+			}
+			
+			if (c == '\n') {
+				System.out.println("Line " + (++lineNum) + " starts as position " + (pos + 1));
+				linePos = -1;
+			}
+			i = is.read();
+			pos ++;
+			linePos ++;
+		}
+		is.close();
+
+		System.out.println("\n\n" + checkPosContents);
+	}
+
+	private static void printChildInfo (Element e, ParsingResult pr, String prefix) {
+		LinePosition lp = pr.getLinePosition(e.getElementPosition());
+		System.out.println(prefix + e + " (Line: " + lp.line + ", Pos: " + lp.position + ": " + lp.absolutePosition + ")");
+		if (null != e.getChildren()) {
+			for (int i=0; i<e.getChildren().size(); i++) {
+				if (e instanceof DebugElementContainerElement) {
+					List internalElements = ((DebugElementContainerElement) e).getInternalElements();
+					System.out.println(prefix + "\\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/ \\/");
+					for (int j=0; j<internalElements.size(); j++) {
+						printChildInfo((Element) internalElements.get(j), pr, prefix);
+					}
+					System.out.println(prefix + "/\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\ /\\");
+				}
+				printChildInfo((Element) e.getChildren().get(i), pr, prefix + "   ");
+			}
+		}
+	}
 }

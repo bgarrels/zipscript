@@ -7,6 +7,7 @@ import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -25,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroDirective extends NestableElement implements MacroInstanceAware {
+public class MacroDirective extends NestableElement implements MacroInstanceAware, DebugElementContainerElement {
 
 	private static PatternMatcher[] MATCHERS;
 	static {
@@ -40,6 +41,8 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	private List attributes = new ArrayList();
 	private Map attributeMap = new HashMap();
 	private MacroLibrary macroLibrary;
+	// debug
+	private List internalElements;
 
 	public MacroDirective (
 			String contents, ParsingSession session, int contentPosition) throws ParseException {
@@ -49,8 +52,13 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		session.addInlineMacroDefinition(this);
 	}
 
+	public List getInternalElements() {
+		return internalElements;
+	}
+
 	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
-		java.util.List elements = parseElements(contents, session, contentPosition);
+		List elements = parseElements(contents, session, contentPosition);
+		this.internalElements = elements;
 		if (elements.size() == 0)
 			throw new ParseException(this, "Macro name was not specified");
 		Element e;
