@@ -52,12 +52,15 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 
 	public void validate(ParsingSession session) throws ParseException {
 		if (null != contents) {
+			boolean hideEscaping = session.isHideEscapeMethods();
+			session.setHideEscapeMethods(true);
 			ParsingResult result = ExpressionParser.getInstance().parse(
 					contents, ZipEngine.TEMPLATE_COMPONENTS, TextDefaultElementFactory.INSTANCE,
 					position, session);
 			children = result.getElements();
 			StringUtil.trim(children);
 			this.contents = null;
+			session.setHideEscapeMethods(hideEscaping);
 		}
 	}
 

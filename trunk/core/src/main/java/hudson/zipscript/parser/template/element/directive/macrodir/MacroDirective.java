@@ -2,8 +2,8 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.Constants;
-import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;

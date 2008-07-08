@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.data;
 
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.resource.macrolib.MacroManager;
 import hudson.zipscript.resource.macrolib.MacroProvider;
 
@@ -14,7 +15,9 @@ public class ParsingSession implements MacroProvider {
 	private Map unknownVariablePatterns;
 	private Map inlineMacroDefinitions;
 	private Stack nestingStack;
+	private Stack escapeMethodStack = new Stack();
 	private MacroManager macroManager;
+	private boolean hideEscapeMethods = false;
 
 	public ParsingSession (
 			ParseParameters parameters, MacroManager macroManager) {
@@ -74,5 +77,31 @@ public class ParsingSession implements MacroProvider {
 
 	public boolean isDebug () {
 		return false;
+	}
+
+	public void addEscapeMethod (SpecialMethod sm) {
+		if (hideEscapeMethods) return;
+		escapeMethodStack.push(sm);
+	}
+
+	public SpecialMethod removeEscapeMethod (SpecialMethod sm) {
+		if (hideEscapeMethods) return null;
+		if (escapeMethodStack.size() == 0) return null;
+		SpecialMethod sm1 = (SpecialMethod) escapeMethodStack.pop();
+		if (null == sm) return sm1;
+		if (sm1 != sm) return null;
+		else return sm;
+	}
+
+	public Stack getEscapeMethods () {
+		return escapeMethodStack;
+	}
+
+	public boolean isHideEscapeMethods() {
+		return hideEscapeMethods;
+	}
+
+	public void setHideEscapeMethods(boolean hideEscapeMethods) {
+		this.hideEscapeMethods = hideEscapeMethods;
 	}
 }

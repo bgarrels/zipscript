@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.whiledir;
 
-import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -47,7 +47,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 			}
 		}
 
-		whileElement = parseElement(s, contentIndex, session);
+		whileElement = parseElement(s, session, contentIndex);
 	}
 
 	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {

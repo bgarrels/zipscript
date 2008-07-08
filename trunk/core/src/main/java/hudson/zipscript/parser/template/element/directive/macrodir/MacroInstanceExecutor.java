@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 
 import java.io.Writer;

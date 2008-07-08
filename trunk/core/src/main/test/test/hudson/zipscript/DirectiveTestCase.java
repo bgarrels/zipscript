@@ -18,12 +18,7 @@ public class DirectiveTestCase extends TestCase {
 
 //	public static TestSuite suite () {
 //		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testForeach"));
-//		suite.addTest(new DirectiveTestCase("testWhile"));
-//		suite.addTest(new DirectiveTestCase("testIf"));
-//		suite.addTest(new DirectiveTestCase("testSet"));
-//		suite.addTest(new DirectiveTestCase("testComment"));
-//		suite.addTest(new DirectiveTestCase("testMacro"));
+//		suite.addTest(new DirectiveTestCase("testEscape"));
 //		return suite;
 //	}
 
@@ -67,6 +62,12 @@ public class DirectiveTestCase extends TestCase {
 	public void testWhile () throws Exception {
 		String mergeTemplate = "templates/while_test.zs";
 		String resultFile = "/templates/while_result.txt";
+		evalResult(mergeTemplate, resultFile, null);
+	}
+
+	public void testEscape () throws Exception {
+		String mergeTemplate = "templates/escape_test.zs";
+		String resultFile = "/templates/escape_result.txt";
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
