@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -203,14 +204,14 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 
 		if (!nestedContent.getMacroInstance().isBodyEmpty())
-			context.put("body", nestedContent, true);
+			context.put(Constants.BODY, nestedContent, true);
 		if (null != nestedContent.getMacroInstance().getHeader())
-			context.put("header", nestedContent.getMacroInstance().getHeader(), true);
+			context.put(Constants.HEADER, nestedContent.getMacroInstance().getHeader(), true);
 		if (null != nestedContent.getMacroInstance().getFooter())
-			context.put("footer", nestedContent.getMacroInstance().getFooter(), true);
+			context.put(Constants.FOOTER, nestedContent.getMacroInstance().getFooter(), true);
 		MacroInstanceEntity mie = new MacroInstanceEntity(nestedContent.getMacroInstance(), context, null);
-		context.put("this", mie, true);
-		context.put("global", parentContext.getRootContext(), true);
+		context.put(Constants.THIS, mie, true);
+		context.put(Constants.GLOBAL, parentContext.getRootContext(), true);
 
 		// add template defined parameters
 		if (getParsingSession().isDebug()) {
