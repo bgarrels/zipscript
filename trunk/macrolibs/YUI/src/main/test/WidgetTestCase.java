@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class WidgetTestCase extends TestCase {
 
-	public void _testDataTableWidget () throws Exception {
+	public void testDataTableWidget () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add(new Person("Bill", "Cosby", "12/03/95", 8, new BigDecimal(1429978.76)));
@@ -32,14 +32,14 @@ public class WidgetTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testTabWidget () throws Exception {
+	public void testTabWidget () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "tab.zs";
 		String resultFile = "/tab_result.html";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testTreeWidget () throws Exception {
+	public void testTreeWidget () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "tree.zs";
 		String resultFile = "/tree_result.html";
@@ -53,7 +53,7 @@ public class WidgetTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void _testAllWidgets () throws Exception {
+	public void testAllWidgets () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add(new Person("Bill", "Cosby", "12/03/95", 8, new BigDecimal(1429978.76)));
@@ -81,10 +81,10 @@ public class WidgetTestCase extends TestCase {
 	private static ZipEngine engine = null;
 	static {
 		try {
-			engine = ZipEngine.getInstance();
-//			engine.addMacroLibrary("data", "data.zsm");
-//			engine.addMacroLibrary("tab", "tab.zsm");
-//			engine.addMacroLibrary("tree", "tree.zsm");
+			engine = ZipEngine.createInstance();
+			engine.addMacroLibrary("data", "data.zsm");
+			engine.addMacroLibrary("tab", "tab.zsm");
+			engine.addMacroLibrary("tree", "tree.zsm");
 			engine.addMacroLibrary("input", "input.zsm");
 		}
 		catch (ParseException e) {

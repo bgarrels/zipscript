@@ -1,10 +1,10 @@
 [#macro autoComplete *name type="array" id=name value="" entry[*key *value] size maxLength style class preHighlightClassName="yui-ac-prehighlight" typeAhead=true useShadow=true minQueryLength=0]
-[#if global.cssIncludes!=null]
-${global.cssIncludes.put("autocomplete/assets/skins/sam/autocomplete.css", "YUI")?void}
+[#if Global.cssIncludes!=null]
+${Global.cssIncludes.put("autocomplete/assets/skins/sam/autocomplete.css", "YUI")?void}
 [/#if]
-[#if global.scriptIncludes!=null]
-${global.scriptIncludes.put("yahoo-dom-event/yahoo-dom-event.js", "YUI")?void}
-${global.scriptIncludes.put("autocomplete/autocomplete-min.js", "YUI")?void}
+[#if Global.scriptIncludes!=null]
+${Global.scriptIncludes.put("yahoo-dom-event/yahoo-dom-event.js", "YUI")?void}
+${Global.scriptIncludes.put("autocomplete/autocomplete-min.js", "YUI")?void}
 [/#if]
 	<div id="${id}AutoComplete">
 		<input id="${id}" type="text"[#call commonAttributes with this/]/>
