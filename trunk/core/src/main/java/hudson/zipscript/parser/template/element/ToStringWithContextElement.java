@@ -2,11 +2,11 @@ package hudson.zipscript.parser.template.element;
 
 import java.io.Writer;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 public interface ToStringWithContextElement {
 
-	public String toString (ZSContext context);
+	public String toString (ExtendedContext context);
 
-	public void append (ZSContext context, Writer writer);
+	public void append (ExtendedContext context, Writer writer);
 }

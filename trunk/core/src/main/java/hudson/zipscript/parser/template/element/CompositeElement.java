@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -33,7 +33,7 @@ public class CompositeElement implements Element {
 		return referenceElement.getElementPosition();
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		for (Iterator i=children.iterator(); i.hasNext(); ) {
 			((Element) i.next()).merge(context, sw);
 		}
@@ -44,13 +44,13 @@ public class CompositeElement implements Element {
 		return null;
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		StringWriter sw = new StringWriter();
 		merge(context, sw);
 		return sw.toString();
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("Invalid boolean element '" + referenceElement + "'", referenceElement);
 	}
 

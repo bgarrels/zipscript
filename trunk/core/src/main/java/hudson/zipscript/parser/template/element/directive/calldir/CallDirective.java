@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.calldir;
 
 import hudson.zipscript.ZipEngine;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -178,7 +178,7 @@ public class CallDirective extends AbstractDirective {
 		}
 	}
 
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 		if (getParsingSession().isDebug()) {
 			System.out.println("Executing: " + this.toString());

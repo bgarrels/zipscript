@@ -3,7 +3,7 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.NestedContextWrapper;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -164,7 +164,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	}
 
 	public void executeMacro (
-			ZSContext context, boolean isOrdinal, List attributes,
+			ExtendedContext context, boolean isOrdinal, List attributes,
 			MacroInstanceExecutor nestedContent, Writer sw)
 	throws ExecutionException {
 		if (getParsingSession().isDebug()) {
@@ -174,7 +174,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			}
 		}
 		
-		ZSContext parentContext = context;
+		ExtendedContext parentContext = context;
 		context = new NestedContextWrapper(context, this, false);
 		// add attributes to context
 		if (isOrdinal) {
@@ -270,7 +270,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	}
 
 	public void getMatchingTemplateDefinedParameters(
-			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
+			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
 	}
 
@@ -313,7 +313,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		return "[#macro " + contents + "]";
 	}
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 	}
 
 	public String getContents() {

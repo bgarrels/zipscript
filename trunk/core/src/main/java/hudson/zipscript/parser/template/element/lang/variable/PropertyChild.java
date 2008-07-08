@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
@@ -28,7 +28,7 @@ public class PropertyChild implements VariableChild {
 		this.variableElement = variableElement;
 	}
 
-	public Object execute(Object parent, ZSContext context) throws ExecutionException {
+	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		if (null == parent) return null;
 		try {
 			if (null == type) {
@@ -39,7 +39,7 @@ public class PropertyChild implements VariableChild {
 				else if (parent instanceof ZSContextRequiredGetter) {
 					type = new Short(TYPE_CONTEXT_REQUIRED);
 				}
-				else if (parent instanceof ZSContext) {
+				else if (parent instanceof ExtendedContext) {
 					type = new Short(TYPE_CONTEXT);
 				}
 				else {
@@ -60,7 +60,7 @@ public class PropertyChild implements VariableChild {
 				return ((ZSContextRequiredGetter) parent).get(name, context);
 			}
 			else if (type.shortValue() == TYPE_CONTEXT) {
-				return ((ZSContext) parent).get(name);
+				return ((ExtendedContext) parent).get(name);
 			}
 			else {
 				return accessorMethod.invoke(parent, NO_PARAMS);

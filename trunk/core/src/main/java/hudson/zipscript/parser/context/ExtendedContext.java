@@ -14,19 +14,7 @@ import java.util.Map;
  * @author Joe Hudson
  */
 
-public interface ZSContext {
-
-	/**
-	 * Return the object matching the key
-	 * @param key the key name
-	 */
-	public Object get (Object key);
-
-	/**
-	 * Remove a value from the context matching the key
-	 * @param key the key name
-	 */
-	public Object remove (Object key);
+public interface ExtendedContext extends Context {
 
 	/**
 	 * Put a value in the context
@@ -42,11 +30,6 @@ public interface ZSContext {
 	 * @param value the value
 	 */
 	public void putGlobal (Object key, Object value);
-
-	/**
-	 * Return all keys for this scoped context
-	 */
-	public Iterator getKeys ();
 
 	/**
 	 * Return the parsing session which is used by evaluators
@@ -65,6 +48,12 @@ public interface ZSContext {
 	public Locale getLocale ();
 
 	/**
+	 * Set the locale
+	 * @param locale
+	 */
+	public void setLocale (Locale locale);
+
+	/**
 	 * Return the macro manager
 	 */
 	public MacroManager getMacroManager ();
@@ -78,7 +67,7 @@ public interface ZSContext {
 	/**
 	 * Return the root context (AKA the global context)
 	 */
-	public ZSContext getRootContext ();
+	public ExtendedContext getRootContext ();
 
 	/**
 	 * Append all nested macro attributes within this context

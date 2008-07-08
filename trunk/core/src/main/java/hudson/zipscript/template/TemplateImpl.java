@@ -1,7 +1,7 @@
 package hudson.zipscript.template;
 
 import hudson.zipscript.parser.context.ContextWrapperFactory;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class TemplateImpl implements Template, Evaluator, Element {
@@ -37,26 +38,42 @@ public class TemplateImpl implements Template, Evaluator, Element {
 
 	/** Template Methods **/
 	public boolean booleanValue(Object context) throws ExecutionException {
-		return booleanValue(getContext(context));
+		return booleanValue(context, null);
+	}
+
+	public boolean booleanValue(Object context, Locale locale) throws ExecutionException {
+		return booleanValue(getContext(context, locale));
 	}
 
 	public Object objectValue(Object context) throws ExecutionException {
-		return objectValue(getContext(context));
+		return objectValue(context, null);
+	}
+
+	public Object objectValue(Object context, Locale locale) throws ExecutionException {
+		return objectValue(getContext(context, locale));
 	}
 
 	public String merge(Object context) throws ExecutionException {
+		return merge(context, (Locale) null);
+	}
+
+	public String merge(Object context, Locale locale) throws ExecutionException {
 		StringWriter sw = new StringWriter();
-		merge(context, sw);
+		merge(context, sw, locale);
 		return sw.toString();
 	}
 
 	public void merge(Object context, Writer sw) throws ExecutionException {
-		merge(getContext(context), sw);
+		merge(context, sw, null);
+	}
+
+	public void merge(Object context, Writer sw, Locale locale) throws ExecutionException {
+		merge(getContext(context, locale), sw);
 	}
 
 
 	/** Element Methods **/
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 	throws ExecutionException {
 		try {
 			for (Iterator i=elements.iterator(); i.hasNext(); ) {
@@ -69,7 +86,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		}
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		if (null != element)
 			try {
 				return element.booleanValue(
@@ -83,7 +100,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 			throw new ExecutionException("Invalid boolean expression", null);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		if (null != element)
 			try {
 				return element.objectValue(
@@ -116,13 +133,14 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	public void setElementPosition(long position) {
 	}
 
-	private ZSContext getContext (Object obj) {
+	private ExtendedContext getContext (Object obj, Locale locale) {
 		Map initParameters = null;
 		if (null != parsingSession && null != parsingSession.getParameters())
 			initParameters = parsingSession.getParameters().getInitParameters();
-		ZSContext context = ContextWrapperFactory.getInstance().wrap(obj, initParameters);
+		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj, initParameters);
 		context.setMacroManager(macroManager);
 		context.setParsingSession(parsingSession);
+		if (null != locale) context.setLocale(locale);
 		return context;
 	}
 

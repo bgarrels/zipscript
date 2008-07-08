@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.macroinstance;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
@@ -16,7 +16,7 @@ public class BooleanValueSpecialMethod implements SpecialMethod {
 	private Element evaluatorElement;
 
 	public Object execute(
-			Object source, ZSContext context) throws Exception {
+			Object source, ExtendedContext context) throws Exception {
 		if (null == evaluatorElement) {
 			List children = ((MacroInstanceExecutor) source).getMacroInstance().getChildren();
 			List nonWhitespaceChildren = new ArrayList(children.size());

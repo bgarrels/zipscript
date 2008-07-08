@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.setdir;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -44,7 +44,7 @@ public class GlobalDirective extends AbstractDirective implements NonOutputEleme
 		}
 	}
 
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 		context.putGlobal(varName, setElement.objectValue(context));
 	}

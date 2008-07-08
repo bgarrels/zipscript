@@ -273,7 +273,7 @@ public class ZipEngine {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
 					contents, VARIABLE_MATCHERS, evalElementFactory, 0, macroManager, initParameters);
-			Evaluator evaluator = new TemplateImpl(element);
+			TemplateImpl evaluator = new TemplateImpl(element);
 			evaluator.setMacroManager(macroManager);
 			return evaluator;
 		}

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.sequence;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
@@ -18,7 +18,7 @@ public class ContainsSpecialMethod implements SpecialMethod {
 		}
 	}
 
-	public Object execute(Object source, ZSContext context) throws Exception {
+	public Object execute(Object source, ExtendedContext context) throws Exception {
 		Object check = checkElement.objectValue(context);
 		if (source instanceof Object[]) {
 			Object[] arr = (Object[]) source;

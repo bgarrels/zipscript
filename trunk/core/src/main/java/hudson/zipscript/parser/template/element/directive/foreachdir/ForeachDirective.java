@@ -2,7 +2,7 @@ package hudson.zipscript.parser.template.element.directive.foreachdir;
 
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.context.NestedContextWrapper;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -107,7 +107,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 	}
 
 	public void getMatchingTemplateDefinedParameters(
-			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
+			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
 			if (list instanceof Object[]) {
@@ -225,7 +225,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 		}
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		Object list = listElement.objectValue(context);
 		if (null != list) {
 			if (list instanceof Object[]) {

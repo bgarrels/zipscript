@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.special;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -32,15 +32,15 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 				this, index, elementList, session);
 	}
 
-	public Object objectValue(ZSContext context) {
+	public Object objectValue(ExtendedContext context) {
 		return value;
 	}
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 		StringUtil.append(value.toString(), sw);
 	}
 
-	public boolean booleanValue(ZSContext context) {
+	public boolean booleanValue(ExtendedContext context) {
 		return value.booleanValue();
 	}
 

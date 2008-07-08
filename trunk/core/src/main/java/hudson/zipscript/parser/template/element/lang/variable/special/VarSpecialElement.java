@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -26,6 +26,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.object.IsM
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsNumberSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsSequenceSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsStringSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.StringSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
@@ -80,7 +81,7 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		}
 	}
 
-	public Object execute(Object source, ZSContext context) {
+	public Object execute(Object source, ExtendedContext context) {
 		try {
 			if (null == source) return null;
 			if (null == executor) {
@@ -102,12 +103,12 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		return "?";
 	}
 
-	public boolean requiresInput(ZSContext context) {
+	public boolean requiresInput(ExtendedContext context) {
 		return true;
 	}
 
 	protected SpecialMethod initializeSpecialMethod (
-			Object source, ZSContext context) {
+			Object source, ExtendedContext context) {
 		// object methods
 		if (method.equals("void"))
 			return VoidSpecialMethod.INSTANCE;
@@ -130,37 +131,37 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 				return new BooleanValueSpecialMethod();
 			else return null;
 		}
-		else if (source instanceof String) {
-			if (method.equals("upperFirst"))
-				return UpperFirstSpecialMethod.INSTANCE;
-			else if (method.equals("lowerFirst"))
-				return LowerFirstSpecialMethod.INSTANCE;
-			else if (method.equals("lowerCase"))
-				return LowerCaseSpecialMethod.INSTANCE;
-			else if (method.equals("humpbackCase"))
-				return HumpbackCaseSpecialMethod.INSTANCE;
-			else if (method.equals("upperCase"))
-				return UpperCaseSpecialMethod.INSTANCE;
-			else if (method.equals("html"))
-				return HTMLSpecialMethod.INSTANCE;
-			else if (method.equals("js"))
-				return JSSpecialMethod.INSTANCE;
-			else if (method.equals("rtf"))
-				return RTFSpecialMethod.INSTANCE;
-			else if (method.equals("url"))
-				return new URLSpecialMethod(context.getParsingSession());
-			else if (method.equals("xml"))
-				return XMLSpecialMethod.INSTANCE;
-			else if (method.equals("leftPad"))
-				return new LPadSpecialMethod(getParameters());
-			else if (method.equals("rightPad"))
-				return new RPadSpecialMethod(getParameters());
-			else if (method.equals("contains"))
-				return new ContainsSpecialMethod(getParameters());
-			else if (method.equals("split"))
-				return new SplitSpecialMethod(getParameters());
-			else return null;
-		}
+
+		// string methods - these are a special case as we will turn objects into strings
+		if (method.equals("upperFirst"))
+			return getStringSpecialMethod(source, UpperFirstSpecialMethod.INSTANCE);
+		else if (method.equals("lowerFirst"))
+			return getStringSpecialMethod(source, LowerFirstSpecialMethod.INSTANCE);
+		else if (method.equals("lowerCase"))
+			return getStringSpecialMethod(source, LowerCaseSpecialMethod.INSTANCE);
+		else if (method.equals("humpbackCase"))
+			return getStringSpecialMethod(source, HumpbackCaseSpecialMethod.INSTANCE);
+		else if (method.equals("upperCase"))
+			return getStringSpecialMethod(source, UpperCaseSpecialMethod.INSTANCE);
+		else if (method.equals("html"))
+			return getStringSpecialMethod(source, HTMLSpecialMethod.INSTANCE);
+		else if (method.equals("js"))
+			return getStringSpecialMethod(source, JSSpecialMethod.INSTANCE);
+		else if (method.equals("rtf"))
+			return getStringSpecialMethod(source, RTFSpecialMethod.INSTANCE);
+		else if (method.equals("url"))
+			return getStringSpecialMethod(source, new URLSpecialMethod(context.getParsingSession()));
+		else if (method.equals("xml"))
+			return getStringSpecialMethod(source, XMLSpecialMethod.INSTANCE);
+		else if (method.equals("leftPad"))
+			return getStringSpecialMethod(source, new LPadSpecialMethod(getParameters()));
+		else if (method.equals("rightPad"))
+			return getStringSpecialMethod(source, new RPadSpecialMethod(getParameters()));
+		else if (method.equals("contains"))
+			return getStringSpecialMethod(source, new ContainsSpecialMethod(getParameters()));
+		else if (method.equals("split"))
+			return getStringSpecialMethod(source, new SplitSpecialMethod(getParameters()));
+
 		else if (source instanceof Number) {
 			if (method.equals("round"))
 				return RoundSpecialMethod.INSTANCE;
@@ -200,6 +201,11 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 				return null;
 		}
 		else return null;
+	}
+
+	private SpecialMethod getStringSpecialMethod (Object source, SpecialMethod specialMethod) {
+		if (source instanceof String) return specialMethod;
+		else return new StringSpecialMethod(specialMethod);
 	}
 
 	private Element[] getParameters () {

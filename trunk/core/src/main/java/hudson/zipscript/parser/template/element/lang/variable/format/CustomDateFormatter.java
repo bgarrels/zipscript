@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.format;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,7 +21,7 @@ public class CustomDateFormatter implements Formatter {
 		this.locale = locale;
 	}
 
-	public String format(Object object, ZSContext context) throws Exception {
+	public String format(Object object, ExtendedContext context) throws Exception {
 		if (null == context.getLocale() || null == this.locale
 				|| this.locale.equals(context.getLocale())) {
 			return formatter.format((Date) object);

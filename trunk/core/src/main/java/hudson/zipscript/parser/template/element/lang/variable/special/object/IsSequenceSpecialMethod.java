@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.object;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ public class IsSequenceSpecialMethod implements SpecialMethod {
 
 	public static IsSequenceSpecialMethod INSTANCE = new IsSequenceSpecialMethod();
 
-	public Object execute(Object source, ZSContext context) throws Exception {
+	public Object execute(Object source, ExtendedContext context) throws Exception {
 		return new Boolean(source instanceof Object[]
 		    || source instanceof Collection
 		    || source instanceof Iterator

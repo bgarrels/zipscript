@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.comparator.logic;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.comparator.AbstractComparatorElement;
@@ -15,7 +15,7 @@ public class AndLogicElement extends AbstractComparatorElement {
 
 	private List elements;
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		if (null == elements) {
 			elements = new ArrayList();
 			elements.add(getLeftHandSide());

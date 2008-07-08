@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.ifdir;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.HeaderElementList;
@@ -87,7 +87,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware, 
 		return children;
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		boolean done = false;
 		boolean isDebug = getParsingSession().isDebug();
 		if (isDebug) System.out.println("Executing: If: " + ifElement);
@@ -115,7 +115,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware, 
 	}
 
 	public void getMatchingTemplateDefinedParameters(
-			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries)
+			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries)
 	throws ExecutionException {
 		boolean done = false;
 		if (ifElement.booleanValue(context)) {

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.comparator.math;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.comparator.AbstractComparatorElement;
 
@@ -12,7 +12,7 @@ public abstract class AbstractMathExpression extends AbstractComparatorElement {
 		return false;
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		if (null == getLeftHandSide() || null == getRightHandSide())
 			throw new ExecutionException("Invalid expression", this);
 		Object lhs = getLeftHandSide().objectValue(context);

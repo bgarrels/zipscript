@@ -2,7 +2,7 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.MacroInstanceEntityContext;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 	private boolean initialized = false;
 
 	public MacroInstanceEntity (
-			MacroInstanceDirective macroInstance, ZSContext context, Map additionalContextEntries) {
+			MacroInstanceDirective macroInstance, ExtendedContext context, Map additionalContextEntries) {
 		this.macroInstance = macroInstance;
 
 		Map clonedEntries = new HashMap();
@@ -36,7 +36,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 	}
 
 
-	public Object get(String key, ZSContext context) {
+	public Object get(String key, ExtendedContext context) {
 		if (key.equals(Constants.BODY)) {
 			if (macroInstance.isBodyEmpty()) {
 				return null;
@@ -74,7 +74,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 		return context;
 	}
 
-	private void initialize (ZSContext context, boolean force) {
+	private void initialize (ExtendedContext context, boolean force) {
 		if (!initialized || force) {
 			this.context.setPostMacroContext(context);
 			initialized = true;

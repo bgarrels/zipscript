@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MacroInstanceEntityContext implements ZSContext {
+public class MacroInstanceEntityContext implements ExtendedContext {
 
-	private ZSContext preMacroContext;
-	private ZSContext postMacroContext;
+	private ExtendedContext preMacroContext;
+	private ExtendedContext postMacroContext;
 	private Map additionalContextEntries;
 	private List macroAttributes;
 	private List macroDefinitionAttributes;
 	private Element scopedElement;
 
 	public MacroInstanceEntityContext (
-			Element scopedElement, ZSContext preMacroContext, Map additionalContextEntries, List macroAttributes, List macroDefinitionAttributes) {
+			Element scopedElement, ExtendedContext preMacroContext, Map additionalContextEntries, List macroAttributes, List macroDefinitionAttributes) {
 		this.preMacroContext = preMacroContext;
 		this.additionalContextEntries = additionalContextEntries;
 		this.macroAttributes = macroAttributes;
@@ -35,7 +35,7 @@ public class MacroInstanceEntityContext implements ZSContext {
 		return obj;
 	}
 
-	public void setPostMacroContext (ZSContext context) {
+	public void setPostMacroContext (ExtendedContext context) {
 		this.postMacroContext = context;
 		initializeMacroAttributes(this);
 	}
@@ -48,6 +48,10 @@ public class MacroInstanceEntityContext implements ZSContext {
 		return preMacroContext.getLocale();
 	}
 
+	public void setLocale(Locale locale) {
+		preMacroContext.setLocale(locale);
+	}
+
 	public MacroManager getMacroManager() {
 		return preMacroContext.getMacroManager();
 	}
@@ -56,12 +60,16 @@ public class MacroInstanceEntityContext implements ZSContext {
 		return preMacroContext.getParsingSession();
 	}
 
-	public ZSContext getRootContext() {
+	public ExtendedContext getRootContext() {
 		return preMacroContext.getRootContext();
 	}
 
 	public void put(Object key, Object value, boolean travelUp) {
 		additionalContextEntries.put(key, value);
+	}
+
+	public void put(Object key, Object value) {
+		this.put(key, value, false);
 	}
 
 	public void putGlobal(Object key, Object value) {
@@ -85,7 +93,7 @@ public class MacroInstanceEntityContext implements ZSContext {
 		// and not in a macro definition
 	}
 
-	private void initializeMacroAttributes (ZSContext context) {
+	private void initializeMacroAttributes (ExtendedContext context) {
 		if (null != macroAttributes) {
 			// save any specified attribute values
 			for (java.util.Iterator i=macroAttributes.iterator(); i.hasNext(); ) {

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -28,7 +28,7 @@ public class EndMacroInstanceDirective extends NestableDirective {
 		return "[/@" + getName() + "]";
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		throw new ExecutionException("Invalid macro directive", this);
 	}
 

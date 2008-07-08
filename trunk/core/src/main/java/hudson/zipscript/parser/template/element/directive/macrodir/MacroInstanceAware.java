@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 import java.util.List;
 import java.util.Map;
@@ -15,5 +15,5 @@ public interface MacroInstanceAware {
 	 * @param additionalContextEntries map for entries that should be added to the context
 	 */
 	public void getMatchingTemplateDefinedParameters (
-			ZSContext context, List list, MacroDirective macro, Map additionalContextEntries); 
+			ExtendedContext context, List list, MacroDirective macro, Map additionalContextEntries); 
 }

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.group;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
@@ -18,18 +18,18 @@ public class GroupElement extends NestableElement {
 		return (e instanceof EndGroupElement);
 	}
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 		StringUtil.append('(', sw);
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else
 			throw new ExecutionException("groups can not be evaluated as booleans", this);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).objectValue(context);
 		else

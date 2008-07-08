@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
@@ -15,7 +15,7 @@ public class RPadSpecialMethod implements SpecialMethod {
 		}
 	}
 
-	public Object execute(Object source, ZSContext context) throws Exception {
+	public Object execute(Object source, ExtendedContext context) throws Exception {
 		if (null == padding) return source;
 		int paddingAmt = ((Number) padding.objectValue(context)).intValue();
 		StringBuffer sb = new StringBuffer();
