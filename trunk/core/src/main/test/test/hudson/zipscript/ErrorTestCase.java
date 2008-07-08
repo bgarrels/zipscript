@@ -45,7 +45,7 @@ public class ErrorTestCase extends TestCase {
 
 	private void evalResult (String mergeTemplate, int line, int position, boolean showError) {
 		try {
-			Template t = ZipEngine.getInstance().getTemplate("templates/error/" + mergeTemplate);
+			Template t = ZipEngine.createInstance().getTemplate("templates/error/" + mergeTemplate);
 			t.merge(null);
 		}
 		catch (ParseException e) {

@@ -16,7 +16,7 @@ public class InitPropertiesTestCase extends TestCase {
 		Map props = new HashMap();
 		props.put(Constants.TEMPLATE_RESOURCE_LOADER_CLASS, StringResourceLoader.class.getName());
 		props.put(Constants.SUPPRESS_NULL_ERRORS, Boolean.TRUE);
-		ZipEngine engine = ZipEngine.getInstance(props);
+		ZipEngine engine = ZipEngine.createInstance(props);
 		Template template = engine.getTemplate("${somethingMissing}");
 		String s = template.merge(null);
 		assertEquals("${somethingMissing}", s);

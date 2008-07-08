@@ -19,12 +19,12 @@ public class VariableTestCase extends TestCase {
 
 	public void testSeparatedPathVariables () throws Exception {
 		Evaluator template = null;
-		template = ZipEngine.getInstance().getEvaluator(
+		template = ZipEngine.createInstance().getEvaluator(
 				"${'foo.bar'}");
 		Map context = new HashMap();
 		context.put("foo.bar", "black sheep");
 		assertEquals("black sheep", template.objectValue(context));
-		template = ZipEngine.getInstance().getEvaluator(
+		template = ZipEngine.createInstance().getEvaluator(
 				"foo.bar");
 		assertEquals("black sheep", template.objectValue(context));
 	}
@@ -51,6 +51,6 @@ public class VariableTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.getInstance().getTemplate(template).merge(context);
+		return ZipEngine.createInstance().getTemplate(template).merge(context);
 	}
 }

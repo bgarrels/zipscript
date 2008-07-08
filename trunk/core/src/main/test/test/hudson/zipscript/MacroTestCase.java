@@ -82,6 +82,6 @@ public class MacroTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.getInstance().getTemplate(template).merge(context);
+		return ZipEngine.createInstance().getTemplate(template).merge(context);
 	}
 }

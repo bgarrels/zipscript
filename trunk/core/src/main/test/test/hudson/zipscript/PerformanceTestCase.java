@@ -22,7 +22,7 @@ public class PerformanceTestCase extends TestCase {
 	}
 	
 	public void testPerformance () throws Exception {
-		Template template = ZipEngine.getInstance().getTemplate("templates/performance_test.zs");
+		Template template = ZipEngine.createInstance().getTemplate("templates/performance_test.zs");
 		
 		Map context = new HashMap();
 		List someList = new ArrayList();

@@ -60,22 +60,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utility class used to retrieve templates and evaluators for the ZipScript expression language.  This can be retrieved
- * as a singleton <code>ZipEngine.getInstance()...</code> or as a unique instance
- * <code>ZipEngine engine = new ZipEngine()</code>.
+ * Utility class used to retrieve templates and evaluators for the ZipScript expression language.
+ * For default engine: <code>ZipEngine.createInstance()...</code>
+ * For customized engine: <code>ZipEngine.createInstance(Map properties)...</code>
  * <p>
- * The default behavior (if not initialized) is to load template and macro resources from the classpath and evaluate the
+ * The default behavior is to load template and macro resources from the classpath and evaluate the
  * string source directly that is passed to the getEvaluator(String) method.  Properties can be set to alter the behavior
  * of the resource locators and other functionality.  Reference all available properties <a href="http://www.zipscript.org/docs/current/bk02ch04.html">here</a>.
  * </p>
  * <p>
  * // standard usage
  * <pre>
- * ZipEngine engine = new ZipEngine();
  * Properties props = new Properties();
  * // set properties
  * engine.init(props);
-
+ * ZipEngine engine = ZipEngine.newInstance(props);
  * Map context = new HashMap();
  * // load the context
  * 
@@ -104,18 +103,21 @@ public class ZipEngine {
 	private Map initParameters;
 
 	/**
-	 * getInstance should be used
+	 * newInstance should be used
 	 */
 	private ZipEngine () {}
 
 	/**
-	 * Use ZipEngine as a singletion
+	 * Retrurn new instanceof ZipEngine
 	 */
-	public static ZipEngine getInstance ()  {
+	public static ZipEngine createInstance ()  {
 		return new ZipEngine();
 	}
 
-	public static ZipEngine getInstance (Map properties) {
+	/**
+	 * Retrurn new instanceof ZipEngine initialized with property map
+	 */
+	public static ZipEngine createInstance (Map properties) {
 		ZipEngine zipEngine = new ZipEngine();
 		zipEngine.init(properties);
 		return zipEngine;

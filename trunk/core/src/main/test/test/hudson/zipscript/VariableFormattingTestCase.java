@@ -39,7 +39,7 @@ public class VariableFormattingTestCase extends TestCase {
 
 	private Object eval (String s, Object context)
 	throws ParseException, ExecutionException {
-		Evaluator t = ZipEngine.getInstance().getEvaluator(s);
+		Evaluator t = ZipEngine.createInstance().getEvaluator(s);
 		return t.objectValue(context);
 	}
 }
