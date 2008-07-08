@@ -3,6 +3,7 @@ package hudson.zipscript.parser.util;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.exception.InitializationException;
 
+import java.io.Writer;
 import java.util.Map;
 
 public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
@@ -17,6 +18,10 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 			uniqueId = uniqueId ++;
 		}
 		return Long.toString(uniqueId);
+	}
+
+	public void toString(ZSContext context, Writer writer) {
+		StringUtil.append(toString(context), writer);
 	}
 
 	public String toString() {

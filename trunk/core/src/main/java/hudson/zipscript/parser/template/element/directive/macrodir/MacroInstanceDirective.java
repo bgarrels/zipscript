@@ -349,7 +349,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			}
 			macro.executeMacro(
 					context, isOrdinal(), getAttributes(),
-					new MacroInstanceExecutor(this, context), sw);
+					new MacroInstanceExecutor(this), sw);
 		}
 	}
 
@@ -359,6 +359,12 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			((Element) i.next()).merge(context, sw);
 		}
 		return sw.toString();
+	}
+
+	public void writeNestedContent (ZSContext context, Writer writer) throws ExecutionException {
+		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+			((Element) i.next()).merge(context, writer);
+		}
 	}
 
 	public MacroDirective getMacroDefinition () {

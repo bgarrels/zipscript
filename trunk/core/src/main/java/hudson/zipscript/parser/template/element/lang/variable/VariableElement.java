@@ -98,8 +98,7 @@ public class VariableElement extends AbstractElement implements Element {
 		Object obj = objectValue(context);
 		if (null != obj) {
 			if (obj instanceof ToStringWithContextElement) {
-				StringUtil.append(
-						((ToStringWithContextElement) obj).toString(context), sw);
+				((ToStringWithContextElement) obj).toString(context, sw);
 			}
 			else {
 				StringUtil.append(obj.toString(), sw);
