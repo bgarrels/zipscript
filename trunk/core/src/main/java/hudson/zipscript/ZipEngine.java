@@ -58,7 +58,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Utility class used to retrieve templates and evaluators for the ZipScript expression language.  This can be retrieved
@@ -114,10 +113,6 @@ public class ZipEngine {
 	 */
 	public static ZipEngine getInstance ()  {
 		return new ZipEngine();
-	}
-
-	public static ZipEngine getInstance (Properties properties) {
-		return getInstance((Map) properties);
 	}
 
 	public static ZipEngine getInstance (Map properties) {
