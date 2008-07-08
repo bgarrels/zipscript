@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ZSContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
@@ -36,7 +37,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
 
 	public Object get(String key, ZSContext context) {
-		if (key.equals("body")) {
+		if (key.equals(Constants.BODY)) {
 			if (macroInstance.isBodyEmpty()) {
 				return null;
 			}
@@ -45,11 +46,11 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 				return macroInstance.getNestedContent(this.context);
 			}
 		}
-		else if (key.equals("header")) {
+		else if (key.equals(Constants.HEADER)) {
 			initialize(context, false);
 			return macroInstance.getHeader();
 		}
-		else if (key.equals("footer")) {
+		else if (key.equals(Constants.FOOTER)) {
 			initialize(context, false);
 			return macroInstance.getFooter();
 		}
