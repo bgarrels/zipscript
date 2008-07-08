@@ -1,7 +1,7 @@
 #summary macro definition/reference cheat sheet
 #labels Featured
 
-_Note: some of the displayed functionality is not yet released (0.8.4)_
+_Note: some of the displayed functionality is not yet released (see: RoadMap)_
 
   * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MacroTestCase.java#61 View this unit test]
   * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_test.zs View unit test template reference]
