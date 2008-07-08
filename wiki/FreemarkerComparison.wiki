@@ -1,3 +1,5 @@
+#summary comparision between Zipscript and Freemarker
+
 ===Iterator Directive===
 *FM Implementation*
 {{{[#list myList as entry] ... [/#list]}}}
