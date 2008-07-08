@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.format;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
@@ -13,7 +13,7 @@ public class CustomNumberFormatter implements Formatter {
 		this.formatter = new DecimalFormat(format);
 	}
 
-	public String format(Object object, ZSContext context) throws Exception {
+	public String format(Object object, ExtendedContext context) throws Exception {
 		return formatter.format((Number) object);
 	}
 }

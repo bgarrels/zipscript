@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.TextElement;
@@ -31,7 +31,7 @@ public class MapChild implements VariableChild {
 		this.keyElement = keyElement;
 	}
 
-	public Object execute(Object parent, ZSContext context) throws ExecutionException {
+	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		if (null == parent) return null;
 		if (type == Integer.MIN_VALUE) {
 			if (parent instanceof Map)
@@ -42,7 +42,7 @@ public class MapChild implements VariableChild {
 				type = TYPE_LIST;
 			else if (parent instanceof Collection)
 				type = TYPE_COLLECTION;
-			else if (parent instanceof ZSContext)
+			else if (parent instanceof ExtendedContext)
 				type = TYPE_CONTEXT;
 			else {
 				type = TYPE_OBJECT;
@@ -57,7 +57,7 @@ public class MapChild implements VariableChild {
 			return ((Map) parent).get(key);
 		}
 		else if (type == TYPE_CONTEXT) {
-			return ((ZSContext) parent).get(key);
+			return ((ExtendedContext) parent).get(key);
 		}
 		else if (type == TYPE_OBJECT) {
 			try {

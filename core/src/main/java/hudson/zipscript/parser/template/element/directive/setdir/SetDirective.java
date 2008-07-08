@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.setdir;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -47,7 +47,7 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 		}
 	}
 
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 		context.put(varName, setElement.objectValue(context), true);
 	}
@@ -61,7 +61,7 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 		return null;
 	}
 
-	public void getMatchingTemplateDefinedParameters(ZSContext context, List list,
+	public void getMatchingTemplateDefinedParameters(ExtendedContext context, List list,
 			MacroDirective macro, Map additionalContextEntries) {
 		additionalContextEntries.put(varName, setElement.objectValue(context));	
 	}

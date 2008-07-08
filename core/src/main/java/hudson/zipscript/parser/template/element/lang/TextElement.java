@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.ExpressionParser;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
@@ -38,7 +38,7 @@ public class TextElement extends AbstractElement implements Element {
 		this.evaluateText = evaluateText;
 	}
 
-	public Object objectValue(ZSContext context) {
+	public Object objectValue(ExtendedContext context) {
 		if (evaluateText) {
 			if (getChildren().size() > 1) {
 				StringWriter sw = new StringWriter();
@@ -57,11 +57,11 @@ public class TextElement extends AbstractElement implements Element {
 		}
 	}
 
-	public boolean booleanValue(ZSContext context) {
+	public boolean booleanValue(ExtendedContext context) {
 		return false;
 	}
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 		if (evaluateText) {
 			for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
 				((Element) i.next()).merge(context, sw);

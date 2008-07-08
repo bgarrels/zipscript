@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 
@@ -11,7 +11,7 @@ public class ElementWrapperChild implements VariableChild {
 		this.element = element;
 	}
 
-	public Object execute(Object parent, ZSContext context) throws ExecutionException {
+	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		return element.objectValue(context);
 	}
 

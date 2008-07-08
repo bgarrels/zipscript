@@ -21,12 +21,15 @@ public class ContextWrapperFactory {
 		return instance;
 	}
 
-	public ZSContext wrap (Object obj, Map params) {
-		ZSContext context = null;
+	public ExtendedContext wrap (Object obj, Map params) {
+		ExtendedContext context = null;
 		if (null == obj)
 			context = new MapContextWrapper(new HashMap(2));
-		if (obj instanceof ZSContext)
-			context = (ZSContext) obj;
+		if (obj instanceof ExtendedContext)
+			context = (ExtendedContext) obj;
+		else if (obj instanceof Context) {
+			context = new SimpleContextWrapper((Context) obj);
+		}
 		else if (obj instanceof Map)
 			context = new MapContextWrapper((Map) obj);
 		else

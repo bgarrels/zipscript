@@ -3,7 +3,7 @@ package hudson.zipscript.parser.template.element.lang.variable;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -94,7 +94,7 @@ public class VariableElement extends AbstractElement implements Element {
 		return true;
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		Object obj = objectValue(context);
 		if (null != obj) {
 			if (obj instanceof ToStringWithContextElement) {
@@ -114,7 +114,7 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		Object rtn = null;
 		int count = 0;
 		boolean isNullAllowed = false;
@@ -164,7 +164,7 @@ public class VariableElement extends AbstractElement implements Element {
 		return rtn;
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		Object obj = objectValue(context);
 		if (null == obj)
 			throw new ExecutionException("The variable '" + this + "' is null and can not be evaluated to a boolean", this);

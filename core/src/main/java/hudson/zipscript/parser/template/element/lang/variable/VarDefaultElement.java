@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -31,15 +31,15 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 		return "!" + executeElement;
 	}
 
-	public Object execute(Object source, ZSContext context) {
+	public Object execute(Object source, ExtendedContext context) {
 		return objectValue(context);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		return executeElement.objectValue(context);
 	}
 
-	public boolean requiresInput(ZSContext context) {
+	public boolean requiresInput(ExtendedContext context) {
 		return false;
 	}
 }

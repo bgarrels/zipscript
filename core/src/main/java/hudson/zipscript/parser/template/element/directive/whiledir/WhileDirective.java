@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.whiledir;
 
 import hudson.zipscript.parser.context.NestedContextWrapper;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -50,7 +50,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 		whileElement = parseElement(s, contentIndex, session);
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0), false);
@@ -61,7 +61,7 @@ public class WhileDirective extends NestableElement implements MacroInstanceAwar
 	}
 
 	public void getMatchingTemplateDefinedParameters(
-			ZSContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
+			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
 		Integer int0 = new Integer(0);

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 public class RootChild implements VariableChild {
 
@@ -10,7 +10,7 @@ public class RootChild implements VariableChild {
 		this.name = name;
 	}
 
-	public Object execute(Object parent, ZSContext context) {
+	public Object execute(Object parent, ExtendedContext context) {
 		return context.get(name);
 	}
 

@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.Constants;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -347,7 +347,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		return "[@" + contents + "]";
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		if (!isTemplateDefinedParameter) {
 			if (null == macro) {
 				// we might need to lazy load
@@ -362,7 +362,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		}
 	}
 
-	public String getNestedContent (ZSContext context) throws ExecutionException {
+	public String getNestedContent (ExtendedContext context) throws ExecutionException {
 		StringWriter sw = new StringWriter();
 		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
 			((Element) i.next()).merge(context, sw);
@@ -370,7 +370,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		return sw.toString();
 	}
 
-	public void writeNestedContent (ZSContext context, Writer writer) throws ExecutionException {
+	public void writeNestedContent (ExtendedContext context, Writer writer) throws ExecutionException {
 		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
 			((Element) i.next()).merge(context, writer);
 		}
@@ -400,7 +400,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		this.isOrdinal = isOrdinal;
 	}
 	
-	public void getMatchingTemplateDefinedParameters(ZSContext context,
+	public void getMatchingTemplateDefinedParameters(ExtendedContext context,
 			List list, MacroDirective macro, Map additionalContextEntries) {
 		if (isTemplateDefinedParameterInMacroDefinition && null != macro.getAttribute(getName())) {
 			list.add(new MacroInstanceEntity(
@@ -444,7 +444,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		else return namespace + '.' + name;
 	}
 
-	public List getMacroDefinitionAttributes (ZSContext context) {
+	public List getMacroDefinitionAttributes (ExtendedContext context) {
 		if (isTemplateDefinedParameterInMacroDefinition()) {
 			// find the associated macro in the parsing session stack
 			List elements = new ArrayList();

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.special;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -102,15 +102,15 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 		return null;
 	}
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 		StringUtil.append(number.toString(), sw);
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("numbers can not be evaluated as boolean", this);
 	}
 
-	public Object objectValue(ZSContext context) {
+	public Object objectValue(ExtendedContext context) {
 		return number;
 	}
 

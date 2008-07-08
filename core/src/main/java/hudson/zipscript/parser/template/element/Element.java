@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -40,14 +40,14 @@ public interface Element {
 	 * @param context the data context
 	 * @throws ExecutionException
 	 */
-	public Object objectValue (ZSContext context) throws ExecutionException;
+	public Object objectValue (ExtendedContext context) throws ExecutionException;
 
 	/**
 	 * Return a boolean value referenced by this element and it's nested structure
 	 * @param context the data context
 	 * @throws ExecutionException
 	 */
-	public boolean booleanValue (ZSContext context) throws ExecutionException;
+	public boolean booleanValue (ExtendedContext context) throws ExecutionException;
 
 	/**
 	 * Merge this element and it's nested structure into the provided writer
@@ -55,7 +55,7 @@ public interface Element {
 	 * @param sw the Writer
 	 * @throws ExecutionException
 	 */
-	public void merge (ZSContext context, Writer sw) throws ExecutionException;
+	public void merge (ExtendedContext context, Writer sw) throws ExecutionException;
 
 	/**
 	 * Allow this element to evaluate the parsed document structure to self-contain all

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
@@ -18,7 +18,7 @@ public class DotElement extends IdentifierElement {
 		return ".";
 	}
 
-	public boolean requiresInput(ZSContext context) {
+	public boolean requiresInput(ExtendedContext context) {
 		return true;
 	}
 }

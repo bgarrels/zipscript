@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -12,14 +12,14 @@ import java.util.List;
 
 public class IdentifierElement extends AbstractElement {
 
-	public void merge(ZSContext context, Writer sw) {
+	public void merge(ExtendedContext context, Writer sw) {
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("identifiers can not be evaluated as booleans", this);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("identifiers can not be evaluated as objects", this);
 	}
 

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -124,7 +124,7 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected void appendTemplateDefinedParameters (
-			List children, ZSContext context, List macroInstanceList,
+			List children, ExtendedContext context, List macroInstanceList,
 			MacroDirective macro, Map additionalContextEntries) {
 		if (null != children) {
 			for (Iterator j=children.iterator(); j.hasNext(); ) {
@@ -168,7 +168,7 @@ public abstract class NestableElement extends AbstractDirective {
 	}
 
 	protected void appendElements (
-			List elements, ZSContext context, Writer sw)
+			List elements, ExtendedContext context, Writer sw)
 	throws ExecutionException {
 		if (null != elements) {
 			for (Iterator i=elements.iterator(); i.hasNext(); ) {

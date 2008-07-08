@@ -66,6 +66,10 @@ public class ObjectContextWrapper extends AbstractContext {
 		setMap.put(key, value);
 	}
 
+	public void put(Object key, Object value) {
+		this.put(key, value, false);
+	}
+
 	public void putGlobal(Object key, Object value) {
 		setMap.put(key, value);
 	}
@@ -78,7 +82,11 @@ public class ObjectContextWrapper extends AbstractContext {
 		return locale;
 	}
 
-	public ZSContext getRootContext() {
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	public ExtendedContext getRootContext() {
 		return this;
 	}
 

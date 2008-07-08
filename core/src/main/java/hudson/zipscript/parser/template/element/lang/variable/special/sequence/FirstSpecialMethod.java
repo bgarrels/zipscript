@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.sequence;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.util.Collection;
@@ -8,7 +8,7 @@ import java.util.Collection;
 public class FirstSpecialMethod implements SpecialMethod {
 
 	public Object execute(
-			Object source, ZSContext context) throws Exception {
+			Object source, ExtendedContext context) throws Exception {
 		if (source instanceof Object[]) {
 			if (((Object[]) source).length > 0) {
 				return ((Object[]) source)[0];

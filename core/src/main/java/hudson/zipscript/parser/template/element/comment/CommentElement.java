@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.comment;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -18,7 +18,7 @@ public class CommentElement implements Element, NonOutputElement {
 		return instance;
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		return false;
 	}
 
@@ -35,11 +35,11 @@ public class CommentElement implements Element, NonOutputElement {
 		return null;
 	}
 
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		return null;
 	}
 

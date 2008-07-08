@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
@@ -14,7 +14,7 @@ public class URLSpecialMethod implements SpecialMethod {
 		this.encoding = "UTF-8";
 	}
 
-	public Object execute(Object source, ZSContext context) throws Exception {
+	public Object execute(Object source, ExtendedContext context) throws Exception {
 		return URLEncoder.encode((String) source, encoding);
 	}
 }

@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.comparator;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -20,17 +20,17 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 	private Element leftHandSide;
 	private Element rightHandSide;
 
-	public boolean booleanValue (ZSContext context) throws ExecutionException {
+	public boolean booleanValue (ExtendedContext context) throws ExecutionException {
 		Object lhsValue = getValue(leftHandSide, context);
 		Object rhsValue = getValue(rightHandSide, context);
 		return compare(lhsValue, rhsValue);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		return new Boolean(booleanValue(context));
 	}
 
-	protected Object getValue (Element element, ZSContext context)
+	protected Object getValue (Element element, ExtendedContext context)
 	throws ExecutionException{
 		return element.objectValue(context);
 	}
@@ -39,7 +39,7 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 
 	protected abstract String getComparatorString ();
 
-	public void merge (ZSContext context, Writer sw)
+	public void merge (ExtendedContext context, Writer sw)
 	throws ExecutionException {
 		Object rtn = objectValue(context);
 		if (null != rtn) {

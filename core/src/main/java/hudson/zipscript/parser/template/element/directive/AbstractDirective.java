@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.ElementStackAware;
@@ -12,11 +12,11 @@ public abstract class AbstractDirective extends AbstractElement implements Direc
 
 	private Stack elementStack;
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("Directives are only applicable for template parsing", this);
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		throw new ExecutionException("Directives are only applicable for template parsing", this);
 	}
 

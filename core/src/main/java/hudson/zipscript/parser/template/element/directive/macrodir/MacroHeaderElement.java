@@ -2,7 +2,7 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -35,7 +35,7 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 		return children;
 	}
 
-	public void merge(ZSContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		if (null != children) {
 			for (Iterator i=children.iterator(); i.hasNext(); ) {
 				((Element) i.next()).merge(context, sw);
@@ -61,21 +61,21 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 		}
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		return null;
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		return false;
 	}
 
-	public String toString(ZSContext context) {
+	public String toString(ExtendedContext context) {
 		StringWriter sw = new StringWriter();
 		append(context, sw);
 		return sw.toString();
 	}
 
-	public void append(ZSContext context, Writer writer) {
+	public void append(ExtendedContext context, Writer writer) {
 		merge(context, writer);
 	}
 }

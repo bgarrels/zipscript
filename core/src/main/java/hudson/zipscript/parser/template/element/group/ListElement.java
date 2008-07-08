@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.group;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -47,12 +47,12 @@ public class ListElement extends NestableElement {
 		return rtn;
 	}
 
-	public void merge(ZSContext context, Writer sw)
+	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 		throw new ExecutionException("Lists can not be merged directly", this);
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		List l = new ArrayList();
 		for (Iterator i=listElements.iterator(); i.hasNext(); ) {
 			l.add(((Element) i.next()).objectValue(context));
@@ -60,7 +60,7 @@ public class ListElement extends NestableElement {
 		return l;
 	}
 
-	public boolean booleanValue(ZSContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else

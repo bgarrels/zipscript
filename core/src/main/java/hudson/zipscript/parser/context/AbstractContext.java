@@ -3,7 +3,7 @@ package hudson.zipscript.parser.context;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
-public abstract class AbstractContext implements ZSContext {
+public abstract class AbstractContext implements ExtendedContext {
 
 	private ParsingSession parsingSession;
 	private MacroManager macroManager;

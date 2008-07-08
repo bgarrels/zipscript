@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.MacroInstanceEntityContext;
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 
 import java.io.Writer;
@@ -20,13 +20,13 @@ public class MacroInstanceExecutor implements ToStringWithContextElement {
 		return macroInstance.getChildren();
 	}
 
-	public String toString(ZSContext context) {
+	public String toString(ExtendedContext context) {
 		if (context instanceof MacroInstanceEntityContext)
 			((MacroInstanceEntityContext) context).setPostMacroContext(context);
 		return macroInstance.getNestedContent(context);
 	}
 
-	public void append(ZSContext context, Writer writer) {
+	public void append(ExtendedContext context, Writer writer) {
 		if (context instanceof MacroInstanceEntityContext)
 			((MacroInstanceEntityContext) context).setPostMacroContext(context);
 		macroInstance.writeNestedContent(context, writer);

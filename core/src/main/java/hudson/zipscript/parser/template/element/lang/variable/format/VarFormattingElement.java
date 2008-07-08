@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.format;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -45,7 +45,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			return "|" + formatFunction;
 	}
 
-	public Object execute(Object source, ZSContext context) {
+	public Object execute(Object source, ExtendedContext context) {
 		if (null == source) return null;
 		try {
 			if (null == formatter) {
@@ -62,12 +62,12 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 		}
 	}
 
-	public Object objectValue(ZSContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context) throws ExecutionException {
 		return null;
 	}
 
 	protected Formatter initializeFormatter (
-			Object source, ZSContext context) {
+			Object source, ExtendedContext context) {
 		if (source instanceof Date) {
 			if (null != this.format) {
 				return new CustomDateFormatter(this.format, context.getLocale());
@@ -87,7 +87,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 		return null;
 	}
 
-	public boolean requiresInput(ZSContext context) {
+	public boolean requiresInput(ExtendedContext context) {
 		return true;
 	}
 }

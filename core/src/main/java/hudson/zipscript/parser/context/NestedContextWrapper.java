@@ -11,19 +11,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class NestedContextWrapper implements ZSContext {
+public class NestedContextWrapper implements ExtendedContext {
 
-	private ZSContext parentContext;
+	private ExtendedContext parentContext;
 	private HashMap map = new HashMap(4);
 	private boolean travelUp;
 	private Element scopedElement;
 
-	public NestedContextWrapper (ZSContext parentContext, Element scopedElement) {
+	public NestedContextWrapper (ExtendedContext parentContext, Element scopedElement) {
 		this (parentContext, scopedElement, true);
 	}
 
 	public NestedContextWrapper (
-			ZSContext parentContext, Element scopedElement, boolean travelUp) {
+			ExtendedContext parentContext, Element scopedElement, boolean travelUp) {
 		this.parentContext = parentContext;
 		this.scopedElement = scopedElement;
 		this.travelUp = travelUp;
@@ -46,6 +46,10 @@ public class NestedContextWrapper implements ZSContext {
 			parentContext.put(key, value, true);
 		else
 			map.put(key, value);
+	}
+
+	public void put(Object key, Object value) {
+		this.put(key, value, false);
 	}
 
 	public void putGlobal(Object key, Object value) {
@@ -72,6 +76,10 @@ public class NestedContextWrapper implements ZSContext {
 		return parentContext.getLocale();
 	}
 
+	public void setLocale(Locale locale) {
+		parentContext.setLocale(locale);
+	}
+
 	public MacroManager getMacroManager() {
 		return parentContext.getMacroManager();
 	}
@@ -80,7 +88,7 @@ public class NestedContextWrapper implements ZSContext {
 		parentContext.setMacroManager(macroManager);
 	}
 
-	public ZSContext getRootContext () {
+	public ExtendedContext getRootContext () {
 		return parentContext.getRootContext();
 	}
 
@@ -88,7 +96,7 @@ public class NestedContextWrapper implements ZSContext {
 		return scopedElement;
 	}
 
-	public ZSContext getParentContext() {
+	public ExtendedContext getParentContext() {
 		return parentContext;
 	}
 

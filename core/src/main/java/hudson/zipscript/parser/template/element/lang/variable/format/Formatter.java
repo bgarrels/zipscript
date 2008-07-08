@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.element.lang.variable.format;
 
-import hudson.zipscript.parser.context.ZSContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 
 public interface Formatter {
 
-	public String format (Object object, ZSContext context) throws Exception;
+	public String format (Object object, ExtendedContext context) throws Exception;
 }
