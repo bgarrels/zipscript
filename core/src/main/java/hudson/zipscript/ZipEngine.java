@@ -18,6 +18,7 @@ import hudson.zipscript.parser.template.element.comparator.logic.OrLogicPatternM
 import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
+import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroComponent;
@@ -132,7 +133,8 @@ public class ZipEngine {
 			new VariableComponent(),
 			new SetComponent(),
 			new GlobalComponent(),
-			new CallComponent()
+			new CallComponent(),
+			new EscapeComponent()
 	};
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
 			new VariablePatternMatcher(),

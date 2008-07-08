@@ -19,6 +19,7 @@ import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
+import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -36,6 +37,7 @@ public class VariableElement extends AbstractElement implements Element {
 	private List children;
 	private String pattern;
 	private List specialElements;
+	private List escapeMethods;
 
 	private boolean suppressNullErrors;
 
@@ -161,6 +163,16 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 			}
 		}
+		if (null != escapeMethods && !(rtn instanceof ToStringWithContextElement)) {
+			try {
+				for (Iterator i=escapeMethods.iterator(); i.hasNext(); ) {
+					rtn = ((SpecialMethod) i.next()).execute(rtn, context);
+				}
+			}
+			catch (Exception e) {
+				throw new ExecutionException(e.getMessage(), this);
+			}
+		}
 		return rtn;
 	}
 
@@ -190,6 +202,14 @@ public class VariableElement extends AbstractElement implements Element {
 					e = ei.getElement();
 				}
 				specialElements.add(e);
+			}
+		}
+		// check for directive escaping
+		if (session.getEscapeMethods().size() > 0) {
+			escapeMethods = new ArrayList(1);
+			for (int i=0; i<session.getEscapeMethods().size(); i++) {
+				SpecialMethod sm = (SpecialMethod) session.getEscapeMethods().get(i);
+				escapeMethods.add(sm);
 			}
 		}
 		return null;
@@ -270,7 +290,7 @@ public class VariableElement extends AbstractElement implements Element {
 				wasSeparator = false;
 				if (children.size() == 0) {
 					// qualified path to use as context key
-					children.add(new RootChild(((TextElement) e).getText()));
+					children.add(new TextElementRootChild(((TextElement) e).getText()));
 				}
 				else {
 					addChildProperty(((TextElement) e).getText(), children);

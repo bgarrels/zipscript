@@ -20,7 +20,7 @@ public class VariableTestCase extends TestCase {
 	public void testSeparatedPathVariables () throws Exception {
 		Evaluator template = null;
 		template = ZipEngine.createInstance().getEvaluator(
-				"${'foo.bar'}");
+				"foo.bar");
 		Map context = new HashMap();
 		context.put("foo.bar", "black sheep");
 		assertEquals("black sheep", template.objectValue(context));

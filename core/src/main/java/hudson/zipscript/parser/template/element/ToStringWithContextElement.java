@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.element;
 
-import java.io.Writer;
-
 import hudson.zipscript.parser.context.ExtendedContext;
+
+import java.io.Writer;
 
 public interface ToStringWithContextElement {
 

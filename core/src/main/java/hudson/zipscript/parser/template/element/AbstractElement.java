@@ -49,7 +49,7 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected Element parseElement (
-			String contents, int startPosition, ParsingSession parsingSession)
+			String contents, ParsingSession parsingSession, int startPosition)
 	throws ParseException {
 		return ExpressionParser.getInstance().parseToElement(
 				contents, getContentParsingPatternMatchers(),
@@ -57,12 +57,18 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {
+		return parseElements(contents, session, startPosition, true);
+	}
+
+	protected List parseElements (String contents, ParsingSession session, int startPosition, boolean hideEscaping) throws ParseException {
 		ParseParameters oldParameters = session.getParameters();
 		session.setParameters(new ParseParameters(true, true));
+		if (hideEscaping) session.setHideEscapeMethods(true);
 		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
 				session, startPosition).getElements();
 		session.setParameters(oldParameters);
+		if (hideEscaping) session.setHideEscapeMethods(false);
 		return rtn;
 	}
 

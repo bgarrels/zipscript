@@ -3,7 +3,6 @@ package hudson.zipscript.parser.context;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

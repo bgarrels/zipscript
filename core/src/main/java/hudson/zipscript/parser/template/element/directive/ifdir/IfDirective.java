@@ -5,8 +5,8 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.HeaderElementList;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.DebugElementContainerElement;
+import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
@@ -45,7 +45,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware, 
 	
 	private void parseContents (
 			String contents, int contentIindex, ParsingSession parsingSession) throws ParseException {
-		ifElement = parseElement(contents, contentIindex, parsingSession);
+		ifElement = parseElement(contents, parsingSession, contentIindex);
 		if (null == ifElement) throw new ParseException(
 				this, "Invalid element syntax '" + contents + "'");
 	}
@@ -60,8 +60,7 @@ public class IfDirective extends NestableElement implements MacroInstanceAware, 
 			if (null == elseifScenarios)
 				elseifScenarios = new ArrayList();
 			ElseIfDirective directive = (ElseIfDirective) elements.getHeader();
-			Element element = parseElement(directive.getContents(),
-					(int) elements.getHeader().getElementPosition(), parsingSession);
+			Element element = parseElement(directive.getContents(), parsingSession, (int) elements.getHeader().getElementPosition());
 			elements.setHeader(element);
 			elseifScenarios.add(elements);
 		}

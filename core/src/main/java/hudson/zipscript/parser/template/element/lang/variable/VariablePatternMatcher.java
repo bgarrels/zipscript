@@ -24,19 +24,10 @@ public class VariablePatternMatcher implements PatternMatcher {
 		StringBuffer sb = new StringBuffer();
 		int nesting = 1;
 		boolean inString = false;
+		char stringChar = Character.MIN_VALUE;
 		while (reader.hasRemaining()) {
 			char c = reader.get();
-			if (c == '\'') {
-				inString = !inString;
-				sb.append(c);
-			}
-			else if (c == '\\') {
-				if (reader.hasRemaining())
-					sb.append(reader.get());
-				else
-					return null;
-			}
-			else if (!inString) {
+			if (!inString) {
 				if (c == '{') {
 					nesting ++;
 				}
@@ -51,10 +42,27 @@ public class VariablePatternMatcher implements PatternMatcher {
 					}
 					
 				}
+				else if (c == '\'' || c == '\"') {
+					inString = true;
+					stringChar = c;
+				}
 				sb.append(c);
 			}
 			else {
-				sb.append(c);
+				if (c == '\\') {
+					if (reader.hasRemaining())
+						sb.append(reader.get());
+					else
+						return null;
+				}
+				else if (c == stringChar) {
+					inString = false;
+					stringChar = Character.MIN_VALUE;
+					sb.append(c);
+				}
+				else {
+					sb.append(c);
+				}
 			}
 		}
 		return null;

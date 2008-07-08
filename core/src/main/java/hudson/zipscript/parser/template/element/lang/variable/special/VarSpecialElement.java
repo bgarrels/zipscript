@@ -57,6 +57,12 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 	private SpecialMethod executor;
 	private String method;
 	private GroupElement parameters;
+	
+	public VarSpecialElement () {}
+
+	public VarSpecialElement (SpecialMethod executor) {
+		this.executor = executor;
+	}
 
 	public ElementIndex normalize(int index, List elementList, ParsingSession session)
 			throws ParseException {
@@ -84,9 +90,8 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 	public Object execute(Object source, ExtendedContext context) {
 		try {
 			if (null == source) return null;
-			if (null == executor) {
-				executor = initializeSpecialMethod(source, context);
-			}
+			if (null == executor) executor = initializeSpecialMethod(source, context);
+			if (null == executor) throw new ExecutionException("Unknown special method '" + method + "'", null);
 			return executor.execute(source, context);
 		}
 		catch (Exception e) {
@@ -95,12 +100,12 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 				throw (ExecutionException) e;
 			}
 			else
-				throw new ExecutionException(e.getMessage(), this);
+				throw new ExecutionException(e.getMessage(), this, e);
 		}
 	}
 
 	public String toString() {
-		return "?";
+		return "?" + method;
 	}
 
 	public boolean requiresInput(ExtendedContext context) {
@@ -133,26 +138,8 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		}
 
 		// string methods - these are a special case as we will turn objects into strings
-		if (method.equals("upperFirst"))
-			return getStringSpecialMethod(source, UpperFirstSpecialMethod.INSTANCE);
-		else if (method.equals("lowerFirst"))
-			return getStringSpecialMethod(source, LowerFirstSpecialMethod.INSTANCE);
-		else if (method.equals("lowerCase"))
-			return getStringSpecialMethod(source, LowerCaseSpecialMethod.INSTANCE);
-		else if (method.equals("humpbackCase"))
-			return getStringSpecialMethod(source, HumpbackCaseSpecialMethod.INSTANCE);
-		else if (method.equals("upperCase"))
-			return getStringSpecialMethod(source, UpperCaseSpecialMethod.INSTANCE);
-		else if (method.equals("html"))
-			return getStringSpecialMethod(source, HTMLSpecialMethod.INSTANCE);
-		else if (method.equals("js"))
-			return getStringSpecialMethod(source, JSSpecialMethod.INSTANCE);
-		else if (method.equals("rtf"))
-			return getStringSpecialMethod(source, RTFSpecialMethod.INSTANCE);
-		else if (method.equals("url"))
-			return getStringSpecialMethod(source, new URLSpecialMethod(context.getParsingSession()));
-		else if (method.equals("xml"))
-			return getStringSpecialMethod(source, XMLSpecialMethod.INSTANCE);
+		SpecialMethod sm = getStringEscapingStringMethod(method, source, context.getParsingSession());
+		if (null != sm) return sm;
 		else if (method.equals("leftPad"))
 			return getStringSpecialMethod(source, new LPadSpecialMethod(getParameters()));
 		else if (method.equals("rightPad"))
@@ -203,7 +190,31 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		else return null;
 	}
 
-	private SpecialMethod getStringSpecialMethod (Object source, SpecialMethod specialMethod) {
+	public static SpecialMethod getStringEscapingStringMethod (String method, Object source, ParsingSession session) {
+		if (method.equals("upperFirst"))
+			return getStringSpecialMethod(source, UpperFirstSpecialMethod.INSTANCE);
+		else if (method.equals("lowerFirst"))
+			return getStringSpecialMethod(source, LowerFirstSpecialMethod.INSTANCE);
+		else if (method.equals("lowerCase"))
+			return getStringSpecialMethod(source, LowerCaseSpecialMethod.INSTANCE);
+		else if (method.equals("humpbackCase"))
+			return getStringSpecialMethod(source, HumpbackCaseSpecialMethod.INSTANCE);
+		else if (method.equals("upperCase"))
+			return getStringSpecialMethod(source, UpperCaseSpecialMethod.INSTANCE);
+		else if (method.equals("html"))
+			return getStringSpecialMethod(source, HTMLSpecialMethod.INSTANCE);
+		else if (method.equals("js"))
+			return getStringSpecialMethod(source, JSSpecialMethod.INSTANCE);
+		else if (method.equals("rtf"))
+			return getStringSpecialMethod(source, RTFSpecialMethod.INSTANCE);
+		else if (method.equals("url"))
+			return getStringSpecialMethod(source, new URLSpecialMethod(session));
+		else if (method.equals("xml"))
+			return getStringSpecialMethod(source, XMLSpecialMethod.INSTANCE);
+		else return null;
+	}
+
+	private static SpecialMethod getStringSpecialMethod (Object source, SpecialMethod specialMethod) {
 		if (source instanceof String) return specialMethod;
 		else return new StringSpecialMethod(specialMethod);
 	}

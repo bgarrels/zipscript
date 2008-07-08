@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.Constants;
-import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 
 import java.util.HashMap;
