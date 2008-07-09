@@ -123,4 +123,12 @@ public class NestedContextWrapper implements ExtendedContext {
 		parentContext.addToElementScope(nestingStack);
 		nestingStack.add(scopedElement);
 	}
+
+	public void setInitialized(boolean val) {
+		parentContext.setInitialized(val);
+	}
+
+	public boolean isInitialized() {
+		return parentContext.isInitialized();
+	}
 }

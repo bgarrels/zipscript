@@ -1,6 +1,7 @@
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.util.IOUtil;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 import junit.framework.TestCase;
 import test.hudson.zipscript.model.Person;
@@ -57,6 +60,23 @@ public class DirectiveTestCase extends TestCase {
 		context = new HashMap();
 		context.put("theList", l2.iterator());
 		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void testInitialize () throws Exception {
+		String mergeTemplate = "templates/initialize_test.zs";
+		String resultFile = "/templates/initialize_result.txt";
+		ZipEngine ze = ZipEngine.createInstance();
+		ze.addMacroLibrary("test", "templates/initialize_test_macro.zsm");
+		hudson.zipscript.template.Template t = ze.getTemplate(mergeTemplate);
+		HashMap obj = new HashMap();
+		Context ctx = t.initialize(obj);
+		assertEquals(new Integer(1), obj.get("inTemplateCount"));
+		assertEquals(new Integer(1), obj.get("inMacroCount"));
+		String s = t.merge(ctx);
+		assertEquals(new Integer(1), obj.get("inTemplateCount"));
+		assertEquals(new Integer(1), obj.get("inMacroCount"));
+		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
+		assertEquals(expectedResult, s);
 	}
 
 	public void testWhile () throws Exception {
