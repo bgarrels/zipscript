@@ -219,7 +219,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			context.put(Constants.FOOTER, nestedContent.getMacroInstance().getFooter(), true);
 		MacroInstanceEntity mie = new MacroInstanceEntity(nestedContent.getMacroInstance(), context, null);
 		context.put(Constants.THIS, mie, true);
-		context.put(Constants.GLOBAL, parentContext.getRootContext(), true);
+		context.put(Constants.VARS, context);
 
 		// add template defined parameters
 		if (getParsingSession().isDebug()) {

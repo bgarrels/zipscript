@@ -36,6 +36,7 @@ public class ContextWrapperFactory {
 			context = new ObjectContextWrapper(obj);
 		context.put(Constants.NOW, new Date(), false);
 		context.put(Constants.VARS, context, false);
+		context.put(Constants.GLOBAL, context, false);
 		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
 				"uniqueIdGenerator", params, UniqueIdGenerator.class,
 				UniqueIdGeneratorImpl.class, null), false);

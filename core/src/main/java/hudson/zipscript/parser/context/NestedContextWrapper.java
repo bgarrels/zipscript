@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
@@ -27,7 +28,7 @@ public class NestedContextWrapper implements ExtendedContext {
 		this.parentContext = parentContext;
 		this.scopedElement = scopedElement;
 		this.travelUp = travelUp;
-		map.put("vars", this);
+		map.put(Constants.VARS, this);
 	}
 
 	public Object get(Object key) {
