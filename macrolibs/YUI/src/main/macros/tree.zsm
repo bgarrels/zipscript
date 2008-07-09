@@ -11,12 +11,14 @@ ${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false
 [/#macro]
 
 [#macro view id node[]]
-[#if Global.cssIncludes!=null]
-${Global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")?void}
-[/#if]
-[#if Global.scriptIncludes!=null]
-${Global.scriptIncludes.put("treeview/treeview-min.js", "YUI")?void}
-[/#if]
+[#initialize]
+	[#if Global.cssIncludes!=null]
+	${Global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")?void}
+	[/#if]
+	[#if Global.scriptIncludes!=null]
+	${Global.scriptIncludes.put("treeview/treeview-min.js", "YUI")?void}
+	[/#if]
+[/#initialize]
 [#set componentId = "${id}_component"/]
 	<div id="${id}"> </div>
 	<script language="javascript">
