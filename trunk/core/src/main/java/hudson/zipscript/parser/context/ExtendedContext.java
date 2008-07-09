@@ -16,6 +16,17 @@ import java.util.Map;
 public interface ExtendedContext extends Context {
 
 	/**
+	 * Return true if the context has been initialized and false if not
+	 */
+	public boolean isInitialized ();
+
+	/**
+	 * Set the initialized status
+	 * @param val the initialized status
+	 */
+	public void setInitialized (boolean val);
+
+	/**
 	 * Put a value in the context
 	 * @param key the key name
 	 * @param value the value

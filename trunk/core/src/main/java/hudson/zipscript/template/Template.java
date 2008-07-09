@@ -1,5 +1,6 @@
 package hudson.zipscript.template;
 
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
@@ -7,6 +8,29 @@ import java.io.Writer;
 import java.util.Locale;
 
 public interface Template {
+
+	/**
+	 * This is optional but can be used in conjunction with the [#initialize] directive.
+	 * Any code within that block will be executed.  There are caviats, however.  They
+	 * can only refer to global variables (no scoped variables or macro parameters).  They
+	 * will also not be executed multiple times within a looping directive.
+	 * @param context the context to inialize
+	 * @return the initialized context
+	 * @throws ExecutionException
+	 */
+	public Context initialize (Object context) throws ExecutionException;
+
+	/**
+	 * This is optional but can be used in conjunction with the [#initialize] directive.
+	 * Any code within that block will be executed.  There are caviats, however.  They
+	 * can only refer to global variables (no scoped variables or macro parameters).  They
+	 * will also not be executed multiple times within a looping directive.
+	 * @param context the context to inialize
+	 * @param locale the locale
+	 * @return the initialized context
+	 * @throws ExecutionException
+	 */
+	public Context initialize (Object context, Locale locale) throws ExecutionException;
 
 	/**
 	 * Merge this template with the data provided with the context.  The context can be any typee of object.

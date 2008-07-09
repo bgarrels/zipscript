@@ -121,4 +121,12 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		preMacroContext.addToElementScope(nestingStack);
 		nestingStack.add(scopedElement);
 	}
+
+	public void setInitialized(boolean val) {
+		preMacroContext.setInitialized(val);
+	}
+
+	public boolean isInitialized() {
+		return postMacroContext.isInitialized();
+	}
 }

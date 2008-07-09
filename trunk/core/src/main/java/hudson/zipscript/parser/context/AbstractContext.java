@@ -7,6 +7,7 @@ public abstract class AbstractContext implements ExtendedContext {
 
 	private ParsingSession parsingSession;
 	private MacroManager macroManager;
+	private boolean initialized;
 
 	public ParsingSession getParsingSession() {
 		return parsingSession;
@@ -22,5 +23,13 @@ public abstract class AbstractContext implements ExtendedContext {
 
 	public void setMacroManager(MacroManager macroManager) {
 		this.macroManager = macroManager;
+	}
+
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
 	}
 }

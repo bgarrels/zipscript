@@ -1,5 +1,6 @@
 package hudson.zipscript.template;
 
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ContextWrapperFactory;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -8,6 +9,8 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.directive.initialize.InitializeDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.io.StringWriter;
@@ -22,6 +25,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 
 	private Element element;
 	private List elements;
+	private List initializeElements;
 	private ParsingSession parsingSession;
 	private ParsingResult parsingResult;
 	private MacroManager macroManager;
@@ -30,10 +34,72 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		this.elements = elements;
 		this.parsingSession = parsingSession;
 		this.parsingResult = result;
+		// load elements for initialization
+		initializeElements = new ArrayList();
+		for (Iterator i=elements.iterator(); i.hasNext(); ) {
+			loadInitializeElements((Element) i.next(), initializeElements);
+		}
 	}
 
 	public TemplateImpl (Element element) {
 		this.element = element;
+	}
+
+	public Context initialize(Object context) throws ExecutionException {
+		return initialize(context, null);
+	}
+
+	public Context initialize(Object obj, Locale locale) throws ExecutionException {
+		ExtendedContext context = getContext(obj, locale);
+		if (!context.isInitialized()) {
+			for (Iterator i=initializeElements.iterator(); i.hasNext(); ) {
+				((InitializeDirective) i.next()).doInitialize(context);
+			}
+			context.setInitialized(true);
+		}
+		return context;
+	}
+
+	private void loadInitializeElements (Element e, List l) {
+		if (e instanceof InitializeDirective) {
+			l.add(e);
+		}
+		else {
+			if (e instanceof MacroInstanceDirective) {
+				MacroInstanceDirective mid = (MacroInstanceDirective) e;
+				if (null != mid.getNamespace() && null != mid.getMacroDefinition()) {
+					// add macro definition initialization
+					loadInitializeMacroLibElements(mid.getMacroDefinition(), l);
+				}
+			}
+			List children = e.getChildren();
+			if (null != children) {
+				for (Iterator i=children.iterator(); i.hasNext(); ) {
+					loadInitializeElements((Element) i.next(), l);
+				}
+			}
+		}
+	}
+
+	private void loadInitializeMacroLibElements (Element e, List l) {
+		if (e instanceof InitializeDirective) {
+			l.add(e);
+		}
+		else {
+			if (e instanceof MacroInstanceDirective) {
+				MacroInstanceDirective mid = (MacroInstanceDirective) e;
+				if (null != mid.getMacroDefinition() && !mid.isTemplateDefinedParameter()) {
+					// add macro definition initialization
+					loadInitializeMacroLibElements(mid.getMacroDefinition(), l);
+				}
+			}
+			List children = e.getChildren();
+			if (null != children) {
+				for (Iterator i=children.iterator(); i.hasNext(); ) {
+					loadInitializeElements((Element) i.next(), l);
+				}
+			}
+		}
 	}
 
 	/** Template Methods **/
@@ -67,8 +133,9 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		merge(context, sw, null);
 	}
 
-	public void merge(Object context, Writer sw, Locale locale) throws ExecutionException {
-		merge(getContext(context, locale), sw);
+	public void merge(Object obj, Writer sw, Locale locale) throws ExecutionException {
+		ExtendedContext context = (ExtendedContext) initialize(obj, locale);
+		merge(context, sw);
 	}
 
 
@@ -134,6 +201,8 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	}
 
 	private ExtendedContext getContext (Object obj, Locale locale) {
+		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized())
+			return (ExtendedContext) obj;
 		Map initParameters = null;
 		if (null != parsingSession && null != parsingSession.getParameters())
 			initParameters = parsingSession.getParameters().getInitParameters();
