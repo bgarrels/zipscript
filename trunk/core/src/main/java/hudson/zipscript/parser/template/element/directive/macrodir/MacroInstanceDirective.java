@@ -267,8 +267,6 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		}
 		else {
 			String name = null;
-			Element valueElemeent = null;
-			
 			Element e;
 			e = (Element) elements.remove(0);
 			if (e instanceof SpecialStringElement)
