@@ -30,7 +30,7 @@ public class ExecutionException extends RuntimeException {
 		StringBuffer sb = new StringBuffer();
 		if (null != resource)
 			sb.append ("[" + resource + "] ");
-		if (null != element) {
+		if (null != element && null != parsingResult) {
 			LinePosition lp = parsingResult.getLinePosition(element.getElementPosition());
 			sb.append("(line " + lp.line + ", position " + lp.position + ") ");
 		}
