@@ -52,7 +52,7 @@ public class VariablePatternMatcher implements PatternMatcher {
 				}
 				else if (c == '}') {
 					squiglyNesting --;
-					if (squiglyNesting == 0) {
+					if (squiglyNesting == 0 && parenNesting == 0 && braceNesting == 0) {
 						// numbers must be referenced formally
 						try {
 							Float.parseFloat(sb.toString());
@@ -93,7 +93,7 @@ public class VariablePatternMatcher implements PatternMatcher {
 							return new VariableElement(isFormal, isSilenced, sb.toString(), session, startPosition);
 						}
 					}
-					if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.')) {
+					else if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.' || c == ',')) {
 						return null;
 					}
 				}

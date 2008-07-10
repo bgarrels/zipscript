@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.NoAutoEscapeElement;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.comparator.ComparatorElement;
 import hudson.zipscript.parser.template.element.group.GroupElement;
@@ -165,7 +166,7 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 			}
 		}
-		if (null != escapeMethods && !(rtn instanceof ToStringWithContextElement)) {
+		if (null != escapeMethods && !(rtn instanceof NoAutoEscapeElement)) {
 			try {
 				for (Iterator i=escapeMethods.iterator(); i.hasNext(); ) {
 					rtn = ((SpecialMethod) i.next()).execute(rtn, context);
@@ -317,6 +318,13 @@ public class VariableElement extends AbstractElement implements Element {
 			else if (e instanceof GroupElement) {
 				if (children.size() == 0)
 					throw new ParseException(e, "Invalid element '" + e.toString() + "'");
+				else if (children.size() == 1) {
+					VariableChild child = (VariableChild) children.remove(0);
+					if (null == child.getPropertyName())
+						throw new ParseException(e, "Invalid sequence '" + e.toString() + "'");
+					List parameters = getMethodParameters((GroupElement) e, session);
+					children.add(new AssumedGetRoot(child.getPropertyName(), parameters, this));
+				}
 				else if (wasWhitespace)
 					throw new ParseException(e, "Invalid sequence after whitespace '" + e.toString() + "'");
 				else if (wasSeparator)
