@@ -1,3 +1,13 @@
+[#set foo = "abc"/]
+\[#set foo = "def"/]
+\${foo}
+\$foo
+\\${foo}
+\\$foo
+\\\${foo}
+\\\$foo
+
+
 [#set var="abc"/]
 [#escape upperCase]
     ${var} def ${"ghi"}
@@ -30,15 +40,3 @@ ${var}
 		${body}
 	[/#escape]
 [/#macro]
-
-
-http://www.google.com?abc=def&ghi=jfk
-http://www.google.com?abc=def&amp;ghi=jfk
-http://www.google.com?abc=def&ghi=jfk
-
-			ab\'cd
-		ef'gh
-			ij'kl
-		mn\'op
-	
-	
