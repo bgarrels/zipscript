@@ -17,8 +17,8 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 	private boolean shouldEvaluateSeparators = true;
 	
 	public SpecialVariableElementImpl(
-			boolean silence, String text, ParsingSession session, int contentPosition) throws ParseException {
-		super(silence, text, session, contentPosition);
+			String text, ParsingSession session, int contentPosition) throws ParseException {
+		super(false, false, text, session, contentPosition);
 	}
 
 	/**

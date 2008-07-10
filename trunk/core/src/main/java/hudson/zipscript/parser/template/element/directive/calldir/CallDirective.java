@@ -106,7 +106,7 @@ public class CallDirective extends AbstractDirective {
 			if (!mainElements.get(1).equals("with"))
 				throw new ParseException(contentStartPosition, "Invalid call directive.  Should be [#call macroName with macroVariable/]");
 
-			withElement = new VariableElement(false, (String) mainElements.get(2), session, contentStartPosition);
+			withElement = new VariableElement(true, false, (String) mainElements.get(2), session, contentStartPosition);
 		}
 
 		if (null != additionalParameters) {

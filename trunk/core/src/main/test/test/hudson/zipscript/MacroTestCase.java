@@ -38,12 +38,6 @@ public class MacroTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
-	public void testHeaderFooterMacro () throws Exception {
-		String mergeTemplate = "templates/macro_headerfooter_test.zs";
-		String resultFile = "/templates/macro_headerfooter_result.txt";
-		evalResult(mergeTemplate, resultFile, null);
-	}
-
 	public void testObjectOrientedMacro () throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList(3);

@@ -492,7 +492,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 	}
 
 	public boolean generatesOutput() {
-		return (isTemplateDefinedParameter());
+		return (!isTemplateDefinedParameter());
 	}
 
 	public boolean isBodyEmpty() {

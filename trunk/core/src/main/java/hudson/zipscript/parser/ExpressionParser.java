@@ -186,6 +186,7 @@ public class ExpressionParser {
 							else {
 								// remove start tokens that were read from the buffer
 								buffer.position(position);
+								match = false;
 							}
 						}
 					}

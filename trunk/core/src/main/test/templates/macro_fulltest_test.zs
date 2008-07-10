@@ -1,8 +1,7 @@
 [@grid entries=people title="Interesting People"]
-[[
-        #** The header can be referenced in the macro definition as ${header} **#
-        This is the header
-]]
+	[@header]
+        Some header content
+	[/@header]
 
         #**
                 - template-defined parameters (only string attributes should be enclosed in quotes)
@@ -29,15 +28,12 @@
         Any non template-defined parameter content inside the macro reference is the macro body and can
         be referenced as ${body}
         
-[[
-        #**
-        	- The footer can be referenced in the macro definition as ${footer}
-        	- You can use macros/directives in the header/footer as well
-        **#
+	[@footer]
+        Some footer content - can use macros inside of macros inside of macros...
         [@simpleMacro]
         	footer content
         [/@simpleMacro]
-]]
+	[/@footer]
 [/@grid]
 
 
@@ -45,7 +41,7 @@
         the macro definition below has the name of "grid" and would be in the "data" macro library as you can see by the reference to "data.grid" above
 **#
 
-[#macro grid *title *entries *column[*title width=100 hidden=false cssClass]]
+[#macro grid *title *entries *column[*title width=100 hidden=false cssClass] *header[] *footer[]]
         The title is ${title}
         <table>
                 <tr>
@@ -55,7 +51,7 @@
                         [/#foreach]
                 </tr>
                 [#if header!=null]
-                        <tr><td colspan="${colSpan}">${header}</td></tr>
+                        <tr><td colspan="${colSpan}">${header.body}</td></tr>
                 [/#if]
                 [#foreach entry in entries]
                         <tr>
@@ -65,7 +61,7 @@
                         </tr>
                 [/#foreach]
                 [#if footer!=null]
-                        <tr><td colspan="${colSpan}">${footer}</td></tr>
+                        <tr><td colspan="${colSpan}">${footer.body}</td></tr>
                 [/#if]          
         </table>
 [/#macro]
