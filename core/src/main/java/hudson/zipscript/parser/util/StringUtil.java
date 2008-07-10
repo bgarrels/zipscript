@@ -212,4 +212,19 @@ public class StringUtil {
 		}
 		return isEmpty;
 	}
+
+	public static boolean isEscaped (StringBuffer sb) {
+		int numSlashes = 0;
+		for (int i=sb.length()-1; i>=0; i--) {
+			if (sb.charAt(i) == '\\') numSlashes ++;
+			else break;
+		}
+		if (numSlashes == 0) return false;
+		int remove = numSlashes / 2;
+		boolean isEven = numSlashes % 2 == 0;
+		if (!isEven) remove ++;
+		if (remove > 0) sb.delete(sb.length()-remove, sb.length());
+		if (isEven) return false;
+		else return true;
+	}
 }

@@ -4,6 +4,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.nio.CharBuffer;
 import java.util.List;
@@ -24,6 +25,7 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 
 	public Element match(char previousChar, char[] startChars, CharBuffer reader,
 			ParsingSession session, List elements, StringBuffer unmatchedChars) throws ParseException {
+		if (StringUtil.isEscaped(unmatchedChars)) return null;
 		boolean isFlat = false;
 		int nesting = 1;
 		int startPos = reader.position();
