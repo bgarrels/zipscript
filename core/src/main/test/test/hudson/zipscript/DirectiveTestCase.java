@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
-
 import junit.framework.TestCase;
 import test.hudson.zipscript.model.Person;
 
