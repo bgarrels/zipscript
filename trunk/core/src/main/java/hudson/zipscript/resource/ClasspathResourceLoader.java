@@ -11,8 +11,10 @@ public class ClasspathResourceLoader extends AbstractResourceLoader {
 	private File sourceFile;
 
 	public Resource getResource(String path) {
-		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-				getRealPath(path));
+		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(getRealPath(path));
+		if (null == is) {
+				is = ClassLoader.getSystemResourceAsStream(getRealPath(path));
+		}
 		if (null == is) {
 			throw new ExecutionException("Invalid classpath resource '" + getRealPath(path), null);
 		}
