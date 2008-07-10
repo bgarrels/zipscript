@@ -33,7 +33,8 @@ import java.util.List;
 
 public class VariableElement extends AbstractElement implements Element {
 
-	boolean silence = false;
+	boolean isSilenced;
+	boolean isFormal;
 	private List children;
 	private String pattern;
 	private List specialElements;
@@ -42,10 +43,11 @@ public class VariableElement extends AbstractElement implements Element {
 	private boolean suppressNullErrors;
 
 	public VariableElement (
-			boolean silence, String pattern, ParsingSession session, int contentIndex) throws ParseException {
+			boolean isFormal, boolean isSilenced, String pattern, ParsingSession session, int contentIndex) throws ParseException {
 		setElementPosition(contentIndex);
 		setElementLength(pattern.length());
-		this.silence = silence;
+		this.isFormal = isFormal;
+		this.isSilenced = isSilenced;
 		setPattern(pattern, session, contentIndex);
 		this.suppressNullErrors = SessionUtil.getProperty(Constants.SUPPRESS_NULL_ERRORS, false, session);
 	}
@@ -107,7 +109,7 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 		}
 		else {
-			if (!silence) {
+			if (!isSilenced) {
 				if (suppressNullErrors)
 					StringUtil.append(toString(), sw);
 				else
@@ -227,10 +229,10 @@ public class VariableElement extends AbstractElement implements Element {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append('$');
-		if (silence) sb.append('!');
-		sb.append('{');
+		if (isSilenced) sb.append('!');
+		if (isFormal) sb.append('{');
 		sb.append(getPattern());
-		sb.append('}');
+		if (isFormal) sb.append('}');
 		return sb.toString();
 	}
 
@@ -402,7 +404,7 @@ public class VariableElement extends AbstractElement implements Element {
 			Element e = (Element) elements.get(0);
 			if (e instanceof SpecialStringElement) {
 				return new VariableElement(
-						false, ((SpecialStringElement) e).getTokenValue(), parseData, (int) e.getElementPosition());
+						true, false, ((SpecialStringElement) e).getTokenValue(), parseData, (int) e.getElementPosition());
 			}
 			else {
 				return e;

@@ -15,7 +15,7 @@ public class DefaultVariablePatternMatcher implements DefaultElementFactory {
 
 	public Element createDefaultElement(
 			String text, ParsingSession session, int contentPosition) throws ParseException {
-		return new SpecialVariableElementImpl(false, text, session, contentPosition);
+		return new SpecialVariableElementImpl(text, session, contentPosition);
 	}
 
 	public boolean doAppend(char c) {

@@ -15,7 +15,7 @@ public class SpecialVariableDefaultEelementFactory implements DefaultElementFact
 	public Element createDefaultElement(
 			String text, ParsingSession session, int contentPosition) throws ParseException {
 		SpecialVariableElementImpl element = new SpecialVariableElementImpl(
-				false, text, session, contentPosition);
+				text, session, contentPosition);
 		element.setShouldEvaluateSeparators(false);
 		element.setElementPosition(contentPosition);
 		element.setElementLength(text.length());
