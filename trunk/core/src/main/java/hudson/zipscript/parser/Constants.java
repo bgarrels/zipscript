@@ -25,6 +25,7 @@ public class Constants {
 	public static final String GLOBAL = "Global";
 	public static final String UNIQUE_ID = "UniqueId";
 	public static final String MATH = "Math";
+	public static final String RESOURCE = "Resource";
 	
 	public static final String TEMPLATE_RESOURCE_LOADER_CLASS = "templateResourceLoader.class";
 	public static final String TEMPLATE_RESOURCE_LOADER_TYPE = "templateResourceLoader.type";

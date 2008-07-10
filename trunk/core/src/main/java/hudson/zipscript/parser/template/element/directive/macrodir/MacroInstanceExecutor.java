@@ -2,12 +2,13 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.MacroInstanceEntityContext;
+import hudson.zipscript.parser.template.element.NoAutoEscapeElement;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 
 import java.io.Writer;
 import java.util.List;
 
-public class MacroInstanceExecutor implements ToStringWithContextElement {
+public class MacroInstanceExecutor implements ToStringWithContextElement, NoAutoEscapeElement {
 
 	private MacroInstanceDirective macroInstance;
 

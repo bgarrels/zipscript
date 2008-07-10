@@ -22,3 +22,9 @@ $myObject.testMap['anotherObj'].list1[0].text
 ->$!myObjectNoExist<-
 
 $myString is $myString.length characters long
+
+== Resources ==
+$Resource("1 This is a test")
+$Resource("2 This is a test", {"param 1", "param 2"})
+${Resource("3 This is a test")}
+${Resource("4 This is a test", {"param 1", "param 2"})}

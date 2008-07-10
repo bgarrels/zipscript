@@ -2,6 +2,8 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.util.ClassUtil;
+import hudson.zipscript.parser.util.I18NResource;
+import hudson.zipscript.parser.util.I18NResourceImpl;
 import hudson.zipscript.parser.util.MathUtil;
 import hudson.zipscript.parser.util.UniqueIdGenerator;
 import hudson.zipscript.parser.util.UniqueIdGeneratorImpl;
@@ -40,6 +42,9 @@ public class ContextWrapperFactory {
 		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
 				"uniqueIdGenerator", params, UniqueIdGenerator.class,
 				UniqueIdGeneratorImpl.class, null), false);
+		context.put(Constants.RESOURCE, ClassUtil.loadResource(
+				"i18n", params, I18NResource.class,
+				I18NResourceImpl.class, null), false);
 		context.put(Constants.MATH, mathUtil, false);
 		return context;
 	}
