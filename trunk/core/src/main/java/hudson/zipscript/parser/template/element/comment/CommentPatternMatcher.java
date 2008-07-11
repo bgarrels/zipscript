@@ -30,11 +30,11 @@ public class CommentPatternMatcher extends AbstractPatternMatcher {
 	}
 
 	protected char[] getEndChars() {
-		return "**#".toCharArray();
+		return "##]".toCharArray();
 	}
 
 	public char[] getStartToken() {
-		return "#**".toCharArray();
+		return "[##".toCharArray();
 	}
 
 	public char[][] getStartTokens() {
