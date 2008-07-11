@@ -2,9 +2,10 @@
 <!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"> -->
 <set id="zipscript">
 	<index/>
+	<title>ZipScript Docs</title>
 	<book id="userGuide">
 		<bookinfo>
-			<title>ZipScript User Guide</title>
+			<title>Template Author's Guide</title>
 		</bookinfo>
 		<chapter id="userGuideGettingStarted">
 			<title>Getting Started</title>
@@ -47,6 +48,12 @@
 							</itemizedlist>
 						</listitem>
 					</itemizedlist>
+				</para>
+				<para>
+					<note>
+						You can also use $... to represent the formal syntax ${...} as long as the variable reference is separated by spaces.  Example: $message.type $message.text
+						In this document, we will refer to variables using the formal syntax.
+					</note>
 				</para>
 				<para>
 					The templates could be located anywhere including the filesystem or classpath or even remote URL's.  Several resource loaders are
@@ -198,8 +205,8 @@ ${driver.children[0].firstName} will print "Bill"
 					Variable references can be escaped by using the '\' prefix.  Escaping is only required if the character is next
 					to a variable or directive.  For example, assume the <link linkend="context">context</link> value <emphasis>foo</emphasis> is equal to "ABC"
 					<itemizedlist>
-						<listitem>foo\test${foo} will print <code>foo\testABC</code></listitem>
-						<listitem>foo\\test${foo} will print <code>foo\\testABC</code></listitem>
+						<listitem>foo\test${foo} will print <code>footest${foo}</code></listitem>
+						<listitem>foo\\test${foo} will print <code>foo\testABC</code></listitem>
 						<listitem>test\${foo} will print <code>test${foo}</code></listitem>
 						<listitem>test\\${foo} will print <code>test\ABC</code></listitem>
 						<listitem>test\\\${foo} will print <code>test\${foo}</code></listitem> 
@@ -409,14 +416,16 @@ ${driver.children[0].firstName} will print "Bill"
 					</para>
 				</section>
 				<section>
-					<title>Template Defined Macro Parameters</title>
+					<title>Macro Body</title>
 					<para>
 						Assume the following macro reference:
 						[@foo]
 							${someNumber}
 						[/@foo]
 						<indexterm><primary>macros</primary><secondary>?objectValue</secondary></indexterm>
-						<listitem>${body?objectValue} (in the foo macro definition) will be the number that someNumber represents</listitem>
+						<itemizedlist>
+							<listitem>${body?objectValue} (in the foo macro definition) will be the number that someNumber represents</listitem>
+						</itemizedlist>
 					</para>
 				</section>
 			</section>
@@ -426,44 +435,53 @@ ${driver.children[0].firstName} will print "Bill"
 			<section id="directives_overview">
 				<title>Overview</title>
 				<para>
-					Directives are special character sequences that start with <code>[#</code> and end with <code>]</code>.  Directives
-					can either be flat or nested.  Directives are used to perform some action.  The action can range from calling a macro
-					to modifying the context to conditional statements and looping, etc.
-					<variablelist>
-						<varlistentry id="flat_directive_def"><term>flat</term><listitem>
-<programlisting>
-[#directive .../]
-</programlisting>
-						</listitem></varlistentry>
-						<varlistentry id="nested_directive_def"><term>nested</term><listitem>
-<programlisting>
-[#directive ...]
-	...
-[/#directive]
-</programlisting>
-						</listitem></varlistentry>
-					</variablelist>
-					<note>
+					You use Zipscript tags to call directives. There are 3 kinds of tags:
 						<itemizedlist>
-							<listitem>Variable references inside directive statements do not need to be wrapped with <code>${}</code> (although they can be)</listitem>
-							<listitem>The indentation is not required.  It is only added for readability</listitem>
+							<listitem>Start tag: [#directivename parameters]</listitem>
+							<listitem>End tag: [/#directivename parameters]</listitem>
+							<listitem>Flat directive tag: [#directivename parameters/]</listitem>
 						</itemizedlist>
-					</note>
 				</para>
+				<para>
+					Almost all directives can have body content meaning they will have a start tag and end tag.  Directives can perform
+					actions ranging from modifying the context to performing looping or conditional statements, etc.  The parameters of
+					directives are dependant on the directive so, in the next section, the syntax of each directive will show usage.
+				</para>
+				<note>
+					When referencing directives in the directive tag (not the body) variable references should not be wrapped in ${...}.
+					See directive example usages for details.
+				</note>
 			</section>
 			<section id="directives_if">
-				<title>If  / Elseif / Else</title>
+				<title>if, elseif, else</title>
+				Syntax:
+<programlisting>
+[#if ...]
+	...
+[#elseif ...]
+
+[#elseif ...]
+
+[/#if]
+</programlisting>
 				<para>
 					<indexterm><primary>directives</primary><secondary>if</secondary></indexterm>
-					The if directive is a <link linkend="nested_directive_def">nested directive</link> with additional optional elements.
-					Aside from the [#if] [/#if], [#elseif] and [#else] can be used.
-					<variablelist>
-						<varlistentry><term>[#if ...]</term><listitem>Used nested block if condition is true</listitem></varlistentry>
-						<varlistentry><term>[#elseif ...]</term><listitem>(optional) Used nested block if condition is true and previous [#elseif] conditions are false and if condition is false</listitem></varlistentry>
-						<varlistentry><term>[#else ...]</term><listitem>(optional) Use nested block if the if condition was false and all elseif conditions are false</listitem></varlistentry>
-					</variablelist>
+					<indexterm><primary>directives</primary><secondary>elseif</secondary></indexterm>
+					<indexterm><primary>directives</primary><secondary>else</secondary></indexterm>
+					You can use if, elseif and else directives to conditionally skip a section of the template
+					The conditions must evaluate to a boolean value, or else an error will abort template processing.
+					The elseif-s and else-s must occur inside if (that is, between the if start-tag and end-tag).
+					The if can contain any number of elseif-s (including 0) and at the end optionally one else.
 				</para>
 				<para>
+					<emphasis>Condition Options</emphasis>
+					<itemizedlist>
+						<listitem>Standard condition: <code>[#if a==b]</code></listitem>
+						<listitem>In sequence statement using 'in': <code>[#if (a in myList) || (a in {"foo", "bar","baz"})]</code></listitem>
+						<listitem>Not in sequence statement using 'not in': <code>[#if (a not in myList) || (a not in {"foo", "bar","baz"})]</code></listitem>
+					</itemizedlist>
+				</para>
+				<emphasis>Example</emphasis>
 <programlisting>
 [#if foo==${bar}]
 	This section will print if the foo <link linkend="context">context</link> variable is equal to the bar <link linkend="context">context</link> variable.  Notice that variables
@@ -488,7 +506,6 @@ ${driver.children[0].firstName} will print "Bill"
 	This section will print if none of the previous sections evaluate to true.
 [/#if]
 </programlisting>
-				</para>
 				<note>
 					For more examples, check out:
 					<itemizedlist>
@@ -499,31 +516,32 @@ ${driver.children[0].firstName} will print "Bill"
 				</note>
 			</section>
 			<section id="directives_foreach">
-				<title>Foreach</title>
+				<title>foreach</title>
+				<indexterm><primary>directives</primary><secondary>foreach</secondary></indexterm>
+				Syntax:
+<programlisting>
+[#foreach entry in myList]
+	...
+[/#foreach]
+</programlisting>
 				<para>
-					<indexterm><primary>directives</primary><secondary>foreach</secondary></indexterm>
-					Syntax: <emphasis>[#foreach refItem in someList] ... [/#foreach]</emphasis>
+					You can use the foreach directive to process a section of template for each variable contained within a sequence.
+					Variables are added to the context which is scoped to allow access to the currently entry and determine the looping state.
 					<variablelist>
-						<varlistentry><term>refItem</term><listitem>This is the <link linkend="context">context</link> key for the current list entry</listitem></varlistentry>
-						<varlistentry><term>someList</term><listitem>This can either be a variable name representing a sequence or an expression which will create a sequence</listitem></varlistentry>
-					</variablelist>
-				</para>
-				<para>
-					The foreach directive can be used to loop through a sequence.  The sequence could be a Collection, Iterator, Enumeration or Object
-					array.  When inside of a foreach directive some special variables can be used:
-					<variablelist>
+						<varlistentry><term>varName</term><listitem>Whatever variable name was used in the foreach tag will be the context key to access the current entry</listitem></varlistentry>
 						<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
 						<varlistentry><term>hasNext</term><listitem>Boolean representing if there are any remaining entries in the list to be processed</listitem></varlistentry>
-						<varlistentry><term>super</term><listitem>If a loop is inside of another loop, super can be used to access loop elements in the parent scope</listitem></varlistentry>
+						<varlistentry><term>super</term><listitem>If inside of another loop (foreach or while), super can be used to access loop elements in the parent scope</listitem></varlistentry>
 					</variablelist>
 				</para>
 				<para>
+					Example:
 <programlisting>
 [#set someList = {"D", "E", "F"}/]
 [#foreach item in {"a", "b", "c"}]
-[#foreach item in someList]
-	${super.item}.${item} (${super.i}.${i}) - ${hasNext} - ${super.hasNext}
-[/#foreach]
+	[#foreach item in someList]
+		${super.item}.${item} (${super.i}.${i}) - ${hasNext} - ${super.hasNext}
+	[/#foreach]
 [/#foreach]
 </programlisting>
 Will print
@@ -550,28 +568,34 @@ c.F (2.2) - false - false
 				</note>
 			</section>
 			<section id="directives_while">
-				<title>While</title>
+				<title>while</title>
 				<para>
 					<indexterm><primary>directives</primary><secondary>while</secondary></indexterm>
-					Syntax: <emphasis>[#while expression] ... [/#while]</emphasis>
+					Syntax:
+<emphasis>
+[#while expression]
+
+[/#while]
+</emphasis>
 					<variablelist>
 						<varlistentry><term>expression</term><listitem>Any expression which can result in a boolean value</listitem></varlistentry>
 					</variablelist>
 				</para>
 				<para>
-					The while directive can be used to loop until a condition is met.  When inside of a foreach directive some special variables can be used:
+					The while directive can be used to loop until a condition is met.
+					Variables are added to the context which is scoped to allow access to the currently entry and determine the looping state.
 					<variablelist>
 						<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
-						<varlistentry><term>super</term><listitem>If inside of another looping struction, super can be used to access loop elements in the parent scope</listitem></varlistentry>
+						<varlistentry><term>super</term><listitem>If  inside of another loop (foreach or while), super can be used to access loop elements in the parent scope</listitem></varlistentry>
 					</variablelist>
 					<note>hasNext is not available for a while directive</note>
 				</para>
 				<para>
 <programlisting>
 [#foreach item in {"a", "b", "c"}]
-[#while i&lt;2]
-	${super.item}.${i+1} (${super.i}.${i}) - ${super.hasNext}
-[/#while]
+	[#while i&lt;2]
+		${super.item}.${i+1} (${super.i}.${i}) - ${super.hasNext}
+	[/#while]
 [/#foreach]
 </programlisting>
 Will print
@@ -594,15 +618,19 @@ c.2 (2.1) - false
 				</note>
 			</section>
 			<section id="directives_set">
-				<title>Set</title>
+				<title>set</title>
+				<indexterm><primary>directives</primary><secondary>set</secondary></indexterm>
 				<para>
-					<indexterm><primary>directives</primary><secondary>set</secondary></indexterm>
-					Syntax: <emphasis>[#set newVar = something/]</emphasis>
+					Syntax:
+<programlisting>
+[#set newVar = something/]
+</programlisting>
 					<variablelist>
 						<varlistentry><term>newVar</term><listitem>The <link linkend="context">context</link> key that will be used to access the variable</listitem></varlistentry>
 						<varlistentry><term>something</term><listitem>An expression or variable reference that will be set in the context</listitem></varlistentry>
 					</variablelist>
-					The set directive is used to set a value in the <link linkend="context">context</link> so it can be accessed later.
+					The set directive is used to set a value in the <link linkend="context">context</link> so it can be accessed later.  This directive is scoped so if it is used
+					inside a macro definition, the value will only be able to be reference inside the macro definition.
 				</para>
 				<para>
 					Examples:
@@ -624,38 +652,118 @@ c.2 (2.1) - false
 					</itemizedlist>
 				</note>
 			</section>
+			<section id="directives_global">
+				<title>global</title>
+				<indexterm><primary>directives</primary><secondary>global</secondary></indexterm>
+				<para>
+					Syntax:
+<programlisting>
+[#global newVar = something/]
+</programlisting>
+					This is functionally the same as the <link linkend="directives_set">set directive</link> except that instead of the variable being scoped, it will be
+					set in a global scope.  Variables set with this directive will be available in the template as ${varName} and in a macro definition as ${Global.varName}.
+				</para>
+			</section>
 			<section id="directives_call">
-				<title>Call</title>
-				<para>TODO: Document call directive</para>
+				<title>call</title>
+				<indexterm><primary>directives</primary><secondary>call</secondary></indexterm>
+				<para>
+					Syntax:
+<programlisting>
+[#macro foo param1 param2]
+	...
+	[#call bar with this | additionalParameter="abc"/]
+	...
+[/#macro]
+[#macro bar param1 param2 additionalParameter]
+	...
+[/#macro]
+</programlisting>
+					The call directive is used to pass control to another macro.  All parameters provided to the directive reference that is used with the call
+					will be accessable to the called directive.  Additionally, new parameters can be added using '|' after the call statement.  In the example above,
+					'bar' is the name of macro to call and 'this' is the reference to the current macro, 'foo'.  Other parameters that could be used instead of 'this'
+					are template-defined parameters used with the macro reference.
+				</para>
+			</section>
+			<section id="directives_escape">
+				<title>escape, noescape</title>
+				<indexterm><primary>directives</primary><secondary>escape</secondary></indexterm>
+				<indexterm><primary>directives</primary><secondary>noescape</secondary></indexterm>
+				<para>
+					Syntax:
+<programlisting>
+[#escape escapeCommand]
+	${somethingToEscape}
+	${somethingElseToEscape}
+	[#noescape]
+		${somethingNotToEscape}
+	[/#noescape]
+[/#escape]
+</programlisting>
+					When you surround a part of the template with an escape directive, interpolations (${...}) that occur inside the block are combined with the escaping
+					expression automatically. This is a convenience method for avoiding writing similar expressions all over. The only exception to this is a reference
+					to ${body} from a macro definition.
+				</para>
+				<para>
+					Any <link linkend="variable_specialMethods_strings">string escape command</link> could be used as the escape command that does not take parameters.
+				</para>
+				<para>
+					The noescape directive is to be used inside an escape directive to "turn off" the auto-escaping.
+				</para>
+			</section>
+			<section id="directives_initialize">
+				<title>initialize</title>
+				<indexterm><primary>directives</primary><secondary>initialize</secondary></indexterm>
+					Syntax:
+<programlisting>
+[#initialize]
+	...
+[/#initialize]
+</programlisting>
+				<para>
+					This is useful for performing context modifications with <link linkend="directives_set">set</link>, <link linkend="directives_global">global</link>
+					directives inside macros that need to take effect at the beginning of template processing.
+				</para>
+				<para>
+					The primary purpose for this directive is to allow macros define required script/css includes in an initialize method for them to be available
+					when rendering the <head></head> node because normally the macros wouldn't have been processed at the time of <head> creation.
+				</para>
 			</section>
 		</chapter>
 		<chapter id="macros">
 			<title>Macros</title>
 			<section id="macros_overview">
-				<title>What is a Macro?</title>
+				<title>Overview</title>
 				<para>
-					Macros are pre-defined ZipScript code that can be referenced using a directive-like syntax.  They can be used in a few different ways
-					<itemizedlist>
-						<listitem>Flat macros: Simple code snippets that can accept parameter input</listitem>
-						<listitem>Nested macros: Code snippets definitions that can reference the nested content inside the macro reference using ${body}</listitem>
-						<listitem>Object-oriented macros: Macros defined as components which can inspect the internal data structure of the macro reference</listitem>
-					</itemizedlist>
+					Macros are ZipScript code that can be referenced in templates using a directive-like syntax.  Macros are defined using the <code>[#macro macroName parameters]</code>
+					syntax and executed using the <code>[@macroName parameters] ... [/@macroName]</code> syntax.
 				</para>
 				<para>
-					All macros have the ability to accept parameters.  All required parameters must be defined before (leftmost) all optional parameters.
+					While the macro definition must have a start and end tag <code>[#macro ...] ... [/#macro]</code>, it is not necessary for the reference <code>[@macroName .../]</code>
+					to have a body.  Macros can contain interpolations, plain text, comments, other macros, and template defined parameters.
+				</para>
+				<para>
+					All macro definitions have the ability to accept parameters.  All required parameters must be defined before (leftmost) all optional parameters.
 					<itemizedlist>
 						<listitem>Required parameters must be prefixed with *</listitem>
 						<listitem>Optional parameters <emphasis>can</emphasis> be assigned a default value using =</listitem>
-						<listitem>Multiple parameters should be separated by a space</listitem>
+						<listitem>Addition parameters should be separated by a space</listitem>
 					</itemizedlist>
-					Every macro would have a definition and one or more references.  The definition would have the following syntax:
+					Parameters can be provided to a macro in 2 ways:
+					<itemizedlist>
+						<listitem>Standard macro parameters provided in the macro tag</listitem>
+						<listitem>Template-defined parameters provided in the macro body</listitem>
+					</itemizedlist>
+				</para>
+			</section>
+			<section id="macros_definition">
+				<title>Definition</title>
 <programlisting>
 [#macro macroName *requiredParam1 optionalDefaultedParam1="abc" optionalNonDefaultedParam]
     The macro parameters can be referenced like ${requiredParam1} ${optionalDefaultedParam1} ${optionalNonDefaultedParam!"Some default because param might be null"}
     The macro body contents can be referenced with ${body} *this is not available for flat macro references*
 [/#macro]
 </programlisting>
-				</para>
 				<para>
 					The syntax of a flat macro reference is:
 <programlisting>
