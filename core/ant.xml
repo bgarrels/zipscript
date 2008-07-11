@@ -1,6 +1,6 @@
 <project name="MyProject" default="dist" basedir=".">
 
-	<property name="version" value="0.8.3" />
+	<property name="version" value="0.8.4" />
 	<property name="name" value="zipscript-core" />
 
 	<!-- set global properties for this build -->
