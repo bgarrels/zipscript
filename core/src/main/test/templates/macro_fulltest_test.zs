@@ -3,25 +3,25 @@
         Some header content
 	[/@header]
 
-        #**
+        [##
                 - template-defined parameters (only string attributes should be enclosed in quotes)
                 - the "entry" context value is added by the macro definition
                         (see ...foreach entry in entries... in the macro definition below)
-        **#
+        ##]
         [@column title="id" hidden=true] ${entry.id} [/@column]
 		[@commonColumns/]
 
-        #** template-defined parameters can be inside other directives **#
+        [## template-defined parameters can be inside other directives ##]
         [#if showAge]
                 [@column title="Age"] ${entry.age} [/@column]
         [/#if]
 
-        #**
+        [##
                 - template-defined parameters can be externalized for powerful functionality
                 - columnList (see below) would be added to the context before merging
-        **#
+        ##]
         [#foreach columnInfo in columnList]
-                #** properties can be access using [] (see below) when dealing with dynamic property names **#
+                [## properties can be access using [] (see below) when dealing with dynamic property names ##]
                 [@column title=columnInfo.title size=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
         [/#foreach]
 
@@ -37,9 +37,9 @@
 [/@grid]
 
 
-#**
+[##
         the macro definition below has the name of "grid" and would be in the "data" macro library as you can see by the reference to "data.grid" above
-**#
+##]
 
 [#macro grid *title *entries *column[*title width=100 hidden=false cssClass] *header[] *footer[]]
         The title is ${title}
