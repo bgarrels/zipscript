@@ -441,7 +441,7 @@ ${driver.children[0].firstName} will print "Bill"
 					</para>
 				</section>
 				<section id="variable_specialMethods_sequences">
-					<title>Dates</title>
+					<title>Sequences</title>
 					<para>
 						Assume the <link linkend="context">context</link> value "mySeq" is {"abc", "def", "ghi"}
 						<itemizedlist>
@@ -886,7 +886,7 @@ Will print
 </programlisting>
 				</para>
 				<section id="macros_parameters_template">
-					<title>Object Oriented Macros</title>
+					<title>Template-defined Parameters</title>
 					<para>
 						The real power of the macros is the ability to provide template-defined parameters that are defined within the body of the
 						macro reference which can be evaluated programatically inside the macro definition.  Template-defined parameters use the same
@@ -1254,14 +1254,13 @@ zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 			</section>
 			<section id="context_custom">
 				<title>Implemting Your Own</title>
-				To provide your own context functionality, you need to use an object which implements <code>hudson.zipscript.parser.context</code>.  It is a good idea to extend
-				from hudson.zipscript.parser.context.AbstractContext as this will contain functionality you need not reproduce.
+				To provide your own context functionality, you need to use an object which implements <code>hudson.zipscript.parser.context.Context</code>.
 			</section>
 		</chapter>
 		<chapter id="properties">
-			<title>Properties</title>
+			<title>Init Properties</title>
 			<para>
-				Listed below are all the properties that affect ZipScript operation
+				Listed below are all the init properties that affect ZipScript operation
 				<variablelist>
 					<varlistentry><term>templateResourceLoader.*</term><listitem>Template resource loader properties</listitem></varlistentry>
 					<varlistentry><term>evalResourceLoader.*</term><listitem>Evaluator resource loader properties</listitem></varlistentry>
