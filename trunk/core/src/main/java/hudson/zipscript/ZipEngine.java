@@ -76,7 +76,7 @@ import java.util.Map;
  * Properties props = new Properties();
  * // set properties
  * engine.init(props);
- * ZipEngine engine = ZipEngine.newInstance(props);
+ * ZipEngine engine = ZipEngine.createInstance(props);
  * Map context = new HashMap();
  * // load the context
  * 

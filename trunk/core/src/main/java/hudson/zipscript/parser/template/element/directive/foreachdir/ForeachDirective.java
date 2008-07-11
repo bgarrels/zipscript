@@ -313,6 +313,9 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 				appendElements(getChildren(), context, sw);
 			}
 		}
+		else {
+			throw new ExecutionException("Null sequence value '" + listElement + "' in foreach loop", listElement);
+		}
 		if (getParsingSession().isDebug()) {
 			System.out.println("Completed:" + this.toString());
 		}
