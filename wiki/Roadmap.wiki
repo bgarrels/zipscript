@@ -1,5 +1,5 @@
 #summary What will be in the next release and when will it be?
 
-The next release 0.8.4 should be around July 14th
+The next release 0.9.1 should be around August 9th
 
-The following features/issues will be addressed: [http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.8.4%20label%3AModule-core&can=1 Click here for details]
+The following features/issues will be addressed: [http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.9.1%20label%3AModule-core&can=1 Click here for details]
