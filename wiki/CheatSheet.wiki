@@ -15,7 +15,7 @@ String expression = "foo != null && bar > 10"; // get the expression to evaluate
 Map context = new HashMap();
 // add business data to the context
 try {
-    Evaluator e = ZipEngine.getInstance().getEvaluator(expression);
+    Evaluator e = ZipEngine.createInstance().getEvaluator(expression);
     boolean val = e.booleanValue(context);
 }
 catch (ParseException e) {
@@ -30,7 +30,7 @@ String expression = "{foo, bar, baz}"; // get the expression to evaluate - examp
 Map context = new HashMap();
 // add business data to the context
 try {
-    Evaluator e = ZipEngine.getInstance().getEvaluator(expression);
+    Evaluator e = ZipEngine.createInstance().getEvaluator(expression);
     Object obj = e.objectValue(context);
     // in this example obj will be a java.util.List
 }
@@ -46,7 +46,7 @@ String templateName = ...
 Map context = new HashMap();
 // add business data to the context
 try {
-    Template t = ZipEngine.getInstance().getTemplate(templateName);
+    Template t = ZipEngine.createInstance().getTemplate(templateName);
     // there are other merging options as well
     String result = t.merge(context);
 }
