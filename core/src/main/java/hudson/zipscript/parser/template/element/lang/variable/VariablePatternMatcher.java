@@ -95,7 +95,7 @@ public class VariablePatternMatcher implements PatternMatcher {
 							return new VariableElement(isFormal, isSilenced, sb.toString(), session, startPosition);
 						}
 					}
-					else if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.' || c == ',')) {
+					else if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.' || c == ',' || c == '?' || c == '|' || c == '!')) {
 						return null;
 					}
 				}
