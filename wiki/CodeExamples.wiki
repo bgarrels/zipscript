@@ -1,6 +1,8 @@
 #summary Examples of the Zipscript language.
 #labels Featured
 
+[## This is a comment ##]
+
 =A Few Variable Examples=
 {{{
    ${person.firstName}  ---------------------------  standard variable reference
@@ -8,6 +10,10 @@
    ${person.children[0].fullName!"No Children"}  --  variable defaults using '!'
    ${person.birthDate|short}  ---------------------  variable formatting using '|'
    ${person.firstName?upperCase}  -----------------  variable special methods using '?'
+lazy variable references
+    $person.firstName
+    $person.birthDate|short
+    $person.firstName?upperCase
 }}}
 
 =A Few Directive Examples=
