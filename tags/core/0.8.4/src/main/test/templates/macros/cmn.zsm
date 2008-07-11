@@ -1,0 +1,10 @@
+[#macro page *title selected=false]
+	<div class="page">
+		${body}
+	</div>
+	[@testFoo/]
+[/#macro]
+
+[#macro testFoo]
+	This is a test
+[/#macro]
