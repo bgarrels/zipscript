@@ -1,58 +1,55 @@
 #summary macro definition/reference cheat sheet
 #labels Featured
 
-_Note: some of the displayed functionality is not yet released (see: [Roadmap])_
-
   * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MacroTestCase.java#61 View this unit test]
   * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_test.zs View unit test template reference]
   * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_result.txt View unit test output]
 
 {{{
 [@grid entries=people title="Interesting People"]
-[[
-        #** The header can be referenced in the macro definition as ${header} **#
-        This is the header
-]]
+	[@header]
+        Some header content
+	[/@header]
 
-        #**
+        [##
                 - template-defined parameters (only string attributes should be enclosed in quotes)
                 - the "entry" context value is added by the macro definition
                         (see ...foreach entry in entries... in the macro definition below)
-        **#
+        ##]
         [@column title="id" hidden=true] ${entry.id} [/@column]
 		[@commonColumns/]
 
-        #** template-defined parameters can be inside other directives **#
+        [## template-defined parameters can be inside other directives ##]
         [#if showAge]
                 [@column title="Age"] ${entry.age} [/@column]
         [/#if]
 
-        #**
+        [##
                 - template-defined parameters can be externalized for powerful functionality
                 - columnList (see below) would be added to the context before merging
-        **#
+        ##]
         [#foreach columnInfo in columnList]
-                #** properties can be access using [] (see below) when dealing with dynamic property names **#
-                [@column title=columnInfo.title width=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
+                [## properties can be access using [] (see below) when dealing with dynamic property names ##]
+                [@column title=columnInfo.title size=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
         [/#foreach]
 
         Any non template-defined parameter content inside the macro reference is the macro body and can
         be referenced as ${body}
         
-[[
-        #** The footer can be referenced in the macro definition as ${footer} **#
+	[@footer]
+        Some footer content - can use macros inside of macros inside of macros...
         [@simpleMacro]
-        	You can use macros/directives in the header/footer as well
+        	footer content
         [/@simpleMacro]
-]]
+	[/@footer]
 [/@grid]
 
 
-#**
+[##
         the macro definition below has the name of "grid" and would be in the "data" macro library as you can see by the reference to "data.grid" above
-**#
+##]
 
-[#macro grid *title *entries *column[*title width=100 hidden=false cssClass]]
+[#macro grid *title *entries *column[*title width=100 hidden=false cssClass] *header[] *footer[]]
         The title is ${title}
         <table>
                 <tr>
@@ -62,7 +59,7 @@ _Note: some of the displayed functionality is not yet released (see: [Roadmap])_
                         [/#foreach]
                 </tr>
                 [#if header!=null]
-                        <tr><td colspan="${colSpan}">${header}</td></tr>
+                        <tr><td colspan="${colSpan}">${header.body}</td></tr>
                 [/#if]
                 [#foreach entry in entries]
                         <tr>
@@ -72,7 +69,7 @@ _Note: some of the displayed functionality is not yet released (see: [Roadmap])_
                         </tr>
                 [/#foreach]
                 [#if footer!=null]
-                        <tr><td colspan="${colSpan}">${footer}</td></tr>
+                        <tr><td colspan="${colSpan}">${footer.body}</td></tr>
                 [/#if]          
         </table>
 [/#macro]
@@ -87,6 +84,8 @@ _Note: some of the displayed functionality is not yet released (see: [Roadmap])_
 [/#macro]
 
 [#macro simpleMacro]
-	The body content of simple macro is: ${body}
+	[#if body?objectValue == "footer content"] See how you can evaluate nested content
+	[#else] If we see this, something is broken
+	[/#if]
 [/#macro]
 }}}
