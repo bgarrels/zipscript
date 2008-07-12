@@ -66,6 +66,7 @@ _Note: whitespace has been changed for readability purposes_
 
 ==Simple HTML Layout Macro Definition Example (layout.simple)==
 {{{
+[#macro simple title="Default Title" script[src] style[src media] onLoad]
 <html>
 	<head>
 		<title>${title}</title>
