@@ -41,6 +41,33 @@
 		<mkdir dir="${dist}/docs/api" />
 		<mkdir dir="${dist}/docs/guides" />
 	</target>
+	
+	<target name="generateSiteDocs" depends="clean">
+		<mkdir dir="${dist}/docs/javadoc" />
+		
+		<javadoc destdir="${dist}/docs/javadoc" author="true" version="true" use="true" windowtitle="Zipscript API">
+			<packageset dir="${src}" defaultexcludes="yes">
+			</packageset>
+		</javadoc>
+
+		<xslt style="${docbook-xsl}/chunk.xsl" extension=".html" basedir="${docbook-xml.dir}" destdir="${dist}/docs">
+			<classpath refid="xalan.classpath" />
+			<include name="docbook.xml" />
+			<param name="html.stylesheet" expression="../css/docbook.css" />
+		</xslt>
+
+		<mkdir dir="${dist}/docs/index_only" />
+		<xslt style="${docbook-xsl}/chunk.xsl" extension=".html" basedir="${docbook-xml.dir}" destdir="${dist}/docs/index_only">
+			<classpath refid="xalan.classpath" />
+			<include name="docbook.xml" />
+			<param name="html.stylesheet" expression="../css/docbook.css" />
+			<param name="generate.toc" expression="false" />
+		</xslt>
+		<copy file="${dist}/docs/index_only/index.html" toFile="${dist}/docs/index_only.html"/>
+
+		<delete dir="${dist}/docs/index_only" />
+		
+	</target>
 
 	<target name="compile-test" depends="compile" description="compile the source ">
 		<!-- Compile the java test code from ${src-test} into ${build} -->
@@ -50,8 +77,6 @@
 	</target>
 
 	<target name="build-html" depends="init" description="Generates HTML files from DocBook XML">
-		<echo message="${docbook-xml}"/>
-		<echo message="${docbook-xsl}/chunk.xsl"/>
 		<xslt style="${docbook-xsl}/chunk.xsl" extension=".html" basedir="${docbook-xml.dir}" destdir="${dist}/docs/guides">
 			<classpath refid="xalan.classpath" />
 			<include name="docbook.xml" />
@@ -117,7 +142,6 @@
 
 	<target name="javadoc" depends="init">
 		<javadoc destdir="${dist}/docs/api" author="true" version="true" use="true" windowtitle="Zipscript API">
-
 			<packageset dir="${src}" defaultexcludes="yes">
 			</packageset>
 		</javadoc>
