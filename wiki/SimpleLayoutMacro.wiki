@@ -3,7 +3,7 @@
 A key feature of using a Zipscript macro over other solutions is the ability to provide template-defined attributes that control overall layout.  Have you ever wanted to provide script content referenced actually in the head node?  It's easy.  See the example below:
 
 ==Example Template Code==
-_Note: this is reference a macro called 'simple' in a library referenced as 'layout'
+_Note: this following template code references a macro demonstrated at the bottom of this page which would be located in a macro library referenced with 'layout'
 {{{
 [@layout.simple title="My Page Title"]
 
