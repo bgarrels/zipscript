@@ -27,9 +27,45 @@ _Note: this is reference a macro called 'simple' in a library referenced as 'lay
 [/@layout.simple]
 }}}
 
+==Template Output==
+_Note: whitespace has been changed for readability purposes_
+{{{
+<html>
+	<head>
+		<title>My Page Title</title>
+		<script language="javascript">
+			function doSomething () {
+				return true;
+			}
+		</script>
+		<style type="text/css">
+			body {
+				background-color: blue;
+			}
+		</style>
+	</head>
+	<body >
+		<div class="header">
+			Header Stuff
+		</div>
+		<div class="menu">
+			Menu Stuff
+		</div>
+		<div class="screen">
+			This is the body content... blah blah blah
+		    <script language="java">
+		        doSomething();
+		    </script>
+		</div>
+		<div class="footer">
+			Footer Stuff
+		</div>
+	</body>
+</html>
+}}}
+
 ==Simple HTML Layout Macro Definition Example (layout.simple)==
 {{{
-[#macro layout.simple title="Default Title" script[src] style[src media] onLoad]
 <html>
 	<head>
 		<title>${title}</title>
@@ -42,7 +78,7 @@ _Note: this is reference a macro called 'simple' in a library referenced as 'lay
 				[#else]
 					<script language="javascript" src="${script.src}></script>
 				[/#if]
-			[/#if]
+			[/#foreach]
 		[/#if]
 		[#if style != null]
 			[#foreach style in style]
@@ -56,7 +92,7 @@ _Note: this is reference a macro called 'simple' in a library referenced as 'lay
 			[/#foreach]
 		[/#if]
 	</head>
-	<body [#if onLoad!=null]onLoad="${onLoad}">
+	<body [#if onLoad!=null]onLoad="${onLoad}"[/#if]>
 		<div class="header">
 			Header Stuff
 		</div>
