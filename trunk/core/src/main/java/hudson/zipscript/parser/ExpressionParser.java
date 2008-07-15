@@ -287,11 +287,9 @@ public class ExpressionParser {
 	private class StartTokenEntry {
 		private char[] startToken;
 		private PatternMatcher patternMatcher;
-		private Component component;
 
 		public StartTokenEntry (
 			Component component, PatternMatcher patternMatcher, char[] startToken) {
-			this.component = component;
 			this.patternMatcher = patternMatcher;
 			this.startToken = startToken;
 		}
