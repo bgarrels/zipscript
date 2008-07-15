@@ -2,7 +2,6 @@ package hudson.zipscript.parser.template.element.directive.whiledir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
-import hudson.zipscript.parser.exception.BreakException;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -11,6 +10,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.BreakableDirective;
 import hudson.zipscript.parser.template.element.directive.LoopingDirective;
+import hudson.zipscript.parser.template.element.directive.breakdir.BreakException;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 
