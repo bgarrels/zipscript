@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.exception;
 
 public class UnknownPropertyException extends ExecutionException {
+	private static final long serialVersionUID = -1363961609103512907L;
 
 	private String propertyName;
 	private Object caller;

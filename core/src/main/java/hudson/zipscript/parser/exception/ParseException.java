@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 
 
 public class ParseException extends Exception {
+	private static final long serialVersionUID = -1363961609103512907L;
 
 	private long absolutePosition;
 	private int length;
@@ -37,6 +38,8 @@ public class ParseException extends Exception {
 		else if (null != this.element)
 			this.length = element.getElementLength();
 		this.element = element;
+		if (null != element)
+			this.length = element.getElementLength();
 	}
 
 	public void setParsingResult (ParsingResult parsingData) {
@@ -71,5 +74,9 @@ public class ParseException extends Exception {
 
 	public void setResource(String resource) {
 		this.resource = resource;
+	}
+
+	public int getLength() {
+		return length;
 	}
 }
