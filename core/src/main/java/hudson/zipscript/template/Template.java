@@ -1,8 +1,8 @@
 package hudson.zipscript.template;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.exception.ExecutionException;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 
 import java.io.Writer;
 import java.util.Locale;

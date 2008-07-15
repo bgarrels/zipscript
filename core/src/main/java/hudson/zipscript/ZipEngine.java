@@ -7,7 +7,6 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -30,6 +29,7 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.StandardVa
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.IOUtil;
+import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.Resource;
 import hudson.zipscript.resource.ResourceLoader;
@@ -42,7 +42,9 @@ import hudson.zipscript.template.TemplateImpl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,8 +84,27 @@ import java.util.Map;
  */
 public class ZipEngine {
 
+	private static final Component[] NON_OVERRIDEABLE_COMPONENTS = new Component[] {
+			new CommentComponent(),
+			new InitializeComponent(),
+			new EscapeComponent()
+	};
+	private static final Component[] OVERRIDEABLE_COMPONENTS = new Component[] {
+			new IfComponent(),
+			new ForeachComponent(),
+			new WhileComponent(),
+			new MacroComponent(),
+			new SetComponent(),
+			new GlobalComponent(),
+			new CallComponent(),
+			new VariableComponent()
+		};
+
+	private static final DefaultElementFactory defaultMergeElementFactory = TextDefaultElementFactory.INSTANCE;
+	private static final DefaultElementFactory defaultEvalElementFactory = new SpecialVariableDefaultEelementFactory();
+
 	private ResourceLoader templateResourceloader = new ClasspathResourceLoader();
-	private ResourceLoader macroLibResourceloader = templateResourceloader;
+	private ResourceLoader macroLibResourceloader;
 	private ResourceLoader evalResourceLoader = new StringResourceLoader();
 
 	private ResourceContainer resourceContainer;
@@ -98,41 +119,48 @@ public class ZipEngine {
 	 * Retrurn new instanceof ZipEngine
 	 */
 	public static ZipEngine createInstance ()  {
-		return createInstance(null);
+		return createInstance(null, null);
 	}
 
 	/**
 	 * Retrurn new instanceof ZipEngine initialized with property map
 	 */
 	public static ZipEngine createInstance (Map properties) {
-		ZipEngine zipEngine = new ZipEngine();
-		zipEngine.init(properties);
-		return zipEngine;
+		return createInstance(properties, null);
 	}
 
-	private static final DefaultElementFactory mergeElementFactory = TextDefaultElementFactory.INSTANCE;
-	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
-
-	private Component[] components = new Component[] {
-		new CommentComponent(),
-		new IfComponent(),
-		new ForeachComponent(),
-		new WhileComponent(),
-		new MacroComponent(),
-		new VariableComponent(),
-		new SetComponent(),
-		new GlobalComponent(),
-		new CallComponent(),
-		new EscapeComponent(),
-		new InitializeComponent()
-	};
+	/**
+	 * Retrurn new instanceof ZipEngine initialized with property map and use the plugins
+	 */
+	public static ZipEngine createInstance (Map properties, Plugin[] plugins) {
+		ZipEngine zipEngine = new ZipEngine();
+		zipEngine.init(properties, plugins);
+		return zipEngine;
+	}
 
 	/**
 	 * Initialize with property map
 	 * @param properties
+	 * @param plugins engine plugins
 	 */
-	private void init (Map properties) {
+	private void init (Map properties, Plugin[] plugins) {
 		VariableAdapterFactory variableAdapterFactory = new StandardVariableAdapterFactory();
+		List components = new ArrayList();
+		for (int i=0; i<NON_OVERRIDEABLE_COMPONENTS.length; i++)
+			components.add(NON_OVERRIDEABLE_COMPONENTS[i]);
+
+		if (null != plugins) {
+			// initialilze plugins
+			for (int i=0; i<plugins.length; i++) {
+				plugins[i].initialize(this, properties);
+				Component[] c = plugins[i].getComponents();
+				if (null != c) {
+					for (int j=0; j<NON_OVERRIDEABLE_COMPONENTS.length; j++)
+						components.add(c[j]);
+				}
+					
+			}
+		}
 
 		if (null != properties) {
 			// get the default resource loader
@@ -177,8 +205,11 @@ public class ZipEngine {
 			}
 		}
 
+		for (int i=0; i<OVERRIDEABLE_COMPONENTS.length; i++)
+			components.add(OVERRIDEABLE_COMPONENTS[i]);
+
 		resourceContainer = new ResourceContainer(
-				new MacroManager(), variableAdapterFactory, components, properties);
+				this, plugins, new MacroManager(), variableAdapterFactory, (Component[]) components.toArray(new Component[components.size()]), properties);
 	}
 
 	/**
@@ -189,7 +220,7 @@ public class ZipEngine {
 	 */
 	public void addMacroLibrary (String namespace, String resourcePath) throws ParseException {
 		resourceContainer.getMacroManager().addMacroLibrary(
-				namespace, resourcePath, macroLibResourceloader, resourceContainer.getVariableAdapterFactory());
+				namespace, resourcePath, getMacroLibResourceloader(), resourceContainer.getVariableAdapterFactory());
 	}
 
 	/**
@@ -255,7 +286,7 @@ public class ZipEngine {
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
-					contents, Constants.VARIABLE_MATCHERS, evalElementFactory, 0, resourceContainer);
+					contents, Constants.VARIABLE_MATCHERS, getDefaultEvalElementFactory(), 0, resourceContainer);
 			TemplateImpl evaluator = new TemplateImpl(element);
 			evaluator.setResourceContainer(resourceContainer);
 			return evaluator;
@@ -278,16 +309,16 @@ public class ZipEngine {
 	protected TemplateResource loadTemplate (
 			String source, Component[] components, PatternMatcher[] patternMatchers, ParseParameters parseParameters)
 	throws ParseException {
-		Resource resource = templateResourceloader.getResource(source);
+		Resource resource = getTemplateResourceloader().getResource(source);
 		String contents = IOUtil.toString(resource.getInputStream());;
 		ParsingResult pr = null;
 		if (null != components) {
 			pr = ExpressionParser.getInstance().parse(
-					contents, components, mergeElementFactory, 0, resourceContainer);
+					contents, components, getDefaultMergeElementFactory(), 0, resourceContainer);
 		}
 		else {
 			pr = ExpressionParser.getInstance().parse(
-					contents, patternMatchers, mergeElementFactory,
+					contents, patternMatchers, getDefaultMergeElementFactory(),
 					new ParsingSession(parseParameters), 0);
 		}
 		return new TemplateResource(
@@ -297,16 +328,16 @@ public class ZipEngine {
 	protected Template loadTemplateForEvaluation (
 			String source, Component[] components, PatternMatcher[] patternMatchers, ParseParameters parseParameters)
 	throws ParseException {
-		Resource resource = evalResourceLoader.getResource(source);
+		Resource resource = getEvalResourceLoader().getResource(source);
 		String contents = IOUtil.toString(resource.getInputStream());
 		Element element = null;
 		if (null != components) {
 			element = ExpressionParser.getInstance().parseToElement(
-					contents, components, mergeElementFactory, 0, resourceContainer);
+					contents, components, getDefaultMergeElementFactory(), 0, resourceContainer);
 		}
 		else {
 			element = ExpressionParser.getInstance().parseToElement(
-					source, patternMatchers, mergeElementFactory, 0, resourceContainer);
+					source, patternMatchers, getDefaultMergeElementFactory(), 0, resourceContainer);
 		}
 		return new TemplateImpl(element);
 	}
@@ -320,5 +351,40 @@ public class ZipEngine {
 			this.resource = resource;
 			this.lastModified = System.currentTimeMillis();
 		}
+	}
+
+	ResourceLoader getTemplateResourceloader() {
+		return templateResourceloader;
+	}
+
+	ResourceLoader getMacroLibResourceloader() {
+		if (null == macroLibResourceloader)
+			return getTemplateResourceloader();
+		else
+			return macroLibResourceloader;
+	}
+
+	ResourceLoader getEvalResourceLoader() {
+		return evalResourceLoader;
+	}
+
+	DefaultElementFactory getDefaultEvalElementFactory() {
+		return defaultEvalElementFactory;
+	}
+
+	DefaultElementFactory getDefaultMergeElementFactory() {
+		return defaultMergeElementFactory;
+	}
+
+	public void setTemplateResourceloader(ResourceLoader templateResourceloader) {
+		this.templateResourceloader = templateResourceloader;
+	}
+
+	public void setEvalResourceLoader(ResourceLoader evalResourceLoader) {
+		this.evalResourceLoader = evalResourceLoader;
+	}
+
+	public void setMacroLibResourceloader(ResourceLoader macroLibResourceloader) {
+		this.macroLibResourceloader = macroLibResourceloader;
 	}
 }

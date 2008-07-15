@@ -1,9 +1,9 @@
 package hudson.zipscript.resource.macrolib;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingResult;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;

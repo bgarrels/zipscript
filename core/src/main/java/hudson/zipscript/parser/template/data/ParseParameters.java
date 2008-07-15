@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.template.data;
 
+import hudson.zipscript.ResourceContainer;
+
 
 public class ParseParameters {
 

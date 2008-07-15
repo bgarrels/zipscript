@@ -1,5 +1,6 @@
 package hudson.zipscript.template;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ContextWrapperFactory;
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -8,7 +9,6 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.initialize.InitializeDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
@@ -203,10 +203,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	private ExtendedContext getContext (Object obj, Locale locale) {
 		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized())
 			return (ExtendedContext) obj;
-		Map initParameters = null;
-		if (null != parsingSession && null != parsingSession.getParameters())
-			initParameters = parsingSession.getParameters().getResourceContainer().getInitParameters();
-		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj, initParameters);
+		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj, resourceContainer);
 		context.setResourceContainer(resourceContainer);
 		context.setParsingSession(parsingSession);
 		if (null != locale) context.setLocale(locale);
