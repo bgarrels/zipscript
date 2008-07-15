@@ -5,6 +5,8 @@ import java.util.List;
 
 public class ListAdapter implements SequenceAdapter {
 
+	public static ListAdapter INSTANCE = new ListAdapter();
+
 	public boolean appliesTo(Object object) {
 		return (object instanceof List);
 	}
@@ -36,7 +38,7 @@ public class ListAdapter implements SequenceAdapter {
 
 	public boolean hasNext(int index, Object previousItem,
 			Object sequence) {
-		return ((List) sequence).size() > (index);
+		return ((List) sequence).size() > (index+1);
 	}
 
 	public int indexOf(Object object, Object sequence)

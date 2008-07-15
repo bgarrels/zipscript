@@ -41,7 +41,7 @@ public class DynamicChild implements VariableChild {
 		List children = new ArrayList();
 		StringTokenizer st = new StringTokenizer(path, ".");
 		while (st.hasMoreElements()) {
-			children.add(new PropertyChild(st.nextToken(), evaluator));
+			children.add(new PropertyChild(st.nextToken()));
 		}
 		return children;
 	}

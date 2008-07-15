@@ -7,6 +7,11 @@ ${abc} - ${i} - ${hasNext}
 ${abc} - ${i} - ${hasNext}
 [/#foreach]
 
+[#if isIterator!=null]
+[#foreach foo in theList]
+foo: ${i}, ${hasNext}
+[/#foreach]
+[#else]
 [#foreach foo in theList]
 foo: ${i}, ${hasNext}
 [#foreach bar in theList]
@@ -14,3 +19,4 @@ foo: ${i}, ${hasNext}
 		[#foreach boo in theList]boo: ${i}[#if hasNext],	[/#if][/#foreach]	
 [/#foreach]
 [/#foreach]
+[/#if]

@@ -1,12 +1,12 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.resource.macrolib.MacroManager;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 
 public abstract class AbstractContext implements ExtendedContext {
 
 	private ParsingSession parsingSession;
-	private MacroManager macroManager;
+	private ResourceContainer resourceContainer;
 	private boolean initialized;
 
 	public ParsingSession getParsingSession() {
@@ -17,12 +17,12 @@ public abstract class AbstractContext implements ExtendedContext {
 		this.parsingSession = parsingSession;
 	}
 
-	public MacroManager getMacroManager() {
-		return macroManager;
+	public ResourceContainer getResourceContainer() {
+		return resourceContainer;
 	}
 
-	public void setMacroManager(MacroManager macroManager) {
-		this.macroManager = macroManager;
+	public void setResourceContainer(ResourceContainer resourceContainer) {
+		this.resourceContainer = resourceContainer;
 	}
 
 	public boolean isInitialized() {

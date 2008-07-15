@@ -13,5 +13,5 @@ foo - 0 - true
 false - 2 - false
 
 foo: 0, true
-	bar: 0, true
-		boo: 0	
+foo: 1, true
+foo: 2, false

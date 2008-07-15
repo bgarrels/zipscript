@@ -8,10 +8,10 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.initialize.InitializeDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
-import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -28,7 +28,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	private List initializeElements;
 	private ParsingSession parsingSession;
 	private ParsingResult parsingResult;
-	private MacroManager macroManager;
+	private ResourceContainer resourceContainer;
 
 	public TemplateImpl (List elements, ParsingSession parsingSession, ParsingResult result) {
 		this.elements = elements;
@@ -205,9 +205,9 @@ public class TemplateImpl implements Template, Evaluator, Element {
 			return (ExtendedContext) obj;
 		Map initParameters = null;
 		if (null != parsingSession && null != parsingSession.getParameters())
-			initParameters = parsingSession.getParameters().getInitParameters();
+			initParameters = parsingSession.getParameters().getResourceContainer().getInitParameters();
 		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj, initParameters);
-		context.setMacroManager(macroManager);
+		context.setResourceContainer(resourceContainer);
 		context.setParsingSession(parsingSession);
 		if (null != locale) context.setLocale(locale);
 		return context;
@@ -243,11 +243,11 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		else return null;
 	}
 
-	public MacroManager getMacroManager() {
-		return macroManager;
+	public ResourceContainer getResourceContainer() {
+		return resourceContainer;
 	}
 
-	public void setMacroManager(MacroManager macroManager) {
-		this.macroManager = macroManager;
+	public void setResourceContainer(ResourceContainer resourceContainer) {
+		this.resourceContainer = resourceContainer;
 	}
 }

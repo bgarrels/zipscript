@@ -2,7 +2,6 @@ package hudson.zipscript.parser.template.data;
 
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
-import hudson.zipscript.resource.macrolib.MacroManager;
 import hudson.zipscript.resource.macrolib.MacroProvider;
 
 import java.util.HashMap;
@@ -16,13 +15,15 @@ public class ParsingSession implements MacroProvider {
 	private Map inlineMacroDefinitions;
 	private Stack nestingStack;
 	private Stack escapeMethodStack = new Stack();
-	private MacroManager macroManager;
 	private boolean hideEscapeMethods = false;
 
 	public ParsingSession (
-			ParseParameters parameters, MacroManager macroManager) {
+			ParseParameters parameters) {
 		this.parameters = parameters;
-		this.macroManager = macroManager;
+	}
+
+	public ResourceContainer getResourceContainer () {
+		return parameters.getResourceContainer();
 	}
 
 	public ParseParameters getParameters () {
@@ -65,14 +66,6 @@ public class ParsingSession implements MacroProvider {
 	public Stack getNestingStack() {
 		if (null == nestingStack) nestingStack = new Stack();
 		return nestingStack;
-	}
-
-	public MacroManager getMacroManager() {
-		return macroManager;
-	}
-
-	public void setMacroManager(MacroManager macroManager) {
-		this.macroManager = macroManager;
 	}
 
 	public boolean isDebug () {

@@ -19,7 +19,7 @@ public class DirectiveTestCase extends TestCase {
 
 //	public static TestSuite suite () {
 //		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testEscape"));
+//		suite.addTest(new DirectiveTestCase("testSimple"));
 //		return suite;
 //	}
 
@@ -56,6 +56,7 @@ public class DirectiveTestCase extends TestCase {
 
 		resultFile = "/templates/foreach_result_iter.txt";
 		context = new HashMap();
+		context.put("isIterator", Boolean.TRUE);
 		context.put("theList", l2.iterator());
 		evalResult(mergeTemplate, resultFile, context);
 	}

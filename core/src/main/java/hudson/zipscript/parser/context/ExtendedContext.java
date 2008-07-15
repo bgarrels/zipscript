@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.resource.macrolib.MacroManager;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 
 import java.util.List;
 import java.util.Locale;
@@ -64,15 +64,14 @@ public interface ExtendedContext extends Context {
 	public void setLocale (Locale locale);
 
 	/**
-	 * Return the macro manager
+	 * Return the resource container
 	 */
-	public MacroManager getMacroManager ();
+	public ResourceContainer getResourceContainer ();
 
 	/**
-	 * Set the macro manager
-	 * @param macroManager the macro manager
+	 * Set the resource container
 	 */
-	public void setMacroManager (MacroManager macroManager);
+	public void setResourceContainer (ResourceContainer resourceContainer);
 
 	/**
 	 * Return the root context (AKA the global context)

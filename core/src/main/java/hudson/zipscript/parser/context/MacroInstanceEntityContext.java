@@ -1,10 +1,10 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
-import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Iterator;
 import java.util.List;
@@ -52,8 +52,13 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		preMacroContext.setLocale(locale);
 	}
 
-	public MacroManager getMacroManager() {
-		return preMacroContext.getMacroManager();
+	public ResourceContainer getResourceContainer() {
+		return preMacroContext.getResourceContainer();
+	}
+
+	public void setResourceContainer(ResourceContainer resourceContainer) {
+		preMacroContext.setResourceContainer(resourceContainer);
+		
 	}
 
 	public ParsingSession getParsingSession() {
@@ -78,10 +83,6 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 
 	public Object remove(Object key) {
 		return postMacroContext.remove(key);
-	}
-
-	public void setMacroManager(MacroManager macroManager) {
-		preMacroContext.setMacroManager(macroManager);
 	}
 
 	public void setParsingSession(ParsingSession session) {

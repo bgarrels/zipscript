@@ -7,6 +7,8 @@ import java.util.List;
 
 public class CollectionAdapter implements SequenceAdapter {
 
+	public static CollectionAdapter INSTANCE = new CollectionAdapter();
+
 	public boolean appliesTo(Object object) {
 		return (object instanceof Collection);
 	}

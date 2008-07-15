@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
-
-
 public class ObjectArrayAdapter implements SequenceAdapter {
 
+	public static ObjectArrayAdapter INSTANCE = new ObjectArrayAdapter();
+	
 	public boolean appliesTo(Object object) {
 		return (object instanceof Object[]);
 	}
@@ -35,7 +35,7 @@ public class ObjectArrayAdapter implements SequenceAdapter {
 	}
 
 	public boolean hasNext(int index, Object previousItem, Object sequence) {
-		return ((Object[]) sequence).length > index;
+		return ((Object[]) sequence).length > (index+1);
 	}
 
 	public int indexOf(Object object, Object sequence)

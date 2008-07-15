@@ -2,9 +2,9 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
-import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,12 +81,12 @@ public class NestedContextWrapper implements ExtendedContext {
 		parentContext.setLocale(locale);
 	}
 
-	public MacroManager getMacroManager() {
-		return parentContext.getMacroManager();
+	public ResourceContainer getResourceContainer() {
+		return parentContext.getResourceContainer();
 	}
 
-	public void setMacroManager (MacroManager macroManager) {
-		parentContext.setMacroManager(macroManager);
+	public void setResourceContainer (ResourceContainer resourceContainer) {
+		parentContext.setResourceContainer(resourceContainer);
 	}
 
 	public ExtendedContext getRootContext () {

@@ -1,29 +1,25 @@
 package hudson.zipscript.parser.template.data;
 
-import java.util.Map;
 
 public class ParseParameters {
 
 	public boolean cleanWhitespace = true;
 	public boolean trim;
-	private Map initParameters;
+	private ResourceContainer resourceContainer;
 
-	public ParseParameters (boolean cleanWhitespace, boolean trim) {
-		this (cleanWhitespace, trim, null);
-	}
-
-	public ParseParameters (boolean cleanWhitespace, boolean trim, Map initParameters) {
+	public ParseParameters (
+			ResourceContainer resourceContainer, boolean cleanWhitespace, boolean trim) {
 		this.cleanWhitespace = cleanWhitespace;
 		this.trim = trim;
-		this.initParameters = initParameters;
+		this.resourceContainer = resourceContainer;
 	}
 
 	public Object getProperty (Object key) {
-		if (null == initParameters) return null;
-		else return initParameters.get(key);
+		if (null == resourceContainer.getInitParameters()) return null;
+		else return resourceContainer.getInitParameters().get(key);
 	}
 
-	public Map getInitParameters () {
-		return initParameters;
+	public ResourceContainer getResourceContainer() {
+		return resourceContainer;
 	}
 }
