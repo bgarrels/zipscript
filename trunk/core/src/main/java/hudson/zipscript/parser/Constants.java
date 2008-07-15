@@ -34,6 +34,7 @@ public class Constants {
 	public static final String EVAL_RESOURCE_LOADER_CLASS = "evalResourceLoader.class";
 	public static final String EVAL_RESOURCE_LOADER_TYPE = "evalResourceLoader.type";
 	public static final String UNIQUE_ID_GENERATOR_CLASS = "uniqueIdGenerator.class";
+	public static final String VARIABLE_ADAPTER_FACTORY_CLASS = "variableAdapterFactory.class";
 
 	public static final Map RESOURCE_LOADER_TYPES = new HashMap();
 	static {
