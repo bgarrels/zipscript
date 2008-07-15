@@ -2,7 +2,7 @@ package hudson.zipscript.template;
 
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.exception.ExecutionException;
-import hudson.zipscript.resource.macrolib.MacroManager;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 
 import java.io.Writer;
 import java.util.Locale;
@@ -67,14 +67,12 @@ public interface Template {
 	public void merge (Object context, Writer writer, Locale locale) throws ExecutionException;
 
 	/**
-	 * Set the macro manager used to retrieve all imported macro libraries
-	 * @param macroManager the macro manager
+	 * Set the resource container to retrieve ZipEngine resources
 	 */
-	public void setMacroManager (MacroManager macroManager);
+	public void setResourceContainer(ResourceContainer resourceContainer);
 
 	/**
-	 * Return the macro manager
-	 * @return the macro manager
+	 * Return the resource container
 	 */
-	public MacroManager getMacroManager ();
+	public ResourceContainer getResourceContainer();
 }

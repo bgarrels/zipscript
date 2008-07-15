@@ -19,7 +19,6 @@ public abstract class AbstractElement implements Element {
 	private ParsingSession parsingSession;
 
 	public AbstractElement() {
-		this.parsingSession = parsingSession;
 	}
 
 	public String toString() {
@@ -53,7 +52,7 @@ public abstract class AbstractElement implements Element {
 	throws ParseException {
 		return ExpressionParser.getInstance().parseToElement(
 				contents, getContentParsingPatternMatchers(),
-				getContentParsingDefaultElementFactory(), startPosition, parsingSession.getMacroManager(), null);
+				getContentParsingDefaultElementFactory(), startPosition, parsingSession.getResourceContainer());
 	}
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {
@@ -62,7 +61,7 @@ public abstract class AbstractElement implements Element {
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition, boolean hideEscaping) throws ParseException {
 		ParseParameters oldParameters = session.getParameters();
-		session.setParameters(new ParseParameters(true, true));
+		session.setParameters(new ParseParameters(session.getResourceContainer(), true, true));
 		if (hideEscaping) session.setHideEscapeMethods(true);
 		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),

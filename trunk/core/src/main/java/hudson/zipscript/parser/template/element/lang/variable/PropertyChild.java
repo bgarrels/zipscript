@@ -1,74 +1,86 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 import hudson.zipscript.parser.exception.ExecutionException;
-import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.util.BeanUtil;
-
-import java.lang.reflect.Method;
-import java.util.Map;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 
 public class PropertyChild implements VariableChild {
 
-	private static final Object[] NO_PARAMS = new Object[0];
-
-	private static final short TYPE_MAP = 1;
-	private static final short TYPE_CONTEXT = 2;
-	private static final short TYPE_CONTEXT_REQUIRED = 3;
-	private static final short TYPE_OBJECT = 4;
-
-	private Element variableElement;
-	private Short type;
 	private String name;
-	private Method accessorMethod;
 
-	public PropertyChild (String name, Element variableElement) {
+	private MapAdapter mapAdapter;
+	private ObjectAdapter objectAdapter;
+
+	private short type = Short.MIN_VALUE;
+	private static short TYPE_CONTEXT = 1;
+	private static short TYPE_CONTEXT_REQUIRED_GETTER = 2;
+	private static short TYPE_MAP = 3;
+	private static short TYPE_OBJECT = 4;
+
+	private boolean doTypeChecking = false;
+
+	public PropertyChild (String name) {
 		this.name = name;
-		this.variableElement = variableElement;
 	}
 
 	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		if (null == parent) return null;
-		try {
-			if (null == type) {
-				// initialize type
-				if (parent instanceof Map) {
-					type = new Short(TYPE_MAP);
+		if (doTypeChecking || type == Short.MIN_VALUE) {
+			type = Short.MIN_VALUE;
+			if (parent instanceof ZSContextRequiredGetter)
+				type = TYPE_CONTEXT_REQUIRED_GETTER;
+			else if (parent instanceof Context)
+				type = TYPE_CONTEXT;
+			if (type == Short.MIN_VALUE) {
+				if (null != mapAdapter && mapAdapter.appliesTo(parent)) {
+					type = TYPE_MAP;
 				}
-				else if (parent instanceof ZSContextRequiredGetter) {
-					type = new Short(TYPE_CONTEXT_REQUIRED);
-				}
-				else if (parent instanceof ExtendedContext) {
-					type = new Short(TYPE_CONTEXT);
-				}
-				else {
-					type = new Short(TYPE_OBJECT);
-					accessorMethod = BeanUtil.getPropertyMethod(
-							parent, name, null);
-					if (null == accessorMethod) {
-						throw new ExecutionException(
-								"Unknown property '" + name + "' on " + variableElement.toString(), null);
+				if (type == Short.MIN_VALUE) {
+					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(parent);
+					if (null != mapAdapter) {
+						type = TYPE_MAP;
+					}
+					else {
+						objectAdapter = context.getResourceContainer().getVariableAdapterFactory().getObjectAdapter(parent);
+						type = TYPE_OBJECT;
 					}
 				}
 			}
-
-			if (type.shortValue() == TYPE_MAP) {
-				return ((Map) parent).get(name);
+		}
+		
+		if (doTypeChecking) {
+			// dont' worry about ClassCast because we just detected type
+			if (type == TYPE_CONTEXT) {
+				return ((Context) parent).get(name);
 			}
-			else if (type.shortValue() == TYPE_CONTEXT_REQUIRED) {
+			else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
 				return ((ZSContextRequiredGetter) parent).get(name, context);
 			}
-			else if (type.shortValue() == TYPE_CONTEXT) {
-				return ((ExtendedContext) parent).get(name);
+			else if (type == TYPE_MAP) {
+				return mapAdapter.get(name, parent);
 			}
-			else {
-				return accessorMethod.invoke(parent, NO_PARAMS);
-			}
+			else return objectAdapter.get(name, parent);
 		}
-		catch (Exception e) {
-			if (e instanceof ExecutionException) throw (ExecutionException) e;
-			else throw new ExecutionException(e.getMessage(), variableElement, e);
+		else {
+			try {
+				if (type == TYPE_CONTEXT) {
+					return ((Context) parent).get(name);
+				}
+				else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
+					return ((ZSContextRequiredGetter) parent).get(name, context);
+				}
+				else if (type == TYPE_MAP) {
+					return mapAdapter.get(name, parent);
+				}
+				else return objectAdapter.get(name, parent);
+			}
+			catch (ClassCastException e) {
+				this.doTypeChecking = true;
+				return this.execute(parent, context);
+			}
 		}
 	}
 

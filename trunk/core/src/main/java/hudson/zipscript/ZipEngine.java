@@ -7,6 +7,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -38,6 +39,7 @@ import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDef
 import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.StandardVariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
@@ -101,8 +103,9 @@ public class ZipEngine {
 	private ResourceLoader templateResourceloader = new ClasspathResourceLoader();
 	private ResourceLoader macroLibResourceloader = templateResourceloader;
 	private ResourceLoader evalResourceLoader = new StringResourceLoader();
+
+	private ResourceContainer resourceContainer;
 	
-	private Map initParameters;
 
 	/**
 	 * newInstance should be used
@@ -113,7 +116,7 @@ public class ZipEngine {
 	 * Retrurn new instanceof ZipEngine
 	 */
 	public static ZipEngine createInstance ()  {
-		return new ZipEngine();
+		return createInstance(null);
 	}
 
 	/**
@@ -125,19 +128,6 @@ public class ZipEngine {
 		return zipEngine;
 	}
 
-	public static final Component[] TEMPLATE_COMPONENTS = new Component[] {
-			new CommentComponent(),
-			new IfComponent(),
-			new ForeachComponent(),
-			new WhileComponent(),
-			new MacroComponent(),
-			new VariableComponent(),
-			new SetComponent(),
-			new GlobalComponent(),
-			new CallComponent(),
-			new EscapeComponent(),
-			new InitializeComponent()
-	};
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
 			new VariablePatternMatcher(),
 			new ListPatternMatcher(),
@@ -162,45 +152,62 @@ public class ZipEngine {
 	};
 	private static final DefaultElementFactory mergeElementFactory = TextDefaultElementFactory.INSTANCE;
 	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
-	private MacroManager macroManager = new MacroManager();
+
+	private Component[] components = new Component[] {
+		new CommentComponent(),
+		new IfComponent(),
+		new ForeachComponent(),
+		new WhileComponent(),
+		new MacroComponent(),
+		new VariableComponent(),
+		new SetComponent(),
+		new GlobalComponent(),
+		new CallComponent(),
+		new EscapeComponent(),
+		new InitializeComponent()
+	};
 
 	/**
 	 * Initialize with property map
 	 * @param properties
 	 */
 	private void init (Map properties) {
-		// get the default resource loader
-		String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
-		if (null != s) {
-			try {
-				this.templateResourceloader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
-						ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
+		if (null != properties) {
+			// get the default resource loader
+			String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
+			if (null != s) {
+				try {
+					this.templateResourceloader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
+							ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
+				}
+				catch (ClassCastException e) {
+					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+				}
 			}
-			catch (ClassCastException e) {
-				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+			s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
+			if (null != s) {
+				try {
+					this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
+							ResourceLoader.class, templateResourceloader.getClass(), Constants.RESOURCE_LOADER_TYPES);
+				}
+				catch (ClassCastException e) {
+					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+				}
+			}
+			s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
+			if (null != s) {
+				try {
+					this.evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
+							ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
+				}
+				catch (ClassCastException e) {
+					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+				}
 			}
 		}
-		s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
-		if (null != s) {
-			try {
-				this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
-						ResourceLoader.class, templateResourceloader.getClass(), Constants.RESOURCE_LOADER_TYPES);
-			}
-			catch (ClassCastException e) {
-				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-			}
-		}
-		s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
-		if (null != s) {
-			try {
-				this.evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
-						ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
-			}
-			catch (ClassCastException e) {
-				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-			}
-		}
-		initParameters = properties;
+		
+		resourceContainer = new ResourceContainer(
+				new MacroManager(), new StandardVariableAdapterFactory(), components, properties);
 	}
 
 	/**
@@ -210,8 +217,8 @@ public class ZipEngine {
 	 * @throws ParseException
 	 */
 	public void addMacroLibrary (String namespace, String resourcePath) throws ParseException {
-		macroManager.addMacroLibrary(
-				namespace, resourcePath, macroLibResourceloader);
+		resourceContainer.getMacroManager().addMacroLibrary(
+				namespace, resourcePath, macroLibResourceloader, resourceContainer.getVariableAdapterFactory());
 	}
 
 	/**
@@ -231,8 +238,9 @@ public class ZipEngine {
 			String namespace = file.getName().substring(
 					0, file.getName().length()-4);
 			String contents = IOUtil.toString(new FileInputStream(file)); 
-			macroManager.addMacroLibrary(
-					namespace, contents, StringResourceLoader.INSTANCE);
+			resourceContainer.getMacroManager().addMacroLibrary(
+					namespace, contents, StringResourceLoader.INSTANCE,
+					resourceContainer.getVariableAdapterFactory());
 		}
 	}
 
@@ -251,13 +259,13 @@ public class ZipEngine {
 		try {
 			TemplateResource tr = (TemplateResource) resourceMap.get(source);
 			if (null == tr) {
-				tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false, initParameters));
+				tr = loadTemplate(source, resourceContainer.getComponents(), null, new ParseParameters(resourceContainer, false, false));
 			}
 			if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
 				// reload the resource
-				tr = loadTemplate(source, TEMPLATE_COMPONENTS, null, new ParseParameters(false, false, initParameters));
+				tr = loadTemplate(source, resourceContainer.getComponents(), null, new ParseParameters(resourceContainer, false, false));
 			}
-			tr.template.setMacroManager(macroManager);
+			tr.template.setResourceContainer(resourceContainer);
 			return tr.template;
 		}
 		catch (ParseException e) {
@@ -276,9 +284,9 @@ public class ZipEngine {
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
-					contents, VARIABLE_MATCHERS, evalElementFactory, 0, macroManager, initParameters);
+					contents, VARIABLE_MATCHERS, evalElementFactory, 0, resourceContainer);
 			TemplateImpl evaluator = new TemplateImpl(element);
-			evaluator.setMacroManager(macroManager);
+			evaluator.setResourceContainer(resourceContainer);
 			return evaluator;
 		}
 		catch (ParseException e) {
@@ -304,12 +312,12 @@ public class ZipEngine {
 		ParsingResult pr = null;
 		if (null != components) {
 			pr = ExpressionParser.getInstance().parse(
-					contents, components, mergeElementFactory, 0, macroManager, initParameters);
+					contents, components, mergeElementFactory, 0, resourceContainer);
 		}
 		else {
 			pr = ExpressionParser.getInstance().parse(
 					contents, patternMatchers, mergeElementFactory,
-					new ParsingSession(parseParameters, macroManager), 0);
+					new ParsingSession(parseParameters), 0);
 		}
 		return new TemplateResource(
 				new TemplateImpl(pr.getElements(), pr.getParsingSession(), pr), resource);
@@ -323,11 +331,11 @@ public class ZipEngine {
 		Element element = null;
 		if (null != components) {
 			element = ExpressionParser.getInstance().parseToElement(
-					contents, components, mergeElementFactory, 0, macroManager);
+					contents, components, mergeElementFactory, 0, resourceContainer);
 		}
 		else {
 			element = ExpressionParser.getInstance().parseToElement(
-					source, patternMatchers, mergeElementFactory, 0, macroManager, initParameters);
+					source, patternMatchers, mergeElementFactory, 0, resourceContainer);
 		}
 		return new TemplateImpl(element);
 	}

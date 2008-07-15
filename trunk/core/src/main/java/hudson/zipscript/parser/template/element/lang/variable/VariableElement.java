@@ -66,7 +66,7 @@ public class VariableElement extends AbstractElement implements Element {
 			if (session.isVariablePatternRecognized(pattern))
 				throw new ParseException(this, "Invalid variable reference '" + pattern + "'");
 			session.setReferencedVariable(pattern);
-			ParseParameters parameters = new ParseParameters(false, true);
+			ParseParameters parameters = new ParseParameters(session.getResourceContainer(), false, true);
 			ParseParameters currentParameters = session.getParameters();
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
@@ -120,63 +120,69 @@ public class VariableElement extends AbstractElement implements Element {
 	}
 
 	public Object objectValue(ExtendedContext context) throws ExecutionException {
-		Object rtn = null;
-		int count = 0;
-		boolean isNullAllowed = false;
-		if (null == pattern) {
-			for (Iterator i=children.iterator(); i.hasNext(); ) {
-				VariableChild child = (VariableChild) i.next();
-				rtn = child.execute(rtn, context);
-				if (!child.shouldReturnSomething()) isNullAllowed = true;
-				if (null == rtn) {
-					break;
-				}
-				count ++;
-			}
-		}
-		else {
-			// bypass path and get the full path from the context
-			rtn = context.get(pattern);
-		}
-		if (isNullAllowed && null == rtn) return "";
-		if (null == rtn && count == 0) {
-			StringBuffer sb = new StringBuffer();
-			for (Iterator i=children.iterator(); i.hasNext(); ) {
-				if (sb.length() > 0) sb.append('.');
-				VariableChild child = (VariableChild) i.next();
-				sb.append(child.getPropertyName());
-			}
-			pattern = sb.toString();
-			rtn = context.get(pattern);
-		}
-		if (null != specialElements) {
-			if (null == rtn
-					&& (((VariableTokenSeparatorElement) specialElements.get(0)).requiresInput(context))) {
-				return null;
-			}
-			for (int i=0; i<specialElements.size(); i++) {
-				VariableTokenSeparatorElement e = (VariableTokenSeparatorElement) specialElements.get(i);
-				if (!e.requiresInput(context)) {
-					// a default element
-					if (null == rtn) rtn = e.execute(rtn, context);
-					if (null != rtn) return rtn;
-				}
-				else {
-					rtn = e.execute(rtn, context);
+		try {
+			Object rtn = null;
+			int count = 0;
+			boolean isNullAllowed = false;
+			if (null == pattern) {
+				for (Iterator i=children.iterator(); i.hasNext(); ) {
+					VariableChild child = (VariableChild) i.next();
+					rtn = child.execute(rtn, context);
+					if (!child.shouldReturnSomething()) isNullAllowed = true;
+					if (null == rtn) {
+						break;
+					}
+					count ++;
 				}
 			}
-		}
-		if (null != escapeMethods && !(rtn instanceof NoAutoEscapeElement)) {
-			try {
-				for (Iterator i=escapeMethods.iterator(); i.hasNext(); ) {
-					rtn = ((SpecialMethod) i.next()).execute(rtn, context);
+			else {
+				// bypass path and get the full path from the context
+				rtn = context.get(pattern);
+			}
+			if (isNullAllowed && null == rtn) return "";
+			if (null == rtn && count == 0) {
+				StringBuffer sb = new StringBuffer();
+				for (Iterator i=children.iterator(); i.hasNext(); ) {
+					if (sb.length() > 0) sb.append('.');
+					VariableChild child = (VariableChild) i.next();
+					sb.append(child.getPropertyName());
+				}
+				pattern = sb.toString();
+				rtn = context.get(pattern);
+			}
+			if (null != specialElements) {
+				if (null == rtn
+						&& (((VariableTokenSeparatorElement) specialElements.get(0)).requiresInput(context))) {
+					return null;
+				}
+				for (int i=0; i<specialElements.size(); i++) {
+					VariableTokenSeparatorElement e = (VariableTokenSeparatorElement) specialElements.get(i);
+					if (!e.requiresInput(context)) {
+						// a default element
+						if (null == rtn) rtn = e.execute(rtn, context);
+						if (null != rtn) return rtn;
+					}
+					else {
+						rtn = e.execute(rtn, context);
+					}
 				}
 			}
-			catch (Exception e) {
-				throw new ExecutionException(e.getMessage(), this);
+			if (null != escapeMethods && !(rtn instanceof NoAutoEscapeElement)) {
+				try {
+					for (Iterator i=escapeMethods.iterator(); i.hasNext(); ) {
+						rtn = ((SpecialMethod) i.next()).execute(rtn, context);
+					}
+				}
+				catch (Exception e) {
+					throw new ExecutionException(e.getMessage(), this);
+				}
 			}
+			return rtn;
 		}
-		return rtn;
+		catch (ExecutionException e) {
+			e.setElement(this);
+			throw e;
+		}
 	}
 
 	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
@@ -266,7 +272,7 @@ public class VariableElement extends AbstractElement implements Element {
 				if (children.size() == 0)
 					children.add(new RootChild(((SpecialElement) e).getTokenValue()));
 				else
-					children.add(new PropertyChild(((SpecialElement) e).getTokenValue(), this));
+					children.add(new PropertyChild(((SpecialElement) e).getTokenValue()));
 			}
 			else if (e instanceof SpecialStringElement) {
 				if (wasWhitespace)
@@ -334,7 +340,7 @@ public class VariableElement extends AbstractElement implements Element {
 					if (null == child.getPropertyName())
 						throw new ParseException(e, "Invalid sequence '" + e.toString() + "'");
 					List parameters = getMethodParameters((GroupElement) e, session);
-					children.add(new MethodChild(child.getPropertyName(), parameters, this));
+					children.add(new MethodChild(child.getPropertyName(), parameters));
 				}
 				wasWhitespace = false;
 			}
@@ -366,7 +372,7 @@ public class VariableElement extends AbstractElement implements Element {
 		if (children.size() == 0)
 			children.add(new RootChild(s));
 		else
-			children.add(new PropertyChild(s, this));
+			children.add(new PropertyChild(s));
 	}
 
 	private List getMethodParameters (GroupElement ge, ParsingSession parseData) throws ParseException {

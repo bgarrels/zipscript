@@ -44,14 +44,6 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				e.normalize(index, elementList, session);
 				addSpecialElement(e);
 			}
-//			else if (e instanceof VariableElement) {
-//				// dynamics variable path
-//				if (null == pattern) {
-//					pattern = new StringBuffer();
-//					pattern.append(getPattern());
-//				}
-//				pattern.append(e);
-//			}
 			else if (isShouldEvaluateSeparators() && e instanceof GroupElement) {
 				elementList.remove(index);
 				if (null == pattern) {

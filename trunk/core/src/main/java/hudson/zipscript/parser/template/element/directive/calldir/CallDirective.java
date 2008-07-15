@@ -102,7 +102,7 @@ public class CallDirective extends AbstractDirective {
 				macroNamespace = s.substring(0, index);
 				macroName = s.substring(index+1, s.length());
 			}
-			this.macroDirective = session.getMacroManager().getMacro(macroName, macroNamespace, session);
+			this.macroDirective = session.getResourceContainer().getMacroManager().getMacro(macroName, macroNamespace, session);
 			if (!mainElements.get(1).equals("with"))
 				throw new ParseException(contentStartPosition, "Invalid call directive.  Should be [#call macroName with macroVariable/]");
 
@@ -218,7 +218,7 @@ public class CallDirective extends AbstractDirective {
 			MacroProvider macroProvider = session;
 			if (null != inMacroDirective.getMacroLibrary())
 				macroProvider = inMacroDirective.getMacroLibrary();
-			macroDirective = session.getMacroManager().getMacro(
+			macroDirective = session.getResourceContainer().getMacroManager().getMacro(
 					macroName, macroNamespace, macroProvider);
 		}
 		if (null == macroDirective) {

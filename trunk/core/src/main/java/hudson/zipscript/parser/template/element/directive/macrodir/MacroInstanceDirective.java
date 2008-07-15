@@ -130,7 +130,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 			if (e instanceof MacroInstanceDirective) {
 				MacroInstanceDirective mid = (MacroInstanceDirective) e;
 				if (!mid.isTemplateDefinedParameter) {
-					baseMacroDefinition = session.getMacroManager().getMacro(
+					baseMacroDefinition = session.getResourceContainer().getMacroManager().getMacro(
 							mid.getName(), mid.getNamespace(), session);
 					isInMacroDefinition = true;
 					break;
@@ -148,7 +148,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		if (!isTemplateDefinedParameterInMacroDefinition) {
 			// find macro in session
 			// if we're in the header/footer - we can't validate until the whole template is parsed - how to do that?
-			macro = session.getMacroManager().getMacro(
+			macro = session.getResourceContainer().getMacroManager().getMacro(
 					getName(), getNamespace(), session);
 	
 			if (null == macro && !isOrdinal() && null == namespace && null != baseMacroDefinition) {
@@ -349,7 +349,7 @@ public class MacroInstanceDirective extends NestableElement implements MacroInst
 		if (!isTemplateDefinedParameter) {
 			if (null == macro) {
 				// we might need to lazy load
-				macro = context.getMacroManager().getMacro(getName(), getNamespace(), context.getParsingSession());
+				macro = context.getResourceContainer().getMacroManager().getMacro(getName(), getNamespace(), context.getParsingSession());
 			}
 			if (null == macro) {
 				throw new ExecutionException("Undefined macro '" + getName() + "'", this);

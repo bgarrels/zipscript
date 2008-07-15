@@ -1,6 +1,5 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -55,7 +54,7 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 			boolean hideEscaping = session.isHideEscapeMethods();
 			session.setHideEscapeMethods(true);
 			ParsingResult result = ExpressionParser.getInstance().parse(
-					contents, ZipEngine.TEMPLATE_COMPONENTS, TextDefaultElementFactory.INSTANCE,
+					contents, session.getResourceContainer().getComponents(), TextDefaultElementFactory.INSTANCE,
 					position, session);
 			children = result.getElements();
 			StringUtil.trim(children);
