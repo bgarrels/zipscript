@@ -20,3 +20,9 @@ foo: ${i}, ${hasNext}
 [/#foreach]
 [/#foreach]
 [/#if]
+
+[## break test ##]
+[#foreach entry in {"a", "b", "c", "d"}]
+	--> ${entry}
+[#if entry=="b"][#break/][/#if]
+[/#foreach]

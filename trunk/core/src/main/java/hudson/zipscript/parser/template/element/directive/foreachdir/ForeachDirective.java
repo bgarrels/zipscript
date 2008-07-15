@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element.directive.foreachdir;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
+import hudson.zipscript.parser.exception.BreakException;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -12,6 +13,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.directive.BreakableDirective;
 import hudson.zipscript.parser.template.element.directive.LoopingDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
@@ -29,7 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class ForeachDirective extends NestableElement implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement {
+public class ForeachDirective extends NestableElement
+implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, BreakableDirective {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
@@ -111,107 +114,117 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) {
 		Object sequence = sequenceElement.objectValue(context);
 		if (null == sequence) throw new ExecutionException("Null sequence for '" + this + "'", this);
-		if (null == sequenceAdapter || !sequenceAdapter.appliesTo(sequence)) {
-			// set the sequence adapter
-			sequenceAdapter = context.getParsingSession().getResourceContainer()
-					.getVariableAdapterFactory().getSequenceAdapter(sequence);
-			if (null == sequenceAdapter) {
-				// unknown sequence - just put the object in the context and loop 1 time
-				if (getParsingSession().isDebug()) {
-					System.out.println("Executing: " + this.toString() + " (0)");
+		try {
+			if (null == sequenceAdapter || !sequenceAdapter.appliesTo(sequence)) {
+				// set the sequence adapter
+				sequenceAdapter = context.getParsingSession().getResourceContainer()
+						.getVariableAdapterFactory().getSequenceAdapter(sequence);
+				if (null == sequenceAdapter) {
+					// unknown sequence - just put the object in the context and loop 1 time
+					if (getParsingSession().isDebug()) {
+						System.out.println("Executing: " + this.toString() + " (0)");
+					}
+					context = new NestedContextWrapper(context, this);
+					Integer index = new Integer(0);
+					additionalContextEntries.put(TOKEN_INDEX, index);
+					context.put(TOKEN_INDEX, index, false);
+					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+					additionalContextEntries.put(varName, sequence);
+					context.put(varName, sequence, false);
+					appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					return;
 				}
+			}
+			
+			if (sequenceAdapter.hasNext(-1, null, sequence)) {
 				context = new NestedContextWrapper(context, this);
-				Integer index = new Integer(0);
-				additionalContextEntries.put(TOKEN_INDEX, index);
-				context.put(TOKEN_INDEX, index, false);
-				additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-				context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-				additionalContextEntries.put(varName, sequence);
-				context.put(varName, sequence, false);
-				appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
-				return;
+				Integer index0 = new Integer(0);
+				additionalContextEntries.put(TOKEN_INDEX, index0);
+				context.put(TOKEN_INDEX, index0, false);
+				additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
+				context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
+				Object previousItem = null;
+				int index = 0;
+				boolean hasNext = true;
+				while (true) {
+					previousItem = sequenceAdapter.nextItem(index, previousItem, sequence);
+					if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
+						hasNext = false;
+						context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+						additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
+					}
+					if (previousItem instanceof SequenceItem) {
+						Object obj = ((SequenceItem) previousItem).getObject();
+						additionalContextEntries.put(varName, obj);
+						context.put(varName, obj, false);
+					}
+					else {
+						additionalContextEntries.put(varName, previousItem);
+						context.put(varName, previousItem, false);
+					}
+					appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					if (!hasNext) break;
+					Integer indexNext = new Integer(++index);
+					additionalContextEntries.put(TOKEN_INDEX, indexNext);
+					context.put(TOKEN_INDEX, indexNext, false);
+				}
 			}
 		}
-		
-		if (sequenceAdapter.hasNext(-1, null, sequence)) {
-			context = new NestedContextWrapper(context, this);
-			Integer index0 = new Integer(0);
-			additionalContextEntries.put(TOKEN_INDEX, index0);
-			context.put(TOKEN_INDEX, index0, false);
-			additionalContextEntries.put(TOKEN_HASNEXT, Boolean.TRUE);
-			context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
-			Object previousItem = null;
-			int index = 0;
-			boolean hasNext = true;
-			while (true) {
-				previousItem = sequenceAdapter.nextItem(index, previousItem, sequence);
-				if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
-					hasNext = false;
-					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-					additionalContextEntries.put(TOKEN_HASNEXT, Boolean.FALSE);
-				}
-				if (previousItem instanceof SequenceItem) {
-					Object obj = ((SequenceItem) previousItem).getObject();
-					additionalContextEntries.put(varName, obj);
-					context.put(varName, obj, false);
-				}
-				else {
-					additionalContextEntries.put(varName, previousItem);
-					context.put(varName, previousItem, false);
-				}
-				appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
-				if (!hasNext) break;
-				Integer indexNext = new Integer(++index);
-				additionalContextEntries.put(TOKEN_INDEX, indexNext);
-				context.put(TOKEN_INDEX, indexNext, false);
-			}
+		catch (BreakException e) {
+			// end
 		}
 	}
 
 	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		Object sequence = sequenceElement.objectValue(context);
 		if (null == sequence) throw new ExecutionException("Null sequence for '" + this + "'", this);
-		if (null == sequenceAdapter || !sequenceAdapter.appliesTo(sequence)) {
-			// set the sequence adapter
-			sequenceAdapter = context.getParsingSession().getResourceContainer()
-					.getVariableAdapterFactory().getSequenceAdapter(sequence);
-			if (null == sequenceAdapter) {
-				// unknown sequence - just put the object in the context and loop 1 time
-				if (getParsingSession().isDebug()) {
-					System.out.println("Executing: " + this.toString() + " (0)");
+		try {
+			if (null == sequenceAdapter || !sequenceAdapter.appliesTo(sequence)) {
+				// set the sequence adapter
+				sequenceAdapter = context.getParsingSession().getResourceContainer()
+						.getVariableAdapterFactory().getSequenceAdapter(sequence);
+				if (null == sequenceAdapter) {
+					// unknown sequence - just put the object in the context and loop 1 time
+					if (getParsingSession().isDebug()) {
+						System.out.println("Executing: " + this.toString() + " (0)");
+					}
+					context = new NestedContextWrapper(context, this);
+					context.put(TOKEN_INDEX, new Integer(0), false);
+					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+					context.put(varName, sequence, false);
+					appendElements(getChildren(), context, sw);
+					return;
 				}
+			}
+			
+			if (sequenceAdapter.hasNext(-1, null, sequence)) {
 				context = new NestedContextWrapper(context, this);
 				context.put(TOKEN_INDEX, new Integer(0), false);
-				context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-				context.put(varName, sequence, false);
-				appendElements(getChildren(), context, sw);
-				return;
+				context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
+				Object previousItem = null;
+				int index = 0;
+				boolean hasNext = true;
+				while (true) {
+					previousItem = sequenceAdapter.nextItem(index, previousItem, sequence);
+					if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
+						hasNext = false;
+						context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+					}
+					if (previousItem instanceof SequenceItem) {
+						context.put(varName, ((SequenceItem) previousItem).getObject(), false);
+					}
+					else {
+						context.put(varName, previousItem, false);
+					}
+					appendElements(getChildren(), context, sw);
+					if (!hasNext) break;
+					context.put(TOKEN_INDEX, new Integer(++index), false);
+				}
 			}
 		}
-		
-		if (sequenceAdapter.hasNext(-1, null, sequence)) {
-			context = new NestedContextWrapper(context, this);
-			context.put(TOKEN_INDEX, new Integer(0), false);
-			context.put(TOKEN_HASNEXT, Boolean.TRUE, false);
-			Object previousItem = null;
-			int index = 0;
-			boolean hasNext = true;
-			while (true) {
-				previousItem = sequenceAdapter.nextItem(index, previousItem, sequence);
-				if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
-					hasNext = false;
-					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-				}
-				if (previousItem instanceof SequenceItem) {
-					context.put(varName, ((SequenceItem) previousItem).getObject(), false);
-				}
-				else {
-					context.put(varName, previousItem, false);
-				}
-				appendElements(getChildren(), context, sw);
-				if (!hasNext) break;
-				context.put(TOKEN_INDEX, new Integer(++index), false);
-			}
+		catch (BreakException e) {
+			// end
 		}
 	}
 

@@ -12,6 +12,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comment.CommentComponent;
 import hudson.zipscript.parser.template.element.component.Component;
+import hudson.zipscript.parser.template.element.directive.breakdir.BreakComponent;
 import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
@@ -87,15 +88,16 @@ public class ZipEngine {
 	private static final Component[] NON_OVERRIDEABLE_COMPONENTS = new Component[] {
 			new CommentComponent(),
 			new InitializeComponent(),
-			new EscapeComponent()
+			new EscapeComponent(),
+			new BreakComponent(),
+			new SetComponent(),
+			new GlobalComponent()
 	};
 	private static final Component[] OVERRIDEABLE_COMPONENTS = new Component[] {
 			new IfComponent(),
 			new ForeachComponent(),
 			new WhileComponent(),
 			new MacroComponent(),
-			new SetComponent(),
-			new GlobalComponent(),
 			new CallComponent(),
 			new VariableComponent()
 		};
