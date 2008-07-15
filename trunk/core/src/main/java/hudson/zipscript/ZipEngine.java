@@ -14,6 +14,7 @@ import hudson.zipscript.parser.template.element.comment.CommentComponent;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.directive.breakdir.BreakComponent;
 import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
+import hudson.zipscript.parser.template.element.directive.continuedir.ContinueComponent;
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
@@ -90,6 +91,7 @@ public class ZipEngine {
 			new InitializeComponent(),
 			new EscapeComponent(),
 			new BreakComponent(),
+			new ContinueComponent(),
 			new SetComponent(),
 			new GlobalComponent()
 	};
