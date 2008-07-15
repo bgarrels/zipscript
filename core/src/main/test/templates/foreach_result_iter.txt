@@ -15,3 +15,6 @@ false - 2 - false
 foo: 0, true
 foo: 1, true
 foo: 2, false
+
+	--> a
+	--> b

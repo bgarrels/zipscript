@@ -53,8 +53,11 @@ public class ElementNormalizer {
 			trim(elements);
 		}
 
-		for (Iterator i=elements.iterator(); i.hasNext(); ) {
-			validate((Element) i.next(), session);
+		if (topLevel) {
+			session.getNestingStack().clear();
+			for (Iterator i=elements.iterator(); i.hasNext(); ) {
+				validate((Element) i.next(), session);
+			}
 		}
 	}
 
@@ -62,8 +65,12 @@ public class ElementNormalizer {
 		e.validate(session);
 		List children = e.getChildren();
 		if (null != children) {
+			session.getNestingStack().add(e);
 			for (Iterator i=children.iterator(); i.hasNext(); )
 				validate((Element) i.next(), session);
+			Object o = session.getNestingStack().peek();
+			if (o == e) session.getNestingStack().pop();
+			else throw new ParseException(e, "Invalid nesting stack");
 		}
 	}
 
