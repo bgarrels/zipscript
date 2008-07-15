@@ -2,13 +2,9 @@ package hudson.zipscript.resource;
 
 import hudson.zipscript.parser.exception.ExecutionException;
 
-import java.io.File;
 import java.io.InputStream;
 
 public class ClasspathResourceLoader extends AbstractResourceLoader {
-
-	private String path;
-	private File sourceFile;
 
 	public Resource getResource(String path) {
 		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(getRealPath(path));

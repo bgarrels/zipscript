@@ -20,7 +20,6 @@ public class StringPatternMatcher extends AbstractPatternMatcher {
 			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
 	throws ParseException {
 		int position = contents.position();
-		char[] endChars = getEndChars();
 		int length = findMatch (contents, startChars, startChars, getInvalidChars(), true);
 		String s = read(contents, position, length, 1);
 		Element rtn = createElement(startChars, s, contents.position(), parseData);
