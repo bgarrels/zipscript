@@ -39,7 +39,9 @@ import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDef
 import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.MultipleVariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.StandardVariableAdapterFactory;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
 import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
@@ -172,6 +174,8 @@ public class ZipEngine {
 	 * @param properties
 	 */
 	private void init (Map properties) {
+		VariableAdapterFactory variableAdapterFactory = new StandardVariableAdapterFactory();
+
 		if (null != properties) {
 			// get the default resource loader
 			String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
@@ -204,10 +208,19 @@ public class ZipEngine {
 					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 				}
 			}
+
+			s = (String) properties.get(Constants.VARIABLE_ADAPTER_FACTORY_CLASS);
+			if (null != s) {
+				VariableAdapterFactory vaf = (VariableAdapterFactory) ClassUtil.loadResource("variableAdapterFactory", properties, VariableAdapterFactory.class, null, null);
+				VariableAdapterFactory[] arr = new VariableAdapterFactory[2];
+				arr[0] = variableAdapterFactory;
+				arr[1] = vaf;
+				variableAdapterFactory = new MultipleVariableAdapterFactory(arr);
+			}
 		}
-		
+
 		resourceContainer = new ResourceContainer(
-				new MacroManager(), new StandardVariableAdapterFactory(), components, properties);
+				new MacroManager(), variableAdapterFactory, components, properties);
 	}
 
 	/**
