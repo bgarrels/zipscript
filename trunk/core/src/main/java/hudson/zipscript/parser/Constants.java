@@ -1,5 +1,26 @@
 package hudson.zipscript.parser;
 
+import hudson.zipscript.parser.template.element.PatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.ComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.logic.AndLogicPatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.logic.OrLogicPatternMatcher;
+import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
+import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
+import hudson.zipscript.parser.template.element.group.ListPatternMatcher;
+import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.AssignmentPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
+import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
+import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
+import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
+import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.FileResourceLoader;
 import hudson.zipscript.resource.StringResourceLoader;
@@ -44,4 +65,27 @@ public class Constants {
 		RESOURCE_LOADER_TYPES.put("URL", URLResourceLoader.class);
 		RESOURCE_LOADER_TYPES.put("string", StringResourceLoader.class);
 	}
+
+	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
+		new VariablePatternMatcher(),
+		new ListPatternMatcher(),
+		new NumericPatternMatcher(),
+		new CommaPatternMatcher(),
+		new StringPatternMatcher(),
+		new InComparatorPatternMatcher(),
+		new AndLogicPatternMatcher(),
+		new OrLogicPatternMatcher(),
+		new BooleanPatternMatcher(),
+		new ComparatorPatternMatcher(),
+		new MathPatternMatcher(),
+		new NullPatternMatcher(),
+		new GroupPatternMatcher(),
+		new WhitespacePatternMatcher(),
+		new MapPatternMatcher(),
+		new DotPatternMatcher(),
+		new AssignmentPatternMatcher(),
+		new VarDefaultElementPatternMatcher(),
+		new VarSpecialElementPatternMatcher(),
+		new VarFormattingElementPatternMatcher()
+};
 }
