@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.template.element.directive;
+package hudson.zipscript.parser.template.element.directive.breakdir;
 
 /**
  * This is a marker interface indicating the directive will catch
