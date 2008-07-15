@@ -26,3 +26,8 @@ foo: ${i}, ${hasNext}
 	--> ${entry}
 [#if entry=="b"][#break/][/#if]
 [/#foreach]
+
+[#foreach entry in {"a", "b", "c", "d"}]
+[#if entry=="b"][#continue/][/#if]
+	--> ${entry}
+[/#foreach]

@@ -15,6 +15,8 @@ import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMa
 import hudson.zipscript.parser.template.element.directive.BreakableDirective;
 import hudson.zipscript.parser.template.element.directive.LoopingDirective;
 import hudson.zipscript.parser.template.element.directive.breakdir.BreakException;
+import hudson.zipscript.parser.template.element.directive.continuedir.ContinueException;
+import hudson.zipscript.parser.template.element.directive.continuedir.ContinueableDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.group.ListElement;
@@ -32,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ForeachDirective extends NestableElement
-implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, BreakableDirective {
+implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, BreakableDirective, ContinueableDirective {
 
 	public static final String TOKEN_INDEX = "i";
 	public static final String TOKEN_HASNEXT = "hasNext";
@@ -132,7 +134,12 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 					additionalContextEntries.put(varName, sequence);
 					context.put(varName, sequence, false);
-					appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					try {
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					}
+					catch (ContinueException e) {
+						// end
+					}
 					return;
 				}
 			}
@@ -163,7 +170,12 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 						additionalContextEntries.put(varName, previousItem);
 						context.put(varName, previousItem, false);
 					}
-					appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					try {
+						appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+					}
+					catch (ContinueException e) {
+						// continue
+					}
 					if (!hasNext) break;
 					Integer indexNext = new Integer(++index);
 					additionalContextEntries.put(TOKEN_INDEX, indexNext);
@@ -193,7 +205,12 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 					context.put(TOKEN_INDEX, new Integer(0), false);
 					context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
 					context.put(varName, sequence, false);
-					appendElements(getChildren(), context, sw);
+					try {
+						appendElements(getChildren(), context, sw);
+					}
+					catch (ContinueException e) {
+						// end
+					}
 					return;
 				}
 			}
@@ -217,7 +234,12 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 					else {
 						context.put(varName, previousItem, false);
 					}
-					appendElements(getChildren(), context, sw);
+					try {
+						appendElements(getChildren(), context, sw);
+					}
+					catch (ContinueException e) {
+						// continue
+					}
 					if (!hasNext) break;
 					context.put(TOKEN_INDEX, new Integer(++index), false);
 				}
