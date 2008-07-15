@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.data;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.resource.macrolib.MacroProvider;

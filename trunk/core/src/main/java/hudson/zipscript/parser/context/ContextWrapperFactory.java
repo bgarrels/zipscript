@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.I18NResource;
@@ -23,8 +24,10 @@ public class ContextWrapperFactory {
 		return instance;
 	}
 
-	public ExtendedContext wrap (Object obj, Map params) {
+	public ExtendedContext wrap (Object obj, ResourceContainer resourceContainer) {
 		ExtendedContext context = null;
+
+		// wrap the context if necessary
 		if (null == obj)
 			context = new MapContextWrapper(new HashMap(2));
 		if (obj instanceof ExtendedContext)
@@ -32,20 +35,43 @@ public class ContextWrapperFactory {
 		else if (obj instanceof Context) {
 			context = new SimpleContextWrapper((Context) obj);
 		}
-		else if (obj instanceof Map)
-			context = new MapContextWrapper((Map) obj);
-		else
-			context = new ObjectContextWrapper(obj);
+		// add plugin wrapping here
+		if (null != resourceContainer.getPlugins()) {
+			Context ctx = null;
+			for (int i=0; i<resourceContainer.getPlugins().length; i++) {
+				ctx = resourceContainer.getPlugins()[i].wrapContextObject(obj);
+				if (null != ctx) {
+					if (ctx instanceof ExtendedContext)
+						context = (ExtendedContext) ctx;
+					else
+						context = new SimpleContextWrapper(ctx);
+				}
+			}
+		}
+		if (null == context) {
+			if (obj instanceof Map)
+				context = new MapContextWrapper((Map) obj);
+			else
+				context = new ObjectContextWrapper(obj);
+		}
+
+		// initialize the context
 		context.put(Constants.NOW, new Date(), false);
 		context.put(Constants.VARS, context, false);
 		context.put(Constants.GLOBAL, context, false);
 		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
-				"uniqueIdGenerator", params, UniqueIdGenerator.class,
+				"uniqueIdGenerator", resourceContainer.getInitParameters(), UniqueIdGenerator.class,
 				UniqueIdGeneratorImpl.class, null), false);
 		context.put(Constants.RESOURCE, ClassUtil.loadResource(
-				"i18n", params, I18NResource.class,
+				"i18n", resourceContainer.getInitParameters(), I18NResource.class,
 				I18NResourceImpl.class, null), false);
 		context.put(Constants.MATH, mathUtil, false);
+		if (null != resourceContainer.getPlugins()) {
+			for (int i=0; i<resourceContainer.getPlugins().length; i++) {
+				resourceContainer.getPlugins()[i].initialize(context);
+			}
+		}
+
 		return context;
 	}
 }

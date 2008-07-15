@@ -1,12 +1,12 @@
 package hudson.zipscript.parser;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;

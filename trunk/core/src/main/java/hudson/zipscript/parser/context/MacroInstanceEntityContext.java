@@ -1,7 +1,7 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.data.ResourceContainer;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
