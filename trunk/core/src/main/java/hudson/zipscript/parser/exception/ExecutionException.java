@@ -5,6 +5,7 @@ import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.element.Element;
 
 public class ExecutionException extends RuntimeException {
+	private static final long serialVersionUID = -1363961609103512907L;
 
 	private Element element;
 	ParsingResult parsingResult;
