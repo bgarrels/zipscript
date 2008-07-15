@@ -27,7 +27,6 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 	public ElementIndex normalize(
 			int index, List elementList, ParsingSession session) throws ParseException {
 		StringBuffer pattern = null;
-		boolean wasWhitespace = false;
 		while (elementList.size() > index) {
 			Element e = (Element) elementList.get(index);
 			if (e instanceof SpecialElement) {

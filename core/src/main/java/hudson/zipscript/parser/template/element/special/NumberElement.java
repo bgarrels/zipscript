@@ -19,7 +19,6 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 
 	private int type;
 	private Object number;
-	private Locale locale;
 	private String tokenValue;
 
 	public static char TYPE_SHORT = 's';
@@ -52,7 +51,6 @@ public class NumberElement extends AbstractElement implements SpecialElement {
 		else {
 			this.tokenValue = numberPart + type;
 		}
-		this.locale = locale;
 		if (type == TYPE_SHORT) {
 			number = new Short(numberPart);
 		}
