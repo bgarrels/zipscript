@@ -1,6 +1,5 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -70,7 +69,7 @@ public class VariableElement extends AbstractElement implements Element {
 			ParseParameters currentParameters = session.getParameters();
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
-					pattern, ZipEngine.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
+					pattern, Constants.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
 					session, contentIndex).getElements();
 			session.setParameters(currentParameters);
 			this.children = parse(elements, session);
@@ -78,7 +77,6 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 	}
 
-	private static final char[] normalChars = new char[] {'_','-'};
 	private boolean quickScan (String pattern) throws ParseException {
 		int trimIndex = 0;
 		if (pattern.startsWith("$")) trimIndex ++;

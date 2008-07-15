@@ -1,6 +1,5 @@
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
-import hudson.zipscript.ZipEngine;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
@@ -30,7 +29,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 
 	private static PatternMatcher[] MATCHERS;
 	static {
-		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
+		PatternMatcher[] matchers = Constants.VARIABLE_MATCHERS;
 		MATCHERS = new PatternMatcher[matchers.length+1];
 		MATCHERS[0] = new RequiredIdentifierPatternMatcher();
 		System.arraycopy(matchers, 0, MATCHERS, 1, matchers.length);

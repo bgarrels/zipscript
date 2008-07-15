@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element.directive.foreachdir;
 
-import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -36,7 +36,7 @@ public class ForeachDirective extends NestableElement implements MacroInstanceAw
 
 	private static PatternMatcher[] MATCHERS;
 	static {
-		PatternMatcher[] matchers = ZipEngine.VARIABLE_MATCHERS;
+		PatternMatcher[] matchers = Constants.VARIABLE_MATCHERS;
 		MATCHERS = new PatternMatcher[matchers.length];
 		for (int i=0; i<matchers.length; i++) {
 			if (matchers[i] instanceof InComparatorPatternMatcher) {

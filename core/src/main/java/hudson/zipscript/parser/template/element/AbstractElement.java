@@ -1,6 +1,6 @@
 package hudson.zipscript.parser.template.element;
 
-import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
@@ -72,7 +72,7 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected PatternMatcher[] getContentParsingPatternMatchers () {
-		return ZipEngine.VARIABLE_MATCHERS;
+		return Constants.VARIABLE_MATCHERS;
 	}
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory () {

@@ -12,11 +12,6 @@ import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comment.CommentComponent;
-import hudson.zipscript.parser.template.element.comparator.ComparatorPatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.InComparatorPatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.logic.AndLogicPatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.logic.OrLogicPatternMatcher;
-import hudson.zipscript.parser.template.element.comparator.math.MathPatternMatcher;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
@@ -27,27 +22,12 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroComponen
 import hudson.zipscript.parser.template.element.directive.setdir.GlobalComponent;
 import hudson.zipscript.parser.template.element.directive.setdir.SetComponent;
 import hudson.zipscript.parser.template.element.directive.whiledir.WhileComponent;
-import hudson.zipscript.parser.template.element.group.GroupPatternMatcher;
-import hudson.zipscript.parser.template.element.group.ListPatternMatcher;
-import hudson.zipscript.parser.template.element.group.MapPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.AssignmentPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.CommaPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.DotPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
-import hudson.zipscript.parser.template.element.lang.WhitespacePatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
-import hudson.zipscript.parser.template.element.lang.variable.VarDefaultElementPatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
-import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MultipleVariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.StandardVariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
-import hudson.zipscript.parser.template.element.lang.variable.format.VarFormattingElementPatternMatcher;
-import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElementPatternMatcher;
-import hudson.zipscript.parser.template.element.special.BooleanPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NullPatternMatcher;
-import hudson.zipscript.parser.template.element.special.NumericPatternMatcher;
-import hudson.zipscript.parser.template.element.special.StringPatternMatcher;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.IOUtil;
 import hudson.zipscript.resource.ClasspathResourceLoader;
@@ -130,28 +110,6 @@ public class ZipEngine {
 		return zipEngine;
 	}
 
-	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
-			new VariablePatternMatcher(),
-			new ListPatternMatcher(),
-			new NumericPatternMatcher(),
-			new CommaPatternMatcher(),
-			new StringPatternMatcher(),
-			new InComparatorPatternMatcher(),
-			new AndLogicPatternMatcher(),
-			new OrLogicPatternMatcher(),
-			new BooleanPatternMatcher(),
-			new ComparatorPatternMatcher(),
-			new MathPatternMatcher(),
-			new NullPatternMatcher(),
-			new GroupPatternMatcher(),
-			new WhitespacePatternMatcher(),
-			new MapPatternMatcher(),
-			new DotPatternMatcher(),
-			new AssignmentPatternMatcher(),
-			new VarDefaultElementPatternMatcher(),
-			new VarSpecialElementPatternMatcher(),
-			new VarFormattingElementPatternMatcher()
-	};
 	private static final DefaultElementFactory mergeElementFactory = TextDefaultElementFactory.INSTANCE;
 	private static final DefaultElementFactory evalElementFactory = new SpecialVariableDefaultEelementFactory();
 
@@ -297,7 +255,7 @@ public class ZipEngine {
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
-					contents, VARIABLE_MATCHERS, evalElementFactory, 0, resourceContainer);
+					contents, Constants.VARIABLE_MATCHERS, evalElementFactory, 0, resourceContainer);
 			TemplateImpl evaluator = new TemplateImpl(element);
 			evaluator.setResourceContainer(resourceContainer);
 			return evaluator;
