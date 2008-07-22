@@ -109,7 +109,7 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 	}
 
 	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
-		return SpecialVariableDefaultEelementFactory.getInstance();
+		return SpecialVariableDefaultEelementFactory.INSTANCE;
 	}
 
 	public void getMatchingTemplateDefinedParameters(

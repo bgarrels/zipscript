@@ -7,10 +7,7 @@ import hudson.zipscript.parser.template.element.Element;
 
 public class SpecialVariableDefaultEelementFactory implements DefaultElementFactory {
 
-	private static final SpecialVariableDefaultEelementFactory INSTANCE = new SpecialVariableDefaultEelementFactory();
-	public static final SpecialVariableDefaultEelementFactory getInstance () {
-		return INSTANCE;
-	}
+	public static final SpecialVariableDefaultEelementFactory INSTANCE = new SpecialVariableDefaultEelementFactory();
 
 	public Element createDefaultElement(
 			String text, ParsingSession session, int contentPosition) throws ParseException {

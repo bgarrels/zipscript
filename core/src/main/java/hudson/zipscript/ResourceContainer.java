@@ -3,7 +3,9 @@ package hudson.zipscript;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.plugin.Plugin;
+import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.ResourceLoader;
+import hudson.zipscript.resource.StringResourceLoader;
 import hudson.zipscript.resource.macrolib.MacroManager;
 
 import java.util.Map;
@@ -17,14 +19,26 @@ public class ResourceContainer {
 	private VariableAdapterFactory variableAdapterFactory;
 	private Map initParameters;
 
+	private ResourceLoader templateResourceLoader = new ClasspathResourceLoader();
+	private ResourceLoader includeResourceLoader = null;
+	private ResourceLoader macroLibResourceLoader = null;
+	private ResourceLoader evalResourceLoader = new StringResourceLoader();
+
 
 	public ResourceContainer (
 			ZipEngine zipEngine, Plugin[] plugins, MacroManager macroManager, VariableAdapterFactory variableAdapterFactory,
+			ResourceLoader templateResourceLoader, ResourceLoader includeResourceLoader, ResourceLoader macroLibResourceLoader, ResourceLoader evalResourceLoader,
 			Component[] components, Map initParameters) {
 		this.zipEngine = zipEngine;
 		this.plugins = plugins;
 		this.macroManager = macroManager;
 		this.variableAdapterFactory = variableAdapterFactory;
+
+		this.templateResourceLoader = templateResourceLoader;
+		this.includeResourceLoader = includeResourceLoader;
+		this.macroLibResourceLoader = macroLibResourceLoader;
+		this.evalResourceLoader = evalResourceLoader;
+
 		this.components = components;
 		this.initParameters = initParameters;
 		macroManager.setResourceContainer(this);
@@ -56,19 +70,49 @@ public class ResourceContainer {
 		this.initParameters = initParameters;
 	}
 
-	public ResourceLoader getTemplateResourceloader() {
-		return zipEngine.getTemplateResourceloader();
+	public ResourceLoader getTemplateResourceLoader() {
+		return templateResourceLoader;
 	}
 
-	public ResourceLoader getMacroLibResourceloader() {
-		return zipEngine.getMacroLibResourceloader();
+	public ResourceLoader getMacroLibResourceLoader() {
+		if (null == macroLibResourceLoader)
+			return getTemplateResourceLoader();
+		else
+			return macroLibResourceLoader;
 	}
 
 	public ResourceLoader getEvalResourceLoader() {
-		return zipEngine.getEvalResourceLoader();
+		return evalResourceLoader;
+	}
+
+	public ResourceLoader getIncludeResourceLoader() {
+		if (null == includeResourceLoader)
+			return getTemplateResourceLoader();
+		else
+			return includeResourceLoader;
 	}
 	
 	public Plugin[] getPlugins() {
 		return plugins;
+	}
+
+	public ZipEngine getEngine () {
+		return zipEngine;
+	}
+
+	public void setTemplateResourceLoader(ResourceLoader templateResourceLoader) {
+		this.templateResourceLoader = templateResourceLoader;
+	}
+
+	public void setIncludeResourceLoader(ResourceLoader includeResourceLoader) {
+		this.includeResourceLoader = includeResourceLoader;
+	}
+
+	public void setMacroLibResourceLoader(ResourceLoader macroLibResourceLoader) {
+		this.macroLibResourceLoader = macroLibResourceLoader;
+	}
+
+	public void setEvalResourceLoader(ResourceLoader evalResourceLoader) {
+		this.evalResourceLoader = evalResourceLoader;
 	}
 }
