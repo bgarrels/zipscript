@@ -53,7 +53,9 @@ public class Constants {
 	public static final String MACROLIB_RESOURCE_LOADER_CLASS = "macroLibResourceLoader.class";
 	public static final String MACROLIB_RESOURCE_LOADER_TYPE = "macroLibResourceLoader.type";
 	public static final String EVAL_RESOURCE_LOADER_CLASS = "evalResourceLoader.class";
-	public static final String EVAL_RESOURCE_LOADER_TYPE = "evalResourceLoader.type";
+	public static final String EVAL_RESOURCE_LOADER_TYPE = "includeResourceLoader.type";
+	public static final String INCLUDE_RESOURCE_LOADER_CLASS = "includeResourceLoader.class";
+	public static final String INCLUDE_RESOURCE_LOADER_TYPE = "includeResourceLoader.type";
 	public static final String UNIQUE_ID_GENERATOR_CLASS = "uniqueIdGenerator.class";
 	public static final String VARIABLE_ADAPTER_FACTORY_CLASS = "variableAdapterFactory.class";
 

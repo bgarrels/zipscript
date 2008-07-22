@@ -5,11 +5,7 @@ import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParseParameters;
-import hudson.zipscript.parser.template.data.ParsingResult;
-import hudson.zipscript.parser.template.data.ParsingSession;
-import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.comment.CommentComponent;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.directive.breakdir.BreakComponent;
@@ -18,12 +14,12 @@ import hudson.zipscript.parser.template.element.directive.continuedir.ContinueCo
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
+import hudson.zipscript.parser.template.element.directive.includedir.IncludeComponent;
 import hudson.zipscript.parser.template.element.directive.initialize.InitializeComponent;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroComponent;
 import hudson.zipscript.parser.template.element.directive.setdir.GlobalComponent;
 import hudson.zipscript.parser.template.element.directive.setdir.SetComponent;
 import hudson.zipscript.parser.template.element.directive.whiledir.WhileComponent;
-import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.lang.variable.VariableComponent;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MultipleVariableAdapterFactory;
@@ -31,9 +27,10 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.StandardVa
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.IOUtil;
+import hudson.zipscript.parser.util.ResourceUtil;
+import hudson.zipscript.parser.util.TemplateResource;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.resource.ClasspathResourceLoader;
-import hudson.zipscript.resource.Resource;
 import hudson.zipscript.resource.ResourceLoader;
 import hudson.zipscript.resource.StringResourceLoader;
 import hudson.zipscript.resource.macrolib.MacroManager;
@@ -89,6 +86,7 @@ public class ZipEngine {
 	private static final Component[] NON_OVERRIDEABLE_COMPONENTS = new Component[] {
 			new CommentComponent(),
 			new InitializeComponent(),
+			new IncludeComponent(),
 			new EscapeComponent(),
 			new BreakComponent(),
 			new ContinueComponent(),
@@ -103,13 +101,6 @@ public class ZipEngine {
 			new CallComponent(),
 			new VariableComponent()
 		};
-
-	private static final DefaultElementFactory defaultMergeElementFactory = TextDefaultElementFactory.INSTANCE;
-	private static final DefaultElementFactory defaultEvalElementFactory = new SpecialVariableDefaultEelementFactory();
-
-	private ResourceLoader templateResourceloader = new ClasspathResourceLoader();
-	private ResourceLoader macroLibResourceloader;
-	private ResourceLoader evalResourceLoader = new StringResourceLoader();
 
 	private ResourceContainer resourceContainer;
 	
@@ -148,6 +139,13 @@ public class ZipEngine {
 	 * @param plugins engine plugins
 	 */
 	private void init (Map properties, Plugin[] plugins) {
+
+		// defaults
+		ResourceLoader templateResourceLoader = new ClasspathResourceLoader();
+		ResourceLoader includeResourceLoader = null;
+		ResourceLoader macroLibResourceLoader = null;
+		ResourceLoader evalResourceLoader = new StringResourceLoader();
+
 		VariableAdapterFactory variableAdapterFactory = new StandardVariableAdapterFactory();
 		List components = new ArrayList();
 		for (int i=0; i<NON_OVERRIDEABLE_COMPONENTS.length; i++)
@@ -169,9 +167,11 @@ public class ZipEngine {
 		if (null != properties) {
 			// get the default resource loader
 			String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
+			if (null == s)
+				s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_TYPE);
 			if (null != s) {
 				try {
-					this.templateResourceloader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
+					templateResourceLoader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
 							ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
 				}
 				catch (ClassCastException e) {
@@ -179,20 +179,36 @@ public class ZipEngine {
 				}
 			}
 			s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
+			if (null == s)
+				s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_TYPE);
 			if (null != s) {
 				try {
-					this.macroLibResourceloader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
-							ResourceLoader.class, templateResourceloader.getClass(), Constants.RESOURCE_LOADER_TYPES);
+					macroLibResourceLoader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
+							ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
 				}
 				catch (ClassCastException e) {
 					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 				}
 			}
 			s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
+			if (null == s)
+				s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_TYPE);
 			if (null != s) {
 				try {
-					this.evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
+					evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
 							ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
+				}
+				catch (ClassCastException e) {
+					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+				}
+			}
+			s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_CLASS);
+			if (null == s)
+				s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_TYPE);
+			if (null != s) {
+				try {
+					includeResourceLoader = (ResourceLoader) ClassUtil.loadResource("includeResourceLoader", properties,
+							ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
 				}
 				catch (ClassCastException e) {
 					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
@@ -213,7 +229,9 @@ public class ZipEngine {
 			components.add(OVERRIDEABLE_COMPONENTS[i]);
 
 		resourceContainer = new ResourceContainer(
-				this, plugins, new MacroManager(), variableAdapterFactory, (Component[]) components.toArray(new Component[components.size()]), properties);
+				this, plugins, new MacroManager(), variableAdapterFactory,
+				templateResourceLoader, includeResourceLoader, macroLibResourceLoader, evalResourceLoader,
+				(Component[]) components.toArray(new Component[components.size()]), properties);
 	}
 
 	/**
@@ -224,7 +242,7 @@ public class ZipEngine {
 	 */
 	public void addMacroLibrary (String namespace, String resourcePath) throws ParseException {
 		resourceContainer.getMacroManager().addMacroLibrary(
-				namespace, resourcePath, getMacroLibResourceloader(), resourceContainer.getVariableAdapterFactory());
+				namespace, resourcePath, resourceContainer.getMacroLibResourceLoader(), resourceContainer.getVariableAdapterFactory());
 	}
 
 	/**
@@ -265,11 +283,11 @@ public class ZipEngine {
 		try {
 			TemplateResource tr = (TemplateResource) resourceMap.get(source);
 			if (null == tr) {
-				tr = loadTemplate(source, resourceContainer.getComponents(), null, new ParseParameters(resourceContainer, false, false));
+				tr = ResourceUtil.loadTemplate(source, new ParseParameters(resourceContainer, false, false), resourceContainer);
 			}
 			if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
 				// reload the resource
-				tr = loadTemplate(source, resourceContainer.getComponents(), null, new ParseParameters(resourceContainer, false, false));
+				tr = ResourceUtil.loadTemplate(new ParseParameters(resourceContainer, false, false), resourceContainer, tr.resource);
 			}
 			tr.template.setResourceContainer(resourceContainer);
 			return tr.template;
@@ -290,7 +308,7 @@ public class ZipEngine {
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
 			Element element = ExpressionParser.getInstance().parseToElement(
-					contents, Constants.VARIABLE_MATCHERS, getDefaultEvalElementFactory(), 0, resourceContainer);
+					contents, Constants.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.INSTANCE, 0, resourceContainer);
 			TemplateImpl evaluator = new TemplateImpl(element);
 			evaluator.setResourceContainer(resourceContainer);
 			return evaluator;
@@ -299,96 +317,5 @@ public class ZipEngine {
 			e.setResource(contents);
 			throw e;
 		}
-	}
-
-	/**
-	 * Load a template
-	 * @param source the source
-	 * @param components all components for pattern matching
-	 * @param patternMatchers all pattern matchers
-	 * @param parseParameters parsing parameters
-	 * @return the template
-	 * @throws ParseException
-	 */
-	protected TemplateResource loadTemplate (
-			String source, Component[] components, PatternMatcher[] patternMatchers, ParseParameters parseParameters)
-	throws ParseException {
-		Resource resource = getTemplateResourceloader().getResource(source);
-		String contents = IOUtil.toString(resource.getInputStream());;
-		ParsingResult pr = null;
-		if (null != components) {
-			pr = ExpressionParser.getInstance().parse(
-					contents, components, getDefaultMergeElementFactory(), 0, resourceContainer);
-		}
-		else {
-			pr = ExpressionParser.getInstance().parse(
-					contents, patternMatchers, getDefaultMergeElementFactory(),
-					new ParsingSession(parseParameters), 0);
-		}
-		return new TemplateResource(
-				new TemplateImpl(pr.getElements(), pr.getParsingSession(), pr), resource);
-	}
-
-	protected Template loadTemplateForEvaluation (
-			String source, Component[] components, PatternMatcher[] patternMatchers, ParseParameters parseParameters)
-	throws ParseException {
-		Resource resource = getEvalResourceLoader().getResource(source);
-		String contents = IOUtil.toString(resource.getInputStream());
-		Element element = null;
-		if (null != components) {
-			element = ExpressionParser.getInstance().parseToElement(
-					contents, components, getDefaultMergeElementFactory(), 0, resourceContainer);
-		}
-		else {
-			element = ExpressionParser.getInstance().parseToElement(
-					source, patternMatchers, getDefaultMergeElementFactory(), 0, resourceContainer);
-		}
-		return new TemplateImpl(element);
-	}
-
-	private class TemplateResource {
-		public long lastModified;
-		public Template template;
-		public Resource resource;
-		public TemplateResource (Template template, Resource resource){
-			this.template = template;
-			this.resource = resource;
-			this.lastModified = System.currentTimeMillis();
-		}
-	}
-
-	ResourceLoader getTemplateResourceloader() {
-		return templateResourceloader;
-	}
-
-	ResourceLoader getMacroLibResourceloader() {
-		if (null == macroLibResourceloader)
-			return getTemplateResourceloader();
-		else
-			return macroLibResourceloader;
-	}
-
-	ResourceLoader getEvalResourceLoader() {
-		return evalResourceLoader;
-	}
-
-	DefaultElementFactory getDefaultEvalElementFactory() {
-		return defaultEvalElementFactory;
-	}
-
-	DefaultElementFactory getDefaultMergeElementFactory() {
-		return defaultMergeElementFactory;
-	}
-
-	public void setTemplateResourceloader(ResourceLoader templateResourceloader) {
-		this.templateResourceloader = templateResourceloader;
-	}
-
-	public void setEvalResourceLoader(ResourceLoader evalResourceLoader) {
-		this.evalResourceLoader = evalResourceLoader;
-	}
-
-	public void setMacroLibResourceloader(ResourceLoader macroLibResourceloader) {
-		this.macroLibResourceloader = macroLibResourceloader;
 	}
 }

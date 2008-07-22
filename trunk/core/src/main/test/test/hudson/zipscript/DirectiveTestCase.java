@@ -19,7 +19,7 @@ public class DirectiveTestCase extends TestCase {
 
 //	public static TestSuite suite () {
 //		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testSimple"));
+//		suite.addTest(new DirectiveTestCase("testInclude"));
 //		return suite;
 //	}
 
@@ -84,6 +84,14 @@ public class DirectiveTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
+	public void testInclude () throws Exception {
+		String mergeTemplate = "templates/include_test.zs";
+		String resultFile = "/templates/include_result.txt";
+		HashMap context = new HashMap();
+		context.put("dynamicInclude", "foo/dynamic.zs");
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
 	public void testEscape () throws Exception {
 		String mergeTemplate = "templates/escape_test.zs";
 		String resultFile = "/templates/escape_result.txt";
@@ -137,7 +145,11 @@ public class DirectiveTestCase extends TestCase {
 
 	private String merge (String template, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.createInstance().getTemplate(template)
-			.merge(context);
+		HashMap props = new HashMap();
+		props.put("includeResourceLoader.type", "classpath");
+		props.put("includeResourceLoader.pathPrefix", "templates/includes/");
+		ZipEngine zipEngine = ZipEngine.createInstance(props);
+		return zipEngine.getTemplate(
+				template).merge(context);
 	}
 }

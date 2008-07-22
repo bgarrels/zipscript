@@ -69,7 +69,7 @@ public class VariableElement extends AbstractElement implements Element {
 			ParseParameters currentParameters = session.getParameters();
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(
-					pattern, Constants.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.getInstance(),
+					pattern, Constants.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.INSTANCE,
 					session, contentIndex).getElements();
 			session.setParameters(currentParameters);
 			this.children = parse(elements, session);
@@ -425,6 +425,14 @@ public class VariableElement extends AbstractElement implements Element {
 		else {
 			return new VariableElement(elements, parseData);
 		}
+	}
+
+	public boolean isStatic () {
+		if (children.size() == 1) {
+			return (children.get(0) instanceof TextElementRootChild);
+		}
+		else
+			return false;
 	}
 
 	protected void addSpecialElement (Element e) {
