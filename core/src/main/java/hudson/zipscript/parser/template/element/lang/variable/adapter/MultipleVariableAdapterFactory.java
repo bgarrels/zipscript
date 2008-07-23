@@ -1,5 +1,10 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
 public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 
 	private VariableAdapterFactory[] factories;
@@ -35,4 +40,25 @@ public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 		return null;
 	}
 
+	public SpecialMethod getSpecialMethod(String name, Element[] parameters,
+			Object object, ExtendedContext context, Element element) {
+		SpecialMethod specialMethod = null;
+		for (int i=0; i<factories.length; i++) {
+			specialMethod = factories[i].getSpecialMethod(
+					name, parameters, object, context, element);
+			if (null != specialMethod) return specialMethod;
+		}
+		return null;
+	}
+
+	public SpecialMethod getStringEscapingStringMethod(String method,
+			ParsingSession session) {
+		SpecialMethod specialMethod = null;
+		for (int i=0; i<factories.length; i++) {
+			specialMethod = factories[i].getStringEscapingStringMethod(
+					method, session);
+			if (null != specialMethod) return specialMethod;
+		}
+		return null;
+	}
 }

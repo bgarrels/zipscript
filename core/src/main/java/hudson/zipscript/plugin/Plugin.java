@@ -5,6 +5,7 @@ import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.template.element.component.Component;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 
 import java.util.Map;
 
@@ -36,4 +37,9 @@ public interface Plugin {
 	 * or null if no syntax is to be modified
 	 */
 	public Component[] getComponents();
+
+	/**
+	 * Return a variable adapter factory or null if N/A
+	 */
+	public VariableAdapterFactory getVariableAdapterFactory();
 }
