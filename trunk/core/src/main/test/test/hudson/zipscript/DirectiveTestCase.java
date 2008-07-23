@@ -17,11 +17,11 @@ import test.hudson.zipscript.model.Person;
 
 public class DirectiveTestCase extends TestCase {
 
-//	public static TestSuite suite () {
-//		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testInclude"));
-//		return suite;
-//	}
+	public static TestSuite suite () {
+		TestSuite suite = new TestSuite();
+		suite.addTest(new DirectiveTestCase("testImport"));
+		return suite;
+	}
 
 	public DirectiveTestCase () {}
 
@@ -89,6 +89,14 @@ public class DirectiveTestCase extends TestCase {
 		String resultFile = "/templates/include_result.txt";
 		HashMap context = new HashMap();
 		context.put("dynamicInclude", "foo/dynamic.zs");
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void testImport () throws Exception {
+		String mergeTemplate = "templates/import_test.zs";
+		String resultFile = "/templates/import_result.txt";
+		HashMap context = new HashMap();
+		context.put("dynamicImport", "templates/imports/dynamic.zsm");
 		evalResult(mergeTemplate, resultFile, context);
 	}
 

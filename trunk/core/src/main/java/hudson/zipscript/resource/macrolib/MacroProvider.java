@@ -5,4 +5,6 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 public interface MacroProvider {
 
 	public MacroDirective getMacro (String name);
+
+	public String getMacroImportPath (String namespace);
 }

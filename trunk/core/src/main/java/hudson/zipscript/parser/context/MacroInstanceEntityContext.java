@@ -4,6 +4,7 @@ import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 
 import java.util.Iterator;
@@ -129,5 +130,17 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 
 	public boolean isInitialized() {
 		return postMacroContext.isInitialized();
+	}
+
+	public MacroDirective getMacro (String name) {
+		return getParsingSession().getMacro(name);
+	}
+
+	public String getMacroImportPath (String namespace) {
+		return preMacroContext.getMacroImportPath(namespace);
+	}
+
+	public void addMacroImport(String namespace, String macroPath) {
+		preMacroContext.addMacroImport(namespace, macroPath);
 	}
 }

@@ -202,7 +202,8 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	private ExtendedContext getContext (Object obj, Locale locale) {
 		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized())
 			return (ExtendedContext) obj;
-		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj, resourceContainer);
+		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(
+				obj, parsingSession, resourceContainer);
 		context.setResourceContainer(resourceContainer);
 		context.setParsingSession(parsingSession);
 		if (null != locale) context.setLocale(locale);

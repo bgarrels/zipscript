@@ -31,4 +31,8 @@ public class MacroLibrary implements MacroProvider {
 	public String getNamespace() {
 		return namespace;
 	}
+
+	public String getMacroImportPath(String namespace) {
+		return null;
+	}
 }

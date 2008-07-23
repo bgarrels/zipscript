@@ -14,6 +14,7 @@ public class ParsingSession implements MacroProvider {
 	private ParseParameters parameters;
 	private Map unknownVariablePatterns;
 	private Map inlineMacroDefinitions;
+	private Map staticMacroImports;
 	private Stack nestingStack;
 	private Stack escapeMethodStack = new Stack();
 	private boolean hideEscapeMethods = false;
@@ -75,6 +76,19 @@ public class ParsingSession implements MacroProvider {
 		inlineMacroDefinitions.put(directive.getName(), directive);
 	}
 
+	public void addMacroImport (String namespace, String macroPath) {
+		if (null == staticMacroImports)
+			staticMacroImports = new HashMap();
+		staticMacroImports.put(namespace, macroPath);
+	}
+
+	public String getMacroImportPath (String namespace) {
+		if (null == staticMacroImports)
+			return null;
+		else
+			return (String) staticMacroImports.get(namespace);
+	}
+
 	public MacroDirective getMacro (String name) {
 		if (null == inlineMacroDefinitions) return null;
 		else return (MacroDirective) inlineMacroDefinitions.get(name);
@@ -113,5 +127,9 @@ public class ParsingSession implements MacroProvider {
 
 	public void setHideEscapeMethods(boolean hideEscapeMethods) {
 		this.hideEscapeMethods = hideEscapeMethods;
+	}
+
+	public Map getStaticMacroImports() {
+		return staticMacroImports;
 	}
 }

@@ -2,6 +2,7 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.resource.macrolib.MacroProvider;
 
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @author Joe Hudson
  */
 
-public interface ExtendedContext extends Context {
+public interface ExtendedContext extends Context, MacroProvider {
 
 	/**
 	 * Return true if the context has been initialized and false if not
@@ -89,4 +90,11 @@ public interface ExtendedContext extends Context {
 	 * @return
 	 */
 	public void addToElementScope(List nestingStack);
+
+	/**
+	 * Add a macro import for the context
+	 * @param namespace the namespace
+	 * @param macroPath the path for the macro
+	 */
+	public void addMacroImport (String namespace, String macroPath);
 }

@@ -2,6 +2,7 @@ package hudson.zipscript.resource.macrolib;
 
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.ExpressionParser;
+import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.element.Element;
@@ -51,9 +52,29 @@ public class MacroManager {
 			else return null;
 		}
 		else {
-			MacroLibrary lib = (MacroLibrary) macroLibraries.get(namespace);
-			if (null != lib) return lib.getMacro(name);
-			else return null;
+			String path = defaultMacroProvider.getMacroImportPath(namespace);
+			if (null != path) {
+				// import with macro provider
+				MacroLibrary lib = (MacroLibrary) macroLibraries.get(path);
+				if (null == lib) {
+					// load the macro library
+					try {
+						addMacroLibrary(path, path, resourceContainer.getMacroLibResourceLoader(), resourceContainer.getVariableAdapterFactory());
+					}
+					catch (ParseException e) {
+						throw new ExecutionException(e.getMessage(), null);
+					}
+				}
+				lib = (MacroLibrary) macroLibraries.get(path);
+				if (null != lib) return lib.getMacro(name);
+				else return null;
+			}
+			else  {
+				// import added at engine level
+				MacroLibrary lib = (MacroLibrary) macroLibraries.get(namespace);
+				if (null != lib) return lib.getMacro(name);
+				else return null;
+			}
 		}
 	}
 

@@ -14,6 +14,7 @@ import hudson.zipscript.parser.template.element.directive.continuedir.ContinueCo
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
+import hudson.zipscript.parser.template.element.directive.importdir.ImportComponent;
 import hudson.zipscript.parser.template.element.directive.includedir.IncludeComponent;
 import hudson.zipscript.parser.template.element.directive.initialize.InitializeComponent;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroComponent;
@@ -87,6 +88,7 @@ public class ZipEngine {
 			new CommentComponent(),
 			new InitializeComponent(),
 			new IncludeComponent(),
+			new ImportComponent(),
 			new EscapeComponent(),
 			new BreakComponent(),
 			new ContinueComponent(),

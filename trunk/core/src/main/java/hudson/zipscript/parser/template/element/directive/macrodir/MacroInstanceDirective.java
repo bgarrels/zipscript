@@ -175,10 +175,15 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 			}
 			else {
 				if (null == macro) {
-					throw new ParseException(this, "Undefined macro name '" + getName() + "'");
+					if (null != namespace) {
+						// maybe a dynamically defined import - lazy load
+					}
+					else {
+						throw new ParseException(this, "Undefined macro name '" + getName() + "'");
+					}
 				}
-				// its not a template defined parameter
-				if (!isOrdinal) {
+
+				if (!isOrdinal && null != macro) {
 					// make sure all attributes are defined
 					for (int i=0; i<attributes.size(); i++) {
 						MacroInstanceAttribute attribute = (MacroInstanceAttribute) attributes.get(i);
@@ -350,7 +355,7 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		if (!isTemplateDefinedParameter) {
 			if (null == macro) {
 				// we might need to lazy load
-				macro = context.getResourceContainer().getMacroManager().getMacro(getName(), getNamespace(), context.getParsingSession());
+				macro = context.getResourceContainer().getMacroManager().getMacro(getName(), getNamespace(), context);
 			}
 			if (null == macro) {
 				throw new ExecutionException("Undefined macro '" + getName() + "'", this);
