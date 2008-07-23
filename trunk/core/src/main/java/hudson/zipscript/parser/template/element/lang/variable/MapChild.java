@@ -1,31 +1,28 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.util.BeanUtil;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
 
 public class MapChild implements VariableChild {
 
-	private static final Object[] params = new Object[0];
+	private static final int TYPE_CONTEXT = 1;
+	private static final int TYPE_SEQUENCE = 2;
+	private static short TYPE_MAP = 3;
+	private static short TYPE_OBJECT = 4;
 
-	private static final int TYPE_MAP = 1;
-	private static final int TYPE_ARRAY = 2;
-	private static final int TYPE_LIST = 3;
-	private static final int TYPE_COLLECTION = 4;
-	private static final int TYPE_CONTEXT = 5;
-	private static final int TYPE_OBJECT = 6;
-
+	private short type = Short.MIN_VALUE;
+	private boolean doTypeChecking = false;
+	
+	private MapAdapter mapAdapter;
+	private SequenceAdapter sequenceAdapter;
+	private ObjectAdapter objectAdapter;
+	
 	private Element keyElement;
-	private int type = Integer.MIN_VALUE;
-	private Method accessorMethod;
 
 	public MapChild (Element keyElement) {
 		this.keyElement = keyElement;
@@ -33,63 +30,69 @@ public class MapChild implements VariableChild {
 
 	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		if (null == parent) return null;
-		if (type == Integer.MIN_VALUE) {
-			if (parent instanceof Map)
-				type = TYPE_MAP;
-			else if (parent instanceof Object[])
-				type = TYPE_ARRAY;
-			else if (parent instanceof List)
-				type = TYPE_LIST;
-			else if (parent instanceof Collection)
-				type = TYPE_COLLECTION;
-			else if (parent instanceof ExtendedContext)
+		if (doTypeChecking || type == Short.MIN_VALUE) {
+			type = Short.MIN_VALUE;
+			if (parent instanceof Context)
 				type = TYPE_CONTEXT;
-			else {
-				type = TYPE_OBJECT;
-				if (keyElement instanceof TextElement || keyElement instanceof SpecialStringElement) {
-					accessorMethod = BeanUtil.getPropertyMethod(
-							parent, keyElement.objectValue(context).toString(), params);
+			if (type == Short.MIN_VALUE) {
+				if (null != mapAdapter && mapAdapter.appliesTo(parent)) {
+					type = TYPE_MAP;
+				}
+				if (type == Short.MIN_VALUE) {
+					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(parent);
+					if (null != mapAdapter) {
+						type = TYPE_MAP;
+					}
+					else {
+						if (null != sequenceAdapter && sequenceAdapter.appliesTo(parent)) {
+							type = TYPE_SEQUENCE;
+						}
+						if (type == Short.MIN_VALUE) {
+							sequenceAdapter = context.getResourceContainer().getVariableAdapterFactory().getSequenceAdapter(parent);
+							if (null != sequenceAdapter) {
+								type = TYPE_SEQUENCE;
+							}
+							else {
+								objectAdapter = context.getResourceContainer().getVariableAdapterFactory().getObjectAdapter(parent);
+								type = TYPE_OBJECT;
+							}
+						}
+					}
 				}
 			}
 		}
-		Object key = keyElement.objectValue(context);
-		if (type == TYPE_MAP) {
-			return ((Map) parent).get(key);
+		
+		if (doTypeChecking) {
+			return getValue(parent, context);
 		}
-		else if (type == TYPE_CONTEXT) {
-			return ((ExtendedContext) parent).get(key);
-		}
-		else if (type == TYPE_OBJECT) {
+		else {
 			try {
-				if (null != accessorMethod) {
-					return accessorMethod.invoke(parent, params);
-				}
-				else {
-					return (BeanUtil.getPropertyMethod(
-							parent, keyElement.objectValue(context).toString(), params)
-								.invoke(parent, params));
-				} 
+				return getValue(parent, context);
 			}
-			catch (Exception e) {
-				throw new ExecutionException("An error occured while evaluating '" + this.keyElement + "'", this.keyElement, e);
+			catch (ClassCastException e) {
+				this.doTypeChecking = true;
+				return execute(parent, context);
 			}
 		}
-		int index = 0;
-		if (!(key instanceof Number))
-			throw new ExecutionException("Invalid type key", keyElement);
-		else
-			index = ((Number) key).intValue();
-		if (type == TYPE_ARRAY) {
-			return ((Object[]) parent)[index];
+	}
+
+	private Object getValue (Object parent, ExtendedContext context) {
+		Object key = keyElement.objectValue(context);
+		if (null == key) throw new ExecutionException("Map or sequence key evaluated to null", null);
+		if (type == TYPE_CONTEXT) {
+			return context.get(key);
 		}
-		else if (type == TYPE_LIST) {
-			return ((List) parent).get(index);
+		else if (type == TYPE_SEQUENCE) {
+			if (!(key instanceof Number))
+				throw new ExecutionException("Invalid type key", keyElement);
+			return sequenceAdapter.getItemAt(((Number) key).intValue(), parent);
 		}
-		else if (type == TYPE_COLLECTION) {
-			return ((Collection) parent).toArray()[index];
+		else if (type == TYPE_MAP) {
+			return mapAdapter.get(key, parent);
 		}
-		else
-			return null;
+		else {
+			return objectAdapter.get(key.toString(), parent);
+		}
 	}
 
 	public String getPropertyName() {
