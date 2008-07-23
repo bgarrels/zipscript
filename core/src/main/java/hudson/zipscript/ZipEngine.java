@@ -146,7 +146,9 @@ public class ZipEngine {
 		ResourceLoader macroLibResourceLoader = null;
 		ResourceLoader evalResourceLoader = new StringResourceLoader();
 
+		List variableAdapterFactories = new ArrayList();
 		VariableAdapterFactory variableAdapterFactory = new StandardVariableAdapterFactory();
+		variableAdapterFactories.add(variableAdapterFactory);
 		List components = new ArrayList();
 		for (int i=0; i<NON_OVERRIDEABLE_COMPONENTS.length; i++)
 			components.add(NON_OVERRIDEABLE_COMPONENTS[i]);
@@ -160,7 +162,9 @@ public class ZipEngine {
 					for (int j=0; j<NON_OVERRIDEABLE_COMPONENTS.length; j++)
 						components.add(c[j]);
 				}
-					
+				VariableAdapterFactory vaf = plugins[i].getVariableAdapterFactory();
+				if (null != vaf)
+					variableAdapterFactories.add(vaf);
 			}
 		}
 
@@ -227,6 +231,12 @@ public class ZipEngine {
 
 		for (int i=0; i<OVERRIDEABLE_COMPONENTS.length; i++)
 			components.add(OVERRIDEABLE_COMPONENTS[i]);
+
+		if (variableAdapterFactories.size() > 1) {
+			variableAdapterFactory = new MultipleVariableAdapterFactory(
+					(VariableAdapterFactory[]) variableAdapterFactories.toArray(
+							new VariableAdapterFactory[variableAdapterFactories.size()]));
+		}
 
 		resourceContainer = new ResourceContainer(
 				this, plugins, new MacroManager(), variableAdapterFactory,
