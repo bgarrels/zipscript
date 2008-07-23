@@ -10,7 +10,6 @@ import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
-import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 
 import java.io.Writer;
 import java.util.List;
@@ -23,7 +22,8 @@ public class EscapeDirective extends NestableElement implements MacroInstanceAwa
 	public EscapeDirective (String contents, int contentIndex, ParsingSession parsingSession)
 	throws ParseException {
 		String method = contents.trim();
-		escapeMethod = VarSpecialElement.getStringEscapingStringMethod(method, Boolean.TRUE, parsingSession);
+		escapeMethod = parsingSession.getResourceContainer().getVariableAdapterFactory().getStringEscapingStringMethod(
+				method, parsingSession);
 		if (null == escapeMethod)
 			throw new ParseException(contentIndex, "Undefined escape method '" + escapeMethod + "'");
 	}
