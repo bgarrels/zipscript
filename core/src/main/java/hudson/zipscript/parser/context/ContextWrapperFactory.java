@@ -2,6 +2,7 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.Constants;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.I18NResource;
 import hudson.zipscript.parser.util.I18NResourceImpl;
@@ -11,6 +12,7 @@ import hudson.zipscript.parser.util.UniqueIdGeneratorImpl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class ContextWrapperFactory {
@@ -24,7 +26,8 @@ public class ContextWrapperFactory {
 		return instance;
 	}
 
-	public ExtendedContext wrap (Object obj, ResourceContainer resourceContainer) {
+	public ExtendedContext wrap (
+			Object obj, ParsingSession parsingSession, ResourceContainer resourceContainer) {
 		ExtendedContext context = null;
 
 		// wrap the context if necessary
@@ -69,6 +72,17 @@ public class ContextWrapperFactory {
 		if (null != resourceContainer.getPlugins()) {
 			for (int i=0; i<resourceContainer.getPlugins().length; i++) {
 				resourceContainer.getPlugins()[i].initialize(context);
+			}
+		}
+
+		if (null != parsingSession) {
+			// initialize macro imports
+			Map staticImports = parsingSession.getStaticMacroImports();
+			if (null != staticImports) {
+				for  (Iterator i=staticImports.entrySet().iterator(); i.hasNext(); ) {
+					Map.Entry entry = (Map.Entry) i.next();
+					context.addMacroImport((String) entry.getKey(), (String) entry.getValue());
+				}
 			}
 		}
 

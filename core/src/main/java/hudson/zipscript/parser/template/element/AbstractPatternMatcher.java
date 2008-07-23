@@ -32,7 +32,7 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		while (true) {
 			if (!contents.hasRemaining()) {
 				throw new ParseException(position,
-						"Unexpected end of file reached while looking for '" + new String(getEndChars()) + "'");
+						"Unexpected end of file reached while looking for '" + new String(endChars) + "'");
 			}
 			char c = contents.get();
 			if (c == endMatchStart) {

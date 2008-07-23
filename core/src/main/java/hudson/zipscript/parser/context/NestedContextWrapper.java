@@ -132,4 +132,16 @@ public class NestedContextWrapper implements ExtendedContext {
 	public boolean isInitialized() {
 		return parentContext.isInitialized();
 	}
+
+	public MacroDirective getMacro (String name) {
+		return parentContext.getMacro(name);
+	}
+
+	public String getMacroImportPath (String namespace) {
+		return parentContext.getMacroImportPath(namespace);
+	}
+
+	public void addMacroImport(String namespace, String macroPath) {
+		parentContext.addMacroImport(namespace, macroPath);
+	}
 }
