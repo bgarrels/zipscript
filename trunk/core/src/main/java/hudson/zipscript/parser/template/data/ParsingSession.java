@@ -23,6 +23,22 @@ public class ParsingSession implements MacroProvider {
 		this.parameters = parameters;
 	}
 
+	public ParsingSession clone (ParseParameters parameters) {
+		ParsingSession session = new ParsingSession(parameters);
+		Map m = null;
+		if (null != unknownVariablePatterns) {
+			m = new HashMap();
+			m.putAll(unknownVariablePatterns);
+			session.unknownVariablePatterns = m;
+		}
+		if (null != inlineMacroDefinitions) {
+			m = new HashMap();
+			m.putAll(inlineMacroDefinitions);
+			session.inlineMacroDefinitions = m;
+		}
+		return session;
+	}
+
 	public ResourceContainer getResourceContainer () {
 		return parameters.getResourceContainer();
 	}

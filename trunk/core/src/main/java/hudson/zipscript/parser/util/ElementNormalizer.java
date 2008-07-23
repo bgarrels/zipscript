@@ -66,8 +66,13 @@ public class ElementNormalizer {
 		List children = e.getChildren();
 		if (null != children) {
 			session.getNestingStack().add(e);
-			for (Iterator i=children.iterator(); i.hasNext(); )
-				validate((Element) i.next(), session);
+			for (Iterator i=children.iterator(); i.hasNext(); ) {
+				Element eSub = (Element) i.next();
+				validate(eSub, session);
+			}
+			if (session.getNestingStack().size() == 0) {
+				System.out.println("joe");
+			}
 			Object o = session.getNestingStack().peek();
 			if (o == e) session.getNestingStack().pop();
 			else throw new ParseException(e, "Invalid nesting stack");
