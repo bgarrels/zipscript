@@ -37,7 +37,8 @@ public class CollectionAdapter implements SequenceAdapter {
 
 	public boolean hasNext(int index, Object previousItem,
 			Object sequence) {
-		return ((IteratorSequenceItem) previousItem).getIterator().hasNext();
+		if (null == previousItem) return ((Collection) sequence).size() > 0;
+		else return ((IteratorSequenceItem) previousItem).getIterator().hasNext();
 	}
 
 	public int indexOf(Object object, Object sequence) {

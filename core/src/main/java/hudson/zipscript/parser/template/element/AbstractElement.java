@@ -60,14 +60,11 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition, boolean hideEscaping) throws ParseException {
-		ParseParameters oldParameters = session.getParameters();
-		session.setParameters(new ParseParameters(session.getResourceContainer(), true, true));
+		session = session.clone(new ParseParameters(session.getResourceContainer(), true, true));
 		if (hideEscaping) session.setHideEscapeMethods(true);
 		List rtn = ExpressionParser.getInstance().parse(
 				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
 				session, startPosition).getElements();
-		session.setParameters(oldParameters);
-		if (hideEscaping) session.setHideEscapeMethods(false);
 		return rtn;
 	}
 
