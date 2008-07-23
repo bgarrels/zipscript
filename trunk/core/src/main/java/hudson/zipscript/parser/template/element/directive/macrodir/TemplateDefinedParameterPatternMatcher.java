@@ -10,7 +10,7 @@ import java.nio.CharBuffer;
 import java.util.List;
 
 
-public class MacroInstancePatternMatcher implements PatternMatcher {
+public class TemplateDefinedParameterPatternMatcher implements PatternMatcher {
 
 	public char[] getStartToken() {
 		return null;
@@ -18,7 +18,8 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 
 	public char[][] getStartTokens() {
 		return new char[][] {
-				"[@".toCharArray()	
+				"[.%".toCharArray(),
+				"[%".toCharArray()	
 		};
 	}
 
@@ -58,11 +59,11 @@ public class MacroInstancePatternMatcher implements PatternMatcher {
 						}
 					}
 					if (startChars.length == 2) {
-						return new MacroInstanceDirective(
+						return new TemplateDefinedParameter(
 								sb.toString(), isFlat, session, startPos);
 					}
 					else {
-						return new MacroInstanceDirective(
+						return new TemplateDefinedParameter(
 								sb.toString(), isFlat, true, session, startPos);
 					}
 				}

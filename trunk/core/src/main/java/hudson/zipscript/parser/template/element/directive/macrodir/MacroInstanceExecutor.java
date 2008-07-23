@@ -10,10 +10,10 @@ import java.util.List;
 
 public class MacroInstanceExecutor implements ToStringWithContextElement, NoAutoEscapeElement {
 
-	private MacroInstanceDirective macroInstance;
+	private MacroOrientedElement macroInstance;
 
 	public MacroInstanceExecutor (
-			MacroInstanceDirective macroInstance) {
+			MacroOrientedElement macroInstance) {
 		this.macroInstance = macroInstance;
 	}
 
@@ -33,7 +33,7 @@ public class MacroInstanceExecutor implements ToStringWithContextElement, NoAuto
 		macroInstance.writeNestedContent(context, writer);
 	}
 
-	public MacroInstanceDirective getMacroInstance() {
+	public MacroOrientedElement getMacroInstance() {
 		return macroInstance;
 	}
 }

@@ -11,6 +11,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirectiv
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
+import hudson.zipscript.parser.template.element.directive.macrodir.TemplateDefinedParameter;
 import hudson.zipscript.parser.util.ElementNormalizer;
 
 import java.io.Writer;
@@ -129,18 +130,19 @@ public abstract class NestableElement extends AbstractDirective {
 		if (null != children) {
 			for (Iterator j=children.iterator(); j.hasNext(); ) {
 				Element e = (Element) j.next();
-				if (e instanceof MacroInstanceDirective) {
-					MacroInstanceDirective mid = (MacroInstanceDirective) e;
+				if (e instanceof TemplateDefinedParameter) {
+					TemplateDefinedParameter mid = (TemplateDefinedParameter) e;
 					if (null != macro.getAttribute(mid.getName())) {
 						macroInstanceList.add(new MacroInstanceEntity(
-								(MacroInstanceDirective) e, context, additionalContextEntries));
+								(TemplateDefinedParameter) e, context, additionalContextEntries));
 					}
-					else {
-						// macro that might contain TDPs
-						if (null != mid.getMacroDefinition())
-							mid.getMacroDefinition().getMatchingTemplateDefinedParameters(
-									context, macroInstanceList, macro, additionalContextEntries);
-					}
+				}
+				else if (e instanceof MacroInstanceDirective) {
+					// might contain common template-defined parameters
+					MacroInstanceDirective mid = (MacroInstanceDirective) e;
+					if (null != mid.getMacroDefinition())
+						mid.getMacroDefinition().getMatchingTemplateDefinedParameters(
+								context, macroInstanceList, macro, additionalContextEntries);
 				}
 				else if (e instanceof MacroInstanceAware) {
 					((MacroInstanceAware) e).getMatchingTemplateDefinedParameters(

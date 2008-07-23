@@ -10,8 +10,8 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.directive.macrodir.MacroOrientedElement;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
@@ -192,7 +192,7 @@ public class CallDirective extends AbstractDirective {
 		Object obj = withElement.objectValue(context);
 		if (obj instanceof MacroInstanceEntity) {
 			MacroInstanceEntity callInput = (MacroInstanceEntity) obj;
-			MacroInstanceDirective macroInstance = callInput.getMacroInstance();
+			MacroOrientedElement macroInstance = callInput.getMacroInstance();
 			MacroInstanceExecutor executor = new MacroInstanceExecutor(macroInstance);
 			if (null == additionalAttributes) {
 				getMacroDirective(context.getParsingSession()).executeMacro(

@@ -17,6 +17,17 @@ import test.hudson.zipscript.model.Person;
 
 public class MacroTestCase extends TestCase {
 
+//	public static TestSuite suite () {
+//		TestSuite suite = new TestSuite();
+//		suite.addTest(new MacroTestCase("testCommonTDOMacro"));
+//		return suite;
+//	}
+
+	public MacroTestCase () {}
+	public MacroTestCase (String name) {
+		super(name);
+	}
+
 	public void testSimpleMacro () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_test.zs";
@@ -35,7 +46,7 @@ public class MacroTestCase extends TestCase {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_nesting_test.zs";
 		String resultFile = "/templates/macro_nesting_result.txt";
-		evalResult(mergeTemplate, resultFile, null);
+		evalResult(mergeTemplate, resultFile, context);
 	}
 
 	public void testObjectOrientedMacro () throws Exception {
