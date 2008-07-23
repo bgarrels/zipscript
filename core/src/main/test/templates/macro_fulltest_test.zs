@@ -1,19 +1,19 @@
 [@grid entries=people title="Interesting People"]
-	[@header]
+	[%header]
         Some header content
-	[/@header]
+	[/%header]
 
         [##
                 - template-defined parameters (only string attributes should be enclosed in quotes)
                 - the "entry" context value is added by the macro definition
                         (see ...foreach entry in entries... in the macro definition below)
         ##]
-        [@column title="id" hidden=true] ${entry.id} [/@column]
+        [%column title="id" hidden=true] ${entry.id} [/%column]
 		[@commonColumns/]
 
         [## template-defined parameters can be inside other directives ##]
         [#if showAge]
-                [@column title="Age"] ${entry.age} [/@column]
+                [%column title="Age"] ${entry.age} [/%column]
         [/#if]
 
         [##
@@ -22,18 +22,18 @@
         ##]
         [#foreach columnInfo in columnList]
                 [## properties can be access using [] (see below) when dealing with dynamic property names ##]
-                [@column title=columnInfo.title size=columnInfo.size] ${entry[columnInfo.propertyName]} [/@column]
+                [%column title=columnInfo.title size=columnInfo.size] ${entry[columnInfo.propertyName]} [/%column]
         [/#foreach]
 
         Any non template-defined parameter content inside the macro reference is the macro body and can
         be referenced as ${body}
         
-	[@footer]
+	[%footer]
         Some footer content - can use macros inside of macros inside of macros...
         [@simpleMacro]
         	footer content
         [/@simpleMacro]
-	[/@footer]
+	[/%footer]
 [/@grid]
 
 
@@ -67,12 +67,12 @@
 [/#macro]
 
 [#macro commonColumns]
-        [.@column title="First Name" width=120] ${entry.firstName} [/.@column]
+        [.%column title="First Name" width=120] ${entry.firstName} [/.%column]
         [@moreCommonColumns/]
 [/#macro]
 
 [#macro moreCommonColumns]
-	[.@column title="Last Name" width=140] ${entry.lastName} [/.@column]
+	[.%column title="Last Name" width=140] ${entry.lastName} [/.%column]
 [/#macro]
 
 [#macro simpleMacro]

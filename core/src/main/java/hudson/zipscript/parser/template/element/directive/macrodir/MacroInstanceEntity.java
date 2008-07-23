@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class MacroInstanceEntity implements ZSContextRequiredGetter{
 
-	private MacroInstanceDirective macroInstance;
+	private MacroOrientedElement macroInstance;
 	private MacroInstanceEntityContext context;
 	private boolean initialized = false;
 
 	public MacroInstanceEntity (
-			MacroInstanceDirective macroInstance, ExtendedContext context, Map additionalContextEntries) {
+			MacroOrientedElement macroInstance, ExtendedContext context, Map additionalContextEntries) {
 		this.macroInstance = macroInstance;
 
 		Map clonedEntries = new HashMap();
@@ -31,7 +31,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 				macroInstance.getMacroDefinitionAttributes(context));
 	}
 
-	public MacroInstanceDirective getMacroInstance() {
+	public MacroOrientedElement getMacroInstance() {
 		return macroInstance;
 	}
 

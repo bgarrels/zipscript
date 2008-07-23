@@ -1,33 +1,33 @@
 [@grid id="myGrid" entries=people]
-	[@column title="First Name"]${entry.firstName?upperFirst}[/@column]
-	[@column title="Last Name"]${entry.lastName!"Unknown Last Name"}[/@column]
+	[%column title="First Name"]${entry.firstName?upperFirst}[/%column]
+	[%column title="Last Name"]${entry.lastName!"Unknown Last Name"}[/%column]
 	[#if doShowBirthday]
-		[@column title="Birthday"]${entry.birthday|short}[/@column]
+		[%column title="Birthday"]${entry.birthday|short}[/%column]
 	[/#if]
 [/@grid]
 
 [@tab id="myId" title="Tab Title 1" callMacro=false]
-	[@page id="page1" title="Page 1-1" selected=true]
+	[%page id="page1" title="Page 1-1" selected=true]
 		This is the page 1-1 contents
-	[/@page]
-	[@page id="page2" title="Page 1-2" selected=false]
+	[/%page]
+	[%page id="page2" title="Page 1-2" selected=false]
 		[@sectionHeader title=title]
 			section body
 		[/@sectionHeader]
 		This is the page 1-2 contents
-	[/@page]
+	[/%page]
 [/@tab]
 
 [@tab id="myId" title="Tab Title 1" callMacro=true]
-	[@page id="page1" title="Page 2-1" selected=true]
+	[%page id="page1" title="Page 2-1" selected=true]
 		This is the page 2-1 contents
-	[/@page]
-	[@page id="page2" title="Page 2-2" selected=false]
+	[/%page]
+	[%page id="page2" title="Page 2-2" selected=false]
 		[@sectionHeader title=title]
 			section body
 		[/@sectionHeader]
 		This is the page 2-2 contents
-	[/@page]
+	[/%page]
 [/@tab]
 
 

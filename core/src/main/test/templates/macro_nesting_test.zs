@@ -22,15 +22,15 @@ stuff at bottom
 [/#macro]
 
 [@test callCommonMacro=true]
-	[@foo flipflop="bar"]def[/@foo]
+	[%foo flipflop="bar"]def[/%foo]
 [/@test]
 [@test callCommonMacro=false]
-	[@foo flipflop="bar"]
-		[@bar title="Bar 1"]
+	[%foo flipflop="bar"]
+		[%bar title="Bar 1"]
 			this is bar 1 nested content
-		[/@bar]
-		[@bar title="Bar 2"]
+		[/%bar]
+		[%bar title="Bar 2"]
 			this is bar 2 nested content
-		[/@bar]
-	[/@foo]
+		[/%bar]
+	[/%foo]
 [/@test]

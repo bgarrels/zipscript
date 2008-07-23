@@ -3,10 +3,10 @@
 [/#macro]
 
 [@tab.pane id="foo" title="My Tab"]
-	[@page title="Page 1"]
+	[%page title="Page 1"]
 		Page 1 contents
-	[/@page]
-	[@page title="Page 2"]
+	[/%page]
+	[%page title="Page 2"]
 		Page 2 contents
-	[/@page]
+	[/%page]
 [/@tab.pane]
