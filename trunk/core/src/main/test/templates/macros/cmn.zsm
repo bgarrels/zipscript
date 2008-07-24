@@ -1,3 +1,8 @@
+[##
+ # Page component
+ # @param title the page title
+ # @param selected is the page selected?
+ ##]
 [#macro page *title selected=false]
 	<div class="page">
 		${body}
