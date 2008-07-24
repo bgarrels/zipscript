@@ -124,7 +124,7 @@
 		<copy todir="${dist}/src/test">
 			<fileset dir="${src-test}" />
 		</copy>
-		<copy todir="${dist}/docs" flatten="true">
+		<copy todir="${dist}">
 			<fileset dir="src/build" />
 			<filterset>
 				<filter token="VERSION" value="${version}" />
