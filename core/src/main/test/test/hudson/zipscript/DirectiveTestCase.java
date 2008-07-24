@@ -29,12 +29,11 @@ public class DirectiveTestCase extends TestCase {
 		super(name);
 	}
 	
-	public void testSimple () throws Exception {
-		String mergeTemplate = "templates/simple_test.zs";
-		System.out.println(
-				ZipEngine.createInstance().getTemplate(mergeTemplate).merge(null));
-		
-	}
+//	public void testSimple () throws Exception {
+//		String mergeTemplate = "templates/simple_test.zs";
+//		System.out.println(
+//				ZipEngine.createInstance().getTemplate(mergeTemplate).merge(null));
+//	}
 	
 	public void testForeach () throws Exception {
 		String mergeTemplate = "templates/foreach_test.zs";
