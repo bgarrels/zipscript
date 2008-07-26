@@ -31,7 +31,7 @@
 [/@tab]
 
 
-[#macro grid *id *entries *column[*title]]
+[#macro grid | column[title] id entries]
 	The grid id is ${id}
 	<table>
 		<tr>
@@ -49,7 +49,7 @@
 	</table>
 [/#macro]
 
-[#macro tab *id *title *callMacro page[*id *title selected=false]]
+[#macro tab | page[id title selected=false] id title callMacro]
 --- Tab ---
 	Id: ${id}
 	Title: ${title}
@@ -67,13 +67,13 @@
 [/#if]
 [/#macro]
 
-[#macro commonPageMacro *id *title *selected]
+[#macro commonPageMacro | id title selected]
 	--- Common Page ---
 		Id: ${id}
 		Title: ${title}
 		Selected: ${selected}
 [/#macro]
 
-[#macro sectionHeader title]
+[#macro sectionHeader | title=null]
 	This is a section - ${title}
 [/#macro]

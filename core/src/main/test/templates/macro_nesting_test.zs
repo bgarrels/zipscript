@@ -1,4 +1,4 @@
-[#macro test *callCommonMacro *foo[*flipflop bar[title]]]
+[#macro test | foo[flipflop bar[title=null]] callCommonMacro]
 Suff at top
 [#if callCommonMacro]
 	Here's the list
@@ -13,7 +13,7 @@ Suff at top
 stuff at bottom
 [/#macro]
 
-[#macro someCommonFooMacro flipflop bar]
+[#macro someCommonFooMacro | flipflop=null bar=null]
 	common macro foo attribute: ${flipflop}
 	The number of bar parameters are ${bar?length}
 	[#foreach entry in bar]

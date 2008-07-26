@@ -15,6 +15,7 @@ public class ParsingSession implements MacroProvider {
 	private Map unknownVariablePatterns;
 	private Map inlineMacroDefinitions;
 	private Map staticMacroImports;
+	private Map dynamicMacroImports;
 	private Stack nestingStack;
 	private Stack escapeMethodStack = new Stack();
 	private boolean hideEscapeMethods = false;
@@ -74,6 +75,17 @@ public class ParsingSession implements MacroProvider {
 		if (null == inlineMacroDefinitions)
 			inlineMacroDefinitions = new HashMap();
 		inlineMacroDefinitions.put(directive.getName(), directive);
+	}
+
+	public void addDynamicMacroImport (String namespace) {
+		if (null == dynamicMacroImports)
+			dynamicMacroImports = new HashMap();
+		dynamicMacroImports.put(namespace, Boolean.TRUE);
+	}
+
+	public boolean isDynamicMacroImport (String namespace) {
+		if (null == dynamicMacroImports) return false;
+		else return (null != dynamicMacroImports.get(namespace));
 	}
 
 	public void addMacroImport (String namespace, String macroPath) {

@@ -1,12 +1,5 @@
 package hudson.zipscript.parser.template.element.directive.setdir;
 
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
@@ -17,6 +10,13 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.util.AttributeUtil;
+
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class NewMapElement extends AbstractElement implements Element {
 

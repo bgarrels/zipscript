@@ -19,7 +19,7 @@
 
 [/@simple]
 
-[#macro simple title="Default Title" script[src] style[src media] onLoad]
+[#macro simple | title="Default Title" onLoad=null script[src=null] style[src=null media=null]]
 <html>
 	<head>
 		<title>${title}</title>

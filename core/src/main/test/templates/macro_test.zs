@@ -1,4 +1,4 @@
-[#macro foo abc="def" baz bar]
+[#macro foo | abc="def" baz=null bar=null]
 	abc=${abc}
 	baz=$!{baz}
 	bar=${bar}
@@ -7,7 +7,7 @@
 - ${body}
 [/#macro]
 
-[#macro test doit foo[]]
+[#macro test | foo[] doit=null]
 [#if test1!=null]
 	[#foreach foo in foo]
 		${foo.body}
@@ -15,7 +15,7 @@
 [/#if]
 [/#macro]
 
-[#macro sectionHeader title]
+[#macro sectionHeader | title=null]
 	The section header title is ${title}
 	--
 	${body}

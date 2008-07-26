@@ -41,7 +41,7 @@
         the macro definition below has the name of "grid" and would be in the "data" macro library as you can see by the reference to "data.grid" above
 ##]
 
-[#macro grid *title *entries *column[*title width=100 hidden=false cssClass] *header[] *footer[]]
+[#macro grid | column[title width=100 hidden=false cssClass=null] header[] footer[] title entries]
         The title is ${title}
         <table>
                 <tr>

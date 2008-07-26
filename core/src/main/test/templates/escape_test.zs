@@ -34,7 +34,7 @@ ${var}
 	[/#escape]
 [/@foo]
 
-[#macro foo *param1]
+[#macro foo | param1]
 	[#escape js]
 		${param1}
 		${body}
