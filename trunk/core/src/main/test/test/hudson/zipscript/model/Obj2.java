@@ -21,4 +21,8 @@ public class Obj2 {
 	public List getList2 () {
 		return list2;
 	}
+
+	public String toString() {
+		return getClass().getName();
+	}
 }

@@ -43,9 +43,8 @@ ${mySequence?length}
 ${mySequence[0]}
 
 == Iterate through context keys ==
-[#foreach key in Vars?keys]
-	[## "Now" and "UniqueId" will always be different which would break our unit test ##]
-	[#if key not in {"Now", "UniqueId"}]
+[#foreach key in Vars?keys]	
+	[#if key.substring(0,1)?isLowerCase]
 		Context Key: ${key} - ${Vars[key]}
 	[/#if]
 [/#foreach]

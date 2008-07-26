@@ -8,4 +8,8 @@ public class Obj3 {
 	public String getText () {
 		return text;
 	}
+
+	public String toString() {
+		return getClass().getName();
+	}
 }

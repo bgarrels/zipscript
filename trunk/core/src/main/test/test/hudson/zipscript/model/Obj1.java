@@ -23,4 +23,8 @@ public class Obj1 {
 	 public Double getTestDouble() {
 		 return new Double(1);
 	 }
+	
+	 public String toString() {
+		return getClass().getName();
+	}
 }

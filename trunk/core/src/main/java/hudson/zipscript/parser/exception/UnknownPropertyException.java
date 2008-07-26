@@ -7,7 +7,7 @@ public class UnknownPropertyException extends ExecutionException {
 	private Object caller;
 	
 	public UnknownPropertyException (String propertyName, Object caller) {
-		super(null, null);
+		super(propertyName + " on " + caller.getClass().getName(), null);
 		this.propertyName = propertyName;
 		this.caller = caller;
 	}

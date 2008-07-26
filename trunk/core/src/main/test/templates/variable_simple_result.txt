@@ -38,15 +38,24 @@ ddd -- ddd
 abc
 
 == Iterate through context keys ==
-						Context Key: Math - hudson.zipscript.parser.util.MathUtil@17182c1
-					Context Key: myString - this is a test
-					Context Key: Vars - hudson.zipscript.parser.context.NestedContextWrapper@13f5d07
-					Context Key: Resource - hudson.zipscript.parser.util.I18NResourceImpl@f4a24a
-					Context Key: obj - test.hudson.zipscript.model.Obj3@cac268
-					Context Key: mySequence - [abc]
-					Context Key: myList - []
-					Context Key: myObject - test.hudson.zipscript.model.Obj1@1a16869
-							Context Key: abc - {foo=ddd, hhh=jjj}
-					Context Key: dynamicPath - text
-					Context Key: Global - hudson.zipscript.parser.context.MapContextWrapper@1cde100
+	
+		
+		
+			Context Key: myString - this is a test
+		
+		
+		
+			Context Key: obj - test.hudson.zipscript.model.Obj3
+		
+			Context Key: mySequence - [abc]
+		
+			Context Key: myList - []
+		
+			Context Key: myObject - test.hudson.zipscript.model.Obj1
+		
+		
+			Context Key: abc - {foo=ddd, hhh=jjj}
+		
+			Context Key: dynamicPath - text
+		
 	
