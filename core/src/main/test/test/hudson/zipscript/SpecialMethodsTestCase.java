@@ -32,6 +32,10 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("&lt;&amp;{}'&quot;&gt;", merge("str?xml", context));
 		assertEquals("<&\\{\\}'\">", merge("str?rtf", context));
 		assertEquals("<&{}\\'\\\"\\>", merge("str?js", context));
+		assertEquals("true", merge("'str'?isLowerCase", context));
+		assertEquals("false", merge("'sTr'?isLowerCase", context));
+		assertEquals("true", merge("'STR'?isUpperCase", context));
+		assertEquals("false", merge("'sTr'?isUpperCase", context));
 		context.put("str", "http://www.google.com?a=b&d=e");
 		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge("str?url", context));
 		context.put("str", "com.foo.bar");
