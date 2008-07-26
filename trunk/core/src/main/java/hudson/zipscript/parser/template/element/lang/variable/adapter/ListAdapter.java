@@ -28,7 +28,7 @@ public class ListAdapter implements SequenceAdapter {
 	}
 
 	public void addItemAt(int index, Object value, Object sequence) {
-		((List) sequence).set(index, value);
+		((List) sequence).add(index, value);
 	}
 
 	public boolean hasNext(int index, Object previousItem,
