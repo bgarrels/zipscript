@@ -1,4 +1,4 @@
-[#macro table *id *entries *column[*title key=title?humpbackCase width format selected] rowHighlight=true]
+[#macro table | column[title key=title?humpbackCase width=null format=null selected=null] id entries rowHighlight=true]
 [#initialize]
 	[#if Global.cssIncludes!=null]
 	${Global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
