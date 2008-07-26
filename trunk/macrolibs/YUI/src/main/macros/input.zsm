@@ -1,4 +1,4 @@
-[#macro autoComplete *name type="array" id=name value="" entry[*key *value] size maxLength style class preHighlightClassName="yui-ac-prehighlight" typeAhead=true useShadow=true minQueryLength=0]
+[#macro autoComplete | entry[key value] name type="array" id=name value="" size=null maxLength=null style=null class=null preHighlightClassName="yui-ac-prehighlight" typeAhead=true useShadow=true minQueryLength=0]
 [#initialize]
 	[#if Global.cssIncludes!=null]
 	${Global.cssIncludes.put("autocomplete/assets/skins/sam/autocomplete.css", "YUI")?void}
@@ -38,6 +38,6 @@
 	</script>
 [/#macro]
 
-[#macro commonAttributes id name class style title onClick onDblClick onMouseDown onMouseUp onMouseOver onMouseMove onMouseOut onKeyPress onKeyDown onKeyUp]
+[#macro commonAttributes | id=null name=null class=null style=null title=null onClick=null onDblClick=null onMouseDown=null onMouseUp=null onMouseOver=null onMouseMove=null onMouseOut=null onKeyPress=null onKeyDown=null onKeyUp=null]
 [#if id!=null] id="${id}"[/#if][#if name!=null] name="${name}"[/#if][#if class!=null] class="${class}"[/#if][#if style!=null] style="${style}"[/#if][#if title!=null] title="${title}"[/#if][#if title!=null] title="${title}"[/#if][#if onClick!=null] onClick="${onClick}"[/#if][#if onDblClick!=null] onDblClick="${onDblClick}"[/#if][#if onMouseDown!=null] onMouseDown="${onMouseDown}"[/#if][#if onMouseUp!=null] onMouseUp="${onMouseUp}"[/#if][#if onMouseOver!=null] onMouseOver="${onMouseOver}"[/#if][#if onMouseMove!=null] onMouseMove="${onMouseMove}"[/#if][#if onMouseOut!=null] onMouseOut="${onMouseOut}"[/#if][#if onKeyPress!=null] onKeyPress="${onKeyPress}"[/#if][#if onKeyDown!=null] onKeyDown="${onKeyDown}"[/#if][#if onKeyUp!=null] onKeyUp="${onKeyUp}"[/#if]
 [/#macro]

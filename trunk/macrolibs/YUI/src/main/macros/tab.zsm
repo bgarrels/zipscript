@@ -1,4 +1,4 @@
-[#macro pane *id *page[*label active=false]]
+[#macro pane | page[label active=false] id]
 [#initialize]
 	[#if Global.cssIncludes!=null]
 	${Global.cssIncludes.put("tabview/assets/skins/sam/tabview.css", "YUI")?void}
