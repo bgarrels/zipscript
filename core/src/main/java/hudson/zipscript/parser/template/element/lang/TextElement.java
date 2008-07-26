@@ -10,15 +10,19 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
 public class TextElement extends AbstractElement implements Element {
+
+	private VarSpecialElement[] specialMethods = null;
 
 	private static final String EMPTY = "";
 	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] {
@@ -40,16 +44,30 @@ public class TextElement extends AbstractElement implements Element {
 
 	public Object objectValue(ExtendedContext context) {
 		if (evaluateText) {
-			if (getChildren().size() > 1) {
-				StringWriter sw = new StringWriter();
+			if (null != specialMethods) {
+				StringWriter sw1 = new StringWriter();
 				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
-					((Element) i.next()).merge(context, sw);
+					((Element) i.next()).merge(context, sw1);
 				}
-				return sw.toString();
+				Object source = sw1.toString();
+				for (int i=0; i<specialMethods.length; i++) {
+					source = specialMethods[i].execute(source, context);
+					if (null == source) return null;
+				}
+				return source;
 			}
 			else {
-				if (getChildren().size() == 0) return EMPTY;
-				else return ((Element) getChildren().get(0)).objectValue(context);
+				if (getChildren().size() > 1) {
+					StringWriter sw = new StringWriter();
+					for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+						((Element) i.next()).merge(context, sw);
+					}
+					return sw.toString();
+				}
+				else {
+					if (getChildren().size() == 0) return EMPTY;
+					else return ((Element) getChildren().get(0)).objectValue(context);
+				}
 			}
 		}
 		else {
@@ -63,8 +81,22 @@ public class TextElement extends AbstractElement implements Element {
 
 	public void merge(ExtendedContext context, Writer sw) {
 		if (evaluateText) {
-			for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
-				((Element) i.next()).merge(context, sw);
+			if (null != specialMethods) {
+				StringWriter sw1 = new StringWriter();
+				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+					((Element) i.next()).merge(context, sw1);
+				}
+				Object source = sw1.toString();
+				for (int i=0; i<specialMethods.length; i++) {
+					source = specialMethods[i].execute(source, context);
+					if (null == source) return;
+				}
+				StringUtil.append(source.toString(), sw);
+			}
+			else {
+				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+					((Element) i.next()).merge(context, sw);
+				}
 			}
 		}
 		else if (null != text) {
@@ -86,6 +118,27 @@ public class TextElement extends AbstractElement implements Element {
 			ParsingResult pr = ExpressionParser.getInstance().parse(text, MATCHERS, TextDefaultElementFactory.INSTANCE,
 					session, (int) (getElementPosition() + 1));
 			setChildren(pr.getElements());
+
+			List varSpecialElements = new ArrayList();
+			// pick up any special methods
+			while (elementList.size() > index) {
+				Element e = (Element) elementList.get(index);
+				if (e instanceof VarSpecialElement) {
+					elementList.remove(index);
+					ElementIndex ei = e.normalize(index, elementList, session);
+					if (null != ei) {
+						index = ei.getIndex();
+						e = ei.getElement();
+					}
+					varSpecialElements.add(e);
+				}
+				else
+					break;
+			}
+			if (varSpecialElements.size() > 0) {
+				this.specialMethods = 
+					(VarSpecialElement[]) varSpecialElements.toArray(new VarSpecialElement[varSpecialElements.size()]);
+			}
 		}
 		return null;
 	}
