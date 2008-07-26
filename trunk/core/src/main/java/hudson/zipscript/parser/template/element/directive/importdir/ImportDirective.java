@@ -41,7 +41,11 @@ public class ImportDirective extends AbstractDirective {
 		importElement = new VariableElement(false, true, s1.trim(), session, contentStartPosition);
 		if (this.importElement.isStatic()) {
 			// go ahead and add the macro
-			session.addMacroImport(namespace, (String) this.importElement.objectValue(new MapContextWrapper(new HashMap())));
+			session.addMacroImport(namespace, (String) this.importElement.objectValue(
+					new MapContextWrapper(new HashMap())));
+		}
+		else {
+			session.addDynamicMacroImport(namespace);
 		}
 	}
 

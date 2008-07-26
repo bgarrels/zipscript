@@ -14,7 +14,6 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.special.RequiredIdentifierElement;
 import hudson.zipscript.parser.template.element.special.RequiredIdentifierPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
@@ -57,30 +56,60 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 	}
 
 	protected void parseContents (String contents, ParsingSession session, int contentPosition) throws ParseException {
-		List elements = parseElements(contents, session, contentPosition);
-		this.internalElements = elements;
-		if (elements.size() == 0)
-			throw new ParseException(this, "Macro name was not specified");
-		Element e;
-		e = (Element) elements.remove(0);
-		if (e instanceof SpecialStringElement)
-			name = ((SpecialStringElement) e).getTokenValue();
+		contents = contents.trim();
+		String[] nameAndIdentifiers = null;
+		String attributes = null;
+		int index = contents.indexOf('|');
+		if  (index >= 0) {
+			nameAndIdentifiers = contents.substring(0, index).split(" ");
+			attributes = contents.substring(index+1).trim();
+		}
+		else {
+			nameAndIdentifiers = contents.split(" ");
+		}
+
+		if (nameAndIdentifiers.length == 0)
+			throw new ParseException(this, "Macro definition does not have a name");
+		// evaluate name and identifiers
+		index = 0;
+		name = nameAndIdentifiers[index++];
 		// validate name
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
 				throw new ParseException(this, "Invalid macro name '" + name + "'");
 		}
+		
+		// we aren't supporting any new identifiers right now
+		if (nameAndIdentifiers.length > index)
+			throw new ParseException(this, "Unknown macro identifier '" + nameAndIdentifiers[1] + "'");
 
-		// look for attributes
-		while (true) {
-			MacroDefinitionAttribute attribute = getAttribute(elements, session);
-			if (null == attribute) break;
-			else this.attributes.add(attribute);
-		}
-		for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
-			MacroDefinitionAttribute attr = (MacroDefinitionAttribute) i.next();
-			attributeMap.put(attr.getName(), attr);
+		boolean startedRequiredAttributes = false;
+		boolean startedDefaultedAttributes = false;
+		if (null != attributes && attributes.length() > 0) {
+			List elements = parseElements(attributes, session, contentPosition);
+			this.internalElements = elements;
+			while (true) {
+				MacroDefinitionAttribute attribute = getAttribute(elements, session);
+				if (null == attribute) break;
+				if (attribute.isTemplateDefinedParameter()) {
+					if (startedRequiredAttributes || startedDefaultedAttributes)
+						throw new ParseException(this, "All template-defined parameters must be referenced before standard parameters '" + attribute.getName() + "'");
+				}
+				else if (null == attribute.getDefaultValue()) {
+					if (startedDefaultedAttributes)
+						throw new ParseException(this, "All required parameters must be referenced before defaulted parameters '" + attribute.getName() + "'");
+					startedRequiredAttributes = true;
+				}
+				else {
+					startedDefaultedAttributes = true;
+				}
+				this.attributes.add(attribute);
+			}
+			for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
+				MacroDefinitionAttribute attr = (MacroDefinitionAttribute) i.next();
+				attributeMap.put(attr.getName(), attr);
+			}
 		}
 	}
 
@@ -101,11 +130,6 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			return null;
 		Element e;
 		e = (Element) elements.remove(0);
-		if (e instanceof RequiredIdentifierElement) {
-			// this attribute is required
-			required = true;
-			e = (Element) elements.remove(0);
-		}
 		if (e instanceof SpecialStringElement)
 			name = ((SpecialStringElement) e).getTokenValue();
 		else if (e instanceof TextElement)
@@ -156,6 +180,9 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 						defaultVal = e;
 					}
 				}
+			}
+			else {
+				required = true;
 			}
 		}
 		MacroDefinitionAttribute attribute = new MacroDefinitionAttribute(

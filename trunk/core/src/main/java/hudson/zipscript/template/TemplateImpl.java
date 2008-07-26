@@ -87,7 +87,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 		else {
 			if (e instanceof MacroInstanceDirective) {
 				MacroInstanceDirective mid = (MacroInstanceDirective) e;
-				if (null != mid.getMacroDefinition() && !mid.isTemplateDefinedParameter()) {
+				if (null != mid.getMacroDefinition()) {
 					// add macro definition initialization
 					loadInitializeMacroLibElements(mid.getMacroDefinition(), l);
 				}

@@ -11,13 +11,13 @@
 
 [#while i < 30]
 	[@grid title="Grid ${i+1}" data=someList]
-		[@header class="abc"]Header 1[/@header]
-		[@header class="def"]Header 2[/@header]
-		[@header class="ghi"]Header 3[/@header]
+		[%header class="abc"]Header 1[/%header]
+		[%header class="def"]Header 2[/%header]
+		[%header class="ghi"]Header 3[/%header]
 	[/@grid]
 [/#while]
 
-[#macro grid title header[] data]
+[#macro grid | header[] title=null data=null]
 	The grid title is ${title}
 	[#if header != null]
 		<tr>

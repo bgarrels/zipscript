@@ -13,6 +13,18 @@ import junit.framework.TestCase;
 
 public class MacroLibTestCase extends TestCase {
 
+//	public static TestSuite suite () {
+//		TestSuite suite = new TestSuite();
+//		suite.addTest(new MacroLibTestCase("testMacroLib"));
+//		return suite;
+//	}
+
+	public MacroLibTestCase () {}
+
+	public MacroLibTestCase (String name) {
+		super(name);
+	}
+
 	public void testMacroLib () throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macros/test.zs";
