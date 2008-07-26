@@ -5,10 +5,10 @@ import hudson.zipscript.parser.util.BeanUtil;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class ObjectContextWrapper extends AbstractContext {
 
@@ -74,8 +74,8 @@ public class ObjectContextWrapper extends AbstractContext {
 		setMap.put(key, value);
 	}
 
-	public Iterator getKeys() {
-		return setMap.keySet().iterator();
+	public Set getKeys() {
+		throw new UnsupportedOperationException();
 	}
 
 	public Locale getLocale () {

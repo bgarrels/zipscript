@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.context;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class MapContextWrapper extends AbstractContext {
 
@@ -40,8 +40,8 @@ public class MapContextWrapper extends AbstractContext {
 		put(key, value, true);
 	}
 
-	public Iterator getKeys() {
-		return map.keySet().iterator();
+	public Set getKeys() {
+		return map.keySet();
 	}
 
 	public Locale getLocale () {

@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.context;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class SimpleContextWrapper extends AbstractContext {
 
@@ -34,7 +34,7 @@ public class SimpleContextWrapper extends AbstractContext {
 		return context.get(key);
 	}
 
-	public Iterator getKeys() {
+	public Set getKeys() {
 		return context.getKeys();
 	}
 

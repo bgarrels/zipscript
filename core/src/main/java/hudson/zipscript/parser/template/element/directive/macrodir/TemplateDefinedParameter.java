@@ -8,11 +8,13 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.util.AttributeUtil;
 import hudson.zipscript.parser.util.SessionUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
@@ -99,7 +101,7 @@ implements MacroInstanceAware, NonOutputElement, DebugElementContainerElement, M
 
 			// look for attributes
 			while (true) {
-				MacroInstanceAttribute attribute = getAttribute(elements, session);
+				ElementAttribute attribute = AttributeUtil.getAttribute(elements, session, this);
 				if (null == attribute) break;
 				else {
 					this.attributes.add(attribute);
@@ -211,65 +213,9 @@ implements MacroInstanceAware, NonOutputElement, DebugElementContainerElement, M
 		}
 	}
 
-	public MacroInstanceAttribute getAttribute (String name) {
+	public ElementAttribute getAttribute (String name) {
 		if (null == attributeMap) return null;
-		else return (MacroInstanceAttribute) attributeMap.get(name);
-	}
-
-	protected MacroInstanceAttribute getAttribute(List elements, ParsingSession session)
-	throws ParseException {
-		if (elements.size() == 0) return null;
-
-		if (isOrdinal) {
-			Element e = (Element) elements.remove(0);
-			if (e instanceof AssignmentElement)
-				throw new ParseException(this, "Unexpected token '=' found when parsing ordinal macro attributes");
-			return new MacroInstanceAttribute(null, e);
-		}
-		else {
-			String name = null;
-			Element e;
-			e = (Element) elements.remove(0);
-			if (e instanceof SpecialStringElement)
-				name = ((SpecialStringElement) e).getTokenValue();
-			else if (e instanceof TextElement)
-				name = ((TextElement) e).getText();
-			else
-				throw new ParseException(this, "Unexpected element, expecting macro attribute name.  Found '" + e + "'");
-			// validate name
-			for (int i=0; i<name.length(); i++) {
-				char c = name.charAt(i);
-				if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-'))
-					throw new ParseException(this, "Invalid macro attribute name '" + name + "'");
-			}
-
-			// attribute properties
-			if (elements.size() > 0) {
-				e = (Element) elements.get(0);
-				if (e instanceof AssignmentElement) {
-					elements.remove(0);
-					if (elements.size() == 0) {
-						throw new ParseException(this, "Unexpected content '" + e + "'");
-					}
-					else {
-						// value
-						e = (Element) elements.remove(0);
-						if (e instanceof AssignmentElement) {
-							throw new ParseException(this, "Unexpected content '" + e + "'");
-						}
-						else {
-							return new MacroInstanceAttribute(name, e);
-						}
-					}
-				}
-				else {
-					throw new ParseException(this, "Unexpected element, expecting '='.  Found '" + e + "'");
-				}
-			}
-			else {
-				throw new ParseException(this, "Missing macro value for '" + name + "' in " + this.toString());
-			}
-		}
+		else return (ElementAttribute) attributeMap.get(name);
 	}
 
 	public ElementIndex normalize(int index, List elementList,

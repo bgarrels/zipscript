@@ -19,11 +19,6 @@ public class ListAdapter implements SequenceAdapter {
 		return ((List) sequence).get(index);
 	}
 
-	public Object nextItem(int previousIndex, Object sequence)
-			throws ClassCastException {
-		return getItemAt(previousIndex+1, sequence);
-	}
-
 	public boolean contains(Object object, Object sequence) {
 		return ((List) sequence).contains(object);
 	}

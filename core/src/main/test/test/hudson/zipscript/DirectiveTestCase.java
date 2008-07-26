@@ -17,11 +17,11 @@ import test.hudson.zipscript.model.Person;
 
 public class DirectiveTestCase extends TestCase {
 
-	public static TestSuite suite () {
-		TestSuite suite = new TestSuite();
-		suite.addTest(new DirectiveTestCase("testImport"));
-		return suite;
-	}
+//	public static TestSuite suite () {
+//		TestSuite suite = new TestSuite();
+//		suite.addTest(new DirectiveTestCase("testImport"));
+//		return suite;
+//	}
 
 	public DirectiveTestCase () {}
 

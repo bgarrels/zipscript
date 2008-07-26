@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
@@ -22,6 +23,8 @@ import hudson.zipscript.parser.template.element.lang.variable.special.object.IsS
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsStringSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.StringSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.sequence.AddFirstSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.sequence.AddLastSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.FirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LastSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.LengthSpecialMethod;
@@ -45,12 +48,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 
 	public MapAdapter getMapAdapter(Object map) {
 		if (map instanceof Map)
 			return JavaMapAdapter.INSTANCE;
+		else if (map instanceof Context)
+			return ContextMapAdapter.INSTANCE;
 		return null;
 	}
 
@@ -63,6 +69,8 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			return ObjectArrayAdapter.INSTANCE;
 		else if (sequence instanceof List)
 			return ListAdapter.INSTANCE;
+		else if (sequence instanceof Set)
+			return SetAdapter.INSTANCE;
 		else if (sequence instanceof Collection)
 			return CollectionAdapter.INSTANCE;
 		else if (sequence instanceof Iterator)
@@ -124,28 +132,35 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return JSDateTimeSpecialMethod.INSTANCE;
 			else return null;
 		}
-		else if (source instanceof Map) {
-			if (method.equals("keys"))
-				return KeysSpecialMethod.INSTANCE;
-			else if (method.equals("values"))
-				return ValuesSpecialMethod.INSTANCE;
-			else
-				return null;
-		}
-		else if (source instanceof Object[]
-		        || source instanceof Collection) {
+		// sequence special methods
+		SequenceAdapter sequenceAdapter = context.getResourceContainer().getVariableAdapterFactory().getSequenceAdapter(source);
+		if (null != sequenceAdapter) {
 			if (method.equals("length"))
 				return new LengthSpecialMethod();
 			else if (method.equals("first"))
 				return new FirstSpecialMethod();
+			else if (method.equals("addFirst"))
+				return new AddFirstSpecialMethod(parameters);
 			else if (method.equals("last"))
 				return new LastSpecialMethod();
+			else if (method.equals("addLast"))
+				return new AddLastSpecialMethod(parameters);
 			else if (method.equals("contains"))
 				return new hudson.zipscript.parser.template.element.lang.variable.special.sequence.ContainsSpecialMethod(parameters);
 			else
 				return null;
 		}
-		else return null;
+		// map special methods
+		MapAdapter mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(source);
+		if (null != mapAdapter) {
+			if (method.equals("keys"))
+				return new KeysSpecialMethod();
+			else if (method.equals("values"))
+				return new ValuesSpecialMethod();
+			else
+				return null;
+		}
+		return null;
 	}
 
 	public SpecialMethod getStringEscapingStringMethod (

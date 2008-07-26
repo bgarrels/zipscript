@@ -17,6 +17,18 @@ import test.hudson.zipscript.model.Obj3;
 
 public class VariableTestCase extends TestCase {
 
+//	public static TestSuite suite () {
+//		TestSuite suite = new TestSuite();
+//		suite.addTest(new VariableTestCase("testSimpleVariables"));
+//		return suite;
+//	}
+
+	public VariableTestCase () {}
+
+	public VariableTestCase (String name) {
+		super(name);
+	}
+	
 	public void testSeparatedPathVariables () throws Exception {
 		Evaluator template = null;
 		template = ZipEngine.createInstance().getEvaluator(

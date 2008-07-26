@@ -10,10 +10,14 @@ import hudson.zipscript.parser.template.element.NonOutputElement;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAware;
+import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
+import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
+import hudson.zipscript.parser.template.element.special.SpecialStringElementImpl;
 
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +25,9 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 
 	private String varName;
 	private Element setElement;
+
+	// hash setter properties
+	private VariableElement setterParent;
 
 	public SetDirective (String contents, ParsingSession session, int contentPosition) throws ParseException {
 		parseContents(contents, session, contentPosition);
@@ -35,12 +42,36 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 			else {
 				throw new ParseException(this, "Invalid sequence.  Expecting variable name");
 			}
-			if (!(elements.remove(0) instanceof AssignmentElement))
-				throw new ParseException(this, "Invalid sequence.  Expecting '='");
-			if (elements.size() > 1)
-				throw new ParseException(this, "Invalid sequence.  Improperly formed set expression");
-			else
+			Element e = (Element) elements.remove(0);
+			if (e instanceof AssignmentElement) {
+				// standard set
+				if (elements.size() > 1 || elements.size() == 0)
+					throw new ParseException(this, "Invalid sequence.  Improperly formed set expression");
 				this.setElement = (Element) elements.get(0);
+				// see if we are creating a new Map or Sequence
+				if (this.setElement instanceof MapElement) {
+					this.setElement = new NewMapElement(
+							(MapElement) this.setElement, session, this);
+				}
+			}
+			else {
+				// complex set
+				StringBuffer sb = new StringBuffer();
+				sb.append(varName);
+				while (!(e instanceof AssignmentElement)) {
+					sb.append(e);
+					if (elements.size() == 0) {
+						throw new ParseException(this, "Invalid sequence.  Expecting '='");
+					}
+					e = (Element) elements.remove(0);
+				}
+				this.varName = null;
+				this.setterParent = new VariableElement(false, true, sb.toString(), session, contentPosition);
+
+				if (elements.size() > 1 || elements.size() == 0)
+					throw new ParseException(this, "Invalid sequence.  Improperly formed set expression");
+				this.setElement = (Element) elements.get(0);
+			}
 		}
 		catch (IndexOutOfBoundsException e) {
 			throw new ParseException(this, "Improperly formed set expression: must have at least 3 tokens");
@@ -49,7 +80,17 @@ public class SetDirective extends AbstractDirective implements MacroInstanceAwar
 
 	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
-		context.put(varName, setElement.objectValue(context), true);
+		Object value = setElement.objectValue(context);
+		if (null != setterParent) {
+			setterParent.put(value, context);
+		}
+		else {
+			setInContext(varName, value, true, context);
+		}
+	}
+
+	protected void setInContext (String key, Object value, boolean travelUp, ExtendedContext context) {
+		context.put(key, value, travelUp);
 	}
 
 	public ElementIndex normalize(int index, List elementList,

@@ -20,4 +20,6 @@ public interface SequenceAdapter {
 	public int indexOf(Object object, Object sequence) throws ClassCastException;
 
 	public int lastIndexOf(Object object, Object sequence) throws ClassCastException;
+
+	public boolean contains (Object obj, Object sequence) throws ClassCastException;
 }

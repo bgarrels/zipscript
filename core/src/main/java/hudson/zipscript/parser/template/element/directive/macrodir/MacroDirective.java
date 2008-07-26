@@ -8,6 +8,7 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DebugElementContainerElement;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapElement;
@@ -179,7 +180,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		if (isOrdinal) {
 			for (int i=0; i<attributes.size(); i++) {
 				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) getAttributes().get(i);
-				MacroInstanceAttribute instAttribute = (MacroInstanceAttribute) attributes.get(i);
+				ElementAttribute instAttribute = (ElementAttribute) attributes.get(i);
 				Object val = instAttribute.getValue().objectValue(parentContext);
 				if (null == val) {
 					
@@ -192,7 +193,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		}
 		else {
 			for (int i=0; i<attributes.size(); i++) {
-				MacroInstanceAttribute instAttribute = (MacroInstanceAttribute) attributes.get(i);
+				ElementAttribute instAttribute = (ElementAttribute) attributes.get(i);
 				Object val = instAttribute.getValue().objectValue(parentContext);
 				if (null == val) {
 					MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) attributeMap.get(instAttribute.getName());

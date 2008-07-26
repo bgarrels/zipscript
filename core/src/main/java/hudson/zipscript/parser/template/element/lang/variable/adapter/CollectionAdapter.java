@@ -2,7 +2,6 @@ package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 
 public class CollectionAdapter implements SequenceAdapter {
@@ -60,10 +59,15 @@ public class CollectionAdapter implements SequenceAdapter {
 	}
 
 	public void setItemAt(int index, Object value, Object sequence) {
-		((List) sequence).set(index, value);
+		throw new UnsupportedOperationException();
 	}
 
 	public void addItemAt(int index, Object value, Object sequence) {
-		((List) sequence).set(index, value);
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean contains(Object obj, Object sequence)
+			throws ClassCastException {
+		return ((Collection) sequence).contains(obj);
 	}
 }
