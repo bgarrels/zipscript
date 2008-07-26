@@ -5,7 +5,9 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.nio.CharBuffer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public abstract class AbstractPatternMatcher implements PatternMatcher {
@@ -20,6 +22,13 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 		return s;
 	}
 
+	private static final Map nestingMap = new HashMap();
+	static {
+		nestingMap.put(new Character('['), new Character(']'));
+		nestingMap.put(new Character('('), new Character(')'));
+		nestingMap.put(new Character('{'), new Character('}'));
+	}
+	
 	protected int findMatch (
 			CharBuffer contents, char[] startChars, char[] endChars, char[] stopChars, boolean allowEscape)
 	throws ParseException {
@@ -35,6 +44,15 @@ public abstract class AbstractPatternMatcher implements PatternMatcher {
 						"Unexpected end of file reached while looking for '" + new String(endChars) + "'");
 			}
 			char c = contents.get();
+			if (nesting > 1) {
+				// forget about end match for now because we have an additional nesting
+				Character nestingEndMatch = (Character) nestingMap.get(new Character(startMatchStart));
+				if (null != nestingEndMatch && nestingEndMatch.charValue() == c) {
+					nesting --;
+					length ++;
+					continue;
+				}
+			}
 			if (c == endMatchStart) {
 				// possible match
 				if (isNestingApplicable()) nesting --;

@@ -1,13 +1,12 @@
-package hudson.zipscript.parser.template.element.directive.macrodir;
+package hudson.zipscript.parser.template.element;
 
-import hudson.zipscript.parser.template.element.Element;
 
-public class MacroInstanceAttribute {
+public class ElementAttribute {
 
 	private String name;
 	private Element value;
 
-	public MacroInstanceAttribute (String name, Element value) {
+	public ElementAttribute (String name, Element value) {
 		this.name = name;
 		this.value = value;
 	}

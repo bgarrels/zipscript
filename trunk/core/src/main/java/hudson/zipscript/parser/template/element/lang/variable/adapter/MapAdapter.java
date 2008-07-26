@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.Set;
 
 public interface MapAdapter {
 
@@ -12,5 +13,7 @@ public interface MapAdapter {
 
 	public Object remove (Object key, Object map) throws ClassCastException;
 
-	public Iterator getKeys (Object map) throws ClassCastException;
+	public Set getKeys (Object map) throws ClassCastException;
+
+	public Collection getValues (Object map) throws ClassCastException;
 }

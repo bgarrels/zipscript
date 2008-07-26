@@ -7,11 +7,11 @@ import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.directive.AbstractDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroOrientedElement;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceEntity;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
@@ -111,7 +111,7 @@ public class CallDirective extends AbstractDirective {
 
 		if (null != additionalParameters) {
 			this.additionalAttributes = new ArrayList();
-			MacroInstanceAttribute attribute = getAttribute(additionalParameters, session);
+			ElementAttribute attribute = getAttribute(additionalParameters, session);
 			while (null != attribute) {
 				additionalAttributes.add(attribute);
 				attribute = getAttribute(additionalParameters, session);
@@ -128,7 +128,7 @@ public class CallDirective extends AbstractDirective {
 		}
 	}
 
-	protected MacroInstanceAttribute getAttribute(List elements, ParsingSession session)
+	protected ElementAttribute getAttribute(List elements, ParsingSession session)
 	throws ParseException {
 		if (elements.size() == 0) return null;
 
@@ -163,7 +163,7 @@ public class CallDirective extends AbstractDirective {
 						throw new ParseException(this, "Unexpected content '" + e + "'");
 					}
 					else {
-						MacroInstanceAttribute attribute = new MacroInstanceAttribute(
+						ElementAttribute attribute = new ElementAttribute(
 								name, e);
 						return attribute;
 					}

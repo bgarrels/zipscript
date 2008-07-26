@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
@@ -19,6 +20,9 @@ import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
@@ -180,6 +184,108 @@ public class VariableElement extends AbstractElement implements Element {
 		catch (ExecutionException e) {
 			e.setElement(this);
 			throw e;
+		}
+	}
+
+	private static final int TYPE_CONTEXT = 1;
+	private static final int TYPE_SEQUENCE = 2;
+	private static short TYPE_MAP = 3;
+	private static short TYPE_OBJECT = 4;
+
+	private short type = Short.MIN_VALUE;
+	private boolean doTypeChecking = false;
+
+	private MapAdapter mapAdapter;
+	private SequenceAdapter sequenceAdapter;
+	private ObjectAdapter objectAdapter;
+
+	public void put (Object value, ExtendedContext context) {
+		Object parent = null;
+		for (int i=0; i<children.size()-1; i++) {
+			parent = ((VariableChild) children.get(i)).execute(parent, context);
+			if (null == parent) {
+				throw new ExecutionException("Null parent for set '" + this + "'", this);
+			}
+		}
+
+		// determine the key
+		VariableChild c = (VariableChild) children.get(children.size()-1);
+		Object key = null;
+		if (c instanceof MapChild) {
+			// hash or sequence set
+			key = ((MapChild) c).getKeyElement().objectValue(context);
+		}
+		else if (c instanceof PropertyChild) {
+			// property set
+			key = c.getPropertyName();
+		}
+		else {
+			throw new ExecutionException("Invalid set expression '" + this + "'", this);
+		}
+
+		// determine the type
+		if (doTypeChecking || type == Short.MIN_VALUE) {
+			type = Short.MIN_VALUE;
+			if (parent instanceof Context)
+				type = TYPE_CONTEXT;
+			if (type == Short.MIN_VALUE) {
+				if (null != mapAdapter && mapAdapter.appliesTo(parent)) {
+					type = TYPE_MAP;
+				}
+				if (type == Short.MIN_VALUE) {
+					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(parent);
+					if (null != mapAdapter) {
+						type = TYPE_MAP;
+					}
+					else {
+						if (null != sequenceAdapter && sequenceAdapter.appliesTo(parent)) {
+							type = TYPE_SEQUENCE;
+						}
+						if (type == Short.MIN_VALUE) {
+							sequenceAdapter = context.getResourceContainer().getVariableAdapterFactory().getSequenceAdapter(parent);
+							if (null != sequenceAdapter) {
+								type = TYPE_SEQUENCE;
+							}
+							else {
+								objectAdapter = context.getResourceContainer().getVariableAdapterFactory().getObjectAdapter(parent);
+								type = TYPE_OBJECT;
+							}
+						}
+					}
+				}
+			}
+		}
+		if (doTypeChecking) {
+			put(parent, key, value, context);
+		}
+		else {
+			try {
+				put(parent, key, value, context);
+			}
+			catch (ClassCastException e) {
+				this.doTypeChecking = true;
+				put(value, context);
+			}
+		}
+	}
+
+	private void put (Object parent, Object key, Object value, ExtendedContext context) {
+		if (type == TYPE_CONTEXT) {
+			((Context) parent).put(key, value);
+		}
+		else if (type == TYPE_MAP) {
+			mapAdapter.put(key, value, parent);
+		}
+		else if (type == TYPE_SEQUENCE) {
+			if (key instanceof Number) {
+				sequenceAdapter.setItemAt(((Number) key).intValue(), value, parent);
+			}
+			else {
+				throw new ExecutionException("Invalid sequence identifier '" + this + "'", this);
+			}
+		}
+		else if (type == TYPE_OBJECT) {
+			objectAdapter.set(key.toString(), value, parent);
 		}
 	}
 

@@ -7,10 +7,10 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class NestedContextWrapper implements ExtendedContext {
 
@@ -38,8 +38,8 @@ public class NestedContextWrapper implements ExtendedContext {
 		return obj;
 	}
 
-	public Iterator getKeys() {
-		return map.keySet().iterator();
+	public Set getKeys() {
+		return map.keySet();
 	}
 
 	public void put(Object key, Object value, boolean travelUp) {

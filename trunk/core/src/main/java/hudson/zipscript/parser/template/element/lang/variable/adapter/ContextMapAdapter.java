@@ -1,35 +1,36 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import hudson.zipscript.parser.context.Context;
+
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 
-public class JavaMapAdapter implements MapAdapter {
+public class ContextMapAdapter implements MapAdapter {
 
-	public static final JavaMapAdapter INSTANCE = new JavaMapAdapter();
+	public static final ContextMapAdapter INSTANCE = new ContextMapAdapter();
 	
 	public boolean appliesTo(Object object) {
-		return (object instanceof Map);
+		return (object instanceof Context);
 	}
 
 	public Object get(Object key, Object map) {
-		return ((Map) map).get(key);
+		return ((Context) map).get(key);
 	}
 
 	public Set getKeys(Object map) {
-		return ((Map) map).keySet();
+		return ((Context) map).getKeys();
 	}
 
 	public Collection getValues(Object map) throws ClassCastException {
-		return ((Map) map).values();
+		throw new UnsupportedOperationException();
 	}
 
 	public void put(Object key, Object value, Object map) {
-		((Map) map).put(key, value);
+		((Context) map).put(key, value);
 	}
 
 	public Object remove(Object key, Object map) {
-		return ((Map) map).remove(key);
+		return ((Context) map).remove(key);
 	}
 
 }

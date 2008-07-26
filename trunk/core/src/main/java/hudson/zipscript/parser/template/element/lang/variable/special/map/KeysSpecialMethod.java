@@ -1,15 +1,11 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.map;
 
 import hudson.zipscript.parser.context.ExtendedContext;
-import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
 
-import java.util.Map;
+public class KeysSpecialMethod extends MapSpecialMethod {
 
-public class KeysSpecialMethod implements SpecialMethod {
-
-	public static final KeysSpecialMethod INSTANCE = new KeysSpecialMethod();
-
-	public Object execute(Object source, ExtendedContext context) throws Exception {
-		return ((Map) source).keySet();
+	public Object execute(Object source, MapAdapter mapAdapter, ExtendedContext context) {
+		return mapAdapter.getKeys(source);
 	}
 }

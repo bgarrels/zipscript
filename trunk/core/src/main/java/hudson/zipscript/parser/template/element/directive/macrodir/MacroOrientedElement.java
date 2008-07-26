@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ElementAttribute;
 
 import java.io.Writer;
 import java.util.List;
@@ -29,5 +30,5 @@ public interface MacroOrientedElement extends Element {
 
 	public boolean isInMacroDefinition();
 
-	public MacroInstanceAttribute getAttribute (String name);
+	public ElementAttribute getAttribute (String name);
 }

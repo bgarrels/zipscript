@@ -3,14 +3,15 @@ package hudson.zipscript.parser.context;
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
-import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceAttribute;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class MacroInstanceEntityContext implements ExtendedContext {
 
@@ -41,7 +42,7 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		initializeMacroAttributes(this);
 	}
 
-	public Iterator getKeys() {
+	public Set getKeys() {
 		return preMacroContext.getKeys();
 	}
 
@@ -99,7 +100,7 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		if (null != macroAttributes) {
 			// save any specified attribute values
 			for (java.util.Iterator i=macroAttributes.iterator(); i.hasNext(); ) {
-				MacroInstanceAttribute attribute = (MacroInstanceAttribute) i.next();
+				ElementAttribute attribute = (ElementAttribute) i.next();
 				Element val = attribute.getValue();
 				if (null != val) {
 					additionalContextEntries.put(attribute.getName(), val.objectValue(context));

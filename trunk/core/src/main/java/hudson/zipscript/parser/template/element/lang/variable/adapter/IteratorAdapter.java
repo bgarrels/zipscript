@@ -47,4 +47,9 @@ public class IteratorAdapter implements SequenceAdapter {
 			throws ClassCastException {
 		throw new UnsupportedOperationException();
 	}
+
+	public boolean contains(Object obj, Object sequence)
+			throws ClassCastException {
+		throw new UnsupportedOperationException();
+	}
 }

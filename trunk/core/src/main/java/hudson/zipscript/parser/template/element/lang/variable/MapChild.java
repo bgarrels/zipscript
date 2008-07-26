@@ -110,4 +110,12 @@ public class MapChild implements VariableChild {
 		sb.append(']');
 		return sb.toString();
 	}
+
+	public Element getKeyElement() {
+		return keyElement;
+	}
+
+	public void setKeyElement(Element keyElement) {
+		this.keyElement = keyElement;
+	}
 }

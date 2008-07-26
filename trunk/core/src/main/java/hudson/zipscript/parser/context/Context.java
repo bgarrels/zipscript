@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
-import java.util.Iterator;
+import java.util.Set;
+
 
 public interface Context {
 
@@ -26,5 +27,5 @@ public interface Context {
 	/**
 	 * Return all keys for this scoped context
 	 */
-	public Iterator getKeys ();
+	public Set getKeys ();
 }
