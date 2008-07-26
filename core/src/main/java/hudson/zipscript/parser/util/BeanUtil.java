@@ -55,7 +55,16 @@ public class BeanUtil {
 
     private static boolean doesParameterFit (Class obj, Class type) {
     	if (null == obj) return true;
-    	else if (obj.equals(type)) return true;
+    	if (type.isPrimitive()) {
+    		if (type.toString().equals("short")) type = Short.class;
+    		else if (type.toString().equals("int")) type = Integer.class;
+    		else if (type.toString().equals("long")) type = Long.class;
+    		else if (type.toString().equals("float")) type = Float.class;
+    		else if (type.toString().equals("double")) type = Double.class;
+    		else if (type.toString().equals("char")) type = Character.class;
+    		else if (type.toString().equals("boolean")) type = Boolean.class;
+    	}
+    	if (obj.equals(type)) return true;
     	else {
     		// check super classes
     		Class parent = obj.getSuperclass();
