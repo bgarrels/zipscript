@@ -70,6 +70,13 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("false", merge("myList?contains('foo')", context));
 		Object obj = ZipEngine.createInstance().getEvaluator("myList?length").objectValue(context);
 		assertEquals(new Integer(3), obj);
+		
+		merge("myList?addFirst('joe')", context);
+		assertEquals("joe", merge("myList?first", context));
+		merge("myList?addLast('eoj')", context);
+		assertEquals("eoj", merge("myList?last", context));
+		obj = ZipEngine.createInstance().getEvaluator("myList?length").objectValue(context);
+		assertEquals(new Integer(5), obj);
 	}
 
 	public void testMapMethods () throws Exception {
@@ -112,7 +119,9 @@ public class SpecialMethodsTestCase extends TestCase {
 
 	private String merge (String contents, Object context)
 	throws ParseException, ExecutionException, IOException {
-		return ZipEngine.createInstance().getEvaluator(
-				contents).objectValue(context).toString();
+		Object rtn = ZipEngine.createInstance().getEvaluator(
+				contents).objectValue(context);
+		if (null != rtn) return rtn.toString();
+		else return null;
 	}
 }
