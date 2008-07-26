@@ -31,6 +31,8 @@ import hudson.zipscript.parser.template.element.lang.variable.special.sequence.L
 import hudson.zipscript.parser.template.element.lang.variable.special.string.ContainsSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HTMLSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.HumpbackCaseSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.IsLowerCaseSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.string.IsUpperCaseSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.JSSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.LPadSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.LowerCaseSpecialMethod;
@@ -114,6 +116,10 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			return getStringSpecialMethod(source, new ContainsSpecialMethod(parameters));
 		else if (method.equals("split"))
 			return getStringSpecialMethod(source, new SplitSpecialMethod(parameters));
+		else if (method.equals("isLowerCase"))
+			return getStringSpecialMethod(null, IsLowerCaseSpecialMethod.INSTANCE);
+		else if (method.equals("isUpperCase"))
+			return getStringSpecialMethod(null, IsUpperCaseSpecialMethod.INSTANCE);
 
 		else if (source instanceof Number) {
 			if (method.equals("round"))

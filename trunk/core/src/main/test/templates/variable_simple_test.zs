@@ -1,5 +1,5 @@
 == Formal Variables ==
-${myObject.testMap['anotherObj'].list1[0].getText().length()}
+${myObject.testMap['anotherObj'].list1[0].getText().length}
 ${myObject.testMap['anotherObj'].list1[0].getText()}
 ${myObject.testMap['anotherObj'].list1[0].Text}
 ${myObject.testMap['anotherObj'].list1[0].text}
@@ -43,6 +43,9 @@ ${mySequence?length}
 ${mySequence[0]}
 
 == Iterate through context keys ==
-[#list Vars?keys as key]
-	Context Key: ${key} - ${Vars[key]}
-[/#list]
+[#foreach key in Vars?keys]
+	[## "Now" and "UniqueId" will always be different which would break our unit test ##]
+	[#if key not in {"Now", "UniqueId"}]
+		Context Key: ${key} - ${Vars[key]}
+	[/#if]
+[/#foreach]
