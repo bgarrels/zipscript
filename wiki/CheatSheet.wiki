@@ -6,6 +6,8 @@
   * The default resource loading behavior is shown below can be modified: [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/bk02ch02.html click here for details]
   * The [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/javadoc/hudson/zipscript/ZipEngine.html ZipEngine] is used to retrieve templates or evaluators
 
+If you're looking for code examples: CodeExamples
+
 =Zipscript Usages=
 
 ==Evaluating config entries as booleans==
