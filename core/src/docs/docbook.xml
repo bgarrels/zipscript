@@ -572,7 +572,7 @@ ${driver.children[0].firstName} will print "Bill"
 				<note>
 					For more examples, check out:
 					<itemizedlist>
-						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#73">DirectiveTestCase</ulink></listitem>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#108">DirectiveTestCase</ulink></listitem>
 						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_test.zs">if_test.zs</ulink></listitem>
 						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_result.txt">if_result.txt</ulink></listitem>
 					</itemizedlist>
@@ -633,7 +633,7 @@ c.F (2.2) - false - false
 				<note>
 					For more examples, check out:
 					<itemizedlist>
-						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#43">DirectiveTestCase</ulink></listitem>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#38">DirectiveTestCase</ulink></listitem>
 						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_test.zs">foreach_test.zs</ulink></listitem>
 						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_result.txt">foreach_result.txt</ulink></listitem>
 						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_result.txt">foreach_result_iter.txt</ulink></listitem>
@@ -688,7 +688,7 @@ Will print
 				<note>
 					For more examples, check out:
 					<itemizedlist>
-						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#67">DirectiveTestCase</ulink></listitem>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#80">DirectiveTestCase</ulink></listitem>
 						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_test.zs">while_test.zs</ulink></listitem>
 						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_result.txt">while_result.txt</ulink></listitem>
 					</itemizedlist>
@@ -732,7 +732,7 @@ Will print
 				<note>
 					For more examples, check out:
 					<itemizedlist>
-						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#99">DirectiveTestCase</ulink></listitem>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#134">DirectiveTestCase</ulink></listitem>
 						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_test.zs">set_test.zs</ulink></listitem>
 						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_result.txt">set_result.txt</ulink></listitem>
 					</itemizedlist>
@@ -791,6 +791,14 @@ Ex:
 [@foo.someMacro] ... [/@foo.someMacro]
 </programlisting>
 				</para>
+				<note>
+					For more examples, check out:
+					<itemizedlist>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#94">DirectiveTestCase</ulink></listitem>
+						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_test.zs">import_test.zs</ulink></listitem>
+						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_result.txt">import_result.txt</ulink></listitem>
+					</itemizedlist>
+				</note>
 			</section>
 			<section id="directives_include">
 				<title>include</title>
@@ -810,6 +818,14 @@ Ex:
 [#include "includes/myTemplate.zs"/]
 </programlisting>
 				</para>
+				<note>
+					For more examples, check out:
+					<itemizedlist>
+						<listitem>Unit Test: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#86">DirectiveTestCase</ulink></listitem>
+						<listitem>Script reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_test.zs">include_test.zs</ulink></listitem>
+						<listitem>Output reference: <ulink url="http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_result.txt">include_result.txt</ulink></listitem>
+					</itemizedlist>
+				</note>
 			</section>
 			<section id="directives_escape">
 				<title>escape, noescape</title>
