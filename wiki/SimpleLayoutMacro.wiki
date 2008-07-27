@@ -7,17 +7,17 @@ _Note: this following template code references a macro demonstrated at the botto
 {{{
 [@layout.simple title="My Page Title"]
 
-    [@style]
+    [%style]
         body {
             background-color: blue;
         }
-    [/@style]
+    [/%style]
 
-    [@script]
+    [%script]
         function doSomething () {
             return true;
         }
-    [/@script]
+    [/%script]
 
     This is the body content... blah blah blah
     <script language="java">
@@ -66,7 +66,7 @@ _Note: whitespace has been changed for readability purposes_
 
 ==Simple HTML Layout Macro Definition Example (layout.simple)==
 {{{
-[#macro simple title="Default Title" script[src] style[src media] onLoad]
+[#macro simple | script[src=null] style[src=null media=null] title="Default Title" onLoad=null]
 <html>
 	<head>
 		<title>${title}</title>
