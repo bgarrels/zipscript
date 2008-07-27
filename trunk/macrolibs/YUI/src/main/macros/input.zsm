@@ -1,11 +1,11 @@
 [#macro autoComplete | entry[key value] name type="array" id=name value="" size=null maxLength=null style=null class=null preHighlightClassName="yui-ac-prehighlight" typeAhead=true useShadow=true minQueryLength=0]
 [#initialize]
 	[#if Global.cssIncludes!=null]
-	${Global.cssIncludes.put("autocomplete/assets/skins/sam/autocomplete.css", "YUI")?void}
+		[#set Global.cssIncludes["autocomplete/assets/skins/sam/autocomplete.css"]="YUI"/]
 	[/#if]
 	[#if Global.scriptIncludes!=null]
-	${Global.scriptIncludes.put("yahoo-dom-event/yahoo-dom-event.js", "YUI")?void}
-	${Global.scriptIncludes.put("autocomplete/autocomplete-min.js", "YUI")?void}
+		[#set Global.scriptIncludes["yahoo-dom-event/yahoo-dom-event.js"]="YUI"/]
+		[#set Global.scriptIncludes["autocomplete/autocomplete-min.js"]="YUI"/]
 	[/#if]
 [/#initialize]
 	<div id="${id}AutoComplete">
