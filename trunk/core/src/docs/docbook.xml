@@ -61,7 +61,7 @@
 				</para>
 			</section>
 			<section id="userGuideDataModel">
-				<title>Data Model</title>
+				<title>Data Model &amp; Variable Types</title>
 				<para>
 					Assume the following data structure:
 <programlisting>
@@ -104,12 +104,12 @@
 				<para>
 					<itemizedlist>
 						<listitem>Directory variables (ex: myCar, driver) are called <emphasis>hashes</emphasis></listitem>
-						<listitem>Single-vlue variables (ex: model under myCar) are called <emphasis>scalars</emphasis></listitem>
-						<listitem>List variables (ex: children under driver) are called <emphasis>sequences</emphasis></listitem>
+						<listitem>Collection variables (ex: children under driver) are called <emphasis>sequences</emphasis></listitem>
+						<listitem>Single-value variables (ex: model under myCar) are called <emphasis>scalars</emphasis></listitem>
 					</itemizedlist>
 				</para>
 				<para>
-					Variables can be referenced using the syntax <code>${...}</code>
+					Variables can be referenced using the formal syntax <code>${...}</code> or, in most cases, the informal syntax of <code>$...</code>.
 					To reference any variable in the template the path from the root must be specified.  Each path segment
 					must be separated by a dot.  Sequences allow for additional functionality.  Because they contain a list of
 					items, indexes can be references to retrieved individual sequence elements.  The index is referenced as [0-based number].
@@ -124,12 +124,13 @@ ${driver.children[0].firstName} will print "Bill"
 </programlisting>
 				</para>
 				<para>
-					Scalars can be sub-divided into different groups with different special methods and formatting functions
+					Single-value can be subdivided into different groups with different special methods and formatting functions
 					<itemizedlist>
-						<listitem><emphasis>text</emphasis>: an arbitrary sequence of characters</listitem>
-						<listitem><emphasis>number</emphasis>: any type of number</listitem>
+						<listitem><emphasis>null</emphasis>: no value (<code>null</code>)</listitem>
+						<listitem><emphasis>text</emphasis>: an arbitrary sequence of characters (<code>"foo"</code>)</listitem>
+						<listitem><emphasis>number</emphasis>: any type of number (<code>123</code>)</listitem>
 						<listitem><emphasis>date</emphasis>: any type of date</listitem>
-						<listitem><emphasis>boolean</emphasis>: a true/false value</listitem>
+						<listitem><emphasis>boolean</emphasis>: a true or false value (<code>true/false</code>)</listitem>
 					</itemizedlist>
 				</para>
 			</section>
@@ -138,11 +139,11 @@ ${driver.children[0].firstName} will print "Bill"
 				<para>
 					There are 5 syntax statements that can be used within a template which will be described in detail later in this guide:
 					<itemizedlist>
-						<listitem><emphasis>variable</emphasis>: Any variable reference</listitem>
-						<listitem><emphasis>comment</emphasis>: A ZipScript comment which would not be printed out in merged results</listitem>
-						<listitem><emphasis>directives</emphasis>: ZipScript instructions which allow conditional evaluation, looping, etc...</listitem>
-						<listitem><emphasis>macros</emphasis>: A nested or flat pre-defined bit of ZipScript language</listitem>
-						<listitem><emphasis>template defined macro parameters</emphasis>: Similar in structure to a macro definition but represents macro input</listitem>
+						<listitem><emphasis>Variable Interpolation</emphasis>: Any variable reference (<code>${...} or $...</code>)</listitem>
+						<listitem><emphasis>Comment</emphasis>: A ZipScript comment which would not be printed out in merged results (<code>[## comment ##]</code>)</listitem>
+						<listitem><emphasis>Directives</emphasis>: ZipScript instructions which allow conditional evaluation, looping, etc... (<code>[#if foo] ... [/#if]</code>)</listitem>
+						<listitem><emphasis>Macros</emphasis>: A nested or flat bit of ZipScript script that can be referenced (<code>[@myMacro | ...] ... [/@myMacro]</code>)</listitem>
+						<listitem><emphasis>Template-defined Macro Parameters</emphasis>: (<code>[%myParam ...] ... [/%myParam]</code>)</listitem>
 					</itemizedlist>
 				</para>
 			</section>
@@ -219,7 +220,7 @@ ${driver.children[0].firstName} will print "Bill"
 						<indexterm><primary>variables</primary><secondary>Vars</secondary></indexterm>
 						<varlistentry><term>Now</term><listitem>
 							The current date/time
-							
+
 							Usage: <code>${Now} or ${Now|short}</code>	
 						</listitem></varlistentry>
 						<indexterm><primary>variables</primary><secondary>UniqueId</secondary></indexterm>
@@ -257,8 +258,8 @@ ${driver.children[0].firstName} will print "Bill"
 					Variable references can be escaped by using the '\' prefix.  Escaping is only required if the character is next
 					to a variable or directive.  For example, assume the <link linkend="context">context</link> value <emphasis>foo</emphasis> is equal to "ABC"
 					<itemizedlist>
-						<listitem>foo\test${foo} will print <code>footest${foo}</code></listitem>
-						<listitem>foo\\test${foo} will print <code>foo\testABC</code></listitem>
+						<listitem>foo\test${foo} will print <code>foo\testABC</code></listitem>
+						<listitem>foo\\test${foo} will print <code>foo\\testABC</code></listitem>
 						<listitem>test\${foo} will print <code>test${foo}</code></listitem>
 						<listitem>test\\${foo} will print <code>test\ABC</code></listitem>
 						<listitem>test\\\${foo} will print <code>test\${foo}</code></listitem> 
@@ -377,8 +378,12 @@ ${driver.children[0].firstName} will print "Bill"
 							<listitem>${myString?lowerFirst} will print <code>hello world!</code></listitem>
 							<indexterm><primary>strings</primary><secondary>?lowerCase</secondary></indexterm>
 							<listitem>${myString?lowerCase} will print <code>hello world!</code></listitem>
+							<indexterm><primary>strings</primary><secondary>?isLowerCase</secondary></indexterm>
+							<listitem>${"foo"?isLowerCase} will print <code>true</code></listitem>
 							<indexterm><primary>strings</primary><secondary>?upperCase</secondary></indexterm>
 							<listitem>${myString?upperCase} will print <code>HELLO WORLD!</code></listitem>
+							<indexterm><primary>strings</primary><secondary>?isUpperCase</secondary></indexterm>
+							<listitem>${"FOO"?isUpperCase} will print <code>true</code></listitem>
 							<indexterm><primary>strings</primary><secondary>?humpbackCase</secondary></indexterm>
 							<listitem>${myString?humpbackCase} will print <code>helloWorld</code></listitem>
 							<indexterm><primary>strings</primary><secondary>?leftPad</secondary></indexterm>
@@ -449,8 +454,12 @@ ${driver.children[0].firstName} will print "Bill"
 							<listitem>${mySeq?contains("abc")} will print <code>true</code> (or evaluate to true)</listitem>
 							<indexterm><primary>sequences</primary><secondary>?first</secondary></indexterm>
 							<listitem>${mySeq?first} will print <code>abc</code></listitem>
+							<indexterm><primary>sequences</primary><secondary>?addFirst</secondary></indexterm>
+							<listitem>${mySeq?addFirst("foo")} will not print anything but will add "foo" as the first element in mySeq</listitem>
 							<indexterm><primary>sequences</primary><secondary>?last</secondary></indexterm>
 							<listitem>${mySeq?last} will print <code>ghi</code></listitem>
+							<indexterm><primary>sequences</primary><secondary>?addLast</secondary></indexterm>
+							<listitem>${mySeq?addLast("foo")} will not print anything but will add "foo" as the last element in mySeq</listitem>
 						</itemizedlist>
 					</para>
 				</section>
@@ -572,15 +581,25 @@ ${driver.children[0].firstName} will print "Bill"
 			<section id="directives_foreach">
 				<title>foreach</title>
 				<indexterm><primary>directives</primary><secondary>foreach</secondary></indexterm>
+				<indexterm><primary>directives</primary><secondary>continue</secondary></indexterm>
+				<indexterm><primary>directives</primary><secondary>break</secondary></indexterm>
 				Syntax:
 <programlisting>
 [#foreach entry in myList]
 	...
+	[#if shouldBreak]
+		[#break/]
+	[/#if]
+	[#if shouldContinue]
+		[#continue/]
+	[/#if]
 [/#foreach]
 </programlisting>
 				<para>
 					You can use the foreach directive to process a section of template for each variable contained within a sequence.
 					Variables are added to the context which is scoped to allow access to the currently entry and determine the looping state.
+					The <emphasis>continue</emphasis> directive will stop processing of the current item and continue to the next one.  The
+					<emphasis>break</emphasis> directive will stop processing of the foreach directive altogether.
 					<variablelist>
 						<varlistentry><term>varName</term><listitem>Whatever variable name was used in the foreach tag will be the context key to access the current entry</listitem></varlistentry>
 						<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
@@ -625,10 +644,18 @@ c.F (2.2) - false - false
 				<title>while</title>
 				<para>
 					<indexterm><primary>directives</primary><secondary>while</secondary></indexterm>
+					<indexterm><primary>directives</primary><secondary>continue</secondary></indexterm>
+					<indexterm><primary>directives</primary><secondary>break</secondary></indexterm>
 					Syntax:
 <emphasis>
 [#while expression]
-
+	...
+	[#if shouldBreak]
+		[#break/]
+	[/#if]
+	[#if shouldContinue]
+		[#continue/]
+	[/#if]
 [/#while]
 </emphasis>
 					<variablelist>
@@ -636,7 +663,8 @@ c.F (2.2) - false - false
 					</variablelist>
 				</para>
 				<para>
-					The while directive can be used to loop until a condition is met.
+					The while directive can be used to loop until a condition is met.  The <emphasis>continue</emphasis> directive will stop processing of the current
+					item and continue to the next one.  The <emphasis>break</emphasis> directive will stop processing of the foreach directive altogether.
 					Variables are added to the context which is scoped to allow access to the currently entry and determine the looping state.
 					<variablelist>
 						<varlistentry><term>i</term><listitem>The current loop index</listitem></varlistentry>
@@ -692,6 +720,15 @@ Will print
 [#set myVar = {1,2,3}/] - will set myVar to the <link linkend="context">context</link> variable with a list of element containing 1, 2, and 3
 </programlisting>
 				</para>
+				<para>
+					Set can also be used to create a new hash and set values in an existing hash:
+<programlisting>
+[#set myHash = [] /] - create a new hash and set it as the myHash context variable
+[#set myHash = [abc="foo" def="bar"] /] - create a new hash (initialized with entry abc="foo" and entry def="bar") and set it as the myHash context variable
+[#set myHash[ghi] = "baz" /] - use the key of "ghi" to set the value of "baz" on the hash retrieved from the context as "myHash"
+[#set mySequence[0] = "foo" /] - set the first element in the sequence (0 index) retrieved from the context as "mySequence"
+</programlisting>
+				</para>
 				<note>
 					For more examples, check out:
 					<itemizedlist>
@@ -732,6 +769,46 @@ Will print
 					will be accessable to the called directive.  Additionally, new parameters can be added using '|' after the call statement.  In the example above,
 					'bar' is the name of macro to call and 'this' is the reference to the current macro, 'foo'.  Other parameters that could be used instead of 'this'
 					are template-defined parameters used with the macro reference.
+				</para>
+			</section>
+			<section id="directives_import">
+				<title>import</title>
+				<indexterm><primary>directives</primary><secondary>import</secondary></indexterm>
+				<para>
+					Syntax:
+<programlisting>
+[#import importPath as macroNamespace/]
+</programlisting>
+					<itemizedlist>
+						<listitem>importPath should resolve to a string that the macro resource loader will resolve when loading the macro library.</listitem>
+						<listitem>macroNamespace should be the text of the namespace that will be used for all macros referenced from importPath.</listitem>
+					</itemizedlist>
+					The import directive will allow access to a macro library found in the referenced importPath directive parameter.
+Ex:
+<programlisting>
+[#import "macros/myMacroLib.zsm" as foo/]
+
+[@foo.someMacro] ... [/@foo.someMacro]
+</programlisting>
+				</para>
+			</section>
+			<section id="directives_include">
+				<title>include</title>
+				<indexterm><primary>directives</primary><secondary>include</secondary></indexterm>
+				<para>
+					Syntax:
+<programlisting>
+[#include includePath/]
+</programlisting>
+					<itemizedlist>
+						<listitem>includePath should resolve to a string that the include resource loader will resolve when loading the template contents.</listitem>
+					</itemizedlist>
+					The include directive will parse a template reference by the include parameter and all contents will be inserted into the template in the location
+					of the include directive.
+Ex:
+<programlisting>
+[#include "includes/myTemplate.zs"/]
+</programlisting>
 				</para>
 			</section>
 			<section id="directives_escape">
@@ -784,7 +861,7 @@ Will print
 			<section id="macros_overview">
 				<title>Overview</title>
 				<para>
-					Macros are ZipScript code that can be referenced in templates using a directive-like syntax.  Macros are defined using the <code>[#macro macroName parameters]</code>
+					Macros are ZipScript code that can be referenced in templates using a directive-like syntax.  Macros are defined using the <code>[#macro macroName | parameters]</code>
 					syntax and executed using the <code>[@macroName parameters] ... [/@macroName]</code> syntax.
 				</para>
 				<para>
@@ -792,25 +869,25 @@ Will print
 					to have a body.  Macros can contain interpolations, plain text, comments, other macros, and template defined parameters.
 				</para>
 				<para>
-					All macro definitions have the ability to accept parameters.  All required parameters must be defined before (leftmost) all optional parameters.
+					All macro definitions have the ability to accept parameters.  Parameters can either be passed or defined within the macro reference (known as a template-defined parameter).
+					All required parameters must be defined before (leftmost) all optional parameters.
 					<itemizedlist>
-						<listitem>Required parameters must be prefixed with *</listitem>
+						<listitem>If macro parameters are defined, the '|' character should be leftmost of all parameter definitions</listitem>
+						<listitem>All template-defined parameters must be defined before all passed parameters</listitem>
+						<listitem>All required passed parameters must be defined before all defaulted passed parameters</listitem>
+						<listitem>Required parameters must have no default</listitem>
 						<listitem>Template-defined parameters must have a suffix of '[' <emphasis>template-defined parameter parameters</emphasis> ']'</listitem>
-						<listitem>Optional parameters <emphasis>can</emphasis> be assigned a default value using =</listitem>
-						<listitem>Additional parameters should be separated by a space</listitem>
-					</itemizedlist>
-					Parameters can be provided to a macro in 2 ways:
-					<itemizedlist>
-						<listitem>Standard macro parameters provided in the macro tag</listitem>
-						<listitem>Template-defined parameters provided in the macro body</listitem>
+						<listitem>Optional parameters must have the format of <code>paramName=null</code></listitem>
+						<listitem>Defaulted parameters must have the format of <code>paramName=defaultValue</code></listitem>
+						<listitem>All additional parameters should be separated by a space</listitem>
 					</itemizedlist>
 				</para>
 				Example Macro Definition:
 <programlisting>
-[#macro macroName *requiredParam1 *requiredParam2 optionalParam1 optionalParamWithDefault=true templateDefinedParameter[*tdpRequiredParam tdpOptionalParam]]
-	Required parameters will always exist ${requiredParam1} - ${requiredParam2}
-	Optional parameters with no defaults should be referenced carefully ${optionalParam1|"-SOME DEFAULT-"} or $!{optionalParam1}
-	Optional parameters with defaults will always exist ${optionalParamWithDefault}
+[#macro macroName | templateDefinedParameter[tdpRequiredParam tdpOptionalParam=null] requiredParam1 requiredParam2 optionalParam1=null optionalParamWithDefault=true]
+	- Required parameters will always exist ${requiredParam1} - ${requiredParam2}
+	- Optional parameters with no defaults should be referenced carefully ${optionalParam1|"-SOME DEFAULT-"} or $!{optionalParam1}
+	- Optional parameters with defaults will always exist ${optionalParamWithDefault}
 
 	Template-defined parameters can be accessed in a sequence
 	[#foreach entry in templateDefinedParameter]
@@ -829,8 +906,8 @@ Will print
 [@macroName requiredParam1="ABC" requiredParam2="DEF"]
 	MAIN MACRO BODY
 	
-	[@templateDefinedParameter tdpRequiredParam="TDP 1"] TDP 1 BODY [/@templateDefinedParameter]
-	[@templateDefinedParameter tdpRequiredParam="TDP 2"] TDP 2 BODY [/@templateDefinedParameter]
+	[%templateDefinedParameter tdpRequiredParam="TDP 1"] TDP 1 BODY [/%templateDefinedParameter]
+	[%templateDefinedParameter tdpRequiredParam="TDP 2"] TDP 2 BODY [/%templateDefinedParameter]
 [/@macroName]
 </programlisting>
 				Example Output:
@@ -898,18 +975,18 @@ Will print
 						See the following macro reference:
 <programlisting>
 [@tab.pane id="myTab"]
-	[@page title="Page 1" visible=true]
+	[%page title="Page 1" visible=true]
 		Page 1 contents
-	[/@page]
-	[@page title="Page 2"]
+	[/%page]
+	[%page title="Page 2"]
 		Page 2 contents
-	[/@page]
+	[/%page]
 [/@tab.pane]
 </programlisting>
 						Notice that even though the pane macro is in the tab namespace, the page template-defined parameters do not reference the namespace.
 						Now, see the macro definition (which would be in the tab macro library) 
 <programlisting>
-[#macro pane id *page[*title id=title?humpbackCase visible=false]]
+[#macro pane | page[title id=title?humpbackCase visible=false] id]
 	&lt;div id="${id}" class="tab"&gt;
 		[#foreach page in page]
 			&lt;div id="${page.id}" class="page" [#if visible==false]style="display: none"[/#if]"&gt;
@@ -949,7 +1026,7 @@ This is what the output would be (I've changed the spacing for readability)
 </programlisting>
 						Notice that the pane macro has not changed since the previous example.  We have just added the commonPages macro to this library.
 <programlisting>
-[#macro pane id *page[*title id=title?humpbackCase visible=false]]
+[#macro pane | page[title id=title?humpbackCase visible=false] id]
 	&lt;div id="${id}" class="tab"&gt;
 		[#foreach page in page]
 			&lt;div id="${page.id}" class="page" [#if visible==false]style="display: none"[/#if]"&gt;
@@ -961,12 +1038,12 @@ This is what the output would be (I've changed the spacing for readability)
 [/#macro]
 
 [#macro commonPages]
-	[.@page title="Page 1" visible=true]
+	[.%page title="Page 1" visible=true]
 		Page 1 contents
-	[/.@page]
-	[.@page title="Page 2"]
+	[/.%page]
+	[.%page title="Page 2"]
 		Page 2 contents
-	[/.@page]
+	[/.%page]
 [/#macro]
 </programlisting>
 And, the output is the same as before
@@ -1107,6 +1184,8 @@ Object rtn = e.objectValue(context);
 						<varlistentry><term>Boolean evaluation</term><listitem>The parameter passed with ZipEngine.getEvaluator(String) is used as the actual ZipScript expression</listitem></varlistentry>
 						<varlistentry><term>Object evaluation</term><listitem>The parameter passed with ZipEngine.getEvaluator(String) is used as the actual ZipScript expression</listitem></varlistentry>
 						<varlistentry><term>Macro library retrieval</term><listitem>Classpath resource files are retrieved</listitem></varlistentry>
+						<varlistentry><term>Include resource loading</term><listitem>Classpath resource files are retrieved</listitem></varlistentry>
+						includeResourceLoader
 					</variablelist>
 				</para>
 			</section>
@@ -1134,6 +1213,7 @@ Object rtn = e.objectValue(context);
 						<varlistentry><term>templateResourceLoader</term><listitem>Resource loading for templates</listitem></varlistentry>
 						<varlistentry><term>macroLibResourceLoader</term><listitem>Resource loading for macro libraries</listitem></varlistentry>
 						<varlistentry><term>evalResourceLoader</term><listitem>Resource loading for evaluators</listitem></varlistentry>
+						<varlistentry><term>includeResourceLoader</term><listitem>Resource loading for template includes (using [#include ...] directive)</listitem></varlistentry>
 					</variablelist>
 				</para>
 				Example:
@@ -1141,6 +1221,7 @@ Object rtn = e.objectValue(context);
 templateResourceLoader.type=file
 macroLibResourceLoader.class=my.custom.FileResourceLoader
 evalResourceLoader.type=string
+includeResourceLoader.type=classpath
 </programlisting>
 				<note>
 					Resource loaders will refer to parameters that can be supplied.  All parameters must be prefixed with the appropriate resource loader prefix.
@@ -1229,6 +1310,15 @@ zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 					<varlistentry><term>macroLibResourceLoader.type</term><listitem>'classpath', 'file', 'url', or 'string'</listitem></varlistentry>
 				</para>
 			</section>
+			<section id="resourceLoading_includes">
+				<title>Includes</title>
+				<indexterm><primary>resource</primary><secondary>includes</secondary></indexterm>
+				<para>
+					By default, the include resource loader will be the same as the template resource loader.  The following property can be used to set the macro resource loader:
+					<varlistentry><term>includeResourceLoader.class</term><listitem>classname implementing hudson.zipscript.resource.ResourceLoader</listitem></varlistentry>
+					<varlistentry><term>includeResourceLoader.type</term><listitem>'classpath', 'file', 'url', or 'string'</listitem></varlistentry>
+				</para>
+			</section>
 		</chapter>
 		<chapter id="context">
 			<title>Context</title>
@@ -1265,6 +1355,7 @@ zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 					<varlistentry><term>templateResourceLoader.*</term><listitem>Template resource loader properties</listitem></varlistentry>
 					<varlistentry><term>evalResourceLoader.*</term><listitem>Evaluator resource loader properties</listitem></varlistentry>
 					<varlistentry><term>macroLibResourceLoader.*</term><listitem>Macro library resource loader properties</listitem></varlistentry>
+					<varlistentry><term>includeResourceLoader.*</term><listitem>Includes resource loader properties</listitem></varlistentry>
 					<varlistentry><term>suppressNullErrors</term><listitem>true/false: should we suppress null errors?</listitem></varlistentry>
 					<varlistentry><term>encoding.url</term><listitem>UTF-8 encoding</listitem></varlistentry>
 					<varlistentry><term>resource.checkModification</term><listitem>true/false: should we check for resource modifications?</listitem></varlistentry>
