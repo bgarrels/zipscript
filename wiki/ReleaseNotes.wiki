@@ -1,6 +1,6 @@
 #summary List of modifications for each version of ZipScript.
 
-[http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.8.4%20label%3AModule-core&can=1 0.9.1]
+[http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.9.1%20label%3AModule-core&can=1 0.9.1]
 
 [http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.8.4%20label%3AModule-core&can=1 0.8.4]
 
