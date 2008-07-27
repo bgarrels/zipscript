@@ -1,4 +1,5 @@
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.util.IOUtil;
@@ -50,6 +51,13 @@ public class WidgetTestCase extends TestCase {
 		Map context = new HashMap();
 		String mergeTemplate = "autoComplete.zs";
 		String resultFile = "/autoComplete_result.html";
+		evalResult(mergeTemplate, resultFile, context);
+	}
+
+	public void testAccordionWidget () throws Exception {
+		Map context = new HashMap();
+		String mergeTemplate = "accordion.zs";
+		String resultFile = "/accordion_result.html";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
