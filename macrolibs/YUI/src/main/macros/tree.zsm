@@ -13,10 +13,10 @@ ${nodeId} = new YAHOO.widget.TextNode("${label?js}", ${parent}, ${isClosed!false
 [#macro view | node[] id=null]
 [#initialize]
 	[#if Global.cssIncludes!=null]
-	${Global.cssIncludes.put("treeview/assets/skins/sam/treeview.css", "YUI")?void}
+		[#set Global.cssIncludes["treeview/assets/skins/sam/treeview.css"]="YUI"/]
 	[/#if]
 	[#if Global.scriptIncludes!=null]
-	${Global.scriptIncludes.put("treeview/treeview-min.js", "YUI")?void}
+		[#set Global.scriptIncludes["treeview/treeview-min.js"]="YUI"/]
 	[/#if]
 [/#initialize]
 [#set componentId = "${id}_component"/]

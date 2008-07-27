@@ -1,11 +1,11 @@
 [#macro table | column[title key=title?humpbackCase width=null format=null selected=null] id entries rowHighlight=true]
 [#initialize]
 	[#if Global.cssIncludes!=null]
-	${Global.cssIncludes.put("datatable/assets/skins/sam/datatable.css", "YUI")?void}
+		[#set Global.cssIncludes["datatable/assets/skins/sam/datatable.css"]="YUI"/]
 	[/#if]
 	[#if Global.scriptIncludes!=null]
-	${Global.scriptIncludes.put("datasource/datasource-beta-min.js", "YUI")?void}
-	${Global.scriptIncludes.put("datatable/datatable-beta-min.js", "YUI")?void}
+		[#set Global.scriptIncludes["datasource/datasource-beta-min.js"]="YUI"/]
+		[#set Global.scriptIncludes["datatable/datatable-beta-min.js"]="YUI"/]
 	[/#if]
 [/#initialize]
 [#set dataName = "${id}_model"/]
