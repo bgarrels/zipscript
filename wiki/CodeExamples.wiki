@@ -6,11 +6,12 @@
 =A Few Variable Examples=
 {{{
    ${person.firstName}  ---------------------------  standard variable reference
-   ${person.age + 10}  ----------------------------  math can be performed inside variable references
+   ${person.age + 10}  ----------------------------  math can be performed inside 
    ${person.children[0].fullName!"No Children"}  --  variable defaults using '!'
    ${person.birthDate|short}  ---------------------  variable formatting using '|'
    ${person.firstName?upperCase}  -----------------  variable special methods using '?'
-lazy variable references
+
+informal variable references
     $person.firstName
     $person.birthDate|short
     $person.firstName?upperCase
