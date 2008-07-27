@@ -19,6 +19,10 @@ informal variable references
 
 =A Few Directive Examples=
 {{{
+[#import "macros/myMacroLib.zsw as mm/]
+
+[#include "includes/someCommonTemplate.zs"/]
+
 [#if foo > bar && abc != "def"]
    [#while i<5]
       this will print 5 times ${i} is the 0-based index
@@ -33,10 +37,10 @@ informal variable references
       [/#while]
    [/#foreach]
 [#else]
-    [@someFlatMacro abc=def ghi="jkl" mno=3/]
-    [@someNestedMacro abc=def ghi="jkl" mno=3/]
+    [@mm.someFlatMacro abc=def ghi="jkl" mno=3/]
+    [@mm.someNestedMacro abc=def ghi="jkl" mno=3/]
        This is the macro body content
-    [/@someNestedMacro]
+    [/@mm.someNestedMacro]
 [/#if]
 }}}
 
