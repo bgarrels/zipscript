@@ -24,7 +24,7 @@
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/accordion.zsm View referenced zipscript macro]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java#57 View unit test producing these results]
 
-*Data Table*
+=Data Table=
 {{{
 [@data.table id="myTable" entries=people]
 	[%column title="First Name" width=150]${entry.firstName}[/%column]
@@ -39,7 +39,7 @@
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/data.zsm View referenced zipscript macro]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java#23 View unit test producing these results]
 
-*Tab Pane*
+=Tab Pane=
 {{{
 [@tab.pane id="myTab"]
 	[%page label="Some Page" active=true]
@@ -64,7 +64,8 @@
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/macros/tab.zsm View referenced zipscript macro]
   * [http://code.google.com/p/zipscript/source/browse/trunk/macrolibs/YUI/src/main/test/WidgetTestCase.java#36 View unit test producing these results]
 
-*Tree View* _Notice the recursive functionality_
+=Tree View=
+_Notice the recursive functionality_
 {{{
 [@tree.view id="myTree"]
 	[%node id="n1" label="Label 1" href="http://www.google.com"]
