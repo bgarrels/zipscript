@@ -37,9 +37,33 @@ informal variable references
       [/#while]
    [/#foreach]
 [#else]
+
+    [## macro reference from imported library ##]
     [@mm.someFlatMacro abc=def ghi="jkl" mno=3/]
-    [@mm.someNestedMacro abc=def ghi="jkl" mno=3/]
+
+    [## macro reference from inline definition (see below) ##]
+    [@myInlineMacro myRequiredParam="something" myDefaultedParam=47]
+        [%myTemplateDefinedParam tdp1="some required parameter"]
+            template defined parameter body content
+        [/%myTemplateDefinedParameter]
        This is the macro body content
     [/@mm.someNestedMacro]
+
 [/#if]
+
+[#macro myIinlineMacro | myTemplateDefinedParam[tdp1 tdp2=true] myRequiredParam myOptionalParam=null myDefaultedParam=6]
+
+    [## access macro parameters ##]
+    ${myRequiredParam}
+    ${myOptionalParam!"Null Optional Param"}
+    ${myDefaultedParam}
+
+    [## access template-defined parameters ##]
+    [#foreach param in myTemplateDefinedParam]
+        ${param.tdp1} ${param.tdp2} ${param.body}
+    [/#foreach]
+
+    [## access macro body content ##]
+    ${body}
+[/#macro]
 }}}
