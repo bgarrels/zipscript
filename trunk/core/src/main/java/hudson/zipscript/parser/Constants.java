@@ -25,6 +25,7 @@ import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.FileResourceLoader;
 import hudson.zipscript.resource.StringResourceLoader;
 import hudson.zipscript.resource.URLResourceLoader;
+import hudson.zipscript.resource.WebInfResourceLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +60,9 @@ public class Constants {
 	public static final String UNIQUE_ID_GENERATOR_CLASS = "uniqueIdGenerator.class";
 	public static final String VARIABLE_ADAPTER_FACTORY_CLASS = "variableAdapterFactory.class";
 
+	public static final String MACROLIB_RESOURCE_LOADER_PARAMETER = "macroLibResourceLoaderParameter";
+	public static final String INCLUDE_RESOURCE_LOADER_PARAMETER = "includeResourceLoaderParameter";
+
 	public static final char NAMESPACE_SEPARATOR = '.';
 
 	public static final Map RESOURCE_LOADER_TYPES = new HashMap();
@@ -68,6 +72,8 @@ public class Constants {
 		RESOURCE_LOADER_TYPES.put("url", URLResourceLoader.class);
 		RESOURCE_LOADER_TYPES.put("URL", URLResourceLoader.class);
 		RESOURCE_LOADER_TYPES.put("string", StringResourceLoader.class);
+		RESOURCE_LOADER_TYPES.put("web-inf", WebInfResourceLoader.class);
+		RESOURCE_LOADER_TYPES.put("WEB-INF", WebInfResourceLoader.class);
 	}
 
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {

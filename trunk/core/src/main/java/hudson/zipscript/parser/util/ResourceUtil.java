@@ -26,9 +26,9 @@ public class ResourceUtil {
 	 * @throws ParseException
 	 */
 	public static TemplateResource loadTemplate (
-			String source, ParseParameters parseParameters, ResourceContainer resourceContainer)
+			String source, Object resourceLoaderParameter, ParseParameters parseParameters, ResourceContainer resourceContainer)
 	throws ParseException {
-		Resource resource = resourceContainer.getTemplateResourceLoader().getResource(source);
+		Resource resource = resourceContainer.getTemplateResourceLoader().getResource(source, resourceLoaderParameter);
 		return loadTemplate(parseParameters, resourceContainer, resource);
 	}
 
@@ -48,10 +48,10 @@ public class ResourceUtil {
 	}
 
 	public static Template loadTemplate (
-			String source, PatternMatcher[] patternMatchers, ParseParameters parseParameters, ResourceContainer resourceContainer)
+			String source, Object resourceLoaderParameter, PatternMatcher[] patternMatchers, ParseParameters parseParameters, ResourceContainer resourceContainer)
 	throws ParseException {
-		Resource resource = resourceContainer.getEvalResourceLoader().getResource(source);
-		TemplateResource tr =  loadTemplate(patternMatchers, parseParameters, resourceContainer, resource, SpecialVariableDefaultEelementFactory.INSTANCE);
+		Resource resource = resourceContainer.getEvalResourceLoader().getResource(source, resourceLoaderParameter);
+		TemplateResource tr = loadTemplate(patternMatchers, parseParameters, resourceContainer, resource, SpecialVariableDefaultEelementFactory.INSTANCE);
 		return tr.template;
 	}
 

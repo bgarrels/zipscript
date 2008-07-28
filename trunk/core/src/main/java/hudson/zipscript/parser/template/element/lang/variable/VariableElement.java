@@ -69,7 +69,8 @@ public class VariableElement extends AbstractElement implements Element {
 			if (session.isVariablePatternRecognized(pattern))
 				throw new ParseException(this, "Invalid variable reference '" + pattern + "'");
 			session.setReferencedVariable(pattern);
-			ParseParameters parameters = new ParseParameters(session.getResourceContainer(), false, true);
+			ParseParameters parameters = new ParseParameters(
+					session.getResourceContainer(), false, true);
 			ParseParameters currentParameters = session.getParameters();
 			session.setParameters(parameters);
 			java.util.List elements = ExpressionParser.getInstance().parse(

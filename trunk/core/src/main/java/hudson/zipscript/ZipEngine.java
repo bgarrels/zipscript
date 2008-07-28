@@ -141,6 +141,7 @@ public class ZipEngine {
 	 * @param plugins engine plugins
 	 */
 	private void init (Map properties, Plugin[] plugins) {
+		if (null == properties) properties = new HashMap();
 
 		// defaults
 		ResourceLoader templateResourceLoader = new ClasspathResourceLoader();
@@ -170,65 +171,63 @@ public class ZipEngine {
 			}
 		}
 
-		if (null != properties) {
-			// get the default resource loader
-			String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
-			if (null == s)
-				s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_TYPE);
-			if (null != s) {
-				try {
-					templateResourceLoader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
-							ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
-				}
-				catch (ClassCastException e) {
-					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-				}
+		// get the default resource loader
+		String s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_CLASS);
+		if (null == s)
+			s = (String) properties.get(Constants.TEMPLATE_RESOURCE_LOADER_TYPE);
+		if (null != s) {
+			try {
+				templateResourceLoader = (ResourceLoader) ClassUtil.loadResource("templateResourceLoader", properties,
+						ResourceLoader.class, ClasspathResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
 			}
-			s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
-			if (null == s)
-				s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_TYPE);
-			if (null != s) {
-				try {
-					macroLibResourceLoader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
-							ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
-				}
-				catch (ClassCastException e) {
-					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-				}
+			catch (ClassCastException e) {
+				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 			}
-			s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
-			if (null == s)
-				s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_TYPE);
-			if (null != s) {
-				try {
-					evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
-							ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
-				}
-				catch (ClassCastException e) {
-					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-				}
+		}
+		s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_CLASS);
+		if (null == s)
+			s = (String) properties.get(Constants.MACROLIB_RESOURCE_LOADER_TYPE);
+		if (null != s) {
+			try {
+				macroLibResourceLoader = (ResourceLoader) ClassUtil.loadResource("macroLibResourceLoader", properties,
+						ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
 			}
-			s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_CLASS);
-			if (null == s)
-				s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_TYPE);
-			if (null != s) {
-				try {
-					includeResourceLoader = (ResourceLoader) ClassUtil.loadResource("includeResourceLoader", properties,
-							ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
-				}
-				catch (ClassCastException e) {
-					throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
-				}
+			catch (ClassCastException e) {
+				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
 			}
+		}
+		s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_CLASS);
+		if (null == s)
+			s = (String) properties.get(Constants.EVAL_RESOURCE_LOADER_TYPE);
+		if (null != s) {
+			try {
+				evalResourceLoader = (ResourceLoader) ClassUtil.loadResource("evalResourceLoader", properties,
+						ResourceLoader.class, StringResourceLoader.class, Constants.RESOURCE_LOADER_TYPES);
+			}
+			catch (ClassCastException e) {
+				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+			}
+		}
+		s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_CLASS);
+		if (null == s)
+			s = (String) properties.get(Constants.INCLUDE_RESOURCE_LOADER_TYPE);
+		if (null != s) {
+			try {
+				includeResourceLoader = (ResourceLoader) ClassUtil.loadResource("includeResourceLoader", properties,
+						ResourceLoader.class, null, Constants.RESOURCE_LOADER_TYPES);
+			}
+			catch (ClassCastException e) {
+				throw new InitializationException("The resource loader '" + s + "' must extend hudson.zipscript.resource.ResourceLoader", e);
+			}
+		}
 
-			s = (String) properties.get(Constants.VARIABLE_ADAPTER_FACTORY_CLASS);
-			if (null != s) {
-				VariableAdapterFactory vaf = (VariableAdapterFactory) ClassUtil.loadResource("variableAdapterFactory", properties, VariableAdapterFactory.class, null, null);
-				VariableAdapterFactory[] arr = new VariableAdapterFactory[2];
-				arr[0] = variableAdapterFactory;
-				arr[1] = vaf;
-				variableAdapterFactory = new MultipleVariableAdapterFactory(arr);
-			}
+		s = (String) properties.get(Constants.VARIABLE_ADAPTER_FACTORY_CLASS);
+		if (null != s) {
+			VariableAdapterFactory vaf = (VariableAdapterFactory) ClassUtil.loadResource("variableAdapterFactory", properties, VariableAdapterFactory.class, null, null);
+			VariableAdapterFactory[] arr = new VariableAdapterFactory[2];
+			arr[0] = variableAdapterFactory;
+			arr[1] = vaf;
+			variableAdapterFactory = new MultipleVariableAdapterFactory(arr);
 		}
 
 		for (int i=0; i<OVERRIDEABLE_COMPONENTS.length; i++)
@@ -240,8 +239,11 @@ public class ZipEngine {
 							new VariableAdapterFactory[variableAdapterFactories.size()]));
 		}
 
+		MacroManager macroManager = new MacroManager();
+		macroManager.setResourceLoaderParameter(properties.get(Constants.INCLUDE_RESOURCE_LOADER_PARAMETER));
+
 		resourceContainer = new ResourceContainer(
-				this, plugins, new MacroManager(), variableAdapterFactory,
+				this, plugins, macroManager, variableAdapterFactory,
 				templateResourceLoader, includeResourceLoader, macroLibResourceLoader, evalResourceLoader,
 				(Component[]) components.toArray(new Component[components.size()]), properties);
 	}
@@ -292,10 +294,24 @@ public class ZipEngine {
 	 * @throws ParseException
 	 */
 	public Template getTemplate (String source) throws ParseException {
+		return getTemplate(source, null);
+	}
+
+	/**
+	 * Return a template used for merging static data with an object model.  This template will be cached as long
+	 * as the same instance of the ZipEngine is used for template retrieval.  The template resource loader will
+	 * be used to load the template.  This can be modified using the 'templateResourceLoader.class' init property.
+	 * @param source the template resource source path & name
+	 * @param properties any additional input that might be used by the resource loader
+	 * @return the Template
+	 * @throws ParseException
+	 */
+	public Template getTemplate (String source, Object parameter) throws ParseException {
 		try {
 			TemplateResource tr = (TemplateResource) resourceMap.get(source);
 			if (null == tr) {
-				tr = ResourceUtil.loadTemplate(source, new ParseParameters(resourceContainer, false, false), resourceContainer);
+				tr = ResourceUtil.loadTemplate(
+						source, parameter, new ParseParameters(resourceContainer, false, false), resourceContainer);
 			}
 			if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
 				// reload the resource

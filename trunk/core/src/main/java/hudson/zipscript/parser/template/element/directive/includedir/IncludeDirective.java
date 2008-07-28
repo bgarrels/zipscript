@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.directive.includedir;
 
 import hudson.zipscript.ResourceContainer;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.MapContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -75,8 +76,11 @@ public class IncludeDirective extends AbstractDirective {
 		}
 	}
 
-	private TemplateResource loadTemplateResource (String path, ResourceContainer resourceContainer) {
-		Resource r = resourceContainer.getIncludeResourceLoader().getResource(path);
+	private TemplateResource loadTemplateResource (
+			String path, ResourceContainer resourceContainer) {
+		Resource r = resourceContainer.getIncludeResourceLoader().getResource(
+				path, resourceContainer.getInitParameters().get(
+						Constants.INCLUDE_RESOURCE_LOADER_PARAMETER));
 		try {
 			return ResourceUtil.loadTemplate(parseParameters, resourceContainer, r);
 		}

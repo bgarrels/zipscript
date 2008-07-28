@@ -4,10 +4,15 @@ import hudson.zipscript.parser.exception.ExecutionException;
 
 import java.io.InputStream;
 
-public class ClasspathResourceLoader extends AbstractResourceLoader {
+import javax.servlet.ServletContext;
 
-	public Resource getResource(String path, Object parameter) {
-		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(getRealPath(path));
+public class WebInfResourceLoader extends AbstractResourceLoader {
+
+	private static final String PREFIX = "WEB-INF/";
+
+	public Resource getResource(String path, Object servletContext) {
+		InputStream is = ((ServletContext) servletContext).getResourceAsStream(
+				PREFIX + getRealPath(path));
 		if (null == is) {
 				is = ClassLoader.getSystemResourceAsStream(getRealPath(path));
 		}

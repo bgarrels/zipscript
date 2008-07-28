@@ -26,7 +26,8 @@ public class ParsingSession implements MacroProvider {
 	}
 
 	public ParsingSession clone (ParseParameters parameters) {
-		ParsingSession session = new ParsingSession(parameters);
+		ParsingSession session = new ParsingSession(
+				parameters);
 		Map m = null;
 		if (null != unknownVariablePatterns) {
 			m = new HashMap();
