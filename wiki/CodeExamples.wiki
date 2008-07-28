@@ -47,7 +47,7 @@ informal variable references
             template defined parameter body content
         [/%myTemplateDefinedParameter]
        This is the macro body content
-    [/@mm.someNestedMacro]
+    [/@myInlineMacro]
 
 [/#if]
 
