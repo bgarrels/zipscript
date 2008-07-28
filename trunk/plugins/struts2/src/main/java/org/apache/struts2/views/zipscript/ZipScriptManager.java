@@ -53,7 +53,8 @@ public class ZipScriptManager {
 
 		// is there a better way to do this?
 		LocatableProperties locatableProperties = new LocatableProperties();
-		List<ConfigurationProvider> configurationProviders = Dispatcher.getInstance().getConfigurationManager().getConfigurationProviders();
+		List<ConfigurationProvider> configurationProviders = Dispatcher.getInstance()
+				.getConfigurationManager().getConfigurationProviders();
 		for (ConfigurationProvider cp : configurationProviders) {
 			try {
 				cp.register(null, locatableProperties);

@@ -31,8 +31,9 @@ public class ZipScriptResult extends StrutsResultSupport {
 	private static final Log log = LogFactory.getLog(ZipScriptResult.class);
 
 	String defaultEncoding;
+
 	private ZipScriptManager zipScriptManager;
-    @Inject("zipScriptManager")
+    @Inject(required=false, value="zipScriptManager")
     public void setZipScriptManager(ZipScriptManager mgr) {
         this.zipScriptManager = mgr;
     }
@@ -65,7 +66,6 @@ public class ZipScriptResult extends StrutsResultSupport {
 	 */
 	public void doExecute(String finalLocation, ActionInvocation invocation)
 			throws Exception {
-
 		// get working values
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -74,6 +74,13 @@ public class ZipScriptResult extends StrutsResultSupport {
 		ServletContext servletContext = ServletActionContext
 				.getServletContext();
 		Servlet servlet = JspSupportServlet.jspSupportServlet;
+
+		if (null == zipScriptManager) {
+			zipScriptManager = (ZipScriptManager) servletContext.getAttribute(
+					ZipScriptManager.class.getName());
+			zipScriptManager = new ZipScriptManager();
+			servletContext.setAttribute(ZipScriptManager.class.getName(), zipScriptManager);
+		}
 
 		ZipEngine zipEngine = zipScriptManager.getZipEngine(servletContext);
 
