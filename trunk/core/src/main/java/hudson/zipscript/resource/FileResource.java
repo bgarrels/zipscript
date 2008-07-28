@@ -10,6 +10,7 @@ import java.io.InputStream;
 public class FileResource extends AbstractResource {
 
 	File file;
+	long lastModified;
 
 	public FileResource (File file) {
 		this.file = file;
@@ -17,6 +18,7 @@ public class FileResource extends AbstractResource {
 
 	public InputStream getInputStream() {
 		try {
+			lastModified = file.lastModified();
 			return new FileInputStream(file);
 		}
 		catch (FileNotFoundException e) {
@@ -24,7 +26,7 @@ public class FileResource extends AbstractResource {
 		}
 	}
 
-	public boolean hasBeenModifiedSince(long currentMilis) {
-		return (file.lastModified() > currentMilis);
+	public boolean hasBeenModified() {
+		return (file.lastModified() > lastModified);
 	}
 }

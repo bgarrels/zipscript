@@ -1,5 +1,6 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -197,5 +198,18 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 	private SpecialMethod getStringSpecialMethod (Object source, SpecialMethod specialMethod) {
 		if (source instanceof String) return specialMethod;
 		else return new StringSpecialMethod(specialMethod);
+	}
+
+	public String getDefaultGetterMethod(Object obj) {
+		return "get";
+	}
+
+	private static String[] reservedContextAttributes = new String[] {
+		Constants.GLOBAL,
+		Constants.RESOURCE,
+		Constants.UNIQUE_ID
+	};
+	public String[] getReservedContextAttributes() {
+		return reservedContextAttributes;
 	}
 }

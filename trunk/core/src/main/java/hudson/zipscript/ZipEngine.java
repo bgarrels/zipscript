@@ -151,7 +151,6 @@ public class ZipEngine {
 
 		List variableAdapterFactories = new ArrayList();
 		VariableAdapterFactory variableAdapterFactory = new StandardVariableAdapterFactory();
-		variableAdapterFactories.add(variableAdapterFactory);
 		List components = new ArrayList();
 		for (int i=0; i<NON_OVERRIDEABLE_COMPONENTS.length; i++)
 			components.add(NON_OVERRIDEABLE_COMPONENTS[i]);
@@ -233,7 +232,8 @@ public class ZipEngine {
 		for (int i=0; i<OVERRIDEABLE_COMPONENTS.length; i++)
 			components.add(OVERRIDEABLE_COMPONENTS[i]);
 
-		if (variableAdapterFactories.size() > 1) {
+		if (variableAdapterFactories.size() > 0) {
+			variableAdapterFactories.add(variableAdapterFactory);
 			variableAdapterFactory = new MultipleVariableAdapterFactory(
 					(VariableAdapterFactory[]) variableAdapterFactories.toArray(
 							new VariableAdapterFactory[variableAdapterFactories.size()]));
@@ -313,11 +313,12 @@ public class ZipEngine {
 				tr = ResourceUtil.loadTemplate(
 						source, parameter, new ParseParameters(resourceContainer, false, false), resourceContainer);
 			}
-			if (tr.resource.hasBeenModifiedSince(tr.lastModified)) {
+			if (tr.resource.hasBeenModified()) {
 				// reload the resource
 				tr = ResourceUtil.loadTemplate(new ParseParameters(resourceContainer, false, false), resourceContainer, tr.resource);
 			}
 			tr.template.setResourceContainer(resourceContainer);
+			resourceMap.put(source, tr);
 			return tr.template;
 		}
 		catch (ParseException e) {
@@ -345,5 +346,37 @@ public class ZipEngine {
 			e.setResource(contents);
 			throw e;
 		}
+	}
+
+	/**
+	 * Set the resource loader to retrieve templates
+	 * @param resourceLoader
+	 */
+	public void setTemplateResourceLoader (ResourceLoader resourceLoader) {
+		resourceContainer.setTemplateResourceLoader(resourceLoader);
+	}
+
+	/**
+	 * Set the resource loader to retrieve include templates
+	 * @param resourceLoader
+	 */
+	public void setIncludeResourceLoader (ResourceLoader resourceLoader) {
+		resourceContainer.setIncludeResourceLoader(resourceLoader);
+	}
+
+	/**
+	 * Set the resource loader to retrieve include templates
+	 * @param resourceLoader
+	 */
+	public void setMacroLibResourceLoader (ResourceLoader resourceLoader) {
+		resourceContainer.setMacroLibResourceLoader(resourceLoader);
+	}
+
+	/**
+	 * Set the resource loader to retrieve evaluators
+	 * @param resourceLoader
+	 */
+	public void setEvalResourceLoader (ResourceLoader resourceLoader) {
+		resourceContainer.setEvalResourceLoader(resourceLoader);
 	}
 }

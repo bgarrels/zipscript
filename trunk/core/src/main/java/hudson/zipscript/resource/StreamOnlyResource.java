@@ -14,7 +14,7 @@ public class StreamOnlyResource extends AbstractResource {
 		return is;
 	}
 
-	public boolean hasBeenModifiedSince(long currentMilis) {
+	public boolean hasBeenModified() {
 		return false;
 	}
 }

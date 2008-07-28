@@ -79,7 +79,9 @@ public class ResourceUtil {
 					contents, patternMatchers, defaultElementFactory,
 					new ParsingSession(parseParameters), 0);
 		}
+		TemplateImpl template = new TemplateImpl(pr.getElements(), pr.getParsingSession(), pr);
+		template.setResourceContainer(resourceContainer);
 		return new TemplateResource(
-				new TemplateImpl(pr.getElements(), pr.getParsingSession(), pr), resource);
+				template, resource);
 	}
 }

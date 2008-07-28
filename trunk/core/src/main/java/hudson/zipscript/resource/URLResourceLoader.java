@@ -7,6 +7,14 @@ import java.net.URL;
 
 public class URLResourceLoader extends AbstractResourceLoader {
 
+	public URLResourceLoader () {
+		super();
+	}
+
+	public URLResourceLoader (String pathPrefix) {
+		super (pathPrefix);
+	}
+
 	public Resource getResource(String path, Object parameter) {
 		try {
 			return new URLResource(new URL(getRealPath(path)));

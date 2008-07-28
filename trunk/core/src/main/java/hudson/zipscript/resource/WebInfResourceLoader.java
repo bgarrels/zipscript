@@ -2,23 +2,42 @@ package hudson.zipscript.resource;
 
 import hudson.zipscript.parser.exception.ExecutionException;
 
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
 public class WebInfResourceLoader extends AbstractResourceLoader {
 
-	private static final String PREFIX = "WEB-INF/";
+	private static final String PREFIX = "/WEB-INF/";
+	private static final String ALT_PREFIX = "WEB-INF/";
+
+	public WebInfResourceLoader () {
+		super();
+	}
+
+	public WebInfResourceLoader (String pathPrefix) {
+		super (pathPrefix);
+	}
 
 	public Resource getResource(String path, Object servletContext) {
-		InputStream is = ((ServletContext) servletContext).getResourceAsStream(
-				PREFIX + getRealPath(path));
-		if (null == is) {
-				is = ClassLoader.getSystemResourceAsStream(getRealPath(path));
+		try {
+			URL url = ((ServletContext) servletContext).getResource(
+					PREFIX + getRealPath(path));
+			if (null == url) {
+				try {
+					url = ((ServletContext) servletContext).getResource(
+							ALT_PREFIX + getRealPath(path));
+				}
+				catch (MalformedURLException e) {}
+			}
+			if (null == url) {
+				throw new ExecutionException("Invalid servlet resource '" + PREFIX + getRealPath(path), null);
+			}
+			return new URLResource(url);
 		}
-		if (null == is) {
-			throw new ExecutionException("Invalid classpath resource '" + getRealPath(path), null);
+		catch (Exception e) {
+			throw new ExecutionException("Invalid resource path '" + PREFIX + getRealPath(path) + "'", null, e);
 		}
-		return new StreamOnlyResource(is);
 	}
 }

@@ -1,5 +1,8 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
@@ -60,5 +63,28 @@ public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 			if (null != specialMethod) return specialMethod;
 		}
 		return null;
+	}
+
+	public String getDefaultGetterMethod (Object obj) {
+		String getterMethod = null;
+		for (int i=0; i<factories.length; i++) {
+			getterMethod = factories[i].getDefaultGetterMethod(obj);
+			if (null != getterMethod) return getterMethod;
+		}
+		return null;
+	}
+	private String[] reservedContextAttributes;
+	public synchronized String[] getReservedContextAttributes() {
+		if (null == reservedContextAttributes) {
+			List l = new ArrayList();
+			for (int i=0; i<factories.length; i++) {
+				String[] sArr = factories[i].getReservedContextAttributes();
+				if (null != sArr && sArr.length > 0)
+					for (int j=0; j<sArr.length; j++)
+						l.add(sArr[j]);
+			}
+			reservedContextAttributes = (String[]) l.toArray(new String[l.size()]);
+		}
+		return reservedContextAttributes;
 	}
 }
