@@ -69,4 +69,4 @@ informal variable references
 }}}
 
 = Macro Libraries =
-See Yahoo! UI macros [myInlineMacro]
+See Yahoo! UI macros [YUIMacros]
