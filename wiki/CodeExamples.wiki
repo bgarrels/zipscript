@@ -67,3 +67,6 @@ informal variable references
     ${body}
 [/#macro]
 }}}
+
+= Macro Libraries =
+See Yahoo! UI macros [myInlineMacro]
