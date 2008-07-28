@@ -10,7 +10,8 @@ public class ParseParameters {
 	private ResourceContainer resourceContainer;
 
 	public ParseParameters (
-			ResourceContainer resourceContainer, boolean cleanWhitespace, boolean trim) {
+			ResourceContainer resourceContainer,
+			boolean cleanWhitespace, boolean trim) {
 		this.cleanWhitespace = cleanWhitespace;
 		this.trim = trim;
 		this.resourceContainer = resourceContainer;

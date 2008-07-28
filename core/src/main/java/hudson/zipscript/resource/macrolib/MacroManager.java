@@ -22,13 +22,14 @@ public class MacroManager {
 
 	private Map macroLibraries = new HashMap();
 	private ResourceContainer resourceContainer;
+	private Object resourceLoaderParameter;
 
 	public void addMacroLibrary (
 			String namespace, String resourcePath, ResourceLoader resourceLoader,
 			VariableAdapterFactory variableAdapterFactory)
 	throws ParseException {
 		if (null == macroLibraries) macroLibraries = new HashMap();
-		Resource resource = resourceLoader.getResource(resourcePath);
+		Resource resource = resourceLoader.getResource(resourcePath, resourceLoaderParameter);
 		String contents = IOUtil.toString(resource.getInputStream());
 		ParsingResult pr = ExpressionParser.getInstance().parse(
 				contents, resourceContainer.getComponents(),
@@ -59,7 +60,8 @@ public class MacroManager {
 				if (null == lib) {
 					// load the macro library
 					try {
-						addMacroLibrary(path, path, resourceContainer.getMacroLibResourceLoader(), resourceContainer.getVariableAdapterFactory());
+						addMacroLibrary(path, path, resourceContainer.getMacroLibResourceLoader(),
+								resourceContainer.getVariableAdapterFactory());
 					}
 					catch (ParseException e) {
 						throw new ExecutionException(e.getMessage(), null);
@@ -84,5 +86,13 @@ public class MacroManager {
 
 	public void setResourceContainer(ResourceContainer resourceContainer) {
 		this.resourceContainer = resourceContainer;
+	}
+
+	public Object getResourceLoaderParameter() {
+		return resourceLoaderParameter;
+	}
+
+	public void setResourceLoaderParameter(Object resourceLoaderParameter) {
+		this.resourceLoaderParameter = resourceLoaderParameter;
 	}
 }
