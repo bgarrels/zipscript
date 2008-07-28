@@ -18,4 +18,8 @@ public interface VariableAdapterFactory {
 
 	public SpecialMethod getStringEscapingStringMethod (
 			String method, ParsingSession session);
+
+	public String getDefaultGetterMethod(Object obj);
+
+	public String[] getReservedContextAttributes();
 }

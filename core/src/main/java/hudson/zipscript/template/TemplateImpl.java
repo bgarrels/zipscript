@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.directive.initialize.InitializeDirective;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceDirective;
 
@@ -20,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class TemplateImpl implements Template, Evaluator, Element {
+public class TemplateImpl implements Template, Evaluator, Element, ToStringWithContextElement {
 
 	private Element element;
 	private List elements;
@@ -50,11 +51,11 @@ public class TemplateImpl implements Template, Evaluator, Element {
 
 	public Context initialize(Object obj, Locale locale) throws ExecutionException {
 		ExtendedContext context = getContext(obj, locale);
-		if (!context.isInitialized()) {
+		if (!context.isInitialized(this)) {
 			for (Iterator i=initializeElements.iterator(); i.hasNext(); ) {
 				((InitializeDirective) i.next()).doInitialize(context);
 			}
-			context.setInitialized(true);
+			context.markInitialized(this);
 		}
 		return context;
 	}
@@ -200,7 +201,7 @@ public class TemplateImpl implements Template, Evaluator, Element {
 	}
 
 	private ExtendedContext getContext (Object obj, Locale locale) {
-		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized())
+		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized(this))
 			return (ExtendedContext) obj;
 		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(
 				obj, parsingSession, resourceContainer);
@@ -246,5 +247,21 @@ public class TemplateImpl implements Template, Evaluator, Element {
 
 	public void setResourceContainer(ResourceContainer resourceContainer) {
 		this.resourceContainer = resourceContainer;
+	}
+
+	public void append(ExtendedContext context, Writer writer) {
+		if (context.isInitialized(this)) {
+			for (Iterator i=initializeElements.iterator(); i.hasNext(); ) {
+				((InitializeDirective) i.next()).doInitialize(context);
+			}
+			context.markInitialized(this);
+		}
+		merge(context, writer);
+	}
+
+	public String toString(ExtendedContext context) {
+		StringWriter sw = new StringWriter();
+		append(context, sw);
+		return sw.toString();
 	}
 }

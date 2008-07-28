@@ -434,7 +434,8 @@ public class VariableElement extends AbstractElement implements Element {
 					if (null == child.getPropertyName())
 						throw new ParseException(e, "Invalid sequence '" + e.toString() + "'");
 					List parameters = getMethodParameters((GroupElement) e, session);
-					children.add(new AssumedGetRoot(child.getPropertyName(), parameters, this));
+					children.add(new AssumedGetRoot(child.getPropertyName(), parameters, this,
+							session.getResourceContainer().getVariableAdapterFactory()));
 				}
 				else if (wasWhitespace)
 					throw new ParseException(e, "Invalid sequence after whitespace '" + e.toString() + "'");

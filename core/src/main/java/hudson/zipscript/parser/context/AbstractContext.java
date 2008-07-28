@@ -2,17 +2,21 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class AbstractContext implements ExtendedContext {
 
+	private Locale locale;
 	private ParsingSession parsingSession;
 	private ResourceContainer resourceContainer;
 	private Map importDefinitions;
-	private boolean initialized;
+	private Map initializeMap;
 
 	public ParsingSession getParsingSession() {
 		return parsingSession;
@@ -30,12 +34,15 @@ public abstract class AbstractContext implements ExtendedContext {
 		this.resourceContainer = resourceContainer;
 	}
 
-	public boolean isInitialized() {
-		return initialized;
+	public boolean isInitialized(Element topLevelElement) {
+		if (null == initializeMap) return false;
+		else return (null != initializeMap.get(topLevelElement));
 	}
 
-	public void setInitialized(boolean initialized) {
-		this.initialized = initialized;
+	public void markInitialized(Element topLevelElement) {
+		if (null == initializeMap)
+			initializeMap = new HashMap();
+		initializeMap.put(topLevelElement, Boolean.TRUE);
 	}
 
 	public MacroDirective getMacro (String name) {
@@ -51,5 +58,26 @@ public abstract class AbstractContext implements ExtendedContext {
 		if (null == importDefinitions)
 			importDefinitions = new HashMap();
 		importDefinitions.put(namespace, macroPath);
+	}
+
+	public Locale getLocale () {
+		return locale;
+	}
+
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
+
+	public ExtendedContext getRootContext() {
+		return this;
+	}
+
+	public void appendMacroNestedAttributes(Map m) {
+		// if we are using this context we are at the top level
+		// and not in a macro definition
+	}
+
+	public void addToElementScope(List nestingStack) {
+		// this is a root element	
 	}
 }

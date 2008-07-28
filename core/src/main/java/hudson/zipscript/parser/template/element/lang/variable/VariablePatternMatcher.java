@@ -118,6 +118,11 @@ public class VariablePatternMatcher implements PatternMatcher {
 				}
 			}
 		}
+		if (!isFormal) {
+			if (squiglyNesting == 0 && parenNesting == 0  && braceNesting == 0) {
+				return new VariableElement(isFormal, isSilenced, sb.toString(), session, startPosition);
+			}
+		}
 		return null;
 	}
 }

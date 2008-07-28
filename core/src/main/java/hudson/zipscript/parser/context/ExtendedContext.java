@@ -2,6 +2,7 @@ package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.resource.macrolib.MacroProvider;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public interface ExtendedContext extends Context, MacroProvider {
 	/**
 	 * Return true if the context has been initialized and false if not
 	 */
-	public boolean isInitialized ();
+	public boolean isInitialized (Element topLevelElement);
 
 	/**
 	 * Set the initialized status
 	 * @param val the initialized status
 	 */
-	public void setInitialized (boolean val);
+	public void markInitialized (Element topLevelElement);
 
 	/**
 	 * Put a value in the context

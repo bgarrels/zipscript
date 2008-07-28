@@ -125,12 +125,12 @@ public class NestedContextWrapper implements ExtendedContext {
 		nestingStack.add(scopedElement);
 	}
 
-	public void setInitialized(boolean val) {
-		parentContext.setInitialized(val);
+	public void markInitialized(Element topLevelElement) {
+		parentContext.markInitialized(topLevelElement);
 	}
 
-	public boolean isInitialized() {
-		return parentContext.isInitialized();
+	public boolean isInitialized(Element topLevelElement) {
+		return parentContext.isInitialized(topLevelElement);
 	}
 
 	public MacroDirective getMacro (String name) {

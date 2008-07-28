@@ -4,6 +4,7 @@ import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.util.BeanUtil;
 
 import java.lang.reflect.Method;
@@ -11,59 +12,62 @@ import java.util.List;
 
 public class AssumedGetRoot implements VariableChild {
 
-	public static final String METHOD_NAME = "get";
-
 	private short TYPE_STANDARD = 1;
-	private short TYPE_GET_GLOBAL = 2;
-	private short TYPE_GET_RESOURCES = 3;
-	private short TYPE_GET_UNIQUEID = 4;
+	private short TYPE_RESERVED = 2;
 
 	private Element variableElement;
 	private String name;
 	private List parameters;
 	private Method accessorMethod;
 	private short type = TYPE_STANDARD;
+	private VariableAdapterFactory variableAdapterFactory;
 
-	public AssumedGetRoot (String name, List parameters, Element variableElement) {
+	private boolean doTypeChecking = false;
+
+	public AssumedGetRoot (
+			String name, List parameters, Element variableElement, VariableAdapterFactory variableAdapterFactory) {
 		this.name = name;
 		this.parameters = parameters;
 		this.variableElement = variableElement;
-		if (name.equals(Constants.GLOBAL))
-			type = TYPE_GET_GLOBAL;
-		else if (name.equals(Constants.RESOURCE))
-			type = TYPE_GET_RESOURCES;
-		else if (name.equals(Constants.UNIQUE_ID))
-			type = TYPE_GET_UNIQUEID;
+		this.variableAdapterFactory = variableAdapterFactory;
+		for (int i=0; i<variableAdapterFactory.getReservedContextAttributes().length; i++) {
+			if (name.equals(variableAdapterFactory.getReservedContextAttributes()[i])) {
+				type = TYPE_RESERVED;
+			}
+		}
 	}
 
 	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		Object source = null;
 		if (type == TYPE_STANDARD)
-			context.get(name);
-		else if (type == TYPE_GET_GLOBAL)
-			source = context.getRootContext().get(Constants.GLOBAL);
-		else if (type == TYPE_GET_RESOURCES)
-			source = context.getRootContext().get(Constants.RESOURCE);
-		else if (type == TYPE_GET_UNIQUEID)
-			source = context.getRootContext().get(Constants.UNIQUE_ID);
-		
+			source = context.get(name);
+		else
+			source = context.getRootContext().get(name);
+		if (null == source) return null;
+
 		// get the method parameters
 		Object[] arr = new Object[parameters.size()];
 		for (int i=0; i<parameters.size(); i++) {
 			arr[i] = ((Element) parameters.get(i)).objectValue(context);
 		}
 
-		if (null == accessorMethod) {
+		if (null == accessorMethod || doTypeChecking) {
+			String methodName = variableAdapterFactory.getDefaultGetterMethod(source);
+			
 			// initialize
-			accessorMethod = BeanUtil.getPropertyMethod(source, METHOD_NAME, arr);
+			accessorMethod = BeanUtil.getPropertyMethod(source, methodName, arr);
 			if (null == accessorMethod) {
 				throw new ExecutionException(
-						"Unknown method '" + METHOD_NAME + "' on " + variableElement.toString(), null);
+						"Unknown method '" + methodName + "' on " + variableElement.toString(), null);
 			}
 		}
 
 		try {
 			return accessorMethod.invoke(source, arr);
+		}
+		catch (ClassCastException e) {
+			this.doTypeChecking = true;
+			return execute(parent, context);
 		}
 		catch (Exception e) {
 			throw new ExecutionException(e.getMessage(), variableElement, e);

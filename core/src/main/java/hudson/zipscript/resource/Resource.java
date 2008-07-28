@@ -7,5 +7,5 @@ public interface Resource {
 
 	public InputStream getInputStream ();
 
-	public boolean hasBeenModifiedSince (long currentMilis);
+	public boolean hasBeenModified ();
 }

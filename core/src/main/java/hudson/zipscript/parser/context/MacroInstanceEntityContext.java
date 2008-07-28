@@ -125,12 +125,12 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		nestingStack.add(scopedElement);
 	}
 
-	public void setInitialized(boolean val) {
-		preMacroContext.setInitialized(val);
+	public void markInitialized(Element topLevelElement) {
+		preMacroContext.markInitialized(topLevelElement);
 	}
 
-	public boolean isInitialized() {
-		return postMacroContext.isInitialized();
+	public boolean isInitialized(Element topLevelElement) {
+		return postMacroContext.isInitialized(topLevelElement);
 	}
 
 	public MacroDirective getMacro (String name) {
