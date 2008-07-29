@@ -9,7 +9,7 @@ public interface MapAdapter {
 
 	public void put (Object key, Object value, Object map) throws ClassCastException;
 
-	public Object get (Object key, Object map) throws ClassCastException;
+	public Object get (Object key, Object map, RetrievalContext retrievalContext) throws ClassCastException;
 
 	public Object remove (Object key, Object map) throws ClassCastException;
 

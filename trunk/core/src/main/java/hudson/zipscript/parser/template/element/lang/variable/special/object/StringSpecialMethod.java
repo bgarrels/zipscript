@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.lang.variable.special.object;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 public class StringSpecialMethod implements SpecialMethod {
@@ -12,7 +13,8 @@ public class StringSpecialMethod implements SpecialMethod {
 		this.stringSpecialMethod = stringSpecialMethod;
 	}
 
-	public Object execute(Object source, ExtendedContext context) throws Exception {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		if (null == source) return null;
 		else if ((source instanceof String)) {
 			if (source instanceof ToStringWithContextElement) {
@@ -22,6 +24,10 @@ public class StringSpecialMethod implements SpecialMethod {
 				source = source.toString();
 			}
 		}
-		return stringSpecialMethod.execute(source, context);
+		return stringSpecialMethod.execute(source, retrievalContext, context);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.SCALAR;
 	}
 }

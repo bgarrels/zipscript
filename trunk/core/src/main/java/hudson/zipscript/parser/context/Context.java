@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+
 import java.util.Set;
 
 
@@ -9,7 +11,7 @@ public interface Context {
 	 * Return the object matching the key
 	 * @param key the key name
 	 */
-	public Object get (Object key);
+	public Object get (Object key, RetrievalContext retrievalContext);
 
 	/**
 	 * Remove a value from the context matching the key

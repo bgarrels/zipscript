@@ -7,6 +7,7 @@ import hudson.zipscript.parser.template.data.ElementIndex;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.List;
 
@@ -31,7 +32,8 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 		return "!" + executeElement;
 	}
 
-	public Object execute(Object source, ExtendedContext context) {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) {
 		return objectValue(context);
 	}
 
@@ -41,5 +43,9 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 
 	public boolean requiresInput(ExtendedContext context) {
 		return false;
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.UNKNOWN;
 	}
 }

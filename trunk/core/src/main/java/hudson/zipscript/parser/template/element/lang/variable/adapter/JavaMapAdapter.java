@@ -12,7 +12,7 @@ public class JavaMapAdapter implements MapAdapter {
 		return (object instanceof Map);
 	}
 
-	public Object get(Object key, Object map) {
+	public Object get(Object key, Object map, RetrievalContext retrievalContext) {
 		return ((Map) map).get(key);
 	}
 

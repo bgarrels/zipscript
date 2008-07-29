@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element.lang.variable;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class DynamicChild implements VariableChild {
 
 	private Element evaluator;
 	private Map pathChildren = new HashMap();
+	private RetrievalContext retrievalContext;
 
 	public DynamicChild (Element evaluator) {
 		this.evaluator = evaluator;
@@ -52,5 +54,13 @@ public class DynamicChild implements VariableChild {
 
 	public String getPropertyName() {
 		return evaluator.toString();
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

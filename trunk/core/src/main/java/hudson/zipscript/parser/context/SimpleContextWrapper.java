@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.context;
 
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,8 +32,8 @@ public class SimpleContextWrapper extends AbstractContext {
 		context.put(key, value);
 	}
 
-	public Object get(Object key) {
-		return context.get(key);
+	public Object get(Object key, RetrievalContext retrievalContext) {
+		return context.get(key, retrievalContext);
 	}
 
 	public Set getKeys() {

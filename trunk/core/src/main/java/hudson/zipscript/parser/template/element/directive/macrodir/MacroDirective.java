@@ -14,6 +14,7 @@ import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.special.RequiredIdentifierPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
@@ -232,7 +233,8 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			}
 			for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
 				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) i.next();
-				if (null != defAttribute.getDefaultValue() && null == context.get(defAttribute.getName())) {
+				if (null != defAttribute.getDefaultValue() && null == context.get(
+						defAttribute.getName(), RetrievalContext.UNKNOWN)) {
 					context.put(defAttribute.getName(), defAttribute.getDefaultValue().objectValue(context), true);
 				}
 			}
@@ -272,7 +274,8 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 			mie = (MacroInstanceEntity) i.next();
-			Object obj = context.get(mie.getMacroInstance().getName());
+			Object obj = context.get(
+					mie.getMacroInstance().getName(), RetrievalContext.UNKNOWN);
 			if (null == obj) {
 				context.put(mie.getMacroInstance().getName(), mie, true);
 			}

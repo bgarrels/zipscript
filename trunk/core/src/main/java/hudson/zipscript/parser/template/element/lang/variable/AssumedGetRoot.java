@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element.lang.variable;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.util.BeanUtil;
 
@@ -20,6 +21,7 @@ public class AssumedGetRoot implements VariableChild {
 	private Method accessorMethod;
 	private short type = TYPE_STANDARD;
 	private VariableAdapterFactory variableAdapterFactory;
+	private RetrievalContext retrievalContext;
 
 	private boolean doTypeChecking = false;
 
@@ -39,9 +41,9 @@ public class AssumedGetRoot implements VariableChild {
 	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		Object source = null;
 		if (type == TYPE_STANDARD)
-			source = context.get(name);
+			source = context.get(name, retrievalContext);
 		else
-			source = context.getRootContext().get(name);
+			source = context.getRootContext().get(name, retrievalContext);
 		if (null == source) return null;
 
 		// get the method parameters
@@ -91,5 +93,13 @@ public class AssumedGetRoot implements VariableChild {
 		}
 		sb.append(')');
 		return sb.toString();
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

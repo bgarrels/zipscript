@@ -45,6 +45,8 @@ import hudson.zipscript.parser.template.element.lang.variable.special.string.URL
 import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperCaseSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperFirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.XMLSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.xml.DOMObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.xml.NodeObjectAdapter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -52,6 +54,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 
@@ -64,6 +69,10 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 	}
 
 	public ObjectAdapter getObjectAdapter(Object object) {
+		if (object instanceof Document)
+			return DOMObjectAdapter.INSTANCE;
+		else if (object instanceof Node)
+			return NodeObjectAdapter.INSTANCE;
 		return new JavaObjectAdapter();
 	}
 

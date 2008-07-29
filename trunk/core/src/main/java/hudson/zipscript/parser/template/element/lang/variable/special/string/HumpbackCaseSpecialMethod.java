@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.parser.util.StringUtil;
 
@@ -8,7 +9,12 @@ public class HumpbackCaseSpecialMethod implements SpecialMethod {
 
 	public static final HumpbackCaseSpecialMethod INSTANCE = new HumpbackCaseSpecialMethod();
 
-	public Object execute(Object source, ExtendedContext context) throws Exception {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		return StringUtil.humpbackCase((String) source);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.TEXT;
 	}
 }

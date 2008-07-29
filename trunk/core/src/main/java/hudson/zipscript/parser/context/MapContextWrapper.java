@@ -1,25 +1,19 @@
 package hudson.zipscript.parser.context;
 
-import java.util.Locale;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+
 import java.util.Map;
 import java.util.Set;
 
 public class MapContextWrapper extends AbstractContext {
 
 	private Map map;
-	private Locale locale;
 
-	public MapContextWrapper (Map map) {
-		this(map, Locale.getDefault());
-	}
-
-	public MapContextWrapper(Map map, Locale locale) {
+	public MapContextWrapper(Map map) {
 		this.map = map;
-		if (null == locale) this.locale = Locale.getDefault();
-		else this.locale = locale;
 	}
 
-	public Object get(Object key) {
+	public Object get(Object key, RetrievalContext retrievalContext) {
 		return map.get(key);
 	}
 

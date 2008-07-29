@@ -41,8 +41,9 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		}
 	}
 
-	public TemplateImpl (Element element) {
+	public TemplateImpl (Element element, ParsingSession parsingSession) {
 		this.element = element;
+		this.parsingSession = parsingSession;
 	}
 
 	public Context initialize(Object context) throws ExecutionException {

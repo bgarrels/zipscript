@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 
@@ -15,7 +16,8 @@ public class LPadSpecialMethod implements SpecialMethod {
 		}
 	}
 
-	public Object execute(Object source, ExtendedContext context) throws Exception {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		if (null == padding) return source;
 		int paddingAmt = ((Number) padding.objectValue(context)).intValue();
 		StringBuffer sb = new StringBuffer();
@@ -23,5 +25,9 @@ public class LPadSpecialMethod implements SpecialMethod {
 			sb.append(' ');
 		sb.append(source);
 		return sb.toString();
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.TEXT;
 	}
 }

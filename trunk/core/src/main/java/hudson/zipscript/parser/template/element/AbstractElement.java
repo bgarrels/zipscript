@@ -3,6 +3,7 @@ package hudson.zipscript.parser.template.element;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementParsingSession;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.special.DefaultVariablePatternMatcher;
@@ -50,9 +51,11 @@ public abstract class AbstractElement implements Element {
 	protected Element parseElement (
 			String contents, ParsingSession parsingSession, int startPosition)
 	throws ParseException {
-		return ExpressionParser.getInstance().parseToElement(
+		ElementParsingSession eps = ExpressionParser.getInstance().parseToElement(
 				contents, getContentParsingPatternMatchers(),
 				getContentParsingDefaultElementFactory(), startPosition, parsingSession.getResourceContainer());
+		if (null != eps) return eps.element;
+		else return null;
 	}
 
 	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {

@@ -4,6 +4,7 @@ import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
+import hudson.zipscript.parser.template.data.ElementParsingSession;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -99,7 +100,7 @@ public class ExpressionParser {
 	 * @param macroManager the macro manager
 	 * @throws ParseException
 	 */
-	public Element parseToElement (
+	public ElementParsingSession parseToElement (
 			String contents, PatternMatcher[] matchers, DefaultElementFactory defaultElementFactory,
 			int startPosition, ResourceContainer resourceContainer)
 	throws ParseException {
@@ -127,7 +128,7 @@ public class ExpressionParser {
 		}
 		
 		if (data.getElements().size() == 1)
-			return (Element) data.getElements().get(0);
+			return new ElementParsingSession((Element) data.getElements().get(0), session);
 		else if (data.getElements().size() == 0) {
 			throw new ParseException(null, "Invlalid expression detected '" + contents + "'");
 		}

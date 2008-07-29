@@ -5,6 +5,7 @@ import hudson.zipscript.parser.template.element.CompositeElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstanceExecutor;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ObjectValueSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		if (null == evaluatorElement) {
 			List children = ((MacroInstanceExecutor) source).getMacroInstance().getChildren();
 			List nonWhitespaceChildren = new ArrayList(children.size());
@@ -38,5 +39,9 @@ public class ObjectValueSpecialMethod implements SpecialMethod {
 			}
 		}
 		return evaluatorElement.objectValue(context);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.HASH;
 	}
 }

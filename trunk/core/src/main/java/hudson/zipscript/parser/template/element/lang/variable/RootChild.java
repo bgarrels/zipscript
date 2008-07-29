@@ -1,37 +1,32 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 
 public class RootChild implements VariableChild {
 
 	private short TYPE_STANDARD = 1;
-	private short TYPE_GET_GLOBAL = 2;
-	private short TYPE_GET_RESOURCES = 3;
-	private short TYPE_GET_UNIQUEID = 4;
+	private short TYPE_RESERVED = 2;
 
 	public String name;
 	private short type = TYPE_STANDARD;
+	private RetrievalContext retrievalContext;
 
-	public RootChild (String name) {
+	public RootChild (String name, VariableAdapterFactory variableAdapterFactory) {
 		this.name = name;
-		if (name.equals(Constants.GLOBAL))
-			type = TYPE_GET_GLOBAL;
-		else if (name.equals(Constants.RESOURCE))
-			type = TYPE_GET_RESOURCES;
-		else if (name.equals(Constants.UNIQUE_ID))
-			type = TYPE_GET_UNIQUEID;
+		for (int i=0; i<variableAdapterFactory.getReservedContextAttributes().length; i++) {
+			if (name.equals(variableAdapterFactory.getReservedContextAttributes()[i])) {
+				type = TYPE_RESERVED;
+			}
+		}
 	}
 
 	public Object execute(Object parent, ExtendedContext context) {
-		if (type == TYPE_GET_GLOBAL)
-			return context.getRootContext().get(Constants.GLOBAL);
-		else if (type == TYPE_GET_RESOURCES)
-			return context.getRootContext().get(Constants.RESOURCE);
-		else if (type == TYPE_GET_UNIQUEID)
-			return context.getRootContext().get(Constants.UNIQUE_ID);
+		if (type == TYPE_RESERVED)
+			return context.getRootContext().get(name, retrievalContext);
 		else
-			return context.get(name);
+			return context.get(name, retrievalContext);
 	}
 
 	public String getPropertyName() {
@@ -44,5 +39,13 @@ public class RootChild implements VariableChild {
 
 	public String toString() {
 		return name;
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

@@ -5,6 +5,7 @@ import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,10 +32,10 @@ public class NestedContextWrapper implements ExtendedContext {
 		map.put(Constants.VARS, this);
 	}
 
-	public Object get(Object key) {
+	public Object get(Object key, RetrievalContext retrievalContext) {
 		Object obj = map.get(key);
 		if (null == obj && travelUp)
-			obj = parentContext.get(key);
+			obj = parentContext.get(key, retrievalContext);
 		return obj;
 	}
 
