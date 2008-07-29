@@ -1,7 +1,9 @@
 #summary Examples of the Zipscript language.
 #labels Featured
 
+{{{
 [## This is a comment ##]
+}}}
 
 =A Few Variable Examples=
 {{{
@@ -19,38 +21,50 @@ informal variable references
 
 =A Few Directive Examples=
 {{{
-[#import "macros/myMacroLib.zsw as mm/]
+[#import "macros/myMacroLib.zsw as mm/] <-- import the macro library "macros/myMacroLib.zsw" to be referenced with the "mm" namespace
 
-[#include "includes/someCommonTemplate.zs"/]
+[#include "includes/someCommonTemplate.zs"/] <-- include an external zipscript template
 
+[##----- if / elseif / else directives -----##]
 [#if foo > bar && abc != "def"]
-   [#while i<5]
-      this will print 5 times ${i} is the 0-based index
-   [/#while]
+   ...
 [#elseif someClassName?split('.')?length > 3]
-   [#foreach entry in {foo, bar, baz}]
-      this will loop through the list containing foo, bar and baz
-      ${i} is the index; ${hasNext} shows if there are more elements in the list
-      [#while someCondition]
-          ${super.i} is the index of the foreach list
-          ${i} is the index of the while list
-      [/#while]
-   [/#foreach]
+   ...
 [#else]
-
-    [## macro reference from imported library ##]
-    [@mm.someFlatMacro abc=def ghi="jkl" mno=3/]
-
-    [## macro reference from inline definition (see below) ##]
-    [@myInlineMacro myRequiredParam="something" myDefaultedParam=47]
-        [%myTemplateDefinedParam tdp1="some required parameter"]
-            template defined parameter body content
-        [/%myTemplateDefinedParameter]
-       This is the macro body content
-    [/@myInlineMacro]
-
+   ...
 [/#if]
 
+
+[##------ while directive -----##]
+[#while i<5]
+    this will print 5 times ${i} is the 0-based index
+[/#while]
+
+
+[##----- foreach directive -----##]
+[#foreach entry in {foo, bar, baz}]
+   this will loop through the list containing foo, bar and baz
+   ${i} is the index; ${hasNext} shows if there are more elements in the list
+   [#while someCondition]
+       ${super.i} is the index of the parent foreach list
+       ${i} is the index of the while list
+   [/#while]
+[/#foreach]
+
+
+[##----- macros -----##]
+[##-- macro reference from imported library --##]
+[@mm.someFlatMacro abc=def ghi="jkl" mno=3/]
+
+[##-- macro reference from inline definition (see below) --##]
+[@myInlineMacro myRequiredParam="something" myDefaultedParam=47]
+    [%myTemplateDefinedParam tdp1="some required parameter"]
+        template defined parameter body content
+    [/%myTemplateDefinedParameter]
+   This is the macro body content
+[/@myInlineMacro]
+
+[##-- macro definition --##]
 [#macro myIinlineMacro | myTemplateDefinedParam[tdp1 tdp2=true] myRequiredParam myOptionalParam=null myDefaultedParam=6]
 
     [## access macro parameters ##]
