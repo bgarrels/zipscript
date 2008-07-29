@@ -16,7 +16,8 @@ public class CollectionAdapter implements SequenceAdapter {
 		return ((Collection) object).size();
 	}
 
-	public Object getItemAt(int index, Object sequence) {
+	public Object getItemAt(
+			int index, Object sequence, RetrievalContext retrievalContext) {
 		return new UnsupportedOperationException();
 	}
 

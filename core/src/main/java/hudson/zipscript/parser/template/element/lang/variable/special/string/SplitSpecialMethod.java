@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class SplitSpecialMethod implements SpecialMethod {
 		this.splitToken = params[0];
 	}
 
-	public Object execute(Object source, ExtendedContext context) throws Exception {
+	public Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		String s = source.toString();
 		String split = splitToken.objectValue(context).toString();
 
@@ -23,5 +24,9 @@ public class SplitSpecialMethod implements SpecialMethod {
 		while (st.hasMoreElements())
 			l.add(st.nextElement());
 		return l.toArray(new String[l.size()]);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.TEXT;
 	}
 }

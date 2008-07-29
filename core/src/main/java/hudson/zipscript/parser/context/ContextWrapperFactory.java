@@ -13,6 +13,7 @@ import hudson.zipscript.parser.util.UniqueIdGeneratorImpl;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 public class ContextWrapperFactory {
@@ -85,6 +86,9 @@ public class ContextWrapperFactory {
 				}
 			}
 		}
+		
+		if (null == context.getLocale())
+			context.setLocale(Locale.getDefault());
 
 		return context;
 	}

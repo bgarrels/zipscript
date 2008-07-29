@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 
 import java.util.List;
@@ -51,12 +52,12 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		}
 	}
 
-	public Object execute(Object source, ExtendedContext context) {
+	public Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context) {
 		try {
 			if (null == source) return null;
 			if (null == executor) executor = initializeSpecialMethod(source, context);
 			if (null == executor) throw new ExecutionException("Unknown special method '" + method + "'", null);
-			return executor.execute(source, context);
+			return executor.execute(source, retrievalContext, context);
 		}
 		catch (Exception e) {
 			if (e instanceof ExecutionException) {
@@ -80,5 +81,9 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			Object source, ExtendedContext context) {
 		return context.getResourceContainer().getVariableAdapterFactory().getSpecialMethod(
 				method, parameters, source, context, this);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.HASH;
 	}
 }

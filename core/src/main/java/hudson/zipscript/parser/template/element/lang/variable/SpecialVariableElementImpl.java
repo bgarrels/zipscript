@@ -41,7 +41,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 			else if (e instanceof VariableTokenSeparatorElement) {
 				elementList.remove(index);
 				e.normalize(index, elementList, session);
-				addSpecialElement(e);
+				addSpecialElement((VariableTokenSeparatorElement) e);
 			}
 			else if (isShouldEvaluateSeparators() && e instanceof GroupElement) {
 				elementList.remove(index);

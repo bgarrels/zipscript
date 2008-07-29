@@ -12,7 +12,7 @@ public class ObjectArrayAdapter implements SequenceAdapter {
 		return ((Object[]) object).length;
 	}
 
-	public Object getItemAt(int index, Object sequence) {
+	public Object getItemAt(int index, Object sequence, RetrievalContext retrievalContext) {
 		return ((Object[]) sequence)[index];
 	}
 

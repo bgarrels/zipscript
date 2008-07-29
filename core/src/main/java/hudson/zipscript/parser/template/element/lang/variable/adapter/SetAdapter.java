@@ -15,7 +15,8 @@ public class SetAdapter implements SequenceAdapter {
 		return ((Set) object).size();
 	}
 
-	public Object getItemAt(int index, Object sequence) {
+	public Object getItemAt(
+			int index, Object sequence, RetrievalContext retrievalContext) {
 		throw new UnsupportedOperationException();
 	}
 

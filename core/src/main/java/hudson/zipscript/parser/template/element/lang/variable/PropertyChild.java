@@ -6,10 +6,12 @@ import hudson.zipscript.parser.context.ZSContextRequiredGetter;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 public class PropertyChild implements VariableChild {
 
 	private String name;
+	private RetrievalContext retrievalContext;
 
 	private MapAdapter mapAdapter;
 	private ObjectAdapter objectAdapter;
@@ -54,28 +56,30 @@ public class PropertyChild implements VariableChild {
 		if (doTypeChecking) {
 			// dont' worry about ClassCast because we just detected type
 			if (type == TYPE_CONTEXT) {
-				return ((Context) parent).get(name);
+				return ((Context) parent).get(name, retrievalContext);
 			}
 			else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
-				return ((ZSContextRequiredGetter) parent).get(name, context);
+				return ((ZSContextRequiredGetter) parent).get(
+						name, retrievalContext, context);
 			}
 			else if (type == TYPE_MAP) {
-				return mapAdapter.get(name, parent);
+				return mapAdapter.get(name, parent, retrievalContext);
 			}
-			else return objectAdapter.get(name, parent);
+			else return objectAdapter.get(name, parent, retrievalContext);
 		}
 		else {
 			try {
 				if (type == TYPE_CONTEXT) {
-					return ((Context) parent).get(name);
+					return ((Context) parent).get(name, retrievalContext);
 				}
 				else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
-					return ((ZSContextRequiredGetter) parent).get(name, context);
+					return ((ZSContextRequiredGetter) parent).get(
+							name, retrievalContext, context);
 				}
 				else if (type == TYPE_MAP) {
-					return mapAdapter.get(name, parent);
+					return mapAdapter.get(name, parent, retrievalContext);
 				}
-				else return objectAdapter.get(name, parent);
+				else return objectAdapter.get(name, parent, retrievalContext);
 			}
 			catch (ClassCastException e) {
 				this.doTypeChecking = true;
@@ -94,5 +98,13 @@ public class PropertyChild implements VariableChild {
 
 	public String toString() {
 		return name;
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

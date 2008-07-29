@@ -6,6 +6,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDefinitionAttribute;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.Iterator;
 import java.util.List;
@@ -30,10 +31,11 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		this.macroDefinitionAttributes = macroDefinitionAttributes;
 	}
 
-	public Object get(Object key) {
+	public Object get(Object key, RetrievalContext retrievalContext) {
 		Object obj = additionalContextEntries.get(key);
-		if (null != postMacroContext && null == obj) obj = postMacroContext.get(key);
-		if (null == obj) obj = preMacroContext.get(key);
+		if (null != postMacroContext && null == obj)
+			obj = postMacroContext.get(key, retrievalContext);
+		if (null == obj) obj = preMacroContext.get(key, retrievalContext);
 		return obj;
 	}
 

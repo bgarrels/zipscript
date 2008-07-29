@@ -4,6 +4,7 @@ import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class MethodChild implements VariableChild {
 
 	public boolean shouldReturnSomething() {
 		return false;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
 	}
 
 	public String toString () {

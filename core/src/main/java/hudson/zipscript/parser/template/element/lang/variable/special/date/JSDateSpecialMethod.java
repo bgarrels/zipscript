@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.template.element.lang.variable.special.date;
 
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.text.SimpleDateFormat;
@@ -12,7 +13,12 @@ public class JSDateSpecialMethod implements SpecialMethod {
 	public static final JSDateSpecialMethod INSTANCE = new JSDateSpecialMethod();
 	SimpleDateFormat sdf = new SimpleDateFormat("'new Date('yyyy, MM, dd')'");
 
-	public Object execute(Object source, ExtendedContext context) throws Exception {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
 		return sdf.format((Date) source);
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.TEXT;
 	}
 }

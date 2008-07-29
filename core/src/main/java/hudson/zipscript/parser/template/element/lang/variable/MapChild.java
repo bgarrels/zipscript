@@ -6,6 +6,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
 
 public class MapChild implements VariableChild {
@@ -23,6 +24,7 @@ public class MapChild implements VariableChild {
 	private ObjectAdapter objectAdapter;
 	
 	private Element keyElement;
+	private RetrievalContext retrievalContext;
 
 	public MapChild (Element keyElement) {
 		this.keyElement = keyElement;
@@ -80,18 +82,18 @@ public class MapChild implements VariableChild {
 		Object key = keyElement.objectValue(context);
 		if (null == key) throw new ExecutionException("Map or sequence key evaluated to null", null);
 		if (type == TYPE_CONTEXT) {
-			return context.get(key);
+			return context.get(key, retrievalContext);
 		}
 		else if (type == TYPE_SEQUENCE) {
 			if (!(key instanceof Number))
 				throw new ExecutionException("Invalid type key", keyElement);
-			return sequenceAdapter.getItemAt(((Number) key).intValue(), parent);
+			return sequenceAdapter.getItemAt(((Number) key).intValue(), parent, retrievalContext);
 		}
 		else if (type == TYPE_MAP) {
-			return mapAdapter.get(key, parent);
+			return mapAdapter.get(key, parent, retrievalContext);
 		}
 		else {
-			return objectAdapter.get(key.toString(), parent);
+			return objectAdapter.get(key.toString(), parent, retrievalContext);
 		}
 	}
 
@@ -117,5 +119,13 @@ public class MapChild implements VariableChild {
 
 	public void setKeyElement(Element keyElement) {
 		this.keyElement = keyElement;
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

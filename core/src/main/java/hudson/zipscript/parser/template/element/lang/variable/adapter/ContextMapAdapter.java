@@ -13,8 +13,8 @@ public class ContextMapAdapter implements MapAdapter {
 		return (object instanceof Context);
 	}
 
-	public Object get(Object key, Object map) {
-		return ((Context) map).get(key);
+	public Object get(Object key, Object map, RetrievalContext retrievalContext) {
+		return ((Context) map).get(key, retrievalContext);
 	}
 
 	public Set getKeys(Object map) {

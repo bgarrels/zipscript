@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.AbstractElement;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.PatternMatcher;
 import hudson.zipscript.parser.template.element.lang.variable.VariablePatternMatcher;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.util.StringUtil;
 
@@ -51,7 +52,8 @@ public class TextElement extends AbstractElement implements Element {
 				}
 				Object source = sw1.toString();
 				for (int i=0; i<specialMethods.length; i++) {
-					source = specialMethods[i].execute(source, context);
+					source = specialMethods[i].execute(
+							source, RetrievalContext.HASH, context);
 					if (null == source) return null;
 				}
 				return source;
@@ -88,7 +90,8 @@ public class TextElement extends AbstractElement implements Element {
 				}
 				Object source = sw1.toString();
 				for (int i=0; i<specialMethods.length; i++) {
-					source = specialMethods[i].execute(source, context);
+					source = specialMethods[i].execute(
+							source, RetrievalContext.HASH, context);
 					if (null == source) return;
 				}
 				StringUtil.append(source.toString(), sw);

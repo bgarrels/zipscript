@@ -2,6 +2,7 @@ package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 public interface VariableChild {
 
@@ -10,4 +11,6 @@ public interface VariableChild {
 	public String getPropertyName ();
 
 	public boolean shouldReturnSomething();
+
+	public void setRetrievalContext (RetrievalContext retrievalContext);
 }

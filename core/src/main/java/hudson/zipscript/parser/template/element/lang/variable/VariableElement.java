@@ -22,7 +22,9 @@ import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
@@ -32,17 +34,17 @@ import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class VariableElement extends AbstractElement implements Element {
 
 	boolean isSilenced;
 	boolean isFormal;
-	private List children;
+	private VariableChild[] children;
 	private String pattern;
-	private List specialElements;
-	private List escapeMethods;
+	private VariableTokenSeparatorElement[] specialElements;
+	private SpecialMethod[] escapeMethods;
+	private RetrievalContext retrievalContext = RetrievalContext.SCALAR;
 
 	private boolean suppressNullErrors;
 
@@ -56,16 +58,15 @@ public class VariableElement extends AbstractElement implements Element {
 		this.suppressNullErrors = SessionUtil.getProperty(Constants.SUPPRESS_NULL_ERRORS, false, session);
 	}
 
-	public VariableElement (List elements, ParsingSession session) throws ParseException {
+	public VariableElement (
+			List elements, RetrievalContext retrievalContext, ParsingSession session) throws ParseException {
 		this.children = parse(elements, session);
+		this.retrievalContext = retrievalContext;
 	}
 
 	public void setPattern (String pattern, ParsingSession session, int contentIndex) throws ParseException {
 		pattern = pattern.trim();
-		
-		if (null == this.children) this.children = new ArrayList();
-		this.children.clear();
-		if (!quickScan(pattern)) {
+		if (!quickScan(pattern, session)) {
 			if (session.isVariablePatternRecognized(pattern))
 				throw new ParseException(this, "Invalid variable reference '" + pattern + "'");
 			session.setReferencedVariable(pattern);
@@ -82,7 +83,7 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 	}
 
-	private boolean quickScan (String pattern) throws ParseException {
+	private boolean quickScan (String pattern, ParsingSession parsingSession) throws ParseException {
 		int trimIndex = 0;
 		if (pattern.startsWith("$")) trimIndex ++;
 		if (pattern.indexOf('!') == trimIndex) trimIndex ++;
@@ -98,7 +99,8 @@ public class VariableElement extends AbstractElement implements Element {
 			char c = pattern.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == ':')) return false;
 		}
-		this.children.add(new RootChild(pattern));
+		this.children = new VariableChild[]{new RootChild(
+				pattern, parsingSession.getResourceContainer().getVariableAdapterFactory())};
 		return true;
 	}
 
@@ -128,10 +130,10 @@ public class VariableElement extends AbstractElement implements Element {
 			int count = 0;
 			boolean isNullAllowed = false;
 			if (null == pattern) {
-				for (Iterator i=children.iterator(); i.hasNext(); ) {
-					VariableChild child = (VariableChild) i.next();
-					rtn = child.execute(rtn, context);
-					if (!child.shouldReturnSomething()) isNullAllowed = true;
+				for (int i=0; i<this.children.length; i++) {
+					rtn = children[i].execute(rtn, context);
+					if (!children[i].shouldReturnSomething())
+						isNullAllowed = true;
 					if (null == rtn) {
 						break;
 					}
@@ -140,42 +142,42 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			else {
 				// bypass path and get the full path from the context
-				rtn = context.get(pattern);
+				rtn = context.get(pattern, retrievalContext);
 			}
 			if (null == rtn && count == 0) {
 				StringBuffer sb = new StringBuffer();
-				for (Iterator i=children.iterator(); i.hasNext(); ) {
+				for (int i=0; i<this.children.length; i++) {
 					if (sb.length() > 0) sb.append('.');
-					VariableChild child = (VariableChild) i.next();
-					if (null != child.getPropertyName())
-						sb.append(child.getPropertyName());
+					if (null != children[i].getPropertyName())
+						sb.append(children[i].getPropertyName());
 				}
 				if (sb.length() > 0) {
 					pattern = sb.toString();
-					rtn = context.get(pattern);
+					rtn = context.get(pattern, retrievalContext);
 				}
 			}
 			if (null != specialElements) {
 				if (null == rtn
-						&& (((VariableTokenSeparatorElement) specialElements.get(0)).requiresInput(context))) {
+						&& (specialElements[0].requiresInput(context))) {
 					return null;
 				}
-				for (int i=0; i<specialElements.size(); i++) {
-					VariableTokenSeparatorElement e = (VariableTokenSeparatorElement) specialElements.get(i);
-					if (!e.requiresInput(context)) {
-						// a default element
-						if (null == rtn) rtn = e.execute(rtn, context);
-						if (null != rtn) return rtn;
-					}
-					else {
-						rtn = e.execute(rtn, context);
+
+				for (int i=0; i<specialElements.length; i++) {
+					boolean requiresInput = specialElements[i].requiresInput(context);
+					if (requiresInput || (null == rtn && !requiresInput)) {
+						if (specialElements.length > i+1 && specialElements[i+1].requiresInput(context)) {
+							rtn = specialElements[i].execute(rtn, specialElements[i+1].getExpectedType(), context);
+						}
+						else {
+							rtn = specialElements[i].execute(rtn, this.retrievalContext, context);
+						}
 					}
 				}
 			}
 			if (null != escapeMethods && !(rtn instanceof NoAutoEscapeElement)) {
 				try {
-					for (Iterator i=escapeMethods.iterator(); i.hasNext(); ) {
-						rtn = ((SpecialMethod) i.next()).execute(rtn, context);
+					for (int i=0; i<escapeMethods.length; i++) {
+						rtn = escapeMethods[i].execute(rtn, RetrievalContext.TEXT, context);
 					}
 				}
 				catch (Exception e) {
@@ -205,15 +207,15 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public void put (Object value, ExtendedContext context) {
 		Object parent = null;
-		for (int i=0; i<children.size()-1; i++) {
-			parent = ((VariableChild) children.get(i)).execute(parent, context);
+		for (int i=0; i<children.length-1; i++) {
+			parent = children[i].execute(parent, context);
 			if (null == parent) {
 				throw new ExecutionException("Null parent for set '" + this + "'", this);
 			}
 		}
 
 		// determine the key
-		VariableChild c = (VariableChild) children.get(children.size()-1);
+		VariableChild c = (VariableChild) children[children.length-1];
 		Object key = null;
 		if (c instanceof MapChild) {
 			// hash or sequence set
@@ -305,13 +307,15 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public ElementIndex normalize(
 			int index, List elementList, ParsingSession session) throws ParseException {
+		
+		List specialElements = new ArrayList();
+		List escapeMethods = new ArrayList();
+		
 		// if the next element over is a special char - process for variable
 		if (elementList.size() > index) {
 			Element nextElement = (Element) elementList.get(index);
 			while (nextElement instanceof VarDefaultElement
 					|| nextElement instanceof VarSpecialElement) {
-				if (null == specialElements) specialElements = new ArrayList(1);
-	
 				Element e = (Element) elementList.remove(index);
 				ElementIndex ei = e.normalize(index, elementList, session);
 				if (null != ei) {
@@ -329,14 +333,35 @@ public class VariableElement extends AbstractElement implements Element {
 				escapeMethods.add(sm);
 			}
 		}
+
+		// now deal with retrieval contexts
+		RetrievalContext normalElementLastRetrievalContext = this.retrievalContext;
+		if (null != specialElements && specialElements.size() > 0)
+			normalElementLastRetrievalContext = ((SpecialMethod) specialElements.get(0)).getExpectedType();
+		for (int i=0; i<children.length; i++) {
+			if (i == children.length-1) {
+				children[i].setRetrievalContext(normalElementLastRetrievalContext);
+			}
+			else {
+				children[i].setRetrievalContext(RetrievalContext.HASH);
+			}
+		}
+		
+		if (specialElements.size() > 0)
+			this.specialElements = (VariableTokenSeparatorElement[]) specialElements.toArray(
+					new VariableTokenSeparatorElement[specialElements.size()]);
+		if (escapeMethods.size() > 0)
+			this.escapeMethods = (SpecialMethod[]) escapeMethods.toArray(
+					new SpecialMethod[escapeMethods.size()]);
+		
 		return null;
 	}
 
 	public String getPattern () {
 		StringBuffer sb = new StringBuffer();
-		for (int i=0; i<children.size(); i++) {
+		for (int i=0; i<children.length; i++) {
 			if (i > 0) sb.append(".");
-			sb.append(children.get(i));
+			sb.append(children[i]);
 		}
 		return sb.toString();
 	}
@@ -351,9 +376,11 @@ public class VariableElement extends AbstractElement implements Element {
 		return sb.toString();
 	}
 
-	private List parse (
+	private VariableChild[] parse (
 			List elements, ParsingSession session) throws ParseException {
 		List children = new ArrayList();
+		List specialElements = new ArrayList();
+
 		boolean started = false;
 		boolean wasWhitespace = false;
 		boolean wasSeparator = false;
@@ -378,7 +405,8 @@ public class VariableElement extends AbstractElement implements Element {
 				wasWhitespace = false;
 				wasSeparator = false;
 				if (children.size() == 0)
-					children.add(new RootChild(((SpecialElement) e).getTokenValue()));
+					children.add(new RootChild(
+							((SpecialElement) e).getTokenValue(), session.getResourceContainer().getVariableAdapterFactory()));
 				else
 					children.add(new PropertyChild(((SpecialElement) e).getTokenValue()));
 			}
@@ -389,12 +417,12 @@ public class VariableElement extends AbstractElement implements Element {
 					throw new ParseException(e, "Invalid sequence after sparator '" + e.toString() + "'");
 				wasWhitespace = false;
 				wasSeparator = false;
-				addChildProperty(((SpecialStringElement) e).getTokenValue(), children);
+				addChildProperty(((SpecialStringElement) e).getTokenValue(), children, session.getResourceContainer().getVariableAdapterFactory());
 				if (e instanceof VariableElement) {
 					// check for special directives
 					if (null != ((VariableElement) e).specialElements) {
-						if (null == this.specialElements) specialElements = new ArrayList(1);
-						this.specialElements.addAll(((VariableElement) e).specialElements);
+						for (int j=0; j<((VariableElement) e).specialElements.length; j++)
+							specialElements.add(((VariableElement) e).specialElements[j]);
 					}
 				}
 			}
@@ -410,7 +438,7 @@ public class VariableElement extends AbstractElement implements Element {
 					children.add(new TextElementRootChild(((TextElement) e).getText()));
 				}
 				else {
-					addChildProperty(((TextElement) e).getText(), children);
+					addChildProperty(((TextElement) e).getText(), children, session.getResourceContainer().getVariableAdapterFactory());
 				}
 			}
 			else if (e instanceof VariableElement) {
@@ -464,7 +492,7 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 				else {
 					children.add(new MapChild(
-							new VariableElement(me.getChildren(), session)));
+							new VariableElement(me.getChildren(), RetrievalContext.HASH, session)));
 				}
 			}
 			else if (e instanceof ComparatorElement && elements.size() == 1) {
@@ -474,12 +502,16 @@ public class VariableElement extends AbstractElement implements Element {
 				throw new ParseException(e, "Invalid element detected '" + e.toString() + "'");
 			}
 		}
-		return children;
+		
+		if (specialElements.size() > 0)
+			this.specialElements = (VariableTokenSeparatorElement[]) specialElements.toArray(
+					new VariableTokenSeparatorElement[specialElements.size()]);
+		return (VariableChild[]) children.toArray(new VariableChild[children.size()]);
 	}
 
-	private void addChildProperty (String s, List children) {
+	private void addChildProperty (String s, List children, VariableAdapterFactory variableAdapterFactory) {
 		if (children.size() == 0)
-			children.add(new RootChild(s));
+			children.add(new RootChild(s, variableAdapterFactory));
 		else
 			children.add(new PropertyChild(s));
 	}
@@ -534,21 +566,29 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 		}
 		else {
-			return new VariableElement(elements, parseData);
+			return new VariableElement(elements, RetrievalContext.HASH, parseData);
 		}
 	}
 
 	public boolean isStatic () {
-		if (children.size() == 1) {
-			return (children.get(0) instanceof TextElementRootChild);
+		if (children.length == 1) {
+			return (children[0] instanceof TextElementRootChild);
 		}
 		else
 			return false;
 	}
 
-	protected void addSpecialElement (Element e) {
-		if (null == specialElements) specialElements = new ArrayList(1);
-		specialElements.add(e);
+	protected void addSpecialElement (VariableTokenSeparatorElement e) {
+		if (null == specialElements) {
+			specialElements = new VariableTokenSeparatorElement[1];
+			specialElements[0] = e;
+		}
+		else {
+			VariableTokenSeparatorElement[] newElements = new VariableTokenSeparatorElement[specialElements.length+1];
+			System.arraycopy(specialElements, 0, newElements, 0, specialElements.length);
+			newElements[newElements.length-1] = e;
+			specialElements = newElements;
+		}
 	}
 
 	public List getChildren() {

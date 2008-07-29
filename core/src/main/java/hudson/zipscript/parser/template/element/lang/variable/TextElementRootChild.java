@@ -1,10 +1,12 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 public class TextElementRootChild implements VariableChild {
 
-	public String text;
+	private String text;
+	private RetrievalContext retrievalContext;
 
 	public TextElementRootChild (String text) {
 		this.text = text;
@@ -24,5 +26,13 @@ public class TextElementRootChild implements VariableChild {
 
 	public String getPropertyName() {
 		return text;
+	}
+
+	public RetrievalContext getRetrievalContext() {
+		return retrievalContext;
+	}
+
+	public void setRetrievalContext(RetrievalContext retrievalContext) {
+		this.retrievalContext = retrievalContext;
 	}
 }

@@ -6,7 +6,7 @@ public interface ObjectAdapter {
 
 	public boolean appliesTo (Object object);
 
-	public Object get (String key, Object object) throws ClassCastException;
+	public Object get (String key, Object object, RetrievalContext context) throws ClassCastException;
 
 	public void set (String key, Object value, Object object) throws ClassCastException;
 

@@ -4,6 +4,7 @@ import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.MacroInstanceEntityContext;
 import hudson.zipscript.parser.context.ZSContextRequiredGetter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 	}
 
 
-	public Object get(String key, ExtendedContext context) {
+	public Object get(String key, RetrievalContext retrievalContext, ExtendedContext context) {
 		if (key.equals(Constants.BODY)) {
 			if (macroInstance.isBodyEmpty()) {
 				return null;
@@ -56,7 +57,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 		}
 		else {
 			initialize(context, false);
-			return this.context.get(key);
+			return this.context.get(key, retrievalContext);
 		}
 	}
 

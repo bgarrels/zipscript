@@ -4,6 +4,7 @@ import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementParsingSession;
 import hudson.zipscript.parser.template.data.ParseParameters;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.comment.CommentComponent;
@@ -344,9 +345,9 @@ public class ZipEngine {
 	 */
 	public Evaluator getEvaluator (String contents) throws ParseException {
 		try {
-			Element element = ExpressionParser.getInstance().parseToElement(
+			ElementParsingSession eps = ExpressionParser.getInstance().parseToElement(
 					contents, Constants.VARIABLE_MATCHERS, SpecialVariableDefaultEelementFactory.INSTANCE, 0, resourceContainer);
-			TemplateImpl evaluator = new TemplateImpl(element);
+			TemplateImpl evaluator = new TemplateImpl(eps.element, eps.parsingSession);
 			evaluator.setResourceContainer(resourceContainer);
 			return evaluator;
 		}

@@ -22,6 +22,7 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstance
 import hudson.zipscript.parser.template.element.group.ListElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableDefaultEelementFactory;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceItem;
 import hudson.zipscript.parser.template.element.special.InElement;
@@ -100,7 +101,7 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 				this.sequenceElement = (Element) elements.get(0);
 			}
 			else {
-				this.sequenceElement = new VariableElement(elements, session);
+				this.sequenceElement = new VariableElement(elements, RetrievalContext.SEQUENCE, session);
 			}
 		}
 		catch (IndexOutOfBoundsException e) {

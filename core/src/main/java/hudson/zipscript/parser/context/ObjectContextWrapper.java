@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.util.BeanUtil;
 
 import java.lang.reflect.Method;
@@ -30,7 +31,7 @@ public class ObjectContextWrapper extends AbstractContext {
 		else this.locale = locale;
 	}
 
-	public Object get(Object key) {
+	public Object get(Object key, RetrievalContext retrievalContext) {
 		if (null == key) return null;
 		Object obj = methodMap.get(key);
 		Method m = null;

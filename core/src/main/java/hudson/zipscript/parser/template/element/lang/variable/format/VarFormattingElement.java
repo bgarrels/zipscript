@@ -10,6 +10,7 @@ import hudson.zipscript.parser.template.element.lang.IdentifierElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.Date;
 import java.util.List;
@@ -45,7 +46,8 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			return "|" + formatFunction;
 	}
 
-	public Object execute(Object source, ExtendedContext context) {
+	public Object execute(
+			Object source, RetrievalContext retrievalContext, ExtendedContext context) {
 		if (null == source) return null;
 		try {
 			if (null == formatter) {
@@ -58,7 +60,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 				((ExecutionException) e).setElement(this);
 				throw (ExecutionException) e;
 			}
-			else throw new ExecutionException(e.getMessage(), this);
+			else throw new ExecutionException(e.getMessage(), this, e);
 		}
 	}
 
@@ -89,5 +91,9 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 
 	public boolean requiresInput(ExtendedContext context) {
 		return true;
+	}
+
+	public RetrievalContext getExpectedType() {
+		return RetrievalContext.SCALAR;
 	}
 }
