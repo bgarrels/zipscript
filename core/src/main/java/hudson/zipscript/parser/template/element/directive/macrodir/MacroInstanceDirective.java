@@ -263,11 +263,19 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
 		if (null == macro) {
 			// we might need to lazy load
-			macro = context.getResourceContainer().getMacroManager().getMacro(getName(), getNamespace(), context);
+			macro = context.getResourceContainer().getMacroManager().getMacro(
+					getName(), getNamespace(), context);
+		}
+		else if (context.doRefreshTemplates() && null != namespace
+				&& macro.getMacroLibrary().hasBeenModified()) {
+			// reload the macro
+			macro = context.getResourceContainer().getMacroManager().reloadMacro(
+					getName(), getNamespace(), context);
 		}
 		if (null == macro) {
 			throw new ExecutionException("Undefined macro '" + getName() + "'", this);
 		}
+
 		macro.executeMacro(
 				context, isOrdinal(), getAttributes(),
 				new MacroInstanceExecutor(this), sw);

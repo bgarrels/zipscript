@@ -142,16 +142,18 @@ public class VariableElement extends AbstractElement implements Element {
 				// bypass path and get the full path from the context
 				rtn = context.get(pattern);
 			}
-			if (isNullAllowed && null == rtn) return "";
 			if (null == rtn && count == 0) {
 				StringBuffer sb = new StringBuffer();
 				for (Iterator i=children.iterator(); i.hasNext(); ) {
 					if (sb.length() > 0) sb.append('.');
 					VariableChild child = (VariableChild) i.next();
-					sb.append(child.getPropertyName());
+					if (null != child.getPropertyName())
+						sb.append(child.getPropertyName());
 				}
-				pattern = sb.toString();
-				rtn = context.get(pattern);
+				if (sb.length() > 0) {
+					pattern = sb.toString();
+					rtn = context.get(pattern);
+				}
 			}
 			if (null != specialElements) {
 				if (null == rtn
@@ -180,6 +182,7 @@ public class VariableElement extends AbstractElement implements Element {
 					throw new ExecutionException(e.getMessage(), this);
 				}
 			}
+			if (isNullAllowed && null == rtn) return "";
 			return rtn;
 		}
 		catch (ExecutionException e) {

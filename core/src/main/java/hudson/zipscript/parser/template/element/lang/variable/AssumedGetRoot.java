@@ -1,6 +1,5 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
-import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;

@@ -18,8 +18,15 @@ public class ParseParameters {
 	}
 
 	public Object getProperty (Object key) {
-		if (null == resourceContainer.getInitParameters()) return null;
-		else return resourceContainer.getInitParameters().get(key);
+		return resourceContainer.getInitParameters().get(key);
+	}
+
+	public boolean getPropertyAsBoolean (Object key, boolean defaultVal) {
+		Object val = resourceContainer.getInitParameters().get(key);
+		if (null == val) return defaultVal;
+		else if (val instanceof Boolean) return ((Boolean) val).booleanValue();
+		else if (val instanceof String) return Boolean.TRUE.equals(val);
+		else return defaultVal;
 	}
 
 	public ResourceContainer getResourceContainer() {

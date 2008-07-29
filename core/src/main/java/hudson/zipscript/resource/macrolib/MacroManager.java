@@ -35,7 +35,7 @@ public class MacroManager {
 				contents, resourceContainer.getComponents(),
 				TextDefaultElementFactory.INSTANCE, 0, resourceContainer);
 		List l = pr.getElements();
-		MacroLibrary macroLibrary = new MacroLibrary(namespace);
+		MacroLibrary macroLibrary = new MacroLibrary(namespace, resource);
 		for (Iterator i=l.iterator(); i.hasNext(); ) {
 			Element e = (Element) i.next();
 			if (e instanceof MacroDirective) {
@@ -45,6 +45,19 @@ public class MacroManager {
 		if (macroLibrary.getMacroNames().size() > 0) {
 			macroLibraries.put(namespace, macroLibrary);
 		}
+	}
+
+	public MacroDirective reloadMacro (String name, String namespace, MacroProvider defaultMacroProvider) {
+		if (null != namespace) {
+			String path = defaultMacroProvider.getMacroImportPath(namespace);
+			if (null != path) {
+				macroLibraries.remove(path);
+			}
+			else  {
+				macroLibraries.remove(namespace);
+			}
+		}
+		return getMacro(name, namespace, defaultMacroProvider);
 	}
 
 	public MacroDirective getMacro (String name, String namespace, MacroProvider defaultMacroProvider) {

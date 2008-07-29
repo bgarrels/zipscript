@@ -1,6 +1,7 @@
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
@@ -17,6 +18,11 @@ public abstract class AbstractContext implements ExtendedContext {
 	private ResourceContainer resourceContainer;
 	private Map importDefinitions;
 	private Map initializeMap;
+	private boolean refreshTemplates = true;
+
+	public boolean doRefreshTemplates() {
+		return refreshTemplates;
+	}
 
 	public ParsingSession getParsingSession() {
 		return parsingSession;
@@ -24,6 +30,8 @@ public abstract class AbstractContext implements ExtendedContext {
 
 	public void setParsingSession(ParsingSession parsingSession) {
 		this.parsingSession = parsingSession;
+		this.refreshTemplates = parsingSession.getParameters().getPropertyAsBoolean(
+				Constants.REFRESH_TEMPLATES, true);
 	}
 
 	public ResourceContainer getResourceContainer() {

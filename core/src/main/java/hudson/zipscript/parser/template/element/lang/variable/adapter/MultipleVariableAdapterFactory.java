@@ -1,12 +1,12 @@
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 
