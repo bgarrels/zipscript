@@ -81,7 +81,7 @@ public class ZipScriptTemplateEngine extends BaseTemplateEngine {
 			return;
 		}
 		else {
-			Object context = zipScriptManager.createContext(actionInvocation, req);
+			Object context = zipScriptManager.createContext(actionInvocation, null, req);
 			writeOutput(zipTemplate, context, templateContext.getWriter());
 		}
 	}
