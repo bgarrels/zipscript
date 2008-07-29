@@ -8,10 +8,6 @@
         <filter-class>
             org.apache.struts2.dispatcher.FilterDispatcher
         </filter-class>
-	    <init-param>
-	      <param-name>zipscript.refreshTemplates</param-name>
-	      <param-value>false</param-value>
-	    </init-param>
     </filter>
 
     <filter-mapping>

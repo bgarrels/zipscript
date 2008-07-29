@@ -8,9 +8,14 @@ import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.plugin.Plugin;
+import hudson.zipscript.plugin.struts2.parser.context.RequestParameterMap;
 import hudson.zipscript.resource.WebInfResourceLoader;
 
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.LocaleProvider;
@@ -18,6 +23,11 @@ import com.opensymphony.xwork2.TextProviderFactory;
 
 public class Struts2Plugin implements Plugin {
 
+	static final String REQUEST = "Request";
+	static final String ACTION = "Action";
+	static final String PARAMETERS = "Parameters";
+	static final String RESPONSE = "Response";
+	
 	public Component[] getComponents() {
 		return null;
 	}
@@ -47,11 +57,19 @@ public class Struts2Plugin implements Plugin {
 
 	public void initialize(ExtendedContext context)
 			throws InitializationException {
-		Object action = ActionContext.getContext().getActionInvocation().getAction();
-		if (action instanceof LocaleProvider) {
-			context.put(Constants.RESOURCE, new TextProviderFactory().createInstance(
-					action.getClass(), (LocaleProvider) action));
-			context.setLocale(((LocaleProvider) action).getLocale());
+		ActionContext actionContext = ActionContext.getContext();
+		if (null != actionContext) {
+			Object action = actionContext.getActionInvocation().getAction();
+			if (action instanceof LocaleProvider) {
+				context.put(Constants.RESOURCE, new TextProviderFactory().createInstance(
+						action.getClass(), (LocaleProvider) action));
+				context.setLocale(((LocaleProvider) action).getLocale());
+			}
+			HttpServletRequest req = ServletActionContext.getRequest();
+			context.put(REQUEST, req);
+			context.put(RESPONSE, ServletActionContext.getResponse());
+			context.put(ACTION, action);
+			context.put(PARAMETERS, new RequestParameterMap(req));
 		}
 	}
 

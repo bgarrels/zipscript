@@ -66,6 +66,8 @@ public class ZipScriptResult extends StrutsResultSupport {
 	 */
 	public void doExecute(String finalLocation, ActionInvocation invocation)
 			throws Exception {
+		ResultData resultData = new ResultData(finalLocation);
+		
 		// get working values
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		HttpServletRequest request = ServletActionContext.getRequest();
@@ -107,7 +109,7 @@ public class ZipScriptResult extends StrutsResultSupport {
 			Writer writer = new OutputStreamWriter(response.getOutputStream(), encoding);
 			Object context = zipScriptManager.createContext(invocation, request);
 
-			writeOutput(context, stack, zipEngine, invocation, finalLocation,
+			writeOutput(context, stack, zipEngine, invocation, resultData,
 					servletContext, request, response, writer);
 
 			response.setContentType(contentType);
@@ -127,11 +129,11 @@ public class ZipScriptResult extends StrutsResultSupport {
 	}
 
 	protected void writeOutput(Object context, ValueStack stack, ZipEngine zipEngine,
-			ActionInvocation invocation, String location, ServletContext servletContext,
+			ActionInvocation invocation, ResultData resultData, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response, Writer writer)
 	throws Exception {
 		Template t = getPageTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData.getTemplate(), servletContext);
 		t.merge(context, writer);
 	}
 
