@@ -22,11 +22,6 @@ import com.opensymphony.xwork2.LocaleProvider;
 import com.opensymphony.xwork2.TextProviderFactory;
 
 public class Struts2Plugin implements Plugin {
-
-	static final String REQUEST = "Request";
-	static final String ACTION = "Action";
-	static final String PARAMETERS = "Parameters";
-	static final String RESPONSE = "Response";
 	
 	public Component[] getComponents() {
 		return null;
@@ -66,10 +61,11 @@ public class Struts2Plugin implements Plugin {
 				context.setLocale(((LocaleProvider) action).getLocale());
 			}
 			HttpServletRequest req = ServletActionContext.getRequest();
-			context.put(REQUEST, req);
-			context.put(RESPONSE, ServletActionContext.getResponse());
-			context.put(ACTION, action);
-			context.put(PARAMETERS, new RequestParameterMap(req));
+			context.put(hudson.zipscript.plugin.struts2.Constants.REQUEST, req);
+			context.put(hudson.zipscript.plugin.struts2.Constants.SESSION, req.getSession());
+			context.put(hudson.zipscript.plugin.struts2.Constants.RESPONSE, ServletActionContext.getResponse());
+			context.put(hudson.zipscript.plugin.struts2.Constants.ACTION, action);
+			context.put(hudson.zipscript.plugin.struts2.Constants.PARAMETERS, new RequestParameterMap(req));
 		}
 	}
 

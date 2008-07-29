@@ -36,10 +36,12 @@ public class VariableAdapterFactory
 
 	public String[] getReservedContextAttributes() {
 		return new String[] {
-				Struts2Plugin.REQUEST,
-				Struts2Plugin.ACTION,
-				Struts2Plugin.RESPONSE,
-				Struts2Plugin.PARAMETERS
+				Constants.REQUEST,
+				Constants.ACTION,
+				Constants.RESPONSE,
+				Constants.PARAMETERS,
+				Constants.LAYOUT,
+				Constants.SESSION,
 		};
 	}
 

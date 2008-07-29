@@ -1,6 +1,7 @@
 package org.apache.struts2.views.zipscript;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.template.Template;
 
 import java.io.OutputStreamWriter;
@@ -107,7 +108,7 @@ public class ZipScriptResult extends StrutsResultSupport {
 			}
 
 			Writer writer = new OutputStreamWriter(response.getOutputStream(), encoding);
-			Object context = zipScriptManager.createContext(invocation, request);
+			Object context = zipScriptManager.createContext(invocation, resultData, request);
 
 			writeOutput(context, stack, zipEngine, invocation, resultData,
 					servletContext, request, response, writer);

@@ -1,6 +1,7 @@
 package org.apache.struts2.views.zipscript;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.template.Template;
 

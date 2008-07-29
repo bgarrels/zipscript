@@ -1,7 +1,9 @@
 package org.apache.struts2.views.zipscript;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.parser.Constants;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.plugin.struts2.Struts2Plugin;
 import hudson.zipscript.plugin.struts2.parser.context.ActionRequestContextWrapper;
@@ -96,8 +98,11 @@ public class ZipScriptManager {
 	}
 
 	public Object createContext (
-			ActionInvocation actionInvocation, HttpServletRequest request) {
-		return new ActionRequestContextWrapper(
+			ActionInvocation actionInvocation, ResultData resultData, HttpServletRequest request) {
+		ExtendedContext ctx = new ActionRequestContextWrapper(
 				actionInvocation.getAction(), request);
+		if (null != resultData)
+			ctx.put(hudson.zipscript.plugin.struts2.Constants.LAYOUT, resultData);
+		return ctx;
 	}
 }
