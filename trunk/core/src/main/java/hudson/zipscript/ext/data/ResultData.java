@@ -1,9 +1,12 @@
 package hudson.zipscript.ext.data;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public class ResultData {
+public class ResultData implements Map {
 
 	private static final char SEPARATOR = ';';
 	private static final char ASSIGNMENT = '=';
@@ -88,8 +91,75 @@ public class ResultData {
 		this.layout = layout;
 	}
 
-	public Object getParameter (String key) {
+	public String getParameter (String key) {
+		return (String) get(key);
+	}
+
+	public void clear() {
+		if (null != parameters)
+			parameters.clear();
+	}
+
+	public boolean containsKey(Object key) {
+		if (null == parameters) return false;
+		else return parameters.containsKey(key);
+	}
+
+	public boolean containsValue(Object value) {
+		if (null == parameters) return false;
+		else return parameters.containsValue(value);
+	}
+
+	public Set entrySet() {
+		if (null == parameters)
+			return Collections.EMPTY_SET;
+		else
+			return parameters.entrySet();
+	}
+
+	public Object get(Object key) {
 		if (null == parameters) return null;
 		else return parameters.get(key);
+	}
+
+	public boolean isEmpty() {
+		if (null == parameters)
+			return true;
+		else
+			return parameters.isEmpty();
+	}
+
+	public Set keySet() {
+		if (null == parameters)
+			return Collections.EMPTY_SET;
+		else
+			return parameters.keySet();
+	}
+
+	public Object put(Object arg0, Object arg1) {
+		if (null == parameters)
+			parameters = new HashMap();
+		return parameters.put(arg0, arg1);
+	}
+
+	public void putAll(Map arg0) {
+		if (null == parameters)
+			parameters = new HashMap();
+		parameters.putAll(arg0);
+	}
+
+	public Object remove(Object key) {
+		if (null == parameters) return null;
+		else return parameters.remove(key);
+	}
+
+	public int size() {
+		if (null == parameters) return 0;
+		else return parameters.size();
+	}
+
+	public Collection values() {
+		if (null == parameters) return null;
+		else return Collections.EMPTY_LIST;
 	}
 }
