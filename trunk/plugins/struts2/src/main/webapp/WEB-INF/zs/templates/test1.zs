@@ -3,15 +3,10 @@
 [/#initialize]
 [#import "tab.zsm" as tab/]
 
-[@tab.pane]
-	[%page label="Page 1"]
-		Page 1 contents
-	[/%page]
-	[%page label="Page 2"]
-		Page 2 contents
-	[/%page]
-[/@tab.pane]
+${Parameters("abc")!"Nope"} $!Parameters("ab")
 
+[##
+<br/>
 This is a test
 <br/>
 $!{message}
@@ -24,3 +19,13 @@ ${foo}
 [/#while]
 
 $Resource("key.text")
+
+[@tab.pane]
+	[%page label="Page 1"]
+		Page 1 contents
+	[/%page]
+	[%page label="Page 2"]
+		Page 2 contents
+	[/%page]
+[/@tab.pane]
+##]

@@ -20,7 +20,7 @@
         </result-types>
 
         <action name="test1" class="actions.Test1">
-            <result name="success" type="zipscriptLayout">test1.zs</result>
+            <result name="success" type="zipscriptLayout">[layout=layout.zs;page=page.zs]test1.zs</result>
         </action>
 
     </package>

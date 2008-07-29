@@ -16,34 +16,39 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class ZipScriptLayoutResult extends ZipScriptBodyResult {
 	private static final long serialVersionUID = -3624317866978957286L;
 
+	private static final String LAYOUT_PATH = LAYOUT_PATH_PREFIX + "layout.zs";
+
 	@Override
 	protected void writeOutput(Object context, ValueStack stack,
-			ZipEngine zipEngine, ActionInvocation invocation, String location,
+			ZipEngine zipEngine, ActionInvocation invocation, ResultData resultData,
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, Writer writer) throws Exception {
 
 		// get the body content
 		Template body = getBodyTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData, servletContext);
 		Context initializedCtx = body.initialize(context);
 		initializedCtx.put(getScreenPlaceholderToken(), body);
 
 		// get the layout content
 		Template layout = getLayoutTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData, servletContext);
 		layout.initialize(initializedCtx);
 		initializedCtx.put(getLayoutPlaceholderToken(), layout);
 
 		// get the page content
 		Template page = getPageTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData, servletContext);
 		page.merge(initializedCtx, writer);
 	}
 
 	protected Template getLayoutTemplate(ValueStack stack, ZipEngine zipEngine,
-			ActionInvocation invocation, String location, ServletContext servletContext)
+			ActionInvocation invocation, ResultData resultData, ServletContext servletContext)
 			throws Exception {
-		return zipEngine.getTemplate(getLayoutPath(), servletContext);
+		if (null != resultData.getLayout())
+			return zipEngine.getTemplate(LAYOUT_PATH_PREFIX + resultData.getLayout(), servletContext);
+		else
+			return zipEngine.getTemplate(getLayoutPath(), servletContext);
 	}
 
 	private static final String SCREEN_PLACEHOLDER = "screen_placeholder";
@@ -51,7 +56,6 @@ public class ZipScriptLayoutResult extends ZipScriptBodyResult {
 		return SCREEN_PLACEHOLDER;
 	}
 
-	private static final String LAYOUT_PATH = "layouts/layout.zs";
 	protected String getLayoutPath () {
 		return LAYOUT_PATH;
 	}

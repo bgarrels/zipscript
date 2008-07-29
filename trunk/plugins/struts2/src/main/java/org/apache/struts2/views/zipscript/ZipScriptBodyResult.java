@@ -17,35 +17,41 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class ZipScriptBodyResult extends ZipScriptResult {
 	private static final long serialVersionUID = -3624317866978957286L;
 
+	public static final String LAYOUT_PATH_PREFIX = "layouts/";
+	public static final String PAGE_PATH = LAYOUT_PATH_PREFIX + "page.zs";
+
 	@Override
 	protected void writeOutput(Object context, ValueStack stack,
-			ZipEngine zipEngine, ActionInvocation invocation, String location,
+			ZipEngine zipEngine, ActionInvocation invocation, ResultData resultData,
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, Writer writer) throws Exception {
 
 		// get the body content
 		Template body = getBodyTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData, servletContext);
 		Context initializedCtx = body.initialize(context);
 
 		// get the page content
 		Template page = getPageTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData, servletContext);
 		initializedCtx.put(getLayoutPlaceholderToken(), body);
 		page.merge(initializedCtx, writer);
 	}
 
 	protected Template getPageTemplate(ValueStack stack, ZipEngine zipEngine,
-			ActionInvocation invocation, String location, ServletContext servletContext)
+			ActionInvocation invocation, ResultData resultData, ServletContext servletContext)
 			throws Exception {
-		return zipEngine.getTemplate(getPagePath(), servletContext);
+		if (null != resultData.getPage())
+			return zipEngine.getTemplate(LAYOUT_PATH_PREFIX + resultData.getPage(), servletContext);
+		else
+			return zipEngine.getTemplate(getPagePath(), servletContext);
 	}
 
 	protected Template getBodyTemplate(ValueStack stack, ZipEngine zipEngine,
-			ActionInvocation invocation, String location, ServletContext servletContext)
+			ActionInvocation invocation, ResultData resultData, ServletContext servletContext)
 			throws Exception {
 		return super.getPageTemplate(
-				stack, zipEngine, invocation, location, servletContext);
+				stack, zipEngine, invocation, resultData.getTemplate(), servletContext);
 	}
 
 	private static final String LAYOUT_PLACEHOLDER = "layout_placeholder";
@@ -53,7 +59,6 @@ public class ZipScriptBodyResult extends ZipScriptResult {
 		return LAYOUT_PLACEHOLDER;
 	}
 
-	private static final String PAGE_PATH = "layouts/page.zs";
 	protected String getPagePath () {
 		return PAGE_PATH;
 	}
