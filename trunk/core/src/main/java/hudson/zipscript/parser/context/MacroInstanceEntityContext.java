@@ -144,4 +144,8 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 	public void addMacroImport(String namespace, String macroPath) {
 		preMacroContext.addMacroImport(namespace, macroPath);
 	}
+
+	public boolean doRefreshTemplates() {
+		return preMacroContext.doRefreshTemplates();
+	}
 }

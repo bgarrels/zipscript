@@ -144,4 +144,8 @@ public class NestedContextWrapper implements ExtendedContext {
 	public void addMacroImport(String namespace, String macroPath) {
 		parentContext.addMacroImport(namespace, macroPath);
 	}
+
+	public boolean doRefreshTemplates() {
+		return parentContext.doRefreshTemplates();
+	}
 }

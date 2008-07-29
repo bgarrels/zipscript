@@ -63,6 +63,8 @@ public class Constants {
 	public static final String MACROLIB_RESOURCE_LOADER_PARAMETER = "macroLibResourceLoaderParameter";
 	public static final String INCLUDE_RESOURCE_LOADER_PARAMETER = "includeResourceLoaderParameter";
 
+	public static final String REFRESH_TEMPLATES = "refreshTemplates";
+
 	public static final char NAMESPACE_SEPARATOR = '.';
 
 	public static final Map RESOURCE_LOADER_TYPES = new HashMap();

@@ -1,6 +1,7 @@
 package hudson.zipscript.resource.macrolib;
 
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
+import hudson.zipscript.resource.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +10,16 @@ import java.util.Set;
 public class MacroLibrary implements MacroProvider {
 
 	private String namespace;
+	private Resource resource;
 	private Map macroDefinitions = new HashMap();
 
-	public MacroLibrary (String namespace) {
+	public MacroLibrary (String namespace, Resource resource) {
 		this.namespace = namespace;
+		this.resource = resource;
+	}
+
+	public boolean hasBeenModified () {
+		return resource.hasBeenModified();
 	}
 
 	public Set getMacroNames () {

@@ -98,4 +98,10 @@ public interface ExtendedContext extends Context, MacroProvider {
 	 * @param macroPath the path for the macro
 	 */
 	public void addMacroImport (String namespace, String macroPath);
+
+	/**
+	 * Return true if templates should be modification checked
+	 * @return
+	 */
+	public boolean doRefreshTemplates ();
 }

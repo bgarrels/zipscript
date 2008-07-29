@@ -84,7 +84,9 @@ public class VariablePatternMatcher implements PatternMatcher {
 				}
 				else if (c == '\'' || c == '\"') {
 					// we can't have strings in lazy variables if we're not nested
-					if (!isFormal && squiglyNesting == 0 && parenNesting == 0  && braceNesting == 0) return null;
+					if (!isFormal && squiglyNesting == 0 && parenNesting == 0  && braceNesting == 0) {
+						return null;
+					}
 					inString = true;
 					stringChar = c;
 				}
@@ -95,7 +97,7 @@ public class VariablePatternMatcher implements PatternMatcher {
 							return new VariableElement(isFormal, isSilenced, sb.toString(), session, startPosition);
 						}
 					}
-					else if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.' || c == ',' || c == '?' || c == '|' || c == '!')) {
+					else if (!(Character.isLetterOrDigit(c) || c == '_' || c == '.' || c == ',')) {
 						return null;
 					}
 				}

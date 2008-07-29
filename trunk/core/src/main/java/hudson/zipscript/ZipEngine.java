@@ -105,6 +105,7 @@ public class ZipEngine {
 		};
 
 	private ResourceContainer resourceContainer;
+	private boolean doRefreshCheck;
 	
 
 	/**
@@ -246,6 +247,10 @@ public class ZipEngine {
 				this, plugins, macroManager, variableAdapterFactory,
 				templateResourceLoader, includeResourceLoader, macroLibResourceLoader, evalResourceLoader,
 				(Component[]) components.toArray(new Component[components.size()]), properties);
+
+		// property accessor
+		ParseParameters pp = new ParseParameters(resourceContainer, false, false);
+		this.doRefreshCheck = pp.getPropertyAsBoolean(Constants.REFRESH_TEMPLATES, true);
 	}
 
 	/**
@@ -312,13 +317,16 @@ public class ZipEngine {
 			if (null == tr) {
 				tr = ResourceUtil.loadTemplate(
 						source, parameter, new ParseParameters(resourceContainer, false, false), resourceContainer);
+				resourceMap.put(source, tr);
 			}
-			if (tr.resource.hasBeenModified()) {
+			else if (doRefreshCheck && tr.resource.hasBeenModified()) {
 				// reload the resource
-				tr = ResourceUtil.loadTemplate(new ParseParameters(resourceContainer, false, false), resourceContainer, tr.resource);
+				tr = ResourceUtil.loadTemplate(
+						new ParseParameters(resourceContainer, false, false), resourceContainer, tr.resource);
+				resourceMap.put(source, tr);
 			}
-			tr.template.setResourceContainer(resourceContainer);
-			resourceMap.put(source, tr);
+			
+			
 			return tr.template;
 		}
 		catch (ParseException e) {

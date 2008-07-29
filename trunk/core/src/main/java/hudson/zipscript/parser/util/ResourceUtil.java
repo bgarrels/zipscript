@@ -52,6 +52,7 @@ public class ResourceUtil {
 	throws ParseException {
 		Resource resource = resourceContainer.getEvalResourceLoader().getResource(source, resourceLoaderParameter);
 		TemplateResource tr = loadTemplate(patternMatchers, parseParameters, resourceContainer, resource, SpecialVariableDefaultEelementFactory.INSTANCE);
+		tr.template.setResourceContainer(resourceContainer);
 		return tr.template;
 	}
 

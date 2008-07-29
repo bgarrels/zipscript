@@ -56,8 +56,9 @@ public class IncludeDirective extends AbstractDirective {
 			throws ExecutionException {
 		if (null != this.includeResource) {
 			// statically defined
-			if (includeResource.resource.hasBeenModified()) {
-				this.includeResource = loadTemplateResource(this.includePath, context.getResourceContainer());
+			if (context.doRefreshTemplates() && includeResource.resource.hasBeenModified()) {
+				this.includeResource = loadTemplateResource(
+						this.includePath, context.getResourceContainer());
 			}
 			includeResource.template.merge(context, sw, context.getLocale());
 		}
@@ -68,7 +69,7 @@ public class IncludeDirective extends AbstractDirective {
 				throw new ExecutionException("Null resource include '" + includeElement + "'", this);
 			String s = includePath.toString();
 			TemplateResource tr = (TemplateResource) parsedResources.get(s);
-			if (null == tr || tr.resource.hasBeenModified()) {
+			if (null == tr || (context.doRefreshTemplates() && tr.resource.hasBeenModified())) {
 				// reload
 				tr = loadTemplateResource(s, context.getResourceContainer());
 			}
