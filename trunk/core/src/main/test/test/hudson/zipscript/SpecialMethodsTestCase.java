@@ -104,7 +104,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertIsMethod("isNumber", new Integer(1), "not it");
 		assertIsMethod("isString", "this is it", Boolean.TRUE);
 		assertIsMethod("isSequence", new Object[1], "not it");
-		assertIsMethod("isMap", new HashMap(), "not it");
+		assertIsMethod("isHash", new HashMap(), "not it");
 	}
 
 	private void assertIsMethod(String sm, Object matchVal, Object noMatchVal) throws ParseException {
