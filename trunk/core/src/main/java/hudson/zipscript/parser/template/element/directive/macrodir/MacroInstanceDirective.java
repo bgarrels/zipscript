@@ -80,10 +80,10 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		// validate name
 		for (int i=0; i<name.length(); i++) {
 			char c = name.charAt(i);
-			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == '.'))
+			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == Constants.NAMESPACE_SEPARATOR))
 				throw new ParseException(contentPosition, "Invalid macro name '" + name + "'");
 		}
-		int index = name.indexOf('.');
+		int index = name.indexOf(Constants.NAMESPACE_SEPARATOR);
 		if (index > 0) {
 			String s = name;
 			namespace = s.substring(0, index);
@@ -343,7 +343,7 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 
 	public String getFullName () {
 		if (null == namespace) return name;
-		else return namespace + '.' + name;
+		else return namespace + Constants.NAMESPACE_SEPARATOR + name;
 	}
 
 	public List getMacroDefinitionAttributes (ExtendedContext context) {

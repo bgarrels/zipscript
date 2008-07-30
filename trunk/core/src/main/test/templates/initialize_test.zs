@@ -2,6 +2,6 @@
 	[#set inTemplateCount = inTemplateCount + 1/]
 [/#initialize]
 
-[@test.foo]
+[@test:foo]
 	abcd
-[/@test.foo]
+[/@test:foo]
