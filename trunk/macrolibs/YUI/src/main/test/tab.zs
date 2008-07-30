@@ -1,4 +1,4 @@
-[@tab.pane id="myTab"]
+[@tab:pane id="myTab"]
 	[%page label="Some Page" active=true]
 		These are the contents of some page...
 		<p>
@@ -21,4 +21,4 @@
 			This is the contents of page "${item}"
 		[/%page]
 	[/#foreach]
-[/@tab.pane]
+[/@tab:pane]
