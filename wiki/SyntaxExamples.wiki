@@ -58,10 +58,14 @@ informal variable references
 
 [##-- macro reference from inline definition (see below) --##]
 [@myInlineMacro myRequiredParam="something" myDefaultedParam=47]
+
+    [## below is a template-defined parameter for "myInlineMacro" ##]
     [%myTemplateDefinedParam tdp1="some required parameter"]
         template defined parameter body content
     [/%myTemplateDefinedParameter]
+
    This is the macro body content
+
 [/@myInlineMacro]
 
 [##-- macro definition --##]
