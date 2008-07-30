@@ -46,6 +46,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.string.Upp
 import hudson.zipscript.parser.template.element.lang.variable.special.string.UpperFirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.string.XMLSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.xml.DocumentObjectAdapter;
+import hudson.zipscript.parser.template.element.lang.xml.NodeMapAdapter;
 import hudson.zipscript.parser.template.element.lang.xml.NodeObjectAdapter;
 
 import java.util.Collection;
@@ -65,6 +66,9 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			return JavaMapAdapter.INSTANCE;
 		else if (map instanceof Context)
 			return ContextMapAdapter.INSTANCE;
+		else if (map instanceof Node) {
+			return NodeMapAdapter.INSTANCE;
+		}
 		return null;
 	}
 
