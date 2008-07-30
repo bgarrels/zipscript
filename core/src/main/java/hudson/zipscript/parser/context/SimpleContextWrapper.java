@@ -28,10 +28,6 @@ public class SimpleContextWrapper extends AbstractContext {
 		context.put(key, value);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		context.put(key, value);
-	}
-
 	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		return context.get(key, retrievalContext, contextHint);
 	}

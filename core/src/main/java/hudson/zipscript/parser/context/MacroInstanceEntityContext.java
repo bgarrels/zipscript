@@ -81,10 +81,6 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		this.put(key, value, false);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		preMacroContext.putGlobal(key, value);
-	}
-
 	public Object remove(Object key) {
 		return postMacroContext.remove(key);
 	}

@@ -37,13 +37,6 @@ public interface ExtendedContext extends Context, MacroProvider {
 	public void put (Object key, Object value, boolean travelUp);
 
 	/**
-	 * Put a value in the context using the global namespace
-	 * @param key the key name
-	 * @param value the value
-	 */
-	public void putGlobal (Object key, Object value);
-
-	/**
 	 * Return the parsing session which is used by evaluators
 	 */
 	public ParsingSession getParsingSession();

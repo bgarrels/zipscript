@@ -54,10 +54,6 @@ public class NestedContextWrapper implements ExtendedContext {
 		this.put(key, value, false);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		parentContext.putGlobal(key, value);
-	}
-
 	public Object remove(Object key) {
 		return map.remove(key);
 	}

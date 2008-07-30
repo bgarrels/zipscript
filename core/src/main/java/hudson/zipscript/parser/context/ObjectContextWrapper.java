@@ -71,10 +71,6 @@ public class ObjectContextWrapper extends AbstractContext {
 		this.put(key, value, false);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		setMap.put(key, value);
-	}
-
 	public Set getKeys() {
 		throw new UnsupportedOperationException();
 	}
