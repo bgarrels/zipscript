@@ -26,19 +26,14 @@ public class ActionRequestContextWrapper extends AbstractContext {
 		request.setAttribute(key.toString(), value);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		request.setAttribute(key.toString(), value);
-		
-	}
-
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHelper) {
 		String keyStr = (String) key;
 		Object rtn = request.getAttribute(keyStr);
 		if (null != rtn) return rtn;
 		else {
 			// maybe action parameter
 			try {
-				rtn = OBJECT_ADAPTER.get(keyStr, action, retrievalContext);
+				rtn = OBJECT_ADAPTER.get(keyStr, action, retrievalContext, contextHelper);
 			}
 			catch (UnknownPropertyException e) {}
 			if (null != rtn) {
