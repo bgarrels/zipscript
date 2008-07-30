@@ -113,6 +113,7 @@
 			<test haltonerror="true" outfile="dist/src/test/VariableFormattingTestCase-results" name="test.hudson.zipscript.VariableFormattingTestCase" />
 			<test haltonerror="true" outfile="dist/src/test/VariableTestCase-results" name="test.hudson.zipscript.VariableTestCase" />
 			<test haltonerror="true" outfile="dist/src/test/ContextTestCase-results" name="test.hudson.zipscript.ContextTestCase" />
+			<test haltonerror="true" outfile="dist/src/test/XMLTestCase-results" name="test.hudson.zipscript.XMLTestCase" />
 		</junit>
 	</target>
 

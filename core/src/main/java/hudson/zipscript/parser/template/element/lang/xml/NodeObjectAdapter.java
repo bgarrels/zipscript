@@ -26,7 +26,7 @@ public class NodeObjectAdapter implements ObjectAdapter {
 
 	public Object get(
 			String key, Object object, RetrievalContext retrievalContext) throws ClassCastException {
-		Node node = (Node) object;
+		Node node = getNode(object);
 		if (retrievalContext.is(RetrievalContext.SEQUENCE)) {
 			// find node children whose name match the key
 			NodeList nl = node.getChildNodes();
@@ -37,19 +37,27 @@ public class NodeObjectAdapter implements ObjectAdapter {
 			}
 			return matchingChildren;
 		}
+		else if (retrievalContext.is(RetrievalContext.HASH)) {
+			NodeList nl = node.getChildNodes();
+			for (int i=0; i<nl.getLength(); i++) {
+				if (nl.item(i).getNodeName().equals(key))
+					return nl.item(i);
+			}
+			return null;
+		}
 		else {
-			node = node.getAttributes().getNamedItem(key);
-			if (null != node)
-				return node.getNodeValue();
+			Node attr = node.getAttributes().getNamedItem(key);
+			if (null != attr)
+				return attr.getNodeValue();
 			else {
 				// maybe a subnode attribute?
 				NodeList nl = node.getChildNodes();
 				for (int i=0; i<nl.getLength(); i++) {
-					if (node.getNodeName().equals(key)) {
-						nl = node.getChildNodes();
+					if (nl.item(i).getNodeName().equals(key)) {
+						nl = nl.item(i).getChildNodes();
 						for (int j=0; j<nl.getLength(); j++) {
 							if (nl.item(j).getNodeType() == Node.TEXT_NODE)
-								return nl.item(j).getNodeValue();
+								return nl.item(j).getNodeValue().trim();
 						}
 						return null;
 					}
@@ -66,5 +74,9 @@ public class NodeObjectAdapter implements ObjectAdapter {
 	public void set(String key, Object value, Object object)
 			throws ClassCastException {
 		throw new UnsupportedOperationException();
+	}
+
+	protected Node getNode (Object object) {
+		return (Node) object;
 	}
 }

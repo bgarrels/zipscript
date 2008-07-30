@@ -3,6 +3,7 @@ package hudson.zipscript.parser.context;
 import hudson.zipscript.ResourceContainer;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
+import hudson.zipscript.parser.template.element.lang.xml.DocumentContextWrapper;
 import hudson.zipscript.parser.util.ClassUtil;
 import hudson.zipscript.parser.util.I18NResource;
 import hudson.zipscript.parser.util.I18NResourceImpl;
@@ -15,6 +16,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+
+import org.w3c.dom.Document;
 
 public class ContextWrapperFactory {
 
@@ -55,6 +58,8 @@ public class ContextWrapperFactory {
 		if (null == context) {
 			if (obj instanceof Map)
 				context = new MapContextWrapper((Map) obj);
+			else if (obj instanceof Document)
+				context = new DocumentContextWrapper((Document) obj);
 			else
 				context = new ObjectContextWrapper(obj);
 		}
