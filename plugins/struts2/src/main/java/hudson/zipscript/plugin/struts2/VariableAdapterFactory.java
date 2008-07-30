@@ -1,6 +1,5 @@
 package hudson.zipscript.plugin.struts2;
 
-import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
@@ -50,7 +49,7 @@ public class VariableAdapterFactory
 	}
 
 	public SpecialMethod getSpecialMethod(String name, Element[] parameters,
-			Object object, ExtendedContext context, Element element) {
+			ParsingSession session, Element element) {
 		return null;
 	}
 
