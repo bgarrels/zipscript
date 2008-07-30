@@ -46,7 +46,7 @@ public class GlobalDirective extends AbstractDirective implements NonOutputEleme
 
 	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
-		context.putGlobal(varName, setElement.objectValue(context));
+		context.getRootContext().put(varName, setElement.objectValue(context));
 	}
 
 	public ElementIndex normalize(int index, List elementList,

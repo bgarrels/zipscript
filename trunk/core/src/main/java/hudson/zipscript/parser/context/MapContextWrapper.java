@@ -29,10 +29,6 @@ public class MapContextWrapper extends AbstractContext {
 		this.put(key, value, false);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		put(key, value, true);
-	}
-
 	public Set getKeys() {
 		return map.keySet();
 	}

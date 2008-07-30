@@ -41,10 +41,6 @@ public class DocumentContextWrapper extends AbstractContext {
 		additionaContextValues.put(key, value);
 	}
 
-	public void putGlobal(Object key, Object value) {
-		additionaContextValues.put(key, value);
-	}
-
 	public Set getKeys() {
 		return additionaContextValues.keySet();
 	}
