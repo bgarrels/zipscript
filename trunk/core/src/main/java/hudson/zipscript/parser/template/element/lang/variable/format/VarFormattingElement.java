@@ -90,7 +90,7 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 		return null;
 	}
 
-	public boolean requiresInput(ExtendedContext context) {
+	public boolean requiresInput() {
 		return true;
 	}
 

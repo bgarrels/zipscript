@@ -20,6 +20,13 @@ public class ContainsSpecialMethod extends SequenceSpecialMethod{
 			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext,
 			String contextHint, ExtendedContext context) {
 		Object check = checkElement.objectValue(context);
-		return new Boolean(sequenceAdapter.contains(check, source));
+		if (null == check) return Boolean.FALSE;
+		if (source instanceof String) {
+			// special case
+			return new Boolean(((String) source).indexOf(check.toString()) > 0);
+		}
+		else {
+			return new Boolean(sequenceAdapter.contains(check, source));
+		}
 	}
 }
