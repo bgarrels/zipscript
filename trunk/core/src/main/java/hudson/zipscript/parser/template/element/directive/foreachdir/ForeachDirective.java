@@ -102,7 +102,7 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 			}
 			else {
 				this.sequenceElement = new VariableElement(
-						elements, RetrievalContext.SEQUENCE, session);
+						elements, RetrievalContext.SEQUENCE, this.varName, session);
 			}
 		}
 		catch (IndexOutOfBoundsException e) {

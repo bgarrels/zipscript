@@ -7,7 +7,8 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 public class KeysSpecialMethod extends MapSpecialMethod {
 
 	public Object execute(
-			Object source, MapAdapter mapAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, MapAdapter mapAdapter, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		return mapAdapter.getKeys(source);
 	}
 }

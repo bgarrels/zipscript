@@ -33,7 +33,7 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, RetrievalContext retrievalContext, String contextHint, ExtendedContext context) {
 		return objectValue(context);
 	}
 

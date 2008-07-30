@@ -9,7 +9,8 @@ public class IsNumberSpecialMethod implements SpecialMethod {
 	public static IsNumberSpecialMethod INSTANCE = new IsNumberSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Boolean(source instanceof Number);
 	}
 

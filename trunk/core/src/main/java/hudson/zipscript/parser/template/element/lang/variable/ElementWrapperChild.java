@@ -9,6 +9,7 @@ public class ElementWrapperChild implements VariableChild {
 
 	private hudson.zipscript.parser.template.element.Element element;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	public ElementWrapperChild (Element element) {
 		this.element = element;
@@ -36,5 +37,13 @@ public class ElementWrapperChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

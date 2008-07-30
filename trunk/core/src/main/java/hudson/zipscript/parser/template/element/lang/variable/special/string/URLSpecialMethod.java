@@ -16,7 +16,8 @@ public class URLSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return URLEncoder.encode((String) source, encoding);
 	}
 

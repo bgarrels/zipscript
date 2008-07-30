@@ -31,11 +31,11 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		this.macroDefinitionAttributes = macroDefinitionAttributes;
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		Object obj = additionalContextEntries.get(key);
 		if (null != postMacroContext && null == obj)
-			obj = postMacroContext.get(key, retrievalContext);
-		if (null == obj) obj = preMacroContext.get(key, retrievalContext);
+			obj = postMacroContext.get(key, retrievalContext, contextHint);
+		if (null == obj) obj = preMacroContext.get(key, retrievalContext, contextHint);
 		return obj;
 	}
 

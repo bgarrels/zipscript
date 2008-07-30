@@ -10,7 +10,8 @@ public class HumpbackCaseSpecialMethod implements SpecialMethod {
 	public static final HumpbackCaseSpecialMethod INSTANCE = new HumpbackCaseSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return StringUtil.humpbackCase((String) source);
 	}
 

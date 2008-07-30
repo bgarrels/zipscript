@@ -9,16 +9,17 @@ public abstract class MapSpecialMethod implements SpecialMethod {
 
 	private MapAdapter mapAdapter;
 
-	public final Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context)
+	public final Object execute(Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context)
 			throws Exception {
 		if (null == mapAdapter) {
 			mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(source);
 		}
-		return execute(source, mapAdapter, retrievalContext, context);
+		return execute(source, mapAdapter, retrievalContext, contextHint, context);
 	}
 
 	protected abstract Object execute (
-			Object source, MapAdapter mapAdapter, RetrievalContext retrievalContext, ExtendedContext context);
+			Object source, MapAdapter mapAdapter, RetrievalContext retrievalContext, String contextHint, ExtendedContext context);
 
 	public RetrievalContext getExpectedType() {
 		return RetrievalContext.HASH;

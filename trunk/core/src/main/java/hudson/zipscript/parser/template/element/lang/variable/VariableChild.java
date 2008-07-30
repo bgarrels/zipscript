@@ -13,4 +13,6 @@ public interface VariableChild {
 	public boolean shouldReturnSomething();
 
 	public void setRetrievalContext (RetrievalContext retrievalContext);
+
+	public void setContextHint (String contextHint);
 }

@@ -52,12 +52,13 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 		}
 	}
 
-	public Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context) {
+	public Object execute(Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		try {
 			if (null == source) return null;
 			if (null == executor) executor = initializeSpecialMethod(source, context);
 			if (null == executor) throw new ExecutionException("Unknown special method '" + method + "'", null);
-			return executor.execute(source, retrievalContext, context);
+			return executor.execute(source, retrievalContext, contextHint, context);
 		}
 		catch (Exception e) {
 			if (e instanceof ExecutionException) {

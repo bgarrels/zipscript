@@ -12,7 +12,8 @@ public class JSDateTimeSpecialMethod implements SpecialMethod {
 	public static final JSDateTimeSpecialMethod INSTANCE = new JSDateTimeSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return "new Date(" + Long.toString(((Date) source).getTime()) + ")";
 	}
 

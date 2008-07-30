@@ -14,7 +14,8 @@ public class AddFirstSpecialMethod extends SequenceSpecialMethod {
 	}
 
 	public Object execute(
-			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		Object value = element.objectValue(context);
 		sequenceAdapter.addItemAt(0, value, source);
 		return "";

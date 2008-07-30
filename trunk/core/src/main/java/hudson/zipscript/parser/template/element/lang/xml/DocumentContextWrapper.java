@@ -20,10 +20,10 @@ public class DocumentContextWrapper extends AbstractContext {
 		this.document = document;
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		Object rtn = null;
 		if (key instanceof String)
-			rtn = adapter.get((String) key, document, retrievalContext);
+			rtn = adapter.get((String) key, document, retrievalContext, contextHint);
 		if (null == rtn)
 			rtn = additionaContextValues.get(key);
 		return rtn;

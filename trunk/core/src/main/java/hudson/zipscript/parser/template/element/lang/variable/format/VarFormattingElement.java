@@ -47,7 +47,8 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		if (null == source) return null;
 		try {
 			if (null == formatter) {

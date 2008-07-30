@@ -8,7 +8,8 @@ public interface VariableTokenSeparatorElement {
 	public boolean requiresInput(ExtendedContext context);
 
 	public Object execute (
-			Object source, RetrievalContext retrievalContext, ExtendedContext context);
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context);
 
 	public RetrievalContext getExpectedType ();
 }

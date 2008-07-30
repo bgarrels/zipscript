@@ -46,6 +46,7 @@ public class VariableElement extends AbstractElement implements Element {
 	private VariableTokenSeparatorElement[] specialElements;
 	private SpecialMethod[] escapeMethods;
 	private RetrievalContext retrievalContext = RetrievalContext.SCALAR;
+	private String contextHint;
 
 	private boolean suppressNullErrors;
 
@@ -60,8 +61,9 @@ public class VariableElement extends AbstractElement implements Element {
 	}
 
 	public VariableElement (
-			List elements, RetrievalContext retrievalContext, ParsingSession session) throws ParseException {
+			List elements, RetrievalContext retrievalContext, String contextHint, ParsingSession session) throws ParseException {
 		this.retrievalContext = retrievalContext;
+		this.contextHint = contextHint;
 		this.children = parse(elements, session);
 		normalize(0, Collections.EMPTY_LIST, session);
 	}
@@ -144,7 +146,7 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			else {
 				// bypass path and get the full path from the context
-				rtn = context.get(pattern, retrievalContext);
+				rtn = context.get(pattern, retrievalContext, contextHint);
 			}
 			if (null == rtn && count == 0) {
 				StringBuffer sb = new StringBuffer();
@@ -155,7 +157,7 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 				if (sb.length() > 0) {
 					pattern = sb.toString();
-					rtn = context.get(pattern, retrievalContext);
+					rtn = context.get(pattern, retrievalContext, contextHint);
 				}
 			}
 			if (null != specialElements) {
@@ -168,10 +170,11 @@ public class VariableElement extends AbstractElement implements Element {
 					boolean requiresInput = specialElements[i].requiresInput(context);
 					if (requiresInput || (null == rtn && !requiresInput)) {
 						if (specialElements.length > i+1 && specialElements[i+1].requiresInput(context)) {
-							rtn = specialElements[i].execute(rtn, specialElements[i+1].getExpectedType(), context);
+							rtn = specialElements[i].execute(
+									rtn, specialElements[i+1].getExpectedType(), null, context);
 						}
 						else {
-							rtn = specialElements[i].execute(rtn, this.retrievalContext, context);
+							rtn = specialElements[i].execute(rtn, retrievalContext, contextHint, context);
 						}
 					}
 				}
@@ -179,7 +182,7 @@ public class VariableElement extends AbstractElement implements Element {
 			if (null != escapeMethods && !(rtn instanceof NoAutoEscapeElement)) {
 				try {
 					for (int i=0; i<escapeMethods.length; i++) {
-						rtn = escapeMethods[i].execute(rtn, RetrievalContext.TEXT, context);
+						rtn = escapeMethods[i].execute(rtn, RetrievalContext.TEXT, null, context);
 					}
 				}
 				catch (Exception e) {
@@ -343,18 +346,21 @@ public class VariableElement extends AbstractElement implements Element {
 		for (int i=0; i<children.length; i++) {
 			if (i == children.length-1) {
 				children[i].setRetrievalContext(normalElementLastRetrievalContext);
+				children[i].setContextHint(contextHint);
 			}
 			else {
 				children[i].setRetrievalContext(RetrievalContext.HASH);
 			}
 		}
 		
-		if (specialElements.size() > 0)
+		if (specialElements.size() > 0) {
 			this.specialElements = (VariableTokenSeparatorElement[]) specialElements.toArray(
 					new VariableTokenSeparatorElement[specialElements.size()]);
-		if (escapeMethods.size() > 0)
+		}
+		if (escapeMethods.size() > 0) {
 			this.escapeMethods = (SpecialMethod[]) escapeMethods.toArray(
 					new SpecialMethod[escapeMethods.size()]);
+		}
 		
 		return null;
 	}
@@ -494,7 +500,7 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 				else {
 					children.add(new MapChild(
-							new VariableElement(me.getChildren(), RetrievalContext.HASH, session)));
+							new VariableElement(me.getChildren(), RetrievalContext.HASH, null, session)));
 				}
 			}
 			else if (e instanceof ComparatorElement && elements.size() == 1) {
@@ -568,7 +574,7 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 		}
 		else {
-			return new VariableElement(elements, RetrievalContext.HASH, parseData);
+			return new VariableElement(elements, RetrievalContext.HASH, null, parseData);
 		}
 	}
 

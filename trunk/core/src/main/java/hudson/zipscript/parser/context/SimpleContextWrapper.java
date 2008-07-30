@@ -32,8 +32,8 @@ public class SimpleContextWrapper extends AbstractContext {
 		context.put(key, value);
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
-		return context.get(key, retrievalContext);
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
+		return context.get(key, retrievalContext, contextHint);
 	}
 
 	public Set getKeys() {

@@ -7,7 +7,8 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAd
 public class LengthSpecialMethod extends SequenceSpecialMethod {
 
 	public Object execute(
-			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		return new Integer(sequenceAdapter.getLength(source));
 	}
 }

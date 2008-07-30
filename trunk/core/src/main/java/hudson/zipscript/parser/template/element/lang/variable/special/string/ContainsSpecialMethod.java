@@ -17,7 +17,8 @@ public class ContainsSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		String s = source.toString();
 		String check = checkElement.objectValue(context).toString();
 		if (s.indexOf(check) >= 0) return Boolean.TRUE;

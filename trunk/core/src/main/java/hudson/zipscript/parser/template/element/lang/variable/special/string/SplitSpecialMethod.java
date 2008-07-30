@@ -15,7 +15,8 @@ public class SplitSpecialMethod implements SpecialMethod {
 		this.splitToken = params[0];
 	}
 
-	public Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+	public Object execute(Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		String s = source.toString();
 		String split = splitToken.objectValue(context).toString();
 

@@ -17,7 +17,8 @@ public class ContainsSpecialMethod extends SequenceSpecialMethod{
 	}
 
 	public Object execute(
-			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		Object check = checkElement.objectValue(context);
 		return new Boolean(sequenceAdapter.contains(check, source));
 	}

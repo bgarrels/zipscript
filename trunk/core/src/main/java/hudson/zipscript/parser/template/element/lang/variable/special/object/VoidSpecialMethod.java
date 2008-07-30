@@ -10,7 +10,8 @@ public class VoidSpecialMethod implements SpecialMethod {
 	public static VoidSpecialMethod INSTANCE = new VoidSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return RTN;
 	}
 

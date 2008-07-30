@@ -25,7 +25,7 @@ public class NodeObjectAdapter implements ObjectAdapter {
 	}
 
 	public Object get(
-			String key, Object object, RetrievalContext retrievalContext) throws ClassCastException {
+			String key, Object object, RetrievalContext retrievalContext, String contextHint) throws ClassCastException {
 		Node node = getNode(object);
 		if (retrievalContext.is(RetrievalContext.SEQUENCE)) {
 			// find node children whose name match the key
@@ -34,6 +34,20 @@ public class NodeObjectAdapter implements ObjectAdapter {
 			for (int i=0; i<nl.getLength(); i++) {
 				if (nl.item(i).getNodeName().equals(key))
 					matchingChildren.add(nl.item(i));
+			}
+			if (matchingChildren.size() == 1 && null != contextHint) {
+				// check for a wrapped list
+				boolean matchFound = false;
+				nl = ((Node) matchingChildren.get(0)).getChildNodes();
+				for (int i=0; i<nl.getLength(); i++) {
+					if (nl.item(i).getNodeName().equals(contextHint)) {
+						if (!matchFound) {
+							matchingChildren.clear();
+							matchFound = true;
+						}
+						matchingChildren.add(nl.item(i));
+					}
+				}
 			}
 			return matchingChildren;
 		}

@@ -9,7 +9,8 @@ public class IsUpperCaseSpecialMethod implements SpecialMethod {
 	public static final IsUpperCaseSpecialMethod INSTANCE = new IsUpperCaseSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		String s = source.toString();
 		return new Boolean(s.toUpperCase().equals(s));
 	}
