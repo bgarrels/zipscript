@@ -65,7 +65,7 @@ public class Constants {
 
 	public static final String REFRESH_TEMPLATES = "refreshTemplates";
 
-	public static final char NAMESPACE_SEPARATOR = '.';
+	public static final char NAMESPACE_SEPARATOR = ':';
 
 	public static final Map RESOURCE_LOADER_TYPES = new HashMap();
 	static {
