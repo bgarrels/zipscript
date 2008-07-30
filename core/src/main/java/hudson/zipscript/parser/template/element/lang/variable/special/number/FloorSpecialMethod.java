@@ -9,7 +9,8 @@ public class FloorSpecialMethod implements SpecialMethod {
 	public static final FloorSpecialMethod INSTANCE = new FloorSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Long((long) Math.floor(((Number) source).doubleValue()));
 	}
 

@@ -16,7 +16,7 @@ public class ListAdapter implements SequenceAdapter {
 	}
 
 	public Object getItemAt(
-			int index, Object sequence, RetrievalContext retrievalContext) {
+			int index, Object sequence, RetrievalContext retrievalContext, String contextHint) {
 		return ((List) sequence).get(index);
 	}
 

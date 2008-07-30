@@ -7,9 +7,10 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAd
 public class LastSpecialMethod extends SequenceSpecialMethod {
 
 	public Object execute(
-			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
+			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		int length = sequenceAdapter.getLength(source);
 		if (length == 0) return null;
-		return sequenceAdapter.getItemAt(length-1, source, retrievalContext);
+		return sequenceAdapter.getItemAt(length-1, source, retrievalContext, contextHint);
 	}
 }

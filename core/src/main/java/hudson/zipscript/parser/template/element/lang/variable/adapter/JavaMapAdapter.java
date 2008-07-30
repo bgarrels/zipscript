@@ -12,7 +12,8 @@ public class JavaMapAdapter implements MapAdapter {
 		return (object instanceof Map);
 	}
 
-	public Object get(Object key, Object map, RetrievalContext retrievalContext) {
+	public Object get(
+			Object key, Object map, RetrievalContext retrievalContext, String contextHint) {
 		return ((Map) map).get(key);
 	}
 

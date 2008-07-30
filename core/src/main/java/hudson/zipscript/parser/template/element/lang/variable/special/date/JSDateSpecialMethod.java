@@ -14,7 +14,8 @@ public class JSDateSpecialMethod implements SpecialMethod {
 	SimpleDateFormat sdf = new SimpleDateFormat("'new Date('yyyy, MM, dd')'");
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return sdf.format((Date) source);
 	}
 

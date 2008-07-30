@@ -17,6 +17,7 @@ public class DynamicChild implements VariableChild {
 	private Element evaluator;
 	private Map pathChildren = new HashMap();
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	public DynamicChild (Element evaluator) {
 		this.evaluator = evaluator;
@@ -62,5 +63,13 @@ public class DynamicChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

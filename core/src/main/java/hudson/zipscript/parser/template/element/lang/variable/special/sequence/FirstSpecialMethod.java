@@ -7,7 +7,8 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAd
 public class FirstSpecialMethod extends SequenceSpecialMethod {
 
 	public Object execute(
-			Object source, SequenceAdapter sequenceAdapter, RetrievalContext retrievalContext, ExtendedContext context) {
-		return sequenceAdapter.getItemAt(0, source, retrievalContext);
+			Object source, SequenceAdapter sequenceAdapter,RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
+		return sequenceAdapter.getItemAt(0, source, retrievalContext, contextHint);
 	}
 }

@@ -31,7 +31,7 @@ public class ObjectContextWrapper extends AbstractContext {
 		else this.locale = locale;
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		if (null == key) return null;
 		Object obj = methodMap.get(key);
 		Method m = null;

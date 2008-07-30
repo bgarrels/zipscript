@@ -13,7 +13,8 @@ public class IsSequenceSpecialMethod implements SpecialMethod {
 	public static IsSequenceSpecialMethod INSTANCE = new IsSequenceSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Boolean(source instanceof Object[]
 		    || source instanceof Collection
 		    || source instanceof Iterator

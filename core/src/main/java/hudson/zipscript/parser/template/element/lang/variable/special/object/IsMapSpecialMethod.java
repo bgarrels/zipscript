@@ -11,7 +11,8 @@ public class IsMapSpecialMethod implements SpecialMethod {
 	public static IsMapSpecialMethod INSTANCE = new IsMapSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Boolean(source instanceof Map);
 	}
 

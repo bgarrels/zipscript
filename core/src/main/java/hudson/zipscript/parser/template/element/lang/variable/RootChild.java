@@ -12,6 +12,7 @@ public class RootChild implements VariableChild {
 	public String name;
 	private short type = TYPE_STANDARD;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	public RootChild (String name, VariableAdapterFactory variableAdapterFactory) {
 		this.name = name;
@@ -24,9 +25,9 @@ public class RootChild implements VariableChild {
 
 	public Object execute(Object parent, ExtendedContext context) {
 		if (type == TYPE_RESERVED)
-			return context.getRootContext().get(name, retrievalContext);
+			return context.getRootContext().get(name, retrievalContext, contextHint);
 		else
-			return context.get(name, retrievalContext);
+			return context.get(name, retrievalContext, contextHint);
 	}
 
 	public String getPropertyName() {
@@ -47,5 +48,13 @@ public class RootChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

@@ -4,5 +4,6 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 
 public interface ZSContextRequiredGetter {
 
-	public Object get(String key, RetrievalContext retrievalContext, ExtendedContext context);
+	public Object get(String key, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context);
 }

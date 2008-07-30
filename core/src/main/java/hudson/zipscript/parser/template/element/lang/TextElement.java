@@ -53,7 +53,7 @@ public class TextElement extends AbstractElement implements Element {
 				Object source = sw1.toString();
 				for (int i=0; i<specialMethods.length; i++) {
 					source = specialMethods[i].execute(
-							source, RetrievalContext.HASH, context);
+							source, RetrievalContext.HASH, null, context);
 					if (null == source) return null;
 				}
 				return source;
@@ -91,7 +91,7 @@ public class TextElement extends AbstractElement implements Element {
 				Object source = sw1.toString();
 				for (int i=0; i<specialMethods.length; i++) {
 					source = specialMethods[i].execute(
-							source, RetrievalContext.HASH, context);
+							source, RetrievalContext.HASH, null, context);
 					if (null == source) return;
 				}
 				StringUtil.append(source.toString(), sw);

@@ -6,7 +6,8 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 public interface SpecialMethod {
 
 	public Object execute (
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception;
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception;
 
 	public RetrievalContext getExpectedType ();
 }

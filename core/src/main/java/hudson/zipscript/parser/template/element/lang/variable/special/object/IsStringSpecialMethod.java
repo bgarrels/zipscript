@@ -9,7 +9,8 @@ public class IsStringSpecialMethod implements SpecialMethod {
 	public static IsStringSpecialMethod INSTANCE = new IsStringSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Boolean(source instanceof String);
 	}
 

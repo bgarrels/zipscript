@@ -37,7 +37,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 	}
 
 
-	public Object get(String key, RetrievalContext retrievalContext, ExtendedContext context) {
+	public Object get(String key, RetrievalContext retrievalContext, String contextHint, ExtendedContext context) {
 		if (key.equals(Constants.BODY)) {
 			if (macroInstance.isBodyEmpty()) {
 				return null;
@@ -57,7 +57,7 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter{
 		}
 		else {
 			initialize(context, false);
-			return this.context.get(key, retrievalContext);
+			return this.context.get(key, retrievalContext, contextHint);
 		}
 	}
 

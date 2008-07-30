@@ -14,7 +14,8 @@ public class StringSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		if (null == source) return null;
 		else if ((source instanceof String)) {
 			if (source instanceof ToStringWithContextElement) {
@@ -24,7 +25,7 @@ public class StringSpecialMethod implements SpecialMethod {
 				source = source.toString();
 			}
 		}
-		return stringSpecialMethod.execute(source, retrievalContext, context);
+		return stringSpecialMethod.execute(source, retrievalContext, contextHint, context);
 	}
 
 	public RetrievalContext getExpectedType() {

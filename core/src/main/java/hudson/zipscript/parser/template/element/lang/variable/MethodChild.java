@@ -47,6 +47,9 @@ public class MethodChild implements VariableChild {
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 	}
 
+	public void setContextHint(String contextHint) {
+	}
+
 	public String toString () {
 		StringBuffer sb = new StringBuffer();
 		sb.append(methodName);

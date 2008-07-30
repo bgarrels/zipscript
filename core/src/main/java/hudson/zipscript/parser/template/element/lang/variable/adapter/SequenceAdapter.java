@@ -11,7 +11,8 @@ public interface SequenceAdapter {
 
 	public boolean hasNext (int index, Object previousItem, Object sequence);
 
-	public Object getItemAt(int index, Object sequence, RetrievalContext retrievalContext) throws ClassCastException;
+	public Object getItemAt(
+			int index, Object sequence, RetrievalContext retrievalContext, String contextHint) throws ClassCastException;
 
 	public void setItemAt(int index, Object value, Object sequence) throws ClassCastException;
 

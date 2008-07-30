@@ -25,6 +25,7 @@ public class MapChild implements VariableChild {
 	
 	private Element keyElement;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	public MapChild (Element keyElement) {
 		this.keyElement = keyElement;
@@ -82,18 +83,20 @@ public class MapChild implements VariableChild {
 		Object key = keyElement.objectValue(context);
 		if (null == key) throw new ExecutionException("Map or sequence key evaluated to null", null);
 		if (type == TYPE_CONTEXT) {
-			return context.get(key, retrievalContext);
+			return context.get(key, retrievalContext, contextHint);
 		}
 		else if (type == TYPE_SEQUENCE) {
 			if (!(key instanceof Number))
 				throw new ExecutionException("Invalid type key", keyElement);
-			return sequenceAdapter.getItemAt(((Number) key).intValue(), parent, retrievalContext);
+			return sequenceAdapter.getItemAt(
+					((Number) key).intValue(), parent, retrievalContext, contextHint);
 		}
 		else if (type == TYPE_MAP) {
-			return mapAdapter.get(key, parent, retrievalContext);
+			return mapAdapter.get(key, parent, retrievalContext, contextHint);
 		}
 		else {
-			return objectAdapter.get(key.toString(), parent, retrievalContext);
+			return objectAdapter.get(
+					key.toString(), parent, retrievalContext, contextHint);
 		}
 	}
 
@@ -127,5 +130,13 @@ public class MapChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

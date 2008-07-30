@@ -32,10 +32,10 @@ public class NestedContextWrapper implements ExtendedContext {
 		map.put(Constants.VARS, this);
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		Object obj = map.get(key);
 		if (null == obj && travelUp)
-			obj = parentContext.get(key, retrievalContext);
+			obj = parentContext.get(key, retrievalContext, contextHint);
 		return obj;
 	}
 

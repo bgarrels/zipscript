@@ -9,7 +9,8 @@ public class UpperCaseSpecialMethod implements SpecialMethod {
 	public static final UpperCaseSpecialMethod INSTANCE = new UpperCaseSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return source.toString().toUpperCase();
 	}
 

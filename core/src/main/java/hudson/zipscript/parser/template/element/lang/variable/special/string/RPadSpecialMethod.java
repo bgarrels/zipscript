@@ -17,7 +17,8 @@ public class RPadSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		if (null == padding) return source;
 		int paddingAmt = ((Number) padding.objectValue(context)).intValue();
 		StringBuffer sb = new StringBuffer();

@@ -9,7 +9,8 @@ public class CeilingSpecialMethod implements SpecialMethod {
 	public static final CeilingSpecialMethod INSTANCE = new CeilingSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Long((long) Math.ceil(((Number) source).doubleValue()));
 	}
 

@@ -9,7 +9,8 @@ public class LowerCaseSpecialMethod implements SpecialMethod {
 	public static final LowerCaseSpecialMethod INSTANCE = new LowerCaseSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		return source.toString().toLowerCase();
 	}
 

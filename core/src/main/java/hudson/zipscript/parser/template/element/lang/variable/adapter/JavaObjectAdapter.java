@@ -36,7 +36,8 @@ public class JavaObjectAdapter implements ObjectAdapter {
 		}
 	}
 
-	public Object get(String key, Object object, RetrievalContext context) {
+	public Object get(
+			String key, Object object, RetrievalContext context, String contextHint) {
 		Object obj = getMethods.get(key);
 		if (null == getMethods.get(key)) {
 			Method method = BeanUtil.getPropertyMethod(

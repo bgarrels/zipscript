@@ -12,6 +12,7 @@ public class PropertyChild implements VariableChild {
 
 	private String name;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	private MapAdapter mapAdapter;
 	private ObjectAdapter objectAdapter;
@@ -56,30 +57,34 @@ public class PropertyChild implements VariableChild {
 		if (doTypeChecking) {
 			// dont' worry about ClassCast because we just detected type
 			if (type == TYPE_CONTEXT) {
-				return ((Context) parent).get(name, retrievalContext);
+				return ((Context) parent).get(name, retrievalContext, contextHint);
 			}
 			else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
 				return ((ZSContextRequiredGetter) parent).get(
-						name, retrievalContext, context);
+						name, retrievalContext, contextHint, context);
 			}
 			else if (type == TYPE_MAP) {
-				return mapAdapter.get(name, parent, retrievalContext);
+				return mapAdapter.get(
+						name, parent, retrievalContext, contextHint);
 			}
-			else return objectAdapter.get(name, parent, retrievalContext);
+			else return objectAdapter.get(
+					name, parent, retrievalContext, contextHint);
 		}
 		else {
 			try {
 				if (type == TYPE_CONTEXT) {
-					return ((Context) parent).get(name, retrievalContext);
+					return ((Context) parent).get(name, retrievalContext, contextHint);
 				}
 				else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
 					return ((ZSContextRequiredGetter) parent).get(
-							name, retrievalContext, context);
+							name, retrievalContext, contextHint, context);
 				}
 				else if (type == TYPE_MAP) {
-					return mapAdapter.get(name, parent, retrievalContext);
+					return mapAdapter.get(
+							name, parent, retrievalContext, contextHint);
 				}
-				else return objectAdapter.get(name, parent, retrievalContext);
+				else return objectAdapter.get(
+						name, parent, retrievalContext, contextHint);
 			}
 			catch (ClassCastException e) {
 				this.doTypeChecking = true;
@@ -106,5 +111,13 @@ public class PropertyChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

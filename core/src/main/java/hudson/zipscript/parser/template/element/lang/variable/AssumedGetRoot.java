@@ -22,6 +22,7 @@ public class AssumedGetRoot implements VariableChild {
 	private short type = TYPE_STANDARD;
 	private VariableAdapterFactory variableAdapterFactory;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	private boolean doTypeChecking = false;
 
@@ -41,9 +42,9 @@ public class AssumedGetRoot implements VariableChild {
 	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
 		Object source = null;
 		if (type == TYPE_STANDARD)
-			source = context.get(name, retrievalContext);
+			source = context.get(name, retrievalContext, contextHint);
 		else
-			source = context.getRootContext().get(name, retrievalContext);
+			source = context.getRootContext().get(name, retrievalContext, contextHint);
 		if (null == source) return null;
 
 		// get the method parameters
@@ -101,5 +102,13 @@ public class AssumedGetRoot implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }

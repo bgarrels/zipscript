@@ -22,7 +22,8 @@ public class ObjectValueSpecialMethod implements SpecialMethod {
 	}
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		if (null == evaluatorElement) {
 			List children = ((MacroInstanceExecutor) source).getMacroInstance().getChildren();
 			List nonWhitespaceChildren = new ArrayList(children.size());

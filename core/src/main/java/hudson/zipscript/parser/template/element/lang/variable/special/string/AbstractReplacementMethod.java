@@ -6,7 +6,8 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 
 public abstract class AbstractReplacementMethod implements SpecialMethod {
 
-	public Object execute(Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+	public Object execute(Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) throws Exception {
 		char[] arr = source.toString().toCharArray();
 		char[] charsToReplace = getCharsToReplace();
 		String[] replacementStrings = getReplacementStrings();

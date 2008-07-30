@@ -15,7 +15,8 @@ public class IteratorAdapter implements SequenceAdapter {
 		return (object instanceof Iterator);
 	}
 
-	public Object getItemAt(int index, Object sequence, RetrievalContext retrievalContext)
+	public Object getItemAt(
+			int index, Object sequence, RetrievalContext retrievalContext, String contextHint)
 			throws ClassCastException {
 		throw new UnsupportedOperationException();
 	}

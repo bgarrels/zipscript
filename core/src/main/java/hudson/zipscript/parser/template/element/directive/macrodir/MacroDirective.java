@@ -234,7 +234,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 			for (Iterator i=getAttributes().iterator(); i.hasNext(); ) {
 				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) i.next();
 				if (null != defAttribute.getDefaultValue() && null == context.get(
-						defAttribute.getName(), RetrievalContext.UNKNOWN)) {
+						defAttribute.getName(), RetrievalContext.UNKNOWN, null)) {
 					context.put(defAttribute.getName(), defAttribute.getDefaultValue().objectValue(context), true);
 				}
 			}
@@ -275,7 +275,7 @@ public class MacroDirective extends NestableElement implements MacroInstanceAwar
 		for (Iterator i=tdp.iterator(); i.hasNext(); ) {
 			mie = (MacroInstanceEntity) i.next();
 			Object obj = context.get(
-					mie.getMacroInstance().getName(), RetrievalContext.UNKNOWN);
+					mie.getMacroInstance().getName(), RetrievalContext.UNKNOWN, null);
 			if (null == obj) {
 				context.put(mie.getMacroInstance().getName(), mie, true);
 			}

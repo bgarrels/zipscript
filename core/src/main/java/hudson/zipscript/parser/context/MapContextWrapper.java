@@ -13,7 +13,7 @@ public class MapContextWrapper extends AbstractContext {
 		this.map = map;
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext) {
+	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
 		return map.get(key);
 	}
 

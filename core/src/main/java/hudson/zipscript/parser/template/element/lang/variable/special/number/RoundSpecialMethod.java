@@ -9,7 +9,8 @@ public class RoundSpecialMethod implements SpecialMethod {
 	public static final RoundSpecialMethod INSTANCE = new RoundSpecialMethod();
 
 	public Object execute(
-			Object source, RetrievalContext retrievalContext, ExtendedContext context) throws Exception {
+			Object source, RetrievalContext retrievalContext, String contextHint,
+			ExtendedContext context) throws Exception {
 		return new Long(Math.round(((Number) source).doubleValue()));
 	}
 

@@ -7,6 +7,7 @@ public class TextElementRootChild implements VariableChild {
 
 	private String text;
 	private RetrievalContext retrievalContext;
+	private String contextHint;
 
 	public TextElementRootChild (String text) {
 		this.text = text;
@@ -34,5 +35,13 @@ public class TextElementRootChild implements VariableChild {
 
 	public void setRetrievalContext(RetrievalContext retrievalContext) {
 		this.retrievalContext = retrievalContext;
+	}
+
+	public String getContextHint() {
+		return contextHint;
+	}
+
+	public void setContextHint(String contextHint) {
+		this.contextHint = contextHint;
 	}
 }
