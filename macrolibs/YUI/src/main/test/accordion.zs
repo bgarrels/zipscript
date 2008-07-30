@@ -6,7 +6,7 @@
 	}
 </style>
 
-[@accordion.view id="mymenu5" collapsible=false width="250px"]
+[@accordion:view id="mymenu5" collapsible=false width="250px"]
 	[%panel title="Item 1"]
 		This is the content of panel 1
 	[/%panel]
@@ -22,4 +22,4 @@
 	[%panel title="Item 5"]
 		This is the content of panel 5
 	[/%panel]
-[/@accordion.view]
+[/@accordion:view]
