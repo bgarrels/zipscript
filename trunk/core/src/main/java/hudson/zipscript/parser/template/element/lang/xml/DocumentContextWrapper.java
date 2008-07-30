@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 
 public class DocumentContextWrapper extends AbstractContext {
 
-	private static final DOMObjectAdapter adapter = DOMObjectAdapter.INSTANCE;
+	private static final DocumentObjectAdapter adapter = DocumentObjectAdapter.INSTANCE;
 
 	private Document document;
 	private Map additionaContextValues = new HashMap();

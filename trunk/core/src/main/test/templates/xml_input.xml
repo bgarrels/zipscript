@@ -1,0 +1,13 @@
+<person firstName="Joe" lastName="Hudson">
+	<company name="Acme Company">
+		<employee>
+			<firstName>Jerry</firstName>
+			<lastName>Smith</lastName>
+		</employee>
+		<employee>
+			<firstName>Jimmy</firstName>
+			<lastName>Doe</lastName>
+		</employee>
+	</company>
+	<car>Honda</car>
+</person>

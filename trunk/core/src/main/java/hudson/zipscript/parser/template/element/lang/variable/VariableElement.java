@@ -34,6 +34,7 @@ import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class VariableElement extends AbstractElement implements Element {
@@ -60,8 +61,9 @@ public class VariableElement extends AbstractElement implements Element {
 
 	public VariableElement (
 			List elements, RetrievalContext retrievalContext, ParsingSession session) throws ParseException {
-		this.children = parse(elements, session);
 		this.retrievalContext = retrievalContext;
+		this.children = parse(elements, session);
+		normalize(0, Collections.EMPTY_LIST, session);
 	}
 
 	public void setPattern (String pattern, ParsingSession session, int contentIndex) throws ParseException {
