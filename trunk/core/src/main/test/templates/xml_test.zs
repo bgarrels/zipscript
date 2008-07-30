@@ -6,6 +6,8 @@ ${company.name}
 	${employee.firstName} ${employee.lastName}
 [/#foreach]
 
+${company.employee[1].firstName}
+
 [#foreach child in children]
 	${child.firstName}
 [/#foreach]
