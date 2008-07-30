@@ -1,10 +1,10 @@
 <person firstName="Joe" lastName="Hudson">
 	<company name="Acme Company">
-		<employee>
+		<employee isGood="true">
 			<firstName>Jerry</firstName>
 			<lastName>Smith</lastName>
 		</employee>
-		<employee>
+		<employee isGood="true">
 			<firstName>Jimmy</firstName>
 			<lastName>Doe</lastName>
 		</employee>

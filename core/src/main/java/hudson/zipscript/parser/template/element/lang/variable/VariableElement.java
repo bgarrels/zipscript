@@ -162,14 +162,14 @@ public class VariableElement extends AbstractElement implements Element {
 			}
 			if (null != specialElements) {
 				if (null == rtn
-						&& (specialElements[0].requiresInput(context))) {
+						&& (specialElements[0].requiresInput())) {
 					return null;
 				}
 
 				for (int i=0; i<specialElements.length; i++) {
-					boolean requiresInput = specialElements[i].requiresInput(context);
+					boolean requiresInput = specialElements[i].requiresInput();
 					if (requiresInput || (null == rtn && !requiresInput)) {
-						if (specialElements.length > i+1 && specialElements[i+1].requiresInput(context)) {
+						if (specialElements.length > i+1 && specialElements[i+1].requiresInput()) {
 							rtn = specialElements[i].execute(
 									rtn, specialElements[i+1].getExpectedType(), null, context);
 						}
@@ -314,6 +314,11 @@ public class VariableElement extends AbstractElement implements Element {
 			int index, List elementList, ParsingSession session) throws ParseException {
 		
 		List specialElements = new ArrayList();
+		if (null != this.specialElements) {
+			for (int i=0; i<this.specialElements.length; i++) {
+				specialElements.add(this.specialElements[i]);
+			}
+		}
 		List escapeMethods = new ArrayList();
 		
 		// if the next element over is a special char - process for variable
@@ -341,8 +346,21 @@ public class VariableElement extends AbstractElement implements Element {
 
 		// now deal with retrieval contexts
 		RetrievalContext normalElementLastRetrievalContext = this.retrievalContext;
+		
+		if (specialElements.size() > 0) {
+			this.specialElements = (VariableTokenSeparatorElement[]) specialElements.toArray(
+					new VariableTokenSeparatorElement[specialElements.size()]);
+			if (this.specialElements[0].requiresInput()) {
+				normalElementLastRetrievalContext = this.specialElements[0].getExpectedType();
+			}
+		}
+		if (escapeMethods.size() > 0) {
+			this.escapeMethods = (SpecialMethod[]) escapeMethods.toArray(
+					new SpecialMethod[escapeMethods.size()]);
+		}
+
 		if (null != specialElements && specialElements.size() > 0)
-			normalElementLastRetrievalContext = ((SpecialMethod) specialElements.get(0)).getExpectedType();
+			normalElementLastRetrievalContext = ((VariableTokenSeparatorElement) specialElements.get(0)).getExpectedType();
 		for (int i=0; i<children.length; i++) {
 			if (i == children.length-1) {
 				children[i].setRetrievalContext(normalElementLastRetrievalContext);
@@ -352,26 +370,22 @@ public class VariableElement extends AbstractElement implements Element {
 				children[i].setRetrievalContext(RetrievalContext.HASH);
 			}
 		}
-		
-		if (specialElements.size() > 0) {
-			this.specialElements = (VariableTokenSeparatorElement[]) specialElements.toArray(
-					new VariableTokenSeparatorElement[specialElements.size()]);
-		}
-		if (escapeMethods.size() > 0) {
-			this.escapeMethods = (SpecialMethod[]) escapeMethods.toArray(
-					new SpecialMethod[escapeMethods.size()]);
-		}
-		
+
 		return null;
 	}
 
-	public String getPattern () {
-		StringBuffer sb = new StringBuffer();
-		for (int i=0; i<children.length; i++) {
-			if (i > 0) sb.append(".");
-			sb.append(children[i]);
+	public String getPattern() {
+		if (null == this.pattern) {
+			StringBuffer sb = new StringBuffer();
+			for (int i=0; i<children.length; i++) {
+				if (i > 0) sb.append(".");
+				sb.append(children[i]);
+			}
+			return sb.toString();
 		}
-		return sb.toString();
+		else {
+			return pattern;
+		}
 	}
 
 	public String toString() {

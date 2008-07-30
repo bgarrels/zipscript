@@ -45,6 +45,9 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 							new Element[parameters.getChildren().size()]);
 				}
 			}
+			executor = session.getResourceContainer().getVariableAdapterFactory().getSpecialMethod(
+					method, parameters, session, this);
+			if (null == executor) throw new ExecutionException("Unknown special method '" + method + "'", null);
 			return null;
 		}
 		else {
@@ -56,8 +59,6 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 			String contextHint, ExtendedContext context) {
 		try {
 			if (null == source) return null;
-			if (null == executor) executor = initializeSpecialMethod(source, context);
-			if (null == executor) throw new ExecutionException("Unknown special method '" + method + "'", null);
 			return executor.execute(source, retrievalContext, contextHint, context);
 		}
 		catch (Exception e) {
@@ -71,20 +72,14 @@ public class VarSpecialElement extends IdentifierElement implements VariableToke
 	}
 
 	public String toString() {
-		return "?" + method;
+		return "?" + executor.toString();
 	}
 
-	public boolean requiresInput(ExtendedContext context) {
+	public boolean requiresInput() {
 		return true;
 	}
 
-	protected SpecialMethod initializeSpecialMethod (
-			Object source, ExtendedContext context) {
-		return context.getResourceContainer().getVariableAdapterFactory().getSpecialMethod(
-				method, parameters, source, context, this);
-	}
-
 	public RetrievalContext getExpectedType() {
-		return RetrievalContext.HASH;
+		return executor.getExpectedType();
 	}
 }

@@ -5,7 +5,7 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 
 public interface VariableTokenSeparatorElement {
 
-	public boolean requiresInput(ExtendedContext context);
+	public boolean requiresInput();
 
 	public Object execute (
 			Object source, RetrievalContext retrievalContext,

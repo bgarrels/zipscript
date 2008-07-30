@@ -41,7 +41,7 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 		return executeElement.objectValue(context);
 	}
 
-	public boolean requiresInput(ExtendedContext context) {
+	public boolean requiresInput() {
 		return false;
 	}
 
