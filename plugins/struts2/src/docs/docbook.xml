@@ -110,7 +110,7 @@ WEB-INF
 		[/#if]
 	&lt;/head&gt;
 	&lt;body&gt;
-		${layout_placeholder}
+		${layout_placeholder}  <-- this is the token used to plug in the other templates in page.zs
 	&lt;/body&gt;
 &lt;/html&gt;
 </programlisting>
@@ -121,32 +121,13 @@ WEB-INF
 	[#set title="My Page Title"/]
 [/#initialize]
 
-[#include head.zsm as head/]  --  include the macro library that we will use to reference the script macro
-
-[@head:script]
-	// this is some script that will allow us put code in the head
-	// this could only be called once per template
-	// we will see the implementation of this macro library down below
-[/@head:script]
-
-... some HTML code ...
+... some HTML or ZipScript code ...
 </programlisting>
-				In our template, we have set the page title and added javascript includes.  Both of these values are referenced from the page.zs
+				In our template, we have set the page title.  This value is referenced from the page.zs
 				template which is actually processed before the foo.zs template.  It happens this way so we don't have to do any template buffering.
 				The initialize directive is the key to this functionality but you have to remember that anything in the initialize directive is only
 				executed a single time (think of it like a static initializer) so you can not reference context data set in the template (but you can
 				reference context data set before merging) and you can not reference macro parameters either.
-			</para>
-			<para>
-				Here is an example of the macro.zsw (that would be located in WEB-INF/zs/macros):
-<programlisting>
-[#macro script]
-	[#initialize]
-		[#set pageDefinedScript=body/]
-	[/#initialize]
-[/#macro]
-</programlisting>
-				This macro will set the context variable "pageDefinedScript" with the body of the macro.
 			</para>
 			<para>
 				This result is useful for rendering pages that can share the same head template with other templates with a layout.  For example,
@@ -183,7 +164,7 @@ WEB-INF
 			[#include "nav.zs"/]
 		&lt;/td&gt;
 		&lt;td&gt;
-			${screen_placeholder}
+			${screen_placeholder} <-- this is the token used to plug in the other templates in layout.zs
 		&lt;/td&gt;
 	&lt;/tr&gt;
 	&lt;tr&gt;
