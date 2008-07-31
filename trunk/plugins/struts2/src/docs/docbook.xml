@@ -110,7 +110,7 @@ WEB-INF
 		[/#if]
 	&lt;/head&gt;
 	&lt;body&gt;
-		${layout_placeholder}  <-- this is the token used to plug in the other templates in page.zs
+		${layout_placeholder}  &lt;-- this is the token used to plug in the other templates in page.zs
 	&lt;/body&gt;
 &lt;/html&gt;
 </programlisting>
@@ -164,7 +164,7 @@ WEB-INF
 			[#include "nav.zs"/]
 		&lt;/td&gt;
 		&lt;td&gt;
-			${screen_placeholder} <-- this is the token used to plug in the other templates in layout.zs
+			${screen_placeholder} &lt;-- this is the token used to plug in the other templates in layout.zs
 		&lt;/td&gt;
 	&lt;/tr&gt;
 	&lt;tr&gt;
@@ -273,6 +273,83 @@ WEB-INF
 <programlisting>
 	${abc} &lt;-- because we have getAbc() as a method in our action class
 	${foo} &lt;-- because we set the request attribute "foo"
+</programlisting>
+			</para>
+		</section>
+	</chapter>
+	<chapter>
+		<title>Using the Yahoo! UI Macros</title>
+		<section>
+			<title>Download &amp; Install Files</title>
+			<para>
+				<itemizedlist>
+					<listitem>Download <ulink url="http://code.google.com/p/zipscript/downloads/list?can=2&amp;q=macrolib-YUI&amp;colspec=Filename+Summary+Uploaded+Size">macrolib-YUI</ulink></listitem>
+				</itemizedlist>
+				Extract all macro files (*.zsm) to your macros directory (WEB-INF/zs/macros)
+			</para>
+		</section>
+		<section>
+			<title>Add script includes</title>
+			Each macro will add includes to a map that is automatically put into the context.  The reson for this is so you only have to include javascript files that are applicable to the
+			YUI components you are using with the current template.  Add the following code to your page template:
+<programlisting>
+&lt;html&gt;
+	&lt;head&gt;
+		...
+		
+		&lt;link rel="stylesheet" type="text/css" href="${yuiIncludePrefix}/fonts/fonts-min.css" /&gt;
+[#foreach key in cssIncludes?keys]
+		&lt;link rel="stylesheet" type="text/css" href="${yuiIncludePrefix}/${key}" /&gt;
+[/#foreach]
+		&lt;script type="text/javascript" src="${yuiIncludePrefix}/yahoo-dom-event/yahoo-dom-event.js"&gt;&lt;/script&gt;
+		&lt;script type="text/javascript" src="${yuiIncludePrefix}/dragdrop/dragdrop-min.js"&gt;&lt;/script&gt;
+		&lt;script type="text/javascript" src="${yuiIncludePrefix}/element/element-beta-min.js"&gt;&lt;/script&gt;
+[#foreach key in scriptIncludes?keys]
+		&lt;script type="text/javascript" src="${yuiIncludePrefix}/${key}"&gt;&lt;/script&gt;
+[/#foreach]
+
+		...
+	&lt;/head&gt;
+	&lt;body class=" yui-skin-sam"&gt;
+		${layout_placeholder}
+	&lt;/body&gt;
+&lt;/html&gt;
+</programlisting>
+		</section>
+		<section>
+			<title>Add Init Property</title>
+			<para>
+				The context parameter "yuiIncludePrefix" should reference the yahoo scripts build root.
+				Most likely you will have a local copy of this but, for example, you can use "http://yui.yahooapis.com/2.5.2/build"
+			</para>
+			<para>
+				This can be done by adding a struts servlet/filter init parameter called <emphasis>zipscript.contextValues</emphasis>.
+				The value can be a semi-colon separated list of key/value pares using the equal sign for key/value separation.
+<programlisting>
+    <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>
+            org.apache.struts2.dispatcher.FilterDispatcher
+        </filter-class>
+
+        <init-param>
+            <param-name>zipscript.contextValues</param-name>
+            <param-value>yuiIncludePrefix=http://yui.yahooapis.com/2.5.2/build</param-value>
+        </init-param>
+    </filter>
+</programlisting>
+			You're done.  Now you can create a template that uses the macros...
+<programlisting>
+[#import tab.zsm as tab/]
+
+[@tab:pane id="myTabPane"]
+	[%page label="Page 1"]
+		Page 1 contents
+	[/%page]
+	[%page label="Page 2"]
+		Page 2 contents
+	[/%page]
+[/@tab:pane]
 </programlisting>
 			</para>
 		</section>

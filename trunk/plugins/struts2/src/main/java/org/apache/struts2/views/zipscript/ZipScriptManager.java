@@ -5,6 +5,7 @@ import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.util.StringUtil;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.plugin.struts2.Struts2Plugin;
 import hudson.zipscript.plugin.struts2.parser.context.ActionRequestContextWrapper;
@@ -12,8 +13,10 @@ import hudson.zipscript.resource.WebInfResourceLoader;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +35,11 @@ public class ZipScriptManager {
 	private static final String CONFIG_SERVLET_CONTEXT_KEY = ZipEngine.class.getName();
 
 	private String encoding;
+	private Map<String, String> contextValues;
+	
+	public ZipScriptManager () {
+		super();
+	}
 
 	@Inject(StrutsConstants.STRUTS_I18N_ENCODING)
 	public void setEncoding(String encoding) {
@@ -70,6 +78,11 @@ public class ZipScriptManager {
 				props.put(key.substring(INIT_PARAM_PREFIX.length()), locatableProperties.get(key));
 			}
 		}
+
+		String contextValues = (String) props.get("contextValues");
+		if (null != contextValues) {
+			this.contextValues = StringUtil.getProperties(contextValues);
+		}
 		
 		props.put(Constants.INCLUDE_RESOURCE_LOADER_PARAMETER, servletContext);
 		props.put(Constants.MACROLIB_RESOURCE_LOADER_PARAMETER, servletContext);
@@ -104,6 +117,11 @@ public class ZipScriptManager {
 				actionInvocation.getAction(), request);
 		if (null != resultData)
 			ctx.put(hudson.zipscript.plugin.struts2.Constants.LAYOUT, resultData);
+		if (null != contextValues) {
+			for (Map.Entry<String, String> entry : contextValues.entrySet()) {
+				ctx.put(entry.getKey(), entry.getValue());
+			}
+		}
 		return ctx;
 	}
 }

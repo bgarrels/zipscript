@@ -8,6 +8,11 @@
         <filter-class>
             org.apache.struts2.dispatcher.FilterDispatcher
         </filter-class>
+
+        <init-param>
+            <param-name>zipscript.contextValues</param-name>
+            <param-value>yuiIncludePrefix=http://yui.yahooapis.com/2.5.2/build</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>
