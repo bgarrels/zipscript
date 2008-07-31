@@ -2,7 +2,7 @@ package hudson.zipscript.plugin.struts2;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
@@ -25,7 +25,7 @@ public class VariableAdapterFactory
 		else return null;
 	}
 
-	public MapAdapter getMapAdapter(Object map) {
+	public HashAdapter getHashAdapter(Object map) {
 		return null;
 	}
 
