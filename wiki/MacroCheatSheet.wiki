@@ -8,7 +8,7 @@
 {{{
 [@grid entries=people title="Interesting People"]
 	[%header]
-        Some header content
+            Some header content
 	[/%header]
 
         [##
