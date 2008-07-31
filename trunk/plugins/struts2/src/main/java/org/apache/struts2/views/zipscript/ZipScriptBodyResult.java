@@ -22,7 +22,7 @@ public class ZipScriptBodyResult extends ZipScriptResult {
 	public static final String PAGE_PATH = LAYOUT_PATH_PREFIX + "page.zs";
 
 	@Override
-	protected void writeOutput(Object context, ValueStack stack,
+	protected void writeOutput(Context context, ValueStack stack,
 			ZipEngine zipEngine, ActionInvocation invocation, ResultData resultData,
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, Writer writer) throws Exception {
@@ -30,13 +30,13 @@ public class ZipScriptBodyResult extends ZipScriptResult {
 		// get the body content
 		Template body = getBodyTemplate(
 				stack, zipEngine, invocation, resultData, servletContext);
-		Context initializedCtx = body.initialize(context);
+		context = body.initialize(context);
 
 		// get the page content
 		Template page = getPageTemplate(
 				stack, zipEngine, invocation, resultData, servletContext);
-		initializedCtx.put(getLayoutPlaceholderToken(), body);
-		page.merge(initializedCtx, writer);
+		context.put(getLayoutPlaceholderToken(), body);
+		page.merge(context, writer, request.getLocale());
 	}
 
 	protected Template getPageTemplate(ValueStack stack, ZipEngine zipEngine,

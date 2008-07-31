@@ -1,6 +1,7 @@
 package hudson.zipscript.plugin.struts2;
 
 import hudson.zipscript.ZipEngine;
+import hudson.zipscript.ext.data.RequestParameterMap;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -8,7 +9,6 @@ import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
 import hudson.zipscript.plugin.Plugin;
-import hudson.zipscript.plugin.struts2.parser.context.RequestParameterMap;
 import hudson.zipscript.resource.WebInfResourceLoader;
 
 import java.util.Map;
@@ -65,7 +65,7 @@ public class Struts2Plugin implements Plugin {
 			context.put(hudson.zipscript.plugin.struts2.Constants.SESSION, req.getSession());
 			context.put(hudson.zipscript.plugin.struts2.Constants.RESPONSE, ServletActionContext.getResponse());
 			context.put(hudson.zipscript.plugin.struts2.Constants.ACTION, action);
-			context.put(hudson.zipscript.plugin.struts2.Constants.PARAMETERS, new RequestParameterMap(req));
+			context.put(hudson.zipscript.plugin.struts2.Constants.PARAMS, new RequestParameterMap(req));
 		}
 	}
 
