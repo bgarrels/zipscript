@@ -54,7 +54,7 @@ informal variable references
 
 [##----- macros -----##]
 [##-- macro reference from imported library --##]
-[@mm.someFlatMacro abc=def ghi="jkl" mno=3/]
+[@mm:someFlatMacro abc=def ghi="jkl" mno=3/]
 
 [##-- macro reference from inline definition (see below) --##]
 [@myInlineMacro myRequiredParam="something" myDefaultedParam=47]
