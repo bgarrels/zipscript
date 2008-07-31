@@ -1,5 +1,4 @@
 #summary Guide for the impatient.
-#labels Featured
 
 =Things You Should Know=
   * No dependencies are required so all you have to do is add zipscript-core.jar to your classpath.
