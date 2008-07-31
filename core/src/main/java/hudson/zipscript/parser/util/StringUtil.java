@@ -9,9 +9,14 @@ import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.CharBuffer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StringUtil {
+
+	private static final char SEPARATOR = ';';
+	private static final char ASSIGNMENT = '=';
 
 	public static void append (char c, Writer writer) {
 		try {
@@ -226,5 +231,40 @@ public class StringUtil {
 		if (remove > 0) sb.delete(sb.length()-remove, sb.length());
 		if (isEven) return false;
 		else return true;
+	}
+
+	public static Map getProperties (String s) {
+		StringBuffer key = new StringBuffer();
+		StringBuffer value = new StringBuffer();
+		StringBuffer currentBuffer = key;
+		Map props = null;
+		
+		for (int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == ASSIGNMENT) {
+				currentBuffer = value;
+			}
+			else if (c == SEPARATOR) {
+				props = setProperty(key, value, props);
+				key = new StringBuffer();
+				value = new StringBuffer();
+				currentBuffer = key;
+			}
+			else
+				currentBuffer.append(c);
+		}
+		props = setProperty(key, value, props);
+		return props;
+	}
+
+	private static Map setProperty (StringBuffer key, StringBuffer value, Map map) {
+		String keyS = key.toString().trim();
+		String valueS = value.toString().trim();
+		if (keyS.length() > 0 && valueS.length() > 0) {
+			if (null == map)
+				map = new HashMap();
+			map.put(keyS, valueS);
+		}
+		return map;
 	}
 }
