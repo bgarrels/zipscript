@@ -131,6 +131,7 @@ ${driver.children[0].firstName} will print "Bill"
 						<listitem><emphasis>number</emphasis>: any type of number (<code>123</code>)</listitem>
 						<listitem><emphasis>date</emphasis>: any type of date</listitem>
 						<listitem><emphasis>boolean</emphasis>: a true or false value (<code>true/false</code>)</listitem>
+						<listitem><emphasis>XML</emphasis>: an XML node or document</listitem>
 					</itemizedlist>
 				</para>
 			</section>
@@ -463,6 +464,17 @@ ${driver.children[0].firstName} will print "Bill"
 						</itemizedlist>
 					</para>
 				</section>
+				<section id="variable_specialMethods_xml">
+					<para>
+						Assume the <link linkend="context">context</link> value "myNode" is an XML node
+						<itemizedlist>
+							<indexterm><primary>xml</primary><secondary>?xpath</secondary></indexterm>
+							<listitem>${myNode?xpath("some xpath statement")} will return the appropriate scalar, hash or sequence result</listitem>
+							<indexterm><primary>xml</primary><secondary>?children</secondary></indexterm>
+							<listitem>${myNode?children} will return a sequence containing all of the children (sub-nodes) of the node</listitem>
+						</itemizedlist>
+					</para>
+				</section>
 				<section id="variable_specialMethods_is">
 					<title>Object Methods</title>
 					<para>
@@ -475,6 +487,12 @@ ${driver.children[0].firstName} will print "Bill"
 							<listitem>${obj?isString} will be <code>true</code> if the value is a String</listitem>
 							<indexterm><primary>objects</primary><secondary>?isNumber</secondary></indexterm>
 							<listitem>${obj?isNumber} will be <code>true</code> if the value is a Number</listitem>
+							<indexterm><primary>objects</primary><secondary>?isHash</secondary></indexterm>
+							<listitem>${obj?isHash} will be <code>true</code> if the value is a Hash</listitem>
+							<indexterm><primary>objects</primary><secondary>?isSequence</secondary></indexterm>
+							<listitem>${obj?isSequence} will be <code>true</code> if the value is a Sequence</listitem>
+							<indexterm><primary>objects</primary><secondary>?isXML</secondary></indexterm>
+							<listitem>${obj?isXML} will be <code>true</code> if the value is an XML node</listitem>
 						</itemizedlist>
 					</para>
 				</section>
@@ -491,6 +509,68 @@ ${driver.children[0].firstName} will print "Bill"
 						</itemizedlist>
 					</para>
 				</section>
+			</section>
+			<section id="variable_xml">
+				<title>XML Structures</title>
+				<indexterm><primary>variables</primary><secondary>XML</secondary></indexterm>
+				<para>
+					XML Nodes (class implementing org.w3c.Node) can be used just like other hash or sequence strucures. 
+				</para>
+				<para>
+					<itemizedlist>
+						<listitem>Node attributes can be reference using the '.' notation</listitem>
+						<listitem>Subnodes with no child nodes can be reference (like attributes) using the '.' notation</listitem>
+						<listitem>Child nodes can be accessed using [index]</listitem>
+						<listitem>Wrapped child nodes can be shortcutted with the foreach directive (see below)</listitem>
+					</itemizedlist>
+				</para>
+				Assume a Document representing the following XML structure is used as the context:
+<programlisting>
+<person firstName="Joe" lastName="Hudson">
+	<car numDoors="4" mpg="35">
+		<manufacturer>Honda</manufacturer>
+	</car>
+	<children>
+		<child age="4" firstName="Jane"/>
+		<child age="5" firstName="Dick">
+			<friend name="Sally"/>
+			<friend name="Jenny"/>
+			<friend name="Sara"/>
+		</child>
+		<child age="5" firstName="John"/>
+	</children>
+</person>
+</programlisting>
+			The following template could be applied:
+<programlisting>
+${firstName} ${lastName} &lt;-- because the context is the the person node
+
+${car.numDoors} ${car.mpg} ${car.manufacturer} &lt;-- see how attributes and child nodes can be accessed the same way
+
+[#foreach child in children] &lt;-- The sequence shortcut can be applied by referencing the wrapped node names as the sequence item reference name
+	${child.firstName} ${child.age}
+	[#foreach entry in child.friend] &lt;-- This is standard sequence access with no shortcut
+		${entry.name}
+	[/#foreach]
+[/#foreach]
+
+${children.child[1]friend[2].name}
+</programlisting>
+		The following output would be created:
+<programlisting>
+Joe Hudson
+
+4 35
+
+	Jane 4
+	Dick 5
+		Sally
+		Jenny
+		Sara
+	John 5
+
+Jenny
+</programlisting>
 			</section>
 		</chapter>
 		<chapter id="directives">
@@ -788,7 +868,7 @@ Ex:
 <programlisting>
 [#import "macros/myMacroLib.zsm" as foo/]
 
-[@foo.someMacro] ... [/@foo.someMacro]
+[@foo:someMacro] ... [/@foo:someMacro]
 </programlisting>
 				</para>
 				<note>
@@ -983,21 +1063,21 @@ Ex:
 					<para>
 						The real power of the macros is the ability to provide template-defined parameters that are defined within the body of the
 						macro reference which can be evaluated programatically inside the macro definition.  Template-defined parameters use the same
-						format as a standard macro reference.  So, how do you determine if an element is a macro reference or a template-defined parameter?
+						format as a standard macro reference with '@' replaced with '%'.
 						<itemizedlist>
-							<listitem>Template-defined parameters must be defined as parameters with the suffix of [...] for the macro definition.</listitem>
-							<listitem>Template-defined parameters must not have a namespace (no '.' in the macro name)</listitem>
+							<listitem>Template-defined parameters must be defined as parameters with the suffix of [...template defined parameter definitions...] for the macro definition.</listitem>
+							<listitem>Template-defined parameters must not have a namespace reference (no ':' in the macro name)</listitem>
 						</itemizedlist>
 						See the following macro reference:
 <programlisting>
-[@tab.pane id="myTab"]
+[@tab:pane id="myTab"]
 	[%page title="Page 1" visible=true]
 		Page 1 contents
 	[/%page]
 	[%page title="Page 2"]
 		Page 2 contents
 	[/%page]
-[/@tab.pane]
+[/@tab:pane]
 </programlisting>
 						Notice that even though the pane macro is in the tab namespace, the page template-defined parameters do not reference the namespace.
 						Now, see the macro definition (which would be in the tab macro library) 
@@ -1036,9 +1116,9 @@ This is what the output would be (I've changed the spacing for readability)
 						In this reference the commonPages macro is not a template-defined parameter but a standard macro reference with will include template defined parameters. 
 This is what the output would be (I've changed the spacing for readability)
 <programlisting>
-[@tab.pane id="myTab"]
-	[@tab.commonPages/]
-[/@tab.pane]
+[@tab:pane id="myTab"]
+	[@tab:commonPages/]
+[/@tab:pane]
 </programlisting>
 						Notice that the pane macro has not changed since the previous example.  We have just added the commonPages macro to this library.
 <programlisting>
@@ -1221,6 +1301,7 @@ Object rtn = e.objectValue(context);
 						<varlistentry><term>file</term><listitem><link linkend="FileResourceLoader">FileResourceLoader</link></listitem></varlistentry>
 						<varlistentry><term>url</term><listitem><link linkend="URLResourceLoader">URLResourceLoader</link></listitem></varlistentry>
 						<varlistentry><term>string</term><listitem><link linkend="StringResourceLoader">StringResourceLoader</link></listitem></varlistentry>
+						<varlistentry><term>WEB-INF</term><listitem><link linkend="WebInfResourceLoader">WebInfResourceLoader</link></listitem></varlistentry>
 					</variablelist>
 				</para>
 				<para>
@@ -1260,6 +1341,25 @@ includeResourceLoader.type=classpath
 <programlisting>
 zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 </programlisting>
+					</para>
+				</section>
+				<section id="WebInfResourceLoader">
+					<title>ClasspathResourceLoader</title>
+					<para>
+						<code>hudson.zipscript.resource.WebInfResourceLoader</code>: Loads a resource from the servlet WEB-INF directory.
+					</para>
+					<para>
+						Init properties:
+						<variablelist>
+							<varlistentry><term>pathPrefix</term><listitem>Prefix to append to all resourceses</listitem></varlistentry>
+						</variablelist>
+					</para>
+					<para>
+						The servlet context must me used with this resource loader and it can be passed in 1 of 2 ways:
+						<itemizedlist>
+							<listitem>WebInfResource loader constructor with zipEngine.set...ResourceLoader(ResourceLoader)</listitem>
+							<listitem>Use the template.merge(context, servletContext) method</listitem>
+						</itemizedlist>
 					</para>
 				</section>
 				<section id="ClasspathResourceLoader">
@@ -1349,8 +1449,9 @@ zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 				a map entry with the key of 'foo.bar' exists, this can be retrieved using the variable format ${'foo.bar'}.
 			</section>
 			<section id="context_xml">
-				<title>XML DOM Context</title>
-				This is not implemented yet but will be.
+				<title>XML Context</title>
+				An XML document can be passed directly to the merge template method to be used as the context (or can be referenced as a property of some other context object).
+				See <link linkend="variable_xml">XML variable section</link> to understand how to work with an XML structure (basically it works the way you would think it would work).
 			</section>
 			<section id="context_object">
 				<title>Object</title>
@@ -1377,6 +1478,7 @@ zipEngine.getTemplate("[#foreach foo in bar]${foo.name}[/#foreach]");
 					<varlistentry><term>resource.checkModification</term><listitem>true/false: should we check for resource modifications?</listitem></varlistentry>
 					<varlistentry><term>uniqueIdGenerator.*</term><listitem>Unique id generator properties (hudson.zipscript.parser.util.UniqueIdGenerator)</listitem></varlistentry>
 					<varlistentry><term>i18n.*</term><listitem>Message bundle helper properties (hudson.zipscript.parser.util.I18NResource)</listitem></varlistentry>
+					<varlistentry><term>refreshTemplates</term>'true' to always check for new templates and 'false' to not (default is true)</varlistentry>
 				</variablelist>
 			</para>
 		</chapter>
