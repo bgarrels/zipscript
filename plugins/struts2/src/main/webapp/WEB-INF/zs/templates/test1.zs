@@ -2,11 +2,6 @@
 	[#set title="Joe Rocks!"/]
 [/#initialize]
 [#import "tab.zsm" as tab/]
-[#import "head.zsm" as head/]
-
-[@head.script]
-	var foo="this is a test";
-[/@head.script]
 
 ${Parameters("abc")!"Nope"} $!Parameters("ab")
 
@@ -24,11 +19,11 @@ ${foo}
 
 $Resource("key.text")
 
-[@tab.pane]
+[@tab:pane id="myTabPane"]
 	[%page label="Page 1"]
 		Page 1 contents
 	[/%page]
 	[%page label="Page 2"]
 		Page 2 contents
 	[/%page]
-[/@tab.pane]
+[/@tab:pane]

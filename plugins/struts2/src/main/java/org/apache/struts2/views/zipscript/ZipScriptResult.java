@@ -7,6 +7,7 @@ import hudson.zipscript.template.Template;
 
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.LinkedHashMap;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -82,8 +83,10 @@ public class ZipScriptResult extends StrutsResultSupport {
 		if (null == zipScriptManager) {
 			zipScriptManager = (ZipScriptManager) servletContext.getAttribute(
 					ZipScriptManager.class.getName());
-			zipScriptManager = new ZipScriptManager();
-			servletContext.setAttribute(ZipScriptManager.class.getName(), zipScriptManager);
+			if (null == zipScriptManager) {
+				zipScriptManager = new ZipScriptManager();
+				servletContext.setAttribute(ZipScriptManager.class.getName(), zipScriptManager);
+			}
 		}
 
 		ZipEngine zipEngine = zipScriptManager.getZipEngine(servletContext);
@@ -188,7 +191,10 @@ public class ZipScriptResult extends StrutsResultSupport {
 	 * "hook" to add data to the context
 	 * @param context the context
 	 */
-	protected void loadContext (Context context) {}
+	protected void loadContext (Context context) {
+		context.put("cssIncludes", new LinkedHashMap<String, Object>());
+		context.put("scriptIncludes", new LinkedHashMap<String, Object>());
+	}
 
 	/**
 	 * Retrieve the content type for this template. <p/> People can override
