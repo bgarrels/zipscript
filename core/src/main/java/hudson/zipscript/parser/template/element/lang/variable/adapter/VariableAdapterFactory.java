@@ -6,7 +6,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 
 public interface VariableAdapterFactory {
 
-	public MapAdapter getMapAdapter (Object map);
+	public HashAdapter getHashAdapter (Object map);
 
 	public SequenceAdapter getSequenceAdapter (Object sequence);
 

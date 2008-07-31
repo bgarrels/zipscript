@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class JavaMapAdapter implements MapAdapter {
+public class JavaHashAdapter implements HashAdapter {
 
-	public static final JavaMapAdapter INSTANCE = new JavaMapAdapter();
+	public static final JavaHashAdapter INSTANCE = new JavaHashAdapter();
 	
 	public boolean appliesTo(Object object) {
 		return (object instanceof Map);

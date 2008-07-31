@@ -4,7 +4,7 @@ import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
@@ -19,7 +19,7 @@ public class MapChild implements VariableChild {
 	private short type = Short.MIN_VALUE;
 	private boolean doTypeChecking = false;
 	
-	private MapAdapter mapAdapter;
+	private HashAdapter mapAdapter;
 	private SequenceAdapter sequenceAdapter;
 	private ObjectAdapter objectAdapter;
 	
@@ -42,7 +42,7 @@ public class MapChild implements VariableChild {
 					type = TYPE_MAP;
 				}
 				if (type == Short.MIN_VALUE) {
-					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(parent);
+					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getHashAdapter(parent);
 					if (null != mapAdapter) {
 						type = TYPE_MAP;
 					}

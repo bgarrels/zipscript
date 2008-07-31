@@ -3,7 +3,7 @@ package hudson.zipscript.parser.template.element.lang.variable.adapter;
 import java.util.Collection;
 import java.util.Set;
 
-public interface MapAdapter {
+public interface HashAdapter {
 
 	public boolean appliesTo (Object object);
 

@@ -6,10 +6,10 @@ import java.util.Set;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
-public class NodeMapAdapter extends NodeObjectAdapter implements MapAdapter {
+public class NodeMapAdapter extends NodeObjectAdapter implements HashAdapter {
 
 	public static NodeMapAdapter INSTANCE = new NodeMapAdapter();
 

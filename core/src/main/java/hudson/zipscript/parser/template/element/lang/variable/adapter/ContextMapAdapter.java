@@ -5,7 +5,7 @@ import hudson.zipscript.parser.context.Context;
 import java.util.Collection;
 import java.util.Set;
 
-public class ContextMapAdapter implements MapAdapter {
+public class ContextMapAdapter implements HashAdapter {
 
 	public static final ContextMapAdapter INSTANCE = new ContextMapAdapter();
 	
