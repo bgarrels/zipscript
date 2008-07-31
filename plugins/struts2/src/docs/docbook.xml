@@ -10,7 +10,7 @@
 			<title>Download Files</title>
 			<para>
 				<itemizedlist>
-					<listitem>Download <ulink url="http://code.google.com/p/zipscript/downloads/list?can=2&amp;q=ZipScript-plugins-struts2&amp;colspec=Filename+Summary+Uploaded+Size">struts2-zipscript</ulink></listitem>
+					<listitem>Download <ulink url="http://code.google.com/p/zipscript/downloads/list?can=2&amp;q=zipscript-struts2&amp;colspec=Filename+Summary+Uploaded+Size">struts2-zipscript</ulink></listitem>
 					<listitem>Download <ulink url="http://code.google.com/p/zipscript/downloads/list?can=2&amp;q=zipscript-core&amp;colspec=Filename+Summary+Uploaded+Size">zipscript-core</ulink></listitem>
 				</itemizedlist>
 				Unzip both zip files somewhere on your filesystem.
