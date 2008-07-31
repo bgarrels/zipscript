@@ -38,7 +38,7 @@ public class VariableAdapterFactory
 				Constants.REQUEST,
 				Constants.ACTION,
 				Constants.RESPONSE,
-				Constants.PARAMETERS,
+				Constants.PARAMS,
 				Constants.LAYOUT,
 				Constants.SESSION,
 		};

@@ -20,7 +20,7 @@ public class ZipScriptLayoutResult extends ZipScriptBodyResult {
 	private static final String LAYOUT_PATH = LAYOUT_PATH_PREFIX + "layout.zs";
 
 	@Override
-	protected void writeOutput(Object context, ValueStack stack,
+	protected void writeOutput(Context context, ValueStack stack,
 			ZipEngine zipEngine, ActionInvocation invocation, ResultData resultData,
 			ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, Writer writer) throws Exception {
@@ -28,19 +28,19 @@ public class ZipScriptLayoutResult extends ZipScriptBodyResult {
 		// get the body content
 		Template body = getBodyTemplate(
 				stack, zipEngine, invocation, resultData, servletContext);
-		Context initializedCtx = body.initialize(context);
-		initializedCtx.put(getScreenPlaceholderToken(), body);
+		context = body.initialize(context);
+		context.put(getScreenPlaceholderToken(), body);
 
 		// get the layout content
 		Template layout = getLayoutTemplate(
 				stack, zipEngine, invocation, resultData, servletContext);
-		layout.initialize(initializedCtx);
-		initializedCtx.put(getLayoutPlaceholderToken(), layout);
+		layout.initialize(context);
+		context.put(getLayoutPlaceholderToken(), layout);
 
 		// get the page content
 		Template page = getPageTemplate(
 				stack, zipEngine, invocation, resultData, servletContext);
-		page.merge(initializedCtx, writer);
+		page.merge(context, writer, request.getLocale());
 	}
 
 	protected Template getLayoutTemplate(ValueStack stack, ZipEngine zipEngine,

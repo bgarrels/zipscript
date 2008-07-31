@@ -2,6 +2,7 @@ package org.apache.struts2.views.zipscript;
 
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.ext.data.ResultData;
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.template.Template;
 
 import java.io.OutputStreamWriter;
@@ -108,7 +109,8 @@ public class ZipScriptResult extends StrutsResultSupport {
 			}
 
 			Writer writer = new OutputStreamWriter(response.getOutputStream(), encoding);
-			Object context = zipScriptManager.createContext(invocation, resultData, request);
+			Context context = zipScriptManager.createContext(invocation, resultData, request);
+			loadContext(context);
 
 			writeOutput(context, stack, zipEngine, invocation, resultData,
 					servletContext, request, response, writer);
@@ -129,13 +131,26 @@ public class ZipScriptResult extends StrutsResultSupport {
 		return;
 	}
 
-	protected void writeOutput(Object context, ValueStack stack, ZipEngine zipEngine,
+	/**
+	 * Perform any template merging and write the output
+	 * @param context the zipscript context
+	 * @param stack the value stack
+	 * @param zipEngine the zip engine
+	 * @param invocation the action invocation
+	 * @param resultData the result data
+	 * @param servletContext the servlet context
+	 * @param request the http servlet request
+	 * @param response the http servlet response
+	 * @param writer the output writer
+	 * @throws Exception if anything goes wrong
+	 */
+	protected void writeOutput(Context context, ValueStack stack, ZipEngine zipEngine,
 			ActionInvocation invocation, ResultData resultData, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response, Writer writer)
 	throws Exception {
 		Template t = getPageTemplate(
 				stack, zipEngine, invocation, resultData.getTemplate(), servletContext);
-		t.merge(context, writer);
+		t.merge(context, writer, request.getLocale());
 	}
 
 	/**
@@ -145,8 +160,7 @@ public class ZipScriptResult extends StrutsResultSupport {
 	 * @param stack
 	 *            the value stack to resolve the location again (when parse
 	 *            equals true)
-	 * @param velocity
-	 *            the velocity engine to process the request against
+	 * @param zipEngine the zip engine
 	 * @param invocation
 	 *            an encapsulation of the action execution state.
 	 * @param location
@@ -163,9 +177,18 @@ public class ZipScriptResult extends StrutsResultSupport {
 		return zipEngine.getTemplate(getTemplatesPath() + location, servletContext);
 	}
 
+	/**
+	 * Return the path to retrieve action templates under the template root (defaults to "templates/")
+	 */
 	protected String getTemplatesPath () {
 		return "templates/";
 	}
+
+	/**
+	 * "hook" to add data to the context
+	 * @param context the context
+	 */
+	protected void loadContext (Context context) {}
 
 	/**
 	 * Retrieve the content type for this template. <p/> People can override

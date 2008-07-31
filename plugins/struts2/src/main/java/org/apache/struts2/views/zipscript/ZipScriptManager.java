@@ -3,6 +3,7 @@ package org.apache.struts2.views.zipscript;
 import hudson.zipscript.ZipEngine;
 import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.parser.Constants;
+import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.plugin.struts2.Struts2Plugin;
@@ -78,13 +79,13 @@ public class ZipScriptManager {
 
 		// set resource loaders
 		String rootDirectory = getProperty("rootDirectory", "zs/", props);
-		String fragmentsDirectory = getProperty("fragmentsDirectory", "fragments/", props);
+		String includesDirectory = getProperty("includesDirectory", "includes/", props);
 		String macrosDirectory = getProperty("macrosDirectory", "macros/", props);
 
 		zipEngine.setTemplateResourceLoader(
 				new WebInfResourceLoader(rootDirectory));
 		zipEngine.setIncludeResourceLoader(
-				new WebInfResourceLoader(rootDirectory + fragmentsDirectory));
+				new WebInfResourceLoader(rootDirectory + includesDirectory));
 		zipEngine.setMacroLibResourceLoader(
 				new WebInfResourceLoader(rootDirectory + macrosDirectory));
 
@@ -97,7 +98,7 @@ public class ZipScriptManager {
 		else return obj.toString();
 	}
 
-	public Object createContext (
+	public Context createContext (
 			ActionInvocation actionInvocation, ResultData resultData, HttpServletRequest request) {
 		ExtendedContext ctx = new ActionRequestContextWrapper(
 				actionInvocation.getAction(), request);
