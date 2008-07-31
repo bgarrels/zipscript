@@ -9,9 +9,9 @@ import org.w3c.dom.NodeList;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
-public class NodeMapAdapter extends NodeObjectAdapter implements HashAdapter {
+public class NodeHashAdapter extends NodeObjectAdapter implements HashAdapter {
 
-	public static NodeMapAdapter INSTANCE = new NodeMapAdapter();
+	public static NodeHashAdapter INSTANCE = new NodeHashAdapter();
 
 	public Object get(Object key, Object map,
 			RetrievalContext retrievalContext, String contextHint)
