@@ -49,13 +49,20 @@
 WEB-INF
    |-- zs
        |-- macros
-           |-- templates referenced with [#import .../]
+       |   |
+       |   |-- templates referenced with [#import .../]
+       |
        |-- includes
-           |-- templates referenced with [#include .../]
+       |   |
+       |   |-- templates referenced with [#include .../]
+       |
        |-- layouts
-           |-- layout.zs
-           |-- page.zs
+       |   |
+       |   |-- layout.zs
+       |   |-- page.zs
+       |
        |-- templates
+           |
            |-- templates referenced with action definition
 </programlisting>
 			<note>
