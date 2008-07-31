@@ -526,20 +526,20 @@ ${driver.children[0].firstName} will print "Bill"
 				</para>
 				Assume a Document representing the following XML structure is used as the context:
 <programlisting>
-<person firstName="Joe" lastName="Hudson">
-	<car numDoors="4" mpg="35">
-		<manufacturer>Honda</manufacturer>
-	</car>
-	<children>
-		<child age="4" firstName="Jane"/>
-		<child age="5" firstName="Dick">
-			<friend name="Sally"/>
-			<friend name="Jenny"/>
-			<friend name="Sara"/>
-		</child>
-		<child age="5" firstName="John"/>
-	</children>
-</person>
+&lt;person firstName="Joe" lastName="Hudson"&gt;
+	&lt;car numDoors="4" mpg="35"&gt;
+		&lt;manufacturer>Honda&lt;/manufacturer&gt;
+	&lt;/car&gt;
+	&lt;children&gt;
+		&lt;child age="4" firstName="Jane"/&gt;
+		&lt;child age="5" firstName="Dick"&gt;
+			&lt;friend name="Sally"/&gt;
+			&lt;friend name="Jenny"/&gt;
+			&lt;friend name="Sara"/&gt;
+		&lt;/child&gt;
+		&lt;child age="5" firstName="John"/&gt;
+	&lt;/children&gt;
+&lt;/person&gt;
 </programlisting>
 			The following template could be applied:
 <programlisting>
