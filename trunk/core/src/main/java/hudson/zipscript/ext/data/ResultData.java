@@ -1,5 +1,7 @@
 package hudson.zipscript.ext.data;
 
+import hudson.zipscript.parser.util.StringUtil;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,8 +10,6 @@ import java.util.Set;
 
 public class ResultData implements Map {
 
-	private static final char SEPARATOR = ';';
-	private static final char ASSIGNMENT = '=';
 	private static final String LAYOUT = "layout";
 	private static final String PAGE = "page";
 	
@@ -30,40 +30,10 @@ public class ResultData implements Map {
 	}
 
 	private void loadParams(String params) {
-		StringBuffer key = new StringBuffer();
-		StringBuffer value = new StringBuffer();
-		StringBuffer currentBuffer = key;
-		
-		for (int i=0; i<params.length(); i++) {
-			char c = params.charAt(i);
-			if (c == ASSIGNMENT) {
-				currentBuffer = value;
-			}
-			else if (c == SEPARATOR) {
-				setProperty(key, value);
-				key = new StringBuffer();
-				value = new StringBuffer();
-				currentBuffer = key;
-			}
-			else
-				currentBuffer.append(c);
-		}
-		setProperty(key, value);
-	}
-
-	private void setProperty (StringBuffer key, StringBuffer value) {
-		String keyS = key.toString().trim();
-		String valueS = value.toString().trim();
-		if (keyS.length() > 0 && valueS.length() > 0) {
-			if (keyS.equals(LAYOUT))
-				this.layout = valueS;
-			else if (keyS.equals(PAGE))
-				this.page = valueS;
-			else {
-				if (null == parameters)
-					parameters = new HashMap();
-				parameters.put(keyS, valueS);
-			}
+		this.parameters = StringUtil.getProperties(params);
+		if (null != this.parameters) {
+			this.layout = (String) this.parameters.get(LAYOUT);
+			this.page = (String) this.parameters.get(PAGE);
 		}
 	}
 
