@@ -1,7 +1,7 @@
 <project name="ZipScript Struts Plugin" default="dist" basedir=".">
 
 	<property name="version" value="1.0.0" />
-	<property name="name" value="zipscript-plugin-struts" />
+	<property name="name" value="zipscript-struts2" />
 
 	<!-- set global properties for this build -->
 	<property name="src" location="src/main/java" />
