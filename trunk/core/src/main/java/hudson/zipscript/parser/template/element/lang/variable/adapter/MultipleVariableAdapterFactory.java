@@ -15,10 +15,10 @@ public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 		this.factories = factories;
 	}
 
-	public MapAdapter getMapAdapter(Object map) {
-		MapAdapter mapAdapter = null;
+	public HashAdapter getHashAdapter(Object map) {
+		HashAdapter mapAdapter = null;
 		for (int i=0; i<factories.length; i++) {
-			mapAdapter = factories[i].getMapAdapter(map);
+			mapAdapter = factories[i].getHashAdapter(map);
 			if (null != mapAdapter) return mapAdapter;
 		}
 		return null;

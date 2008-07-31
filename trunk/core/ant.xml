@@ -71,7 +71,7 @@
 
 	<target name="compile-test" depends="compile" description="compile the source ">
 		<!-- Compile the java test code from ${src-test} into ${build} -->
-		<javac srcdir="${src-test}" destdir="${build-test}">
+		<javac srcdir="${src-test}" destdir="${build-test}" source="1.4">
 			<classpath refid="classpath.test" />
 		</javac>
 	</target>
@@ -88,7 +88,7 @@
 
 	<target name="compile" depends="init" description="compile the source ">
 		<!-- Compile the java code from ${src} into ${build} -->
-		<javac srcdir="${src}" destdir="${build}" />
+		<javac srcdir="${src}" destdir="${build}" source="1.4"/>
 	</target>
 
 	<target name="test" depends="compile-test" description="test the source ">

@@ -63,9 +63,9 @@ import org.w3c.dom.NodeList;
 
 public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 
-	public MapAdapter getMapAdapter(Object map) {
+	public HashAdapter getHashAdapter(Object map) {
 		if (map instanceof Map)
-			return JavaMapAdapter.INSTANCE;
+			return JavaHashAdapter.INSTANCE;
 		else if (map instanceof Context)
 			return ContextMapAdapter.INSTANCE;
 		else if (map instanceof Node) {

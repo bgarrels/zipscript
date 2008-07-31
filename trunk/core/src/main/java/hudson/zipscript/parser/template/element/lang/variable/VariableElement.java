@@ -20,7 +20,7 @@ import hudson.zipscript.parser.template.element.lang.CommaElement;
 import hudson.zipscript.parser.template.element.lang.DotElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.WhitespaceElement;
-import hudson.zipscript.parser.template.element.lang.variable.adapter.MapAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
@@ -206,7 +206,7 @@ public class VariableElement extends AbstractElement implements Element {
 	private short type = Short.MIN_VALUE;
 	private boolean doTypeChecking = false;
 
-	private MapAdapter mapAdapter;
+	private HashAdapter mapAdapter;
 	private SequenceAdapter sequenceAdapter;
 	private ObjectAdapter objectAdapter;
 
@@ -244,7 +244,7 @@ public class VariableElement extends AbstractElement implements Element {
 					type = TYPE_MAP;
 				}
 				if (type == Short.MIN_VALUE) {
-					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getMapAdapter(parent);
+					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getHashAdapter(parent);
 					if (null != mapAdapter) {
 						type = TYPE_MAP;
 					}
