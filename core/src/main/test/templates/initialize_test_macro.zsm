@@ -1,6 +1,0 @@
-[#macro foo]
-	[#initialize]
-		[#set inMacroCount = inMacroCount + 1/]
-	[/#initialize]
-	Body: ${body}
-[/#macro]

@@ -1,3 +1,0 @@
-[#macro test | message]
-	This is a dynamic test - $message
-[/#macro]
