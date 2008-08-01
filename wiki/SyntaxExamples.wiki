@@ -18,9 +18,8 @@ informal variable references
     $person.birthDate|short
     $person.firstName?upperCase
 }}}
-*[http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/core/bk01ch02s06.html#variable_specialMethods_is See all variable special methods]*
-*[http://www.zipscript.org/layout/frameset.html?bk01ch02s05.html See all variable formatting options]*
-bk01ch02s06.html#variable_specialMethods_is
+  * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/core/bk01ch02s06.html See all variable special methods]
+  * [http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/core/bk01ch02s05.html See all variable formatting options]
 
 =A Few Directive Examples=
 {{{
