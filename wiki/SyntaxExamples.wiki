@@ -51,6 +51,15 @@ informal variable references
 [/#foreach]
 
 
+[##----- escape/noescape directive -----##]
+[#escape html]
+    ${foo}  <-- This will automatically be HTML-escaped
+    [#noescape]
+        ${bar}  <-- This will not automatically be escaped
+    [/#noescape]
+[/#escape]
+
+
 [##----- macros -----##]
 [##-- macro reference from imported library --##]
 [@mm:someFlatMacro abc=def ghi="jkl" mno=3/]
