@@ -29,7 +29,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 import hudson.zipscript.parser.template.element.lang.variable.special.VarSpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
-import hudson.zipscript.parser.util.SessionUtil;
+import hudson.zipscript.parser.util.PropertyUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
@@ -57,7 +57,8 @@ public class VariableElement extends AbstractElement implements Element {
 		this.isFormal = isFormal;
 		this.isSilenced = isSilenced;
 		setPattern(pattern, session, contentIndex);
-		this.suppressNullErrors = SessionUtil.getProperty(Constants.SUPPRESS_NULL_ERRORS, false, session);
+		this.suppressNullErrors = PropertyUtil.getProperty(
+				Constants.SUPPRESS_NULL_ERRORS, false, session.getParameters().getInitParameters());
 	}
 
 	public VariableElement (

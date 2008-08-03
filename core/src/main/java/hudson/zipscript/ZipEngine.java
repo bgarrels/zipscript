@@ -6,13 +6,13 @@ import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementParsingSession;
 import hudson.zipscript.parser.template.data.ParseParameters;
-import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.comment.CommentComponent;
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.directive.breakdir.BreakComponent;
 import hudson.zipscript.parser.template.element.directive.calldir.CallComponent;
 import hudson.zipscript.parser.template.element.directive.continuedir.ContinueComponent;
 import hudson.zipscript.parser.template.element.directive.escape.EscapeComponent;
+import hudson.zipscript.parser.template.element.directive.escape.translate.TranslateComponent;
 import hudson.zipscript.parser.template.element.directive.foreachdir.ForeachComponent;
 import hudson.zipscript.parser.template.element.directive.ifdir.IfComponent;
 import hudson.zipscript.parser.template.element.directive.importdir.ImportComponent;
@@ -94,7 +94,8 @@ public class ZipEngine {
 			new BreakComponent(),
 			new ContinueComponent(),
 			new SetComponent(),
-			new GlobalComponent()
+			new GlobalComponent(),
+			new TranslateComponent()
 	};
 	private static final Component[] OVERRIDEABLE_COMPONENTS = new Component[] {
 			new IfComponent(),

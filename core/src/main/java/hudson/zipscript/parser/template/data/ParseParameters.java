@@ -1,5 +1,7 @@
 package hudson.zipscript.parser.template.data;
 
+import java.util.Map;
+
 import hudson.zipscript.ResourceContainer;
 
 
@@ -27,6 +29,10 @@ public class ParseParameters {
 		else if (val instanceof Boolean) return ((Boolean) val).booleanValue();
 		else if (val instanceof String) return Boolean.TRUE.equals(val);
 		else return defaultVal;
+	}
+	
+	public Map getInitParameters () {
+		return resourceContainer.getInitParameters();
 	}
 
 	public ResourceContainer getResourceContainer() {

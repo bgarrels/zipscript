@@ -14,7 +14,7 @@ import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.parser.util.AttributeUtil;
-import hudson.zipscript.parser.util.SessionUtil;
+import hudson.zipscript.parser.util.PropertyUtil;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.StringWriter;
@@ -177,8 +177,8 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		if (null != footer)
 			footer.validate(session);
 
-		if (null != getChildren() && SessionUtil.getProperty(
-				Constants.TRIM_MACRO_BODY, true, session)) {
+		if (null != getChildren() && PropertyUtil.getProperty(
+				Constants.TRIM_MACRO_BODY, true, session.getParameters().getInitParameters())) {
 			// trim the body
 			this.isBodyEmpty = StringUtil.trim(getChildren());
 		}
