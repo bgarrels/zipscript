@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -17,11 +18,11 @@ import test.hudson.zipscript.model.Person;
 
 public class DirectiveTestCase extends TestCase {
 
-//	public static TestSuite suite () {
-//		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testImport"));
-//		return suite;
-//	}
+	public static TestSuite suite () {
+		TestSuite suite = new TestSuite();
+		suite.addTest(new DirectiveTestCase("testTranslation"));
+		return suite;
+	}
 
 	public DirectiveTestCase () {}
 
@@ -34,7 +35,7 @@ public class DirectiveTestCase extends TestCase {
 //		System.out.println(
 //				ZipEngine.createInstance().getTemplate(mergeTemplate).merge(null));
 //	}
-	
+
 	public void testForeach () throws Exception {
 		String mergeTemplate = "templates/foreach_test.zs";
 		String resultFile = "/templates/foreach_result.txt";
@@ -143,20 +144,39 @@ public class DirectiveTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, null);
 	}
 
+	public void testTranslation () throws Exception {
+		String mergeTemplate = "templates/translate_test.zs";
+		Map context = new HashMap();
+		context.put("var", new Integer(3));
+		
+		String actualResult = merge(mergeTemplate, context, Locale.CANADA_FRENCH);
+		System.out.println(actualResult);
+		
+		// String resultFile = "/templates/translate_result.txt";
+		// evalResult(mergeTemplate, resultFile, null, Locale.FRENCH);
+	}
+
 	private void evalResult (String mergeTemplate, String resultFile, Object context)
 	throws ParseException, ExecutionException, IOException {
 		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
-		String actualResult = merge(mergeTemplate, context);
+		String actualResult = merge(mergeTemplate, context, null);
 		assertEquals(expectedResult, actualResult);
 	}
 
-	private String merge (String template, Object context)
+	private void evalResult (String mergeTemplate, String resultFile, Object context, Locale locale)
+	throws ParseException, ExecutionException, IOException {
+		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
+		String actualResult = merge(mergeTemplate, context, locale);
+		assertEquals(expectedResult, actualResult);
+	}
+
+	private String merge (String template, Object context, Locale locale)
 	throws ParseException, ExecutionException, IOException {
 		HashMap props = new HashMap();
 		props.put("includeResourceLoader.type", "classpath");
 		props.put("includeResourceLoader.pathPrefix", "templates/includes/");
 		ZipEngine zipEngine = ZipEngine.createInstance(props);
 		return zipEngine.getTemplate(
-				template).merge(context);
+				template).merge(context, locale);
 	}
 }

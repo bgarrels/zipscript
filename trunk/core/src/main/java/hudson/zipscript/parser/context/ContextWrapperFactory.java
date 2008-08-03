@@ -5,11 +5,11 @@ import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.lang.xml.DocumentContextWrapper;
 import hudson.zipscript.parser.util.ClassUtil;
-import hudson.zipscript.parser.util.I18NResource;
-import hudson.zipscript.parser.util.I18NResourceImpl;
 import hudson.zipscript.parser.util.MathUtil;
-import hudson.zipscript.parser.util.UniqueIdGenerator;
-import hudson.zipscript.parser.util.UniqueIdGeneratorImpl;
+import hudson.zipscript.parser.util.i18n.I18NResource;
+import hudson.zipscript.parser.util.i18n.I18NResourceImpl;
+import hudson.zipscript.parser.util.uniqueid.UniqueIdGenerator;
+import hudson.zipscript.parser.util.uniqueid.UniqueIdGeneratorImpl;
 
 import java.util.Date;
 import java.util.HashMap;

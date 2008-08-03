@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.util;
+package hudson.zipscript.parser.util.uniqueid;
 
 import hudson.zipscript.parser.Configurable;
 import hudson.zipscript.parser.context.ExtendedContext;

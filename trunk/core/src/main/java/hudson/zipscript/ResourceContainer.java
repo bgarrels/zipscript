@@ -2,6 +2,9 @@ package hudson.zipscript;
 
 import hudson.zipscript.parser.template.element.component.Component;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.VariableAdapterFactory;
+import hudson.zipscript.parser.util.ClassUtil;
+import hudson.zipscript.parser.util.translator.GoogleTranslator;
+import hudson.zipscript.parser.util.translator.Translator;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.resource.ClasspathResourceLoader;
 import hudson.zipscript.resource.ResourceLoader;
@@ -18,6 +21,7 @@ public class ResourceContainer {
 	private Component[] components;
 	private VariableAdapterFactory variableAdapterFactory;
 	private Map initParameters;
+	private static Translator translator;
 
 	private ResourceLoader templateResourceLoader = new ClasspathResourceLoader();
 	private ResourceLoader includeResourceLoader = null;
@@ -114,5 +118,16 @@ public class ResourceContainer {
 
 	public void setEvalResourceLoader(ResourceLoader evalResourceLoader) {
 		this.evalResourceLoader = evalResourceLoader;
+	}
+
+	public Translator getTranslator () {
+		synchronized (this) {
+			if (null == translator) {
+				translator = (Translator) ClassUtil.loadResource(
+						"translator", initParameters,
+							Translator.class, GoogleTranslator.class, null);
+			}
+		}
+		return translator;
 	}
 }

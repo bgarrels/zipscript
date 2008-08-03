@@ -1,4 +1,4 @@
-package hudson.zipscript.parser.util;
+package hudson.zipscript.parser.util.i18n;
 
 import java.util.List;
 

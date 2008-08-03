@@ -1,7 +1,8 @@
-package hudson.zipscript.parser.util;
+package hudson.zipscript.parser.util.uniqueid;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.InitializationException;
+import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
 import java.util.Map;

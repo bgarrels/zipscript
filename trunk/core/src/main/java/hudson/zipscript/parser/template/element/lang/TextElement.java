@@ -25,7 +25,6 @@ public class TextElement extends AbstractElement implements Element {
 
 	private VarSpecialElement[] specialMethods = null;
 
-	private static final String EMPTY = "";
 	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] {
 		new VariablePatternMatcher()
 	};
@@ -59,17 +58,7 @@ public class TextElement extends AbstractElement implements Element {
 				return source;
 			}
 			else {
-				if (getChildren().size() > 1) {
-					StringWriter sw = new StringWriter();
-					for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
-						((Element) i.next()).merge(context, sw);
-					}
-					return sw.toString();
-				}
-				else {
-					if (getChildren().size() == 0) return EMPTY;
-					else return ((Element) getChildren().get(0)).objectValue(context);
-				}
+				return text;
 			}
 		}
 		else {
