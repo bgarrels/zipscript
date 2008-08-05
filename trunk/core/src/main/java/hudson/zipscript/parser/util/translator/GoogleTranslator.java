@@ -2,8 +2,6 @@ package hudson.zipscript.parser.util.translator;
 
 import hudson.zipscript.parser.exception.InitializationException;
 import hudson.zipscript.parser.template.element.Element;
-import hudson.zipscript.parser.template.element.lang.TextElement;
-import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.util.NetUtil;
 import hudson.zipscript.parser.util.PropertyUtil;
 

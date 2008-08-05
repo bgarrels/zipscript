@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.Document;
-
 import junit.framework.TestCase;
+
+import org.w3c.dom.Document;
 
 public class XMLTestCase extends TestCase {
 

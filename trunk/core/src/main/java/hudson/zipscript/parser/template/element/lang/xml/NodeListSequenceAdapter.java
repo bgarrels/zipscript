@@ -1,9 +1,9 @@
 package hudson.zipscript.parser.template.element.lang.xml;
 
-import org.w3c.dom.NodeList;
-
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
+
+import org.w3c.dom.NodeList;
 
 public class NodeListSequenceAdapter implements SequenceAdapter {
 

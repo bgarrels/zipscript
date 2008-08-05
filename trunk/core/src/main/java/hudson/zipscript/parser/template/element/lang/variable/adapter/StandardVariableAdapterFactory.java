@@ -47,8 +47,8 @@ import hudson.zipscript.parser.template.element.lang.variable.special.string.Upp
 import hudson.zipscript.parser.template.element.lang.variable.special.string.XMLSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.xml.XPathSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.xml.DocumentObjectAdapter;
-import hudson.zipscript.parser.template.element.lang.xml.NodeListSequenceAdapter;
 import hudson.zipscript.parser.template.element.lang.xml.NodeHashAdapter;
+import hudson.zipscript.parser.template.element.lang.xml.NodeListSequenceAdapter;
 import hudson.zipscript.parser.template.element.lang.xml.NodeObjectAdapter;
 
 import java.util.Collection;

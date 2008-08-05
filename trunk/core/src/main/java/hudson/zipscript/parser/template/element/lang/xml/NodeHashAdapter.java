@@ -1,13 +1,13 @@
 package hudson.zipscript.parser.template.element.lang.xml;
 
+import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+
 import java.util.Collection;
 import java.util.Set;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
-import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 public class NodeHashAdapter extends NodeObjectAdapter implements HashAdapter {
 

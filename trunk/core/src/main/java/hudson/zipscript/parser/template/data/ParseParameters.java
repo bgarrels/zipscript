@@ -1,8 +1,8 @@
 package hudson.zipscript.parser.template.data;
 
-import java.util.Map;
-
 import hudson.zipscript.ResourceContainer;
+
+import java.util.Map;
 
 
 public class ParseParameters {
