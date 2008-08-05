@@ -1,4 +1,5 @@
-Hello
+This won't be translated...
+
 [#translate]
-Hello dad you have ${var} pets at your house.
+Hello ${name}, how are you doing today?
 [/#translate]

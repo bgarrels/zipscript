@@ -147,9 +147,9 @@ public class DirectiveTestCase extends TestCase {
 	public void testTranslation () throws Exception {
 		String mergeTemplate = "templates/translate_test.zs";
 		Map context = new HashMap();
-		context.put("var", new Integer(3));
+		context.put("name", "Joe");
 		
-		String actualResult = merge(mergeTemplate, context, Locale.CANADA_FRENCH);
+		String actualResult = merge(mergeTemplate, context, Locale.FRENCH);
 		System.out.println(actualResult);
 		
 		// String resultFile = "/templates/translate_result.txt";
