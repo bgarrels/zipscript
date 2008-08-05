@@ -66,7 +66,7 @@ _Note: whitespace has been changed for readability purposes_
 
 ==Simple HTML Layout Macro Definition Example (layout.simple)==
 {{{
-[#macro simple | script[src=null] style[src=null media=null] title="Default Title" onLoad=null]
+[#macro simple | script[src=null] style[src=null media="screen"] title="Default Title" onLoad=null]
 <html>
 	<head>
 		<title>${title}</title>
@@ -88,7 +88,7 @@ _Note: whitespace has been changed for readability purposes_
 						${style.body}
 					</style>
 				[#else]
-					<link rel="stylesheet" type="text/css" href="${style.src}" [#if style.media != null]media="screen"[/#if]></link>				
+					<link rel="stylesheet" type="text/css" href="${style.src}" media="${style.media}"></link>				
 				[/#if]
 			[/#foreach]
 		[/#if]
