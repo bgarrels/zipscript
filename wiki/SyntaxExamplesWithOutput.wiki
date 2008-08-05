@@ -1,100 +1,80 @@
 #summary Unit test references with syntax examples and output
 ==if directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#108
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#108 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/if_result.txt merged output]
 
 ==foreach directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#38
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#38 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/foreach_result.txt merged output]
+
 
 ==while directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#80
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#80 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/while_result.txt merged output]
+
 
 ==set directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#134
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/set_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/set_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#134 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/set_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/set_result.txt merged output]
+
 
 ==import directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#94
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_test.zs
-  * macro libraries:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/imports
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#94 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/imports macro libraries]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/import_result.txt merged output]
+
 
 ==include directive==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#86
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_test.zs
-  * include templates:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates#templates/includes/foo
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/DirectiveTestCase.java#86 test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates#templates/includes/foo include templates]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/include_result.txt merged output]
+
 
 ==evaluating booleans==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/BooleanTestCase.java
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/BooleanTestCase.java test case]
 
 ==evaluating objects==
 ===test cases===
-  * http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/ListTestCase.java
-  * http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MathTestCase.java
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/ListTestCase.java ListTestCase]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MathTestCase.java MathTestCase]
 
 ==logic==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/LogicTestCase.java
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/LogicTestCase.java test case]
 
 ==variables==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableTestCase.java
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/variable_simple_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/variable_simple_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableTestCase.java test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/variable_simple_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/variable_simple_result.txt merged output]
 
 ===special methods:===
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/SpecialMethodsTestCase.java
+[http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/SpecialMethodsTestCase.java test case]
 
 ===defaults===
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableDefaultsTestCase.java
+[http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableDefaultsTestCase.java test case]
 
 ===formatting===
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableFormattingTestCase.java
+[http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/VariableFormattingTestCase.java test case]
 
 ==XML==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/XMLTestCase.java
-  * XML input: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_input.xml
-  * zipscript code:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_test.zs
-  * merged output:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/XMLTestCase.java test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_input.xml XML input]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_test.zs zipscript code]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/xml_result.txt merged output]
+
 
 ==macros==
-  * test case: http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MacroTestCase.java
-  * zipscript code 1:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_test.zs
-  * merged output 1:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_result.txt
-  * zipscript code 2:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_common_test.zs
-  * merged output 2:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_common_result.txt
-  * zipscript code 3:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_nesting_test.zs
-  * merged output 3:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_nesting_result.txt
-  * zipscript code 4:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_test.zs
-  * merged output 4:
-http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_result.txt
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/test/hudson/zipscript/MacroTestCase.java test case]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_test.zs zipscript code 1]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_result.txt merged output 1]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_common_test.zs zipscript code 2]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_common_result.txt merged output 2]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_nesting_test.zs zipscript code 3]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_nesting_result.txt merged output 3]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_test.zs zipscript code 4]
+  * [http://code.google.com/p/zipscript/source/browse/trunk/core/src/main/test/templates/macro_fulltest_result.txt merged output 4]
