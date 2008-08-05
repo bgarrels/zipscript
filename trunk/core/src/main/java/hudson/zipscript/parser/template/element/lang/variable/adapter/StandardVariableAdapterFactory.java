@@ -7,9 +7,15 @@ package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.Context;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.format.CustomDateFormatter;
+import hudson.zipscript.parser.template.element.lang.variable.format.CustomNumberFormatter;
+import hudson.zipscript.parser.template.element.lang.variable.format.DefinedDateFormatter;
+import hudson.zipscript.parser.template.element.lang.variable.format.DefinedNumberFormatter;
+import hudson.zipscript.parser.template.element.lang.variable.format.Formatter;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.date.JSDateTimeSpecialMethod;
@@ -57,6 +63,7 @@ import hudson.zipscript.parser.template.element.lang.xml.NodeListSequenceAdapter
 import hudson.zipscript.parser.template.element.lang.xml.NodeObjectAdapter;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -227,6 +234,27 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 
 	public String getDefaultGetterMethod(Object obj) {
 		return "get";
+	}
+
+	public Formatter getFormatter(String format, String formatFunction,
+			Object source, ExtendedContext context) {
+		if (source instanceof Date) {
+			if (null != format) {
+				return new CustomDateFormatter(format, context.getLocale());
+			} else {
+				return new DefinedDateFormatter(formatFunction, context
+						.getLocale());
+			}
+		} else if (source instanceof Number) {
+			if (null != format) {
+				return new CustomNumberFormatter(format, context
+						.getLocale());
+			} else {
+				return new DefinedNumberFormatter(formatFunction, context
+						.getLocale());
+			}
+		}
+		return null;
 	}
 
 	private static String[] reservedContextAttributes = new String[] {

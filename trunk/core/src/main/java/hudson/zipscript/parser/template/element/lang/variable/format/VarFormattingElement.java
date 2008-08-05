@@ -17,8 +17,9 @@ import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableEle
 import hudson.zipscript.parser.template.element.lang.variable.VariableTokenSeparatorElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
-import java.util.Date;
 import java.util.List;
+
+
 
 public class VarFormattingElement extends IdentifierElement implements
 		VariableTokenSeparatorElement {
@@ -76,23 +77,8 @@ public class VarFormattingElement extends IdentifierElement implements
 
 	protected Formatter initializeFormatter(Object source,
 			ExtendedContext context) {
-		if (source instanceof Date) {
-			if (null != this.format) {
-				return new CustomDateFormatter(this.format, context.getLocale());
-			} else {
-				return new DefinedDateFormatter(this.formatFunction, context
-						.getLocale());
-			}
-		} else if (source instanceof Number) {
-			if (null != this.format) {
-				return new CustomNumberFormatter(this.format, context
-						.getLocale());
-			} else {
-				return new DefinedNumberFormatter(this.formatFunction, context
-						.getLocale());
-			}
-		}
-		return null;
+		return context.getResourceContainer().getVariableAdapterFactory().getFormatter(
+				this.format, this.formatFunction, source, context);
 	}
 
 	public boolean requiresInput() {
