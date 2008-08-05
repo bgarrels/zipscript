@@ -5,11 +5,13 @@
 
 package hudson.zipscript.plugin.struts2;
 
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.SequenceAdapter;
+import hudson.zipscript.parser.template.element.lang.variable.format.Formatter;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +57,11 @@ public class VariableAdapterFactory
 
 	public SpecialMethod getSpecialMethod(String name, Element[] parameters,
 			ParsingSession session, Element element) {
+		return null;
+	}
+
+	public Formatter getFormatter(String format, String formatFunction,
+			Object source, ExtendedContext context) {
 		return null;
 	}
 
