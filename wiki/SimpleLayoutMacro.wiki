@@ -20,7 +20,7 @@ _Note: this following template code references a macro demonstrated at the botto
     [/%script]
 
     This is the body content... blah blah blah
-    <script language="java">
+    <script language="javascript">
         doSomething();
     </script>
 
