@@ -5,8 +5,10 @@
 
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.lang.variable.format.Formatter;
 import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMethod;
 
 import java.util.ArrayList;
@@ -80,6 +82,18 @@ public class MultipleVariableAdapterFactory implements VariableAdapterFactory {
 			getterMethod = factories[i].getDefaultGetterMethod(obj);
 			if (null != getterMethod)
 				return getterMethod;
+		}
+		return null;
+	}
+
+	public Formatter getFormatter(String format, String formatFunction,
+			Object source, ExtendedContext context) {
+		Formatter formatter = null;
+		for (int i = 0; i < factories.length; i++) {
+			formatter = factories[i].getFormatter(
+					format, formatFunction, source, context);
+			if (null != formatter)
+				return formatter;
 		}
 		return null;
 	}
