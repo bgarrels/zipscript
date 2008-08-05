@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comparator.math;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -15,19 +20,14 @@ public class MathPatternMatcher implements PatternMatcher {
 	}
 
 	public char[][] getStartTokens() {
-		return new char[][] {
-			"+".toCharArray(),
-			"-".toCharArray(),
-			"*".toCharArray(),
-			"/".toCharArray(),
-			"%".toCharArray(),
-			"^".toCharArray()
-		};
+		return new char[][] { "+".toCharArray(), "-".toCharArray(),
+				"*".toCharArray(), "/".toCharArray(), "%".toCharArray(),
+				"^".toCharArray() };
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader,
-			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars,
+			CharBuffer reader, ParsingSession parseData, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
 		char c = startChars[0];
 		if (c == '+')
 			return new AddExpression();

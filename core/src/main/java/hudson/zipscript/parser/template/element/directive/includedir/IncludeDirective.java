@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.includedir;
 
 import hudson.zipscript.ResourceContainer;
@@ -33,20 +38,22 @@ public class IncludeDirective extends AbstractDirective {
 	private int contentStartPosition;
 	private ParseParameters parseParameters;
 
-	public IncludeDirective (String contents, ParsingSession session, int contentStartPosition)
-	throws ParseException {
+	public IncludeDirective(String contents, ParsingSession session,
+			int contentStartPosition) throws ParseException {
 		this.contents = contents;
 		this.contentStartPosition = contentStartPosition;
 	}
 
 	public void validate(ParsingSession session) throws ParseException {
-		this.includeElement = new VariableElement(false, true, contents.trim(), session, contentStartPosition);
+		this.includeElement = new VariableElement(false, true, contents.trim(),
+				session, contentStartPosition);
 		if (this.includeElement.isStatic()) {
-			this.includePath = this.includeElement.objectValue(new MapContextWrapper(new HashMap())).toString();
+			this.includePath = this.includeElement.objectValue(
+					new MapContextWrapper(new HashMap())).toString();
 			this.includeElement = null;
-			this.includeResource = loadTemplateResource(includePath, session.getResourceContainer());
-		}
-		else {
+			this.includeResource = loadTemplateResource(includePath, session
+					.getResourceContainer());
+		} else {
 			this.parsedResources = new HashMap();
 		}
 		this.parseParameters = session.getParameters();
@@ -56,20 +63,23 @@ public class IncludeDirective extends AbstractDirective {
 			throws ExecutionException {
 		if (null != this.includeResource) {
 			// statically defined
-			if (context.doRefreshTemplates() && includeResource.resource.hasBeenModified()) {
-				this.includeResource = loadTemplateResource(
-						this.includePath, context.getResourceContainer());
+			if (context.doRefreshTemplates()
+					&& includeResource.resource.hasBeenModified()) {
+				this.includeResource = loadTemplateResource(this.includePath,
+						context.getResourceContainer());
 			}
 			includeResource.template.merge(context, sw, context.getLocale());
-		}
-		else {
+		} else {
 			// dynamically defined
 			Object includePath = this.includeElement.objectValue(context);
 			if (null == includePath)
-				throw new ExecutionException("Null resource include '" + includeElement + "'", this);
+				throw new ExecutionException("Null resource include '"
+						+ includeElement + "'", this);
 			String s = includePath.toString();
 			TemplateResource tr = (TemplateResource) parsedResources.get(s);
-			if (null == tr || (context.doRefreshTemplates() && tr.resource.hasBeenModified())) {
+			if (null == tr
+					|| (context.doRefreshTemplates() && tr.resource
+							.hasBeenModified())) {
 				// reload
 				tr = loadTemplateResource(s, context.getResourceContainer());
 			}
@@ -77,15 +87,16 @@ public class IncludeDirective extends AbstractDirective {
 		}
 	}
 
-	private TemplateResource loadTemplateResource (
-			String path, ResourceContainer resourceContainer) {
+	private TemplateResource loadTemplateResource(String path,
+			ResourceContainer resourceContainer) {
 		Resource r = resourceContainer.getIncludeResourceLoader().getResource(
-				path, resourceContainer.getInitParameters().get(
+				path,
+				resourceContainer.getInitParameters().get(
 						Constants.INCLUDE_RESOURCE_LOADER_PARAMETER));
 		try {
-			return ResourceUtil.loadTemplate(parseParameters, resourceContainer, r);
-		}
-		catch (ParseException e) {
+			return ResourceUtil.loadTemplate(parseParameters,
+					resourceContainer, r);
+		} catch (ParseException e) {
 			throw new ExecutionException(e.getMessage(), this);
 		}
 	}

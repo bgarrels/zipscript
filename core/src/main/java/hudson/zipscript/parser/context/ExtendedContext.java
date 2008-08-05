@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
@@ -10,7 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * The context interface used for all variables to retrieve supplied business data
+ * The context interface used for all variables to retrieve supplied business
+ * data
  * 
  * @author Joe Hudson
  */
@@ -20,21 +26,27 @@ public interface ExtendedContext extends Context, MacroProvider {
 	/**
 	 * Return true if the context has been initialized and false if not
 	 */
-	public boolean isInitialized (Element topLevelElement);
+	public boolean isInitialized(Element topLevelElement);
 
 	/**
 	 * Set the initialized status
-	 * @param val the initialized status
+	 * 
+	 * @param val
+	 *            the initialized status
 	 */
-	public void markInitialized (Element topLevelElement);
+	public void markInitialized(Element topLevelElement);
 
 	/**
 	 * Put a value in the context
-	 * @param key the key name
-	 * @param value the value
-	 * @param if we can travel up, should we?
+	 * 
+	 * @param key
+	 *            the key name
+	 * @param value
+	 *            the value
+	 * @param if
+	 *            we can travel up, should we?
 	 */
-	public void put (Object key, Object value, boolean travelUp);
+	public void put(Object key, Object value, boolean travelUp);
 
 	/**
 	 * Return the parsing session which is used by evaluators
@@ -43,58 +55,68 @@ public interface ExtendedContext extends Context, MacroProvider {
 
 	/**
 	 * Set the parsing session which is used by evaluators
+	 * 
 	 * @param session
 	 */
-	public void setParsingSession (ParsingSession session);
+	public void setParsingSession(ParsingSession session);
 
 	/**
 	 * Return the locale
 	 */
-	public Locale getLocale ();
+	public Locale getLocale();
 
 	/**
 	 * Set the locale
+	 * 
 	 * @param locale
 	 */
-	public void setLocale (Locale locale);
+	public void setLocale(Locale locale);
 
 	/**
 	 * Return the resource container
 	 */
-	public ResourceContainer getResourceContainer ();
+	public ResourceContainer getResourceContainer();
 
 	/**
 	 * Set the resource container
 	 */
-	public void setResourceContainer (ResourceContainer resourceContainer);
+	public void setResourceContainer(ResourceContainer resourceContainer);
 
 	/**
 	 * Return the root context (AKA the global context)
 	 */
-	public ExtendedContext getRootContext ();
+	public ExtendedContext getRootContext();
 
 	/**
 	 * Append all nested macro attributes within this context
-	 * @param m the map to add the elements to using the macro name as the map key
+	 * 
+	 * @param m
+	 *            the map to add the elements to using the macro name as the map
+	 *            key
 	 */
-	public void appendMacroNestedAttributes (Map m);
+	public void appendMacroNestedAttributes(Map m);
 
 	/**
 	 * Return all elements in the current execution scope
+	 * 
 	 * @return
 	 */
 	public void addToElementScope(List nestingStack);
 
 	/**
 	 * Add a macro import for the context
-	 * @param namespace the namespace
-	 * @param macroPath the path for the macro
+	 * 
+	 * @param namespace
+	 *            the namespace
+	 * @param macroPath
+	 *            the path for the macro
 	 */
-	public void addMacroImport (String namespace, String macroPath);
+	public void addMacroImport(String namespace, String macroPath);
 
 	/**
 	 * Return true if templates should be modification checked
+	 * 
 	 * @return
 	 */
-	public boolean doRefreshTemplates ();
+	public boolean doRefreshTemplates();
 }

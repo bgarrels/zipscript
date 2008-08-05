@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -19,13 +24,14 @@ public class DynamicChild implements VariableChild {
 	private RetrievalContext retrievalContext;
 	private String contextHint;
 
-	public DynamicChild (Element evaluator) {
+	public DynamicChild(Element evaluator) {
 		this.evaluator = evaluator;
 	}
 
 	public Object execute(Object parent, ExtendedContext context)
-	throws ExecutionException {
-		if (null == parent) return null;
+			throws ExecutionException {
+		if (null == parent)
+			return null;
 		String path = evaluator.objectValue(context).toString();
 		List children = (List) pathChildren.get(path);
 		if (null == children) {
@@ -33,14 +39,15 @@ public class DynamicChild implements VariableChild {
 			children = initialize(path);
 			pathChildren.put(path, children);
 		}
-		for (Iterator i=children.iterator(); i.hasNext(); ) {
-			if (null == parent) return null;
+		for (Iterator i = children.iterator(); i.hasNext();) {
+			if (null == parent)
+				return null;
 			parent = ((VariableChild) i.next()).execute(parent, context);
 		}
 		return parent;
 	}
 
-	protected List initialize (String path) {
+	protected List initialize(String path) {
 		List children = new ArrayList();
 		StringTokenizer st = new StringTokenizer(path, ".");
 		while (st.hasMoreElements()) {

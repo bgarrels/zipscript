@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.whiledir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -22,16 +27,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class WhileDirective extends NestableElement
-implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, BreakableDirective, ContinueableDirective {
+public class WhileDirective extends NestableElement implements
+		MacroInstanceAware, LoopingDirective, DebugElementContainerElement,
+		BreakableDirective, ContinueableDirective {
 
 	public static final String TOKEN_INDEX = "i";
 
 	private Element whileElement;
 	private boolean isInMacroDefinition;
 
-	public WhileDirective (String contents, int contentIndex, ParsingSession parsingSession)
-	throws ParseException {
+	public WhileDirective(String contents, int contentIndex,
+			ParsingSession parsingSession) throws ParseException {
 		parseContents(contents, contentIndex, parsingSession);
 	}
 
@@ -41,11 +47,10 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 		return list;
 	}
 
-	private void parseContents (
-			String s, int contentIndex, ParsingSession session)
-	throws ParseException {
+	private void parseContents(String s, int contentIndex,
+			ParsingSession session) throws ParseException {
 		// see if we are in a macro definition
-		for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+		for (Iterator i = session.getNestingStack().iterator(); i.hasNext();) {
 			if (i.next() instanceof MacroDirective) {
 				isInMacroDefinition = true;
 				break;
@@ -55,7 +60,8 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 		whileElement = parseElement(s, session, contentIndex);
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
 		context.put(TOKEN_INDEX, new Integer(0), false);
@@ -63,20 +69,19 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 			while (whileElement.booleanValue(context)) {
 				try {
 					appendElements(getChildren(), context, sw);
-				}
-				catch (ContinueException e) {
+				} catch (ContinueException e) {
 					// continue
 				}
 				context.put(TOKEN_INDEX, new Integer(++i), false);
 			}
-		}
-		catch (BreakException e) {
+		} catch (BreakException e) {
 			// end
 		}
 	}
 
-	public void getMatchingTemplateDefinedParameters(
-			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
+	public void getMatchingTemplateDefinedParameters(ExtendedContext context,
+			List macroInstanceList, MacroDirective macro,
+			Map additionalContextEntries) throws ExecutionException {
 		int i = 0;
 		context = new NestedContextWrapper(context, this);
 		Integer int0 = new Integer(0);
@@ -85,17 +90,16 @@ implements MacroInstanceAware, LoopingDirective, DebugElementContainerElement, B
 		try {
 			while (whileElement.booleanValue(context)) {
 				try {
-					appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
-				}
-				catch (ContinueException e) {
+					appendTemplateDefinedParameters(getChildren(), context,
+							macroInstanceList, macro, additionalContextEntries);
+				} catch (ContinueException e) {
 					// continue
 				}
 				Integer index = new Integer(++i);
 				additionalContextEntries.put(TOKEN_INDEX, index);
 				context.put(TOKEN_INDEX, index, false);
 			}
-		}
-		catch (BreakException e) {
+		} catch (BreakException e) {
 			// end
 		}
 	}

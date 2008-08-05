@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.continuedir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -14,22 +19,22 @@ public class ContinueDirective extends AbstractDirective {
 
 	private int contentStartPosition;
 
-	public ContinueDirective (int contentStartPosition)
-	throws ParseException {
+	public ContinueDirective(int contentStartPosition) throws ParseException {
 		this.contentStartPosition = contentStartPosition;
 	}
 
 	public void validate(ParsingSession session) throws ParseException {
 		// we must be within a continueable directive
 		boolean isValid = false;
-		for (int i=session.getNestingStack().size()-1; i>=0; i--) {
+		for (int i = session.getNestingStack().size() - 1; i >= 0; i--) {
 			if (session.getNestingStack().get(i) instanceof ContinueableDirective) {
 				isValid = true;
 				break;
 			}
 		}
 		if (!isValid)
-			throw new ParseException(this.contentStartPosition, "[#continue/] directives can only used within a continuable directive");
+			throw new ParseException(this.contentStartPosition,
+					"[#continue/] directives can only used within a continuable directive");
 	}
 
 	public void merge(ExtendedContext context, Writer sw)

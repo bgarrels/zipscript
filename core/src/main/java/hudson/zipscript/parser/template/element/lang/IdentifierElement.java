@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,12 +20,16 @@ public class IdentifierElement extends AbstractElement {
 	public void merge(ExtendedContext context, Writer sw) {
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
-		throw new ExecutionException("identifiers can not be evaluated as booleans", this);
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
+		throw new ExecutionException(
+				"identifiers can not be evaluated as booleans", this);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
-		throw new ExecutionException("identifiers can not be evaluated as objects", this);
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
+		throw new ExecutionException(
+				"identifiers can not be evaluated as objects", this);
 	}
 
 	public ElementIndex normalize(int index, List elementList,

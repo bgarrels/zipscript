@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -12,9 +17,10 @@ import junit.framework.TestCase;
 
 public class InitPropertiesTestCase extends TestCase {
 
-	public void testSuppressNullErrors () throws Exception {
+	public void testSuppressNullErrors() throws Exception {
 		Map props = new HashMap();
-		props.put(Constants.TEMPLATE_RESOURCE_LOADER_CLASS, StringResourceLoader.class.getName());
+		props.put(Constants.TEMPLATE_RESOURCE_LOADER_CLASS,
+				StringResourceLoader.class.getName());
 		props.put(Constants.SUPPRESS_NULL_ERRORS, Boolean.TRUE);
 		ZipEngine engine = ZipEngine.createInstance(props);
 		Template template = engine.getTemplate("${somethingMissing}");

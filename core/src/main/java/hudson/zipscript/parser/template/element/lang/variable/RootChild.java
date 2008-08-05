@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -14,10 +19,12 @@ public class RootChild implements VariableChild {
 	private RetrievalContext retrievalContext;
 	private String contextHint;
 
-	public RootChild (String name, VariableAdapterFactory variableAdapterFactory) {
+	public RootChild(String name, VariableAdapterFactory variableAdapterFactory) {
 		this.name = name;
-		for (int i=0; i<variableAdapterFactory.getReservedContextAttributes().length; i++) {
-			if (name.equals(variableAdapterFactory.getReservedContextAttributes()[i])) {
+		for (int i = 0; i < variableAdapterFactory
+				.getReservedContextAttributes().length; i++) {
+			if (name.equals(variableAdapterFactory
+					.getReservedContextAttributes()[i])) {
 				type = TYPE_RESERVED;
 			}
 		}
@@ -25,7 +32,8 @@ public class RootChild implements VariableChild {
 
 	public Object execute(Object parent, ExtendedContext context) {
 		if (type == TYPE_RESERVED)
-			return context.getRootContext().get(name, retrievalContext, contextHint);
+			return context.getRootContext().get(name, retrievalContext,
+					contextHint);
 		else
 			return context.get(name, retrievalContext, contextHint);
 	}

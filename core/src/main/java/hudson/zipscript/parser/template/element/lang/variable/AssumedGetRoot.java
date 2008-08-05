@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -26,52 +31,58 @@ public class AssumedGetRoot implements VariableChild {
 
 	private boolean doTypeChecking = false;
 
-	public AssumedGetRoot (
-			String name, List parameters, Element variableElement, VariableAdapterFactory variableAdapterFactory) {
+	public AssumedGetRoot(String name, List parameters,
+			Element variableElement,
+			VariableAdapterFactory variableAdapterFactory) {
 		this.name = name;
 		this.parameters = parameters;
 		this.variableElement = variableElement;
 		this.variableAdapterFactory = variableAdapterFactory;
-		for (int i=0; i<variableAdapterFactory.getReservedContextAttributes().length; i++) {
-			if (name.equals(variableAdapterFactory.getReservedContextAttributes()[i])) {
+		for (int i = 0; i < variableAdapterFactory
+				.getReservedContextAttributes().length; i++) {
+			if (name.equals(variableAdapterFactory
+					.getReservedContextAttributes()[i])) {
 				type = TYPE_RESERVED;
 			}
 		}
 	}
 
-	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
+	public Object execute(Object parent, ExtendedContext context)
+			throws ExecutionException {
 		Object source = null;
 		if (type == TYPE_STANDARD)
 			source = context.get(name, retrievalContext, contextHint);
 		else
-			source = context.getRootContext().get(name, retrievalContext, contextHint);
-		if (null == source) return null;
+			source = context.getRootContext().get(name, retrievalContext,
+					contextHint);
+		if (null == source)
+			return null;
 
 		// get the method parameters
 		Object[] arr = new Object[parameters.size()];
-		for (int i=0; i<parameters.size(); i++) {
+		for (int i = 0; i < parameters.size(); i++) {
 			arr[i] = ((Element) parameters.get(i)).objectValue(context);
 		}
 
 		if (null == accessorMethod || doTypeChecking) {
-			String methodName = variableAdapterFactory.getDefaultGetterMethod(source);
-			
+			String methodName = variableAdapterFactory
+					.getDefaultGetterMethod(source);
+
 			// initialize
-			accessorMethod = BeanUtil.getPropertyMethod(source, methodName, arr);
+			accessorMethod = BeanUtil
+					.getPropertyMethod(source, methodName, arr);
 			if (null == accessorMethod) {
-				throw new ExecutionException(
-						"Unknown method '" + methodName + "' on " + variableElement.toString(), null);
+				throw new ExecutionException("Unknown method '" + methodName
+						+ "' on " + variableElement.toString(), null);
 			}
 		}
 
 		try {
 			return accessorMethod.invoke(source, arr);
-		}
-		catch (ClassCastException e) {
+		} catch (ClassCastException e) {
 			this.doTypeChecking = true;
 			return execute(parent, context);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new ExecutionException(e.getMessage(), variableElement, e);
 		}
 	}
@@ -84,12 +95,13 @@ public class AssumedGetRoot implements VariableChild {
 		return false;
 	}
 
-	public String toString () {
+	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(name);
 		sb.append('(');
-		for (int i=0; i<parameters.size(); i++) {
-			if (i > 0) sb.append(", ");
+		for (int i = 0; i < parameters.size(); i++) {
+			if (i > 0)
+				sb.append(", ");
 			sb.append(parameters.get(i));
 		}
 		sb.append(')');

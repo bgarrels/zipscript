@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.xml;
 
 import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
@@ -24,20 +29,19 @@ public class NodeHashAdapter extends NodeObjectAdapter implements HashAdapter {
 			int count = 0;
 			int rtnIndex = ((Number) key).intValue();
 			NodeList nl = parent.getChildNodes();
-			for (int i=0; i<nl.getLength(); i++) {
+			for (int i = 0; i < nl.getLength(); i++) {
 				if (nl.item(i).getNodeName().equals(name)) {
 					if (count == rtnIndex) {
 						return nl.item(i);
-					}
-					else {
-						count ++;
+					} else {
+						count++;
 					}
 				}
 			}
 			return null;
-		}
-		else {
-			return super.get(key.toString(), map, retrievalContext, contextHint);
+		} else {
+			return super
+					.get(key.toString(), map, retrievalContext, contextHint);
 		}
 	}
 

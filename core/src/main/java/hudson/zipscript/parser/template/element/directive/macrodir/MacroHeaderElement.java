@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.ExpressionParser;
@@ -18,14 +23,15 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 
-public class MacroHeaderElement extends AbstractElement implements ToStringWithContextElement {
+public class MacroHeaderElement extends AbstractElement implements
+		ToStringWithContextElement {
 
 	private List children;
 	private String contents;
 	private int position;
 
-	public MacroHeaderElement(
-			String contents, ParsingSession session, int position) throws ParseException {
+	public MacroHeaderElement(String contents, ParsingSession session,
+			int position) throws ParseException {
 		this.contents = contents;
 		this.position = position;
 	}
@@ -34,9 +40,10 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 		return children;
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		if (null != children) {
-			for (Iterator i=children.iterator(); i.hasNext(); ) {
+			for (Iterator i = children.iterator(); i.hasNext();) {
 				((Element) i.next()).merge(context, sw);
 			}
 		}
@@ -45,7 +52,8 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
 		// set element in macro
-		((MacroInstanceDirective) session.getNestingStack().get(session.getNestingStack().size()-1)).setHeader(this);
+		((MacroInstanceDirective) session.getNestingStack().get(
+				session.getNestingStack().size() - 1)).setHeader(this);
 		return new ElementIndex(null, -1);
 	}
 
@@ -54,8 +62,8 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 			boolean hideEscaping = session.isHideEscapeMethods();
 			session.setHideEscapeMethods(true);
 			ParsingResult result = ExpressionParser.getInstance().parse(
-					contents, session.getResourceContainer().getComponents(), TextDefaultElementFactory.INSTANCE,
-					position, session);
+					contents, session.getResourceContainer().getComponents(),
+					TextDefaultElementFactory.INSTANCE, position, session);
 			children = result.getElements();
 			StringUtil.trim(children);
 			this.contents = null;
@@ -63,11 +71,13 @@ public class MacroHeaderElement extends AbstractElement implements ToStringWithC
 		}
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		return null;
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		return false;
 	}
 

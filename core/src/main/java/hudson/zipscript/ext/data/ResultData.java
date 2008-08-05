@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.ext.data;
 
 import hudson.zipscript.parser.util.StringUtil;
@@ -12,19 +17,18 @@ public class ResultData implements Map {
 
 	private static final String LAYOUT = "layout";
 	private static final String PAGE = "page";
-	
+
 	private String template;
 	private String page;
 	private String layout;
 	private Map parameters;
 
-	public ResultData (String templateLocation) {
+	public ResultData(String templateLocation) {
 		int index = templateLocation.indexOf(']');
 		if (index >= 0 && templateLocation.charAt(0) == '[') {
-			this.template = templateLocation.substring(index+1).trim();
+			this.template = templateLocation.substring(index + 1).trim();
 			loadParams(templateLocation.substring(1, index));
-		}
-		else {
+		} else {
 			this.template = templateLocation;
 		}
 	}
@@ -61,7 +65,7 @@ public class ResultData implements Map {
 		this.layout = layout;
 	}
 
-	public String getParameter (String key) {
+	public String getParameter(String key) {
 		return (String) get(key);
 	}
 
@@ -71,13 +75,17 @@ public class ResultData implements Map {
 	}
 
 	public boolean containsKey(Object key) {
-		if (null == parameters) return false;
-		else return parameters.containsKey(key);
+		if (null == parameters)
+			return false;
+		else
+			return parameters.containsKey(key);
 	}
 
 	public boolean containsValue(Object value) {
-		if (null == parameters) return false;
-		else return parameters.containsValue(value);
+		if (null == parameters)
+			return false;
+		else
+			return parameters.containsValue(value);
 	}
 
 	public Set entrySet() {
@@ -88,8 +96,10 @@ public class ResultData implements Map {
 	}
 
 	public Object get(Object key) {
-		if (null == parameters) return null;
-		else return parameters.get(key);
+		if (null == parameters)
+			return null;
+		else
+			return parameters.get(key);
 	}
 
 	public boolean isEmpty() {
@@ -119,17 +129,23 @@ public class ResultData implements Map {
 	}
 
 	public Object remove(Object key) {
-		if (null == parameters) return null;
-		else return parameters.remove(key);
+		if (null == parameters)
+			return null;
+		else
+			return parameters.remove(key);
 	}
 
 	public int size() {
-		if (null == parameters) return 0;
-		else return parameters.size();
+		if (null == parameters)
+			return 0;
+		else
+			return parameters.size();
 	}
 
 	public Collection values() {
-		if (null == parameters) return null;
-		else return Collections.EMPTY_LIST;
+		if (null == parameters)
+			return null;
+		else
+			return Collections.EMPTY_LIST;
 	}
 }

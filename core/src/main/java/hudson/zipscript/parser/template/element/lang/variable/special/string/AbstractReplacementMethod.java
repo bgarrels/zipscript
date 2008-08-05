@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -13,9 +18,9 @@ public abstract class AbstractReplacementMethod implements SpecialMethod {
 		String[] replacementStrings = getReplacementStrings();
 
 		StringBuffer sb = new StringBuffer();
-		for (int i=0; i<arr.length; i++) {
+		for (int i = 0; i < arr.length; i++) {
 			boolean match = false;
-			for (int j=0; j<charsToReplace.length; j++) {
+			for (int j = 0; j < charsToReplace.length; j++) {
 				if (arr[i] == charsToReplace[j]) {
 					// replace
 					sb.append(replacementStrings[j]);
@@ -29,9 +34,9 @@ public abstract class AbstractReplacementMethod implements SpecialMethod {
 		return sb.toString();
 	}
 
-	protected abstract char[] getCharsToReplace ();
+	protected abstract char[] getCharsToReplace();
 
-	protected abstract String[] getReplacementStrings ();
+	protected abstract String[] getReplacementStrings();
 
 	public RetrievalContext getExpectedType() {
 		return RetrievalContext.TEXT;

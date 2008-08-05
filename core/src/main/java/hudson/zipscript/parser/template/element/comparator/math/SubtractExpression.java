@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comparator.math;
 
 import java.math.BigDecimal;
@@ -8,20 +13,15 @@ public class SubtractExpression extends AbstractMathExpression {
 		Class clazz = getCommonDenominatorClass(lhs, rhs);
 		if (clazz.getName().equals(Double.class.getName())) {
 			return new Double(lhs.doubleValue() - rhs.doubleValue());
-		}
-		else if (clazz.getName().equals(Float.class.getName())) {
+		} else if (clazz.getName().equals(Float.class.getName())) {
 			return new Float(lhs.floatValue() - rhs.floatValue());
-		}
-		else if (clazz.getName().equals(BigDecimal.class.getName())) {
+		} else if (clazz.getName().equals(BigDecimal.class.getName())) {
 			return new BigDecimal(lhs.doubleValue() - rhs.doubleValue());
-		}
-		else if (clazz.getName().equals(Long.class.getName())) {
+		} else if (clazz.getName().equals(Long.class.getName())) {
 			return new Long(lhs.longValue() - rhs.longValue());
-		}
-		else if (clazz.getName().equals(Short.class.getName())) {
+		} else if (clazz.getName().equals(Short.class.getName())) {
 			return new Long(lhs.shortValue() - rhs.shortValue());
-		}
-		else
+		} else
 			return new Integer(lhs.intValue() - rhs.intValue());
 	}
 

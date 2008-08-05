@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -13,11 +18,13 @@ import java.util.List;
 public class NullElement extends AbstractElement implements SpecialElement {
 
 	private static final NullElement instance = new NullElement();
-	public static final NullElement getInstance () {
+
+	public static final NullElement getInstance() {
 		return instance;
 	}
 
-	private NullElement () {}
+	private NullElement() {
+	}
 
 	public String getTokenValue() {
 		return "null";
@@ -34,8 +41,10 @@ public class NullElement extends AbstractElement implements SpecialElement {
 		return null;
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParsingSession session) throws ParseException {
-		return SpecialElementNormalizer.normalizeSpecialElement(this, index, elementList, session);
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
+		return SpecialElementNormalizer.normalizeSpecialElement(this, index,
+				elementList, session);
 	}
 
 	public List getChildren() {

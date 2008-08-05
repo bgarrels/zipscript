@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -8,16 +13,16 @@ import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import java.io.Writer;
 import java.util.List;
 
-public class MacroInstanceExecutor implements ToStringWithContextElement, NoAutoEscapeElement {
+public class MacroInstanceExecutor implements ToStringWithContextElement,
+		NoAutoEscapeElement {
 
 	private MacroOrientedElement macroInstance;
 
-	public MacroInstanceExecutor (
-			MacroOrientedElement macroInstance) {
+	public MacroInstanceExecutor(MacroOrientedElement macroInstance) {
 		this.macroInstance = macroInstance;
 	}
 
-	public List getChildren () {
+	public List getChildren() {
 		return macroInstance.getChildren();
 	}
 

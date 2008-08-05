@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.exception;
 
 import hudson.zipscript.parser.template.data.LinePosition;
@@ -11,28 +16,28 @@ public class ExecutionException extends RuntimeException {
 	ParsingResult parsingResult;
 	private String resource;
 
-	public ExecutionException(
-			String message, Element element) {
+	public ExecutionException(String message, Element element) {
 		super(message);
 		this.element = element;
 	}
 
-	public ExecutionException(
-			String message, Element element, Exception thrownException) {
+	public ExecutionException(String message, Element element,
+			Exception thrownException) {
 		super(message, thrownException);
 		this.element = element;
 	}
 
-	public void setParsingResult (ParsingResult parsingResult) {
+	public void setParsingResult(ParsingResult parsingResult) {
 		this.parsingResult = parsingResult;
 	}
 
 	public String getMessage() {
 		StringBuffer sb = new StringBuffer();
 		if (null != resource)
-			sb.append ("[" + resource + "] ");
+			sb.append("[" + resource + "] ");
 		if (null != element && null != parsingResult) {
-			LinePosition lp = parsingResult.getLinePosition(element.getElementPosition());
+			LinePosition lp = parsingResult.getLinePosition(element
+					.getElementPosition());
 			sb.append("(line " + lp.line + ", position " + lp.position + ") ");
 		}
 		sb.append(super.getMessage());
@@ -47,13 +52,15 @@ public class ExecutionException extends RuntimeException {
 		this.element = element;
 	}
 
-	public int getLine () {
-		if (null == parsingResult) return 0;
+	public int getLine() {
+		if (null == parsingResult)
+			return 0;
 		return parsingResult.getLinePosition(element.getElementPosition()).line;
 	}
 
-	public int getPosition () {
-		if (null == parsingResult) return 0;
+	public int getPosition() {
+		if (null == parsingResult)
+			return 0;
 		return parsingResult.getLinePosition(element.getElementPosition()).position;
 	}
 

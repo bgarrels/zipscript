@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser;
 
 import hudson.zipscript.parser.template.element.PatternMatcher;
@@ -43,12 +48,12 @@ public class Constants {
 	public static final String THIS = "this";
 
 	public static final String NOW = "Now";
-	public static final String VARS = "Vars";	
+	public static final String VARS = "Vars";
 	public static final String GLOBAL = "Global";
 	public static final String UNIQUE_ID = "UniqueId";
 	public static final String MATH = "Math";
 	public static final String RESOURCE = "Resource";
-	
+
 	public static final String TEMPLATE_RESOURCE_LOADER_CLASS = "templateResourceLoader.class";
 	public static final String TEMPLATE_RESOURCE_LOADER_TYPE = "templateResourceLoader.type";
 	public static final String MACROLIB_RESOURCE_LOADER_CLASS = "macroLibResourceLoader.class";
@@ -79,25 +84,16 @@ public class Constants {
 	}
 
 	public static final PatternMatcher[] VARIABLE_MATCHERS = new PatternMatcher[] {
-		new VariablePatternMatcher(),
-		new ListPatternMatcher(),
-		new NumericPatternMatcher(),
-		new CommaPatternMatcher(),
-		new StringPatternMatcher(),
-		new InComparatorPatternMatcher(),
-		new AndLogicPatternMatcher(),
-		new OrLogicPatternMatcher(),
-		new BooleanPatternMatcher(),
-		new ComparatorPatternMatcher(),
-		new MathPatternMatcher(),
-		new NullPatternMatcher(),
-		new GroupPatternMatcher(),
-		new WhitespacePatternMatcher(),
-		new MapPatternMatcher(),
-		new DotPatternMatcher(),
-		new AssignmentPatternMatcher(),
-		new VarDefaultElementPatternMatcher(),
-		new VarSpecialElementPatternMatcher(),
-		new VarFormattingElementPatternMatcher()
-};
+			new VariablePatternMatcher(), new ListPatternMatcher(),
+			new NumericPatternMatcher(), new CommaPatternMatcher(),
+			new StringPatternMatcher(), new InComparatorPatternMatcher(),
+			new AndLogicPatternMatcher(), new OrLogicPatternMatcher(),
+			new BooleanPatternMatcher(), new ComparatorPatternMatcher(),
+			new MathPatternMatcher(), new NullPatternMatcher(),
+			new GroupPatternMatcher(), new WhitespacePatternMatcher(),
+			new MapPatternMatcher(), new DotPatternMatcher(),
+			new AssignmentPatternMatcher(),
+			new VarDefaultElementPatternMatcher(),
+			new VarSpecialElementPatternMatcher(),
+			new VarFormattingElementPatternMatcher() };
 }

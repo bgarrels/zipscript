@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.template;
 
 import hudson.zipscript.ResourceContainer;
@@ -21,7 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class TemplateImpl implements Template, Evaluator, Element, ToStringWithContextElement {
+public class TemplateImpl implements Template, Evaluator, Element,
+		ToStringWithContextElement {
 
 	private Element element;
 	private List elements;
@@ -30,18 +36,19 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 	private ParsingResult parsingResult;
 	private ResourceContainer resourceContainer;
 
-	public TemplateImpl (List elements, ParsingSession parsingSession, ParsingResult result) {
+	public TemplateImpl(List elements, ParsingSession parsingSession,
+			ParsingResult result) {
 		this.elements = elements;
 		this.parsingSession = parsingSession;
 		this.parsingResult = result;
 		// load elements for initialization
 		initializeElements = new ArrayList();
-		for (Iterator i=elements.iterator(); i.hasNext(); ) {
+		for (Iterator i = elements.iterator(); i.hasNext();) {
 			loadInitializeElements((Element) i.next(), initializeElements);
 		}
 	}
 
-	public TemplateImpl (Element element, ParsingSession parsingSession) {
+	public TemplateImpl(Element element, ParsingSession parsingSession) {
 		this.element = element;
 		this.parsingSession = parsingSession;
 	}
@@ -50,10 +57,11 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		return initialize(context, null);
 	}
 
-	public Context initialize(Object obj, Locale locale) throws ExecutionException {
+	public Context initialize(Object obj, Locale locale)
+			throws ExecutionException {
 		ExtendedContext context = getContext(obj, locale);
 		if (!context.isInitialized(this)) {
-			for (Iterator i=initializeElements.iterator(); i.hasNext(); ) {
+			for (Iterator i = initializeElements.iterator(); i.hasNext();) {
 				((InitializeDirective) i.next()).doInitialize(context);
 			}
 			context.markInitialized(this);
@@ -61,32 +69,31 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		return context;
 	}
 
-	private void loadInitializeElements (Element e, List l) {
+	private void loadInitializeElements(Element e, List l) {
 		if (e instanceof InitializeDirective) {
 			l.add(e);
-		}
-		else {
+		} else {
 			if (e instanceof MacroInstanceDirective) {
 				MacroInstanceDirective mid = (MacroInstanceDirective) e;
-				if (null != mid.getNamespace() && null != mid.getMacroDefinition()) {
+				if (null != mid.getNamespace()
+						&& null != mid.getMacroDefinition()) {
 					// add macro definition initialization
 					loadInitializeMacroLibElements(mid.getMacroDefinition(), l);
 				}
 			}
 			List children = e.getChildren();
 			if (null != children) {
-				for (Iterator i=children.iterator(); i.hasNext(); ) {
+				for (Iterator i = children.iterator(); i.hasNext();) {
 					loadInitializeElements((Element) i.next(), l);
 				}
 			}
 		}
 	}
 
-	private void loadInitializeMacroLibElements (Element e, List l) {
+	private void loadInitializeMacroLibElements(Element e, List l) {
 		if (e instanceof InitializeDirective) {
 			l.add(e);
-		}
-		else {
+		} else {
 			if (e instanceof MacroInstanceDirective) {
 				MacroInstanceDirective mid = (MacroInstanceDirective) e;
 				if (null != mid.getMacroDefinition()) {
@@ -96,19 +103,20 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 			}
 			List children = e.getChildren();
 			if (null != children) {
-				for (Iterator i=children.iterator(); i.hasNext(); ) {
+				for (Iterator i = children.iterator(); i.hasNext();) {
 					loadInitializeElements((Element) i.next(), l);
 				}
 			}
 		}
 	}
 
-	/** Template Methods **/
+	/** Template Methods * */
 	public boolean booleanValue(Object context) throws ExecutionException {
 		return booleanValue(context, null);
 	}
 
-	public boolean booleanValue(Object context, Locale locale) throws ExecutionException {
+	public boolean booleanValue(Object context, Locale locale)
+			throws ExecutionException {
 		return booleanValue(getContext(context, locale));
 	}
 
@@ -116,7 +124,8 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		return objectValue(context, null);
 	}
 
-	public Object objectValue(Object context, Locale locale) throws ExecutionException {
+	public Object objectValue(Object context, Locale locale)
+			throws ExecutionException {
 		return objectValue(getContext(context, locale));
 	}
 
@@ -124,7 +133,8 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		return merge(context, (Locale) null);
 	}
 
-	public String merge(Object context, Locale locale) throws ExecutionException {
+	public String merge(Object context, Locale locale)
+			throws ExecutionException {
 		StringWriter sw = new StringWriter();
 		merge(context, sw, locale);
 		return sw.toString();
@@ -134,33 +144,31 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		merge(context, sw, null);
 	}
 
-	public void merge(Object obj, Writer sw, Locale locale) throws ExecutionException {
+	public void merge(Object obj, Writer sw, Locale locale)
+			throws ExecutionException {
 		ExtendedContext context = (ExtendedContext) initialize(obj, locale);
 		merge(context, sw);
 	}
 
-
-	/** Element Methods **/
+	/** Element Methods * */
 	public void merge(ExtendedContext context, Writer sw)
-	throws ExecutionException {
+			throws ExecutionException {
 		try {
-			for (Iterator i=elements.iterator(); i.hasNext(); ) {
+			for (Iterator i = elements.iterator(); i.hasNext();) {
 				((Element) i.next()).merge(context, sw);
 			}
-		}
-		catch (ExecutionException e) {
+		} catch (ExecutionException e) {
 			e.setParsingResult(parsingResult);
 			throw (e);
 		}
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		if (null != element)
 			try {
-				return element.booleanValue(
-						context);
-			}
-			catch (ExecutionException e) {
+				return element.booleanValue(context);
+			} catch (ExecutionException e) {
 				e.setParsingResult(parsingResult);
 				throw (e);
 			}
@@ -168,13 +176,12 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 			throw new ExecutionException("Invalid boolean expression", null);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		if (null != element)
 			try {
-				return element.objectValue(
-						context);
-			}
-			catch (ExecutionException e) {
+				return element.objectValue(context);
+			} catch (ExecutionException e) {
 				e.setParsingResult(parsingResult);
 				throw (e);
 			}
@@ -201,14 +208,16 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 	public void setElementPosition(long position) {
 	}
 
-	private ExtendedContext getContext (Object obj, Locale locale) {
-		if (obj instanceof ExtendedContext && ((ExtendedContext) obj).isInitialized(this))
+	private ExtendedContext getContext(Object obj, Locale locale) {
+		if (obj instanceof ExtendedContext
+				&& ((ExtendedContext) obj).isInitialized(this))
 			return (ExtendedContext) obj;
-		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(
-				obj, parsingSession, resourceContainer);
+		ExtendedContext context = ContextWrapperFactory.getInstance().wrap(obj,
+				parsingSession, resourceContainer);
 		context.setResourceContainer(resourceContainer);
 		context.setParsingSession(parsingSession);
-		if (null != locale) context.setLocale(locale);
+		if (null != locale)
+			context.setLocale(locale);
 		return context;
 	}
 
@@ -228,7 +237,7 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 		return elements;
 	}
 
-	public void validate(ParsingSession session) throws ParseException {	
+	public void validate(ParsingSession session) throws ParseException {
 	}
 
 	public List getChildren() {
@@ -238,8 +247,8 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 			elements = new ArrayList();
 			elements.add(element);
 			return elements;
-		}
-		else return null;
+		} else
+			return null;
 	}
 
 	public ResourceContainer getResourceContainer() {
@@ -252,7 +261,7 @@ public class TemplateImpl implements Template, Evaluator, Element, ToStringWithC
 
 	public void append(ExtendedContext context, Writer writer) {
 		if (context.isInitialized(this)) {
-			for (Iterator i=initializeElements.iterator(); i.hasNext(); ) {
+			for (Iterator i = initializeElements.iterator(); i.hasNext();) {
 				((InitializeDirective) i.next()).doInitialize(context);
 			}
 			context.markInitialized(this);

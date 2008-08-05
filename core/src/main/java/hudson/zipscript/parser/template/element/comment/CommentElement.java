@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comment;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -14,11 +19,13 @@ import java.util.List;
 public class CommentElement implements Element, NonOutputElement {
 
 	private static CommentElement instance = new CommentElement();
-	public static CommentElement getInstance () {
+
+	public static CommentElement getInstance() {
 		return instance;
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		return false;
 	}
 
@@ -39,7 +46,8 @@ public class CommentElement implements Element, NonOutputElement {
 			throws ExecutionException {
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		return null;
 	}
 
@@ -53,7 +61,7 @@ public class CommentElement implements Element, NonOutputElement {
 		return null;
 	}
 
-	public void validate(ParsingSession session) throws ParseException {	
+	public void validate(ParsingSession session) throws ParseException {
 	}
 
 	public boolean generatesOutput() {

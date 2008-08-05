@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.data;
 
 import hudson.zipscript.ResourceContainer;
@@ -20,14 +25,12 @@ public class ParsingSession implements MacroProvider {
 	private Stack escapeMethodStack = new Stack();
 	private boolean hideEscapeMethods = false;
 
-	public ParsingSession (
-			ParseParameters parameters) {
+	public ParsingSession(ParseParameters parameters) {
 		this.parameters = parameters;
 	}
 
-	public ParsingSession clone (ParseParameters parameters) {
-		ParsingSession session = new ParsingSession(
-				parameters);
+	public ParsingSession clone(ParseParameters parameters) {
+		ParsingSession session = new ParsingSession(parameters);
 		Map m = null;
 		if (null != unknownVariablePatterns) {
 			m = new HashMap();
@@ -42,95 +45,106 @@ public class ParsingSession implements MacroProvider {
 		return session;
 	}
 
-	public ResourceContainer getResourceContainer () {
+	public ResourceContainer getResourceContainer() {
 		return parameters.getResourceContainer();
 	}
 
-	public ParseParameters getParameters () {
+	public ParseParameters getParameters() {
 		return parameters;
 	}
 
-	public void setParameters (ParseParameters parameters) {
+	public void setParameters(ParseParameters parameters) {
 		this.parameters = parameters;
 	}
 
-	public boolean isVariablePatternRecognized (String pattern) {
+	public boolean isVariablePatternRecognized(String pattern) {
 		if (null == unknownVariablePatterns)
 			unknownVariablePatterns = new HashMap();
 		return (null != unknownVariablePatterns.get(pattern));
 	}
 
-	public void setReferencedVariable (String pattern) {
+	public void setReferencedVariable(String pattern) {
 		if (null == unknownVariablePatterns)
 			unknownVariablePatterns = new HashMap();
 		unknownVariablePatterns.put(pattern, Boolean.TRUE);
 	}
 
-	public void markValidVariablePattern (String pattern) {
+	public void markValidVariablePattern(String pattern) {
 		if (null != unknownVariablePatterns) {
 			unknownVariablePatterns.remove(pattern);
 		}
 	}
 
-	public void addInlineMacroDefinition (MacroDirective directive) {
+	public void addInlineMacroDefinition(MacroDirective directive) {
 		if (null == inlineMacroDefinitions)
 			inlineMacroDefinitions = new HashMap();
 		inlineMacroDefinitions.put(directive.getName(), directive);
 	}
 
-	public void addDynamicMacroImport (String namespace) {
+	public void addDynamicMacroImport(String namespace) {
 		if (null == dynamicMacroImports)
 			dynamicMacroImports = new HashMap();
 		dynamicMacroImports.put(namespace, Boolean.TRUE);
 	}
 
-	public boolean isDynamicMacroImport (String namespace) {
-		if (null == dynamicMacroImports) return false;
-		else return (null != dynamicMacroImports.get(namespace));
+	public boolean isDynamicMacroImport(String namespace) {
+		if (null == dynamicMacroImports)
+			return false;
+		else
+			return (null != dynamicMacroImports.get(namespace));
 	}
 
-	public void addMacroImport (String namespace, String macroPath) {
+	public void addMacroImport(String namespace, String macroPath) {
 		if (null == staticMacroImports)
 			staticMacroImports = new HashMap();
 		staticMacroImports.put(namespace, macroPath);
 	}
 
-	public String getMacroImportPath (String namespace) {
+	public String getMacroImportPath(String namespace) {
 		if (null == staticMacroImports)
 			return null;
 		else
 			return (String) staticMacroImports.get(namespace);
 	}
 
-	public MacroDirective getMacro (String name) {
-		if (null == inlineMacroDefinitions) return null;
-		else return (MacroDirective) inlineMacroDefinitions.get(name);
+	public MacroDirective getMacro(String name) {
+		if (null == inlineMacroDefinitions)
+			return null;
+		else
+			return (MacroDirective) inlineMacroDefinitions.get(name);
 	}
 
 	public Stack getNestingStack() {
-		if (null == nestingStack) nestingStack = new Stack();
+		if (null == nestingStack)
+			nestingStack = new Stack();
 		return nestingStack;
 	}
 
-	public boolean isDebug () {
+	public boolean isDebug() {
 		return false;
 	}
 
-	public void addEscapeMethod (SpecialMethod sm) {
-		if (hideEscapeMethods) return;
+	public void addEscapeMethod(SpecialMethod sm) {
+		if (hideEscapeMethods)
+			return;
 		escapeMethodStack.push(sm);
 	}
 
-	public SpecialMethod removeEscapeMethod (SpecialMethod sm) {
-		if (hideEscapeMethods) return null;
-		if (escapeMethodStack.size() == 0) return null;
+	public SpecialMethod removeEscapeMethod(SpecialMethod sm) {
+		if (hideEscapeMethods)
+			return null;
+		if (escapeMethodStack.size() == 0)
+			return null;
 		SpecialMethod sm1 = (SpecialMethod) escapeMethodStack.pop();
-		if (null == sm) return sm1;
-		if (sm1 != sm) return null;
-		else return sm;
+		if (null == sm)
+			return sm1;
+		if (sm1 != sm)
+			return null;
+		else
+			return sm;
 	}
 
-	public Stack getEscapeMethods () {
+	public Stack getEscapeMethods() {
 		return escapeMethodStack;
 	}
 

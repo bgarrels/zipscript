@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.Constants;
@@ -25,8 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MacroInstanceDirective extends NestableElement
-implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElement {
+public class MacroInstanceDirective extends NestableElement implements
+		MacroInstanceAware, DebugElementContainerElement, MacroOrientedElement {
 
 	private boolean isOrdinal = true;
 	private String contents;
@@ -42,7 +47,6 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 	private MacroHeaderElement header;
 	private MacroFooterElement footer;
 	private boolean isBodyEmpty;
-	
 
 	// text normalization
 	TextElement previousTextElement;
@@ -53,8 +57,9 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 	// debug
 	private List internalElements;
 
-	public MacroInstanceDirective (
-			String contents, boolean isFlat, ParsingSession parsingSession, int contentPosition) throws ParseException {
+	public MacroInstanceDirective(String contents, boolean isFlat,
+			ParsingSession parsingSession, int contentPosition)
+			throws ParseException {
 		this.contents = contents;
 		setFlat(isFlat);
 		this.contentPosition = contentPosition;
@@ -65,9 +70,8 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		return internalElements;
 	}
 
-	protected void parseContents (
-			String contents, ParsingSession session, int contentPosition)
-	throws ParseException {
+	protected void parseContents(String contents, ParsingSession session,
+			int contentPosition) throws ParseException {
 		List elements = parseElements(contents, session, contentPosition);
 		this.internalElements = new ArrayList();
 		internalElements.addAll(elements);
@@ -78,16 +82,17 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		if (e instanceof SpecialStringElement)
 			name = ((SpecialStringElement) e).getTokenValue();
 		// validate name
-		for (int i=0; i<name.length(); i++) {
+		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);
 			if (!(Character.isLetterOrDigit(c) || c == '_' || c == '-' || c == Constants.NAMESPACE_SEPARATOR))
-				throw new ParseException(contentPosition, "Invalid macro name '" + name + "'");
+				throw new ParseException(contentPosition,
+						"Invalid macro name '" + name + "'");
 		}
 		int index = name.indexOf(Constants.NAMESPACE_SEPARATOR);
 		if (index > 0) {
 			String s = name;
 			namespace = s.substring(0, index);
-			name = s.substring(index+1, s.length());
+			name = s.substring(index + 1, s.length());
 		}
 
 		// determine parameter type
@@ -101,38 +106,41 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 
 			// look for attributes
 			while (true) {
-				ElementAttribute attribute = AttributeUtil.getAttribute(elements, session, this);
-				if (null == attribute) break;
+				ElementAttribute attribute = AttributeUtil.getAttribute(
+						elements, session, this);
+				if (null == attribute)
+					break;
 				else {
 					this.attributes.add(attribute);
-					if (!isOrdinal) attributeMap.put(attribute.getName(), attribute);
+					if (!isOrdinal)
+						attributeMap.put(attribute.getName(), attribute);
 				}
 			}
-		}
-		else {
+		} else {
 			isOrdinal = false;
 		}
 	}
 
-	public void validate (ParsingSession session) throws ParseException {
+	public void validate(ParsingSession session) throws ParseException {
 		// see if we are in a macro definition
-		for (Iterator i=session.getNestingStack().iterator(); i.hasNext(); ) {
+		for (Iterator i = session.getNestingStack().iterator(); i.hasNext();) {
 			Element e = (Element) i.next();
 			if (e instanceof MacroInstanceDirective) {
 				MacroInstanceDirective mid = (MacroInstanceDirective) e;
-				baseMacroDefinition = session.getResourceContainer().getMacroManager().getMacro(
-						mid.getName(), mid.getNamespace(), session);
+				baseMacroDefinition = session.getResourceContainer()
+						.getMacroManager().getMacro(mid.getName(),
+								mid.getNamespace(), session);
 				isInMacroDefinition = true;
 				break;
-			}
-			else if (e instanceof MacroDirective) {
+			} else if (e instanceof MacroDirective) {
 				isInMacroDefinition = true;
 				break;
 			}
 		}
 
 		// find macro in session
-		// if we're in the header/footer - we can't validate until the whole template is parsed - how to do that?
+		// if we're in the header/footer - we can't validate until the whole
+		// template is parsed - how to do that?
 		macro = session.getResourceContainer().getMacroManager().getMacro(
 				getName(), getNamespace(), session);
 
@@ -141,33 +149,40 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 				// if dynamically defined import - lazy load
 				if (session.isDynamicMacroImport(namespace)) {
 					// lazy load
+				} else {
+					throw new ParseException(this, "Undefined macro name '"
+							+ getName() + "'");
 				}
-				else {
-					throw new ParseException(this, "Undefined macro name '" + getName() + "'");
-				}
-			}
-			else {
-				throw new ParseException(this, "Undefined macro name '" + getName() + "'");
+			} else {
+				throw new ParseException(this, "Undefined macro name '"
+						+ getName() + "'");
 			}
 		}
 
 		if (!isOrdinal && null != macro) {
 			// make sure all attributes are defined
-			for (int i=0; i<attributes.size(); i++) {
-				ElementAttribute attribute = (ElementAttribute) attributes.get(i);
+			for (int i = 0; i < attributes.size(); i++) {
+				ElementAttribute attribute = (ElementAttribute) attributes
+						.get(i);
 				if (null == macro.getAttribute(attribute.getName())) {
-					throw new ParseException(contentPosition, "Undefined macro attribute '" + attribute.getName() + "'");
+					throw new ParseException(contentPosition,
+							"Undefined macro attribute '" + attribute.getName()
+									+ "'");
 				}
 			}
 			// make sure we're passing all non-required attributes
-			for (int i=0; i<macro.getAttributes().size(); i++) {
-				MacroDefinitionAttribute attribute = (MacroDefinitionAttribute) macro.getAttributes().get(i);
+			for (int i = 0; i < macro.getAttributes().size(); i++) {
+				MacroDefinitionAttribute attribute = (MacroDefinitionAttribute) macro
+						.getAttributes().get(i);
 				if (attribute.isTemplateDefinedParameter()) {
 					validateTemplateAttribute(attribute, this);
-				}
-				else if (attribute.isRequired() && null == attribute.getDefaultValue() && null == getAttribute(attribute.getName())) {
+				} else if (attribute.isRequired()
+						&& null == attribute.getDefaultValue()
+						&& null == getAttribute(attribute.getName())) {
 					// it's required
-					throw new ParseException(contentPosition, "Undefined required macro attriute '" + attribute.getName() + "'");
+					throw new ParseException(contentPosition,
+							"Undefined required macro attriute '"
+									+ attribute.getName() + "'");
 				}
 			}
 		}
@@ -177,70 +192,85 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		if (null != footer)
 			footer.validate(session);
 
-		if (null != getChildren() && PropertyUtil.getProperty(
-				Constants.TRIM_MACRO_BODY, true, session.getParameters().getInitParameters())) {
+		if (null != getChildren()
+				&& PropertyUtil.getProperty(Constants.TRIM_MACRO_BODY, true,
+						session.getParameters().getInitParameters())) {
 			// trim the body
 			this.isBodyEmpty = StringUtil.trim(getChildren());
 		}
 	}
 
 	protected void validateTemplateAttribute(
-			MacroDefinitionAttribute attribute, MacroOrientedElement mid) throws ParseException {
+			MacroDefinitionAttribute attribute, MacroOrientedElement mid)
+			throws ParseException {
 		if (attribute.isTemplateDefinedParameter()) {
 			// make sure we have the parameter
 			List templateDefinedParameters = new ArrayList();
-			loadTemplateDefinedAttributes(attribute.getName(), mid, templateDefinedParameters);
+			loadTemplateDefinedAttributes(attribute.getName(), mid,
+					templateDefinedParameters);
 			if (templateDefinedParameters.size() == 0 && attribute.isRequired())
-				throw new ParseException(mid, "Missing template defined parameter '" + attribute.getName() + "'");
-			for (Iterator i=templateDefinedParameters.iterator(); i.hasNext(); ) {
-				TemplateDefinedParameter subMid = (TemplateDefinedParameter) i.next();
-				for (Iterator j=attribute.getTDPAttributes().iterator(); j.hasNext(); ) {
-					MacroDefinitionAttribute mda = (MacroDefinitionAttribute) j.next();
-					if (mda.isTemplateDefinedParameter())  {
+				throw new ParseException(mid,
+						"Missing template defined parameter '"
+								+ attribute.getName() + "'");
+			for (Iterator i = templateDefinedParameters.iterator(); i.hasNext();) {
+				TemplateDefinedParameter subMid = (TemplateDefinedParameter) i
+						.next();
+				for (Iterator j = attribute.getTDPAttributes().iterator(); j
+						.hasNext();) {
+					MacroDefinitionAttribute mda = (MacroDefinitionAttribute) j
+							.next();
+					if (mda.isTemplateDefinedParameter()) {
 						validateTemplateAttribute(mda, subMid);
 					}
 				}
 			}
-		}
-		else {
-			if (attribute.isRequired() && null == mid.getAttribute(attribute.getName()))
-				throw new ParseException(mid, "Missing template defined parameter attribute '" + attribute.getName() + "'");
+		} else {
+			if (attribute.isRequired()
+					&& null == mid.getAttribute(attribute.getName()))
+				throw new ParseException(mid,
+						"Missing template defined parameter attribute '"
+								+ attribute.getName() + "'");
 		}
 	}
 
-	protected void loadTemplateDefinedAttributes (String name, Element e, List l) {
+	protected void loadTemplateDefinedAttributes(String name, Element e, List l) {
 		List children = e.getChildren();
 		if (null != e.getChildren()) {
-			for (Iterator i=children.iterator(); i.hasNext(); ) {
+			for (Iterator i = children.iterator(); i.hasNext();) {
 				Element subE = (Element) i.next();
 				if (subE instanceof TemplateDefinedParameter) {
 					TemplateDefinedParameter mid = (TemplateDefinedParameter) subE;
-					if (mid.getName().equals(name)) l.add(mid);
-				}
-				else loadTemplateDefinedAttributes(name, subE, l);
+					if (mid.getName().equals(name))
+						l.add(mid);
+				} else
+					loadTemplateDefinedAttributes(name, subE, l);
 			}
 		}
 	}
 
-	public ElementAttribute getAttribute (String name) {
-		if (null == attributeMap) return null;
-		else return (ElementAttribute) attributeMap.get(name);
+	public ElementAttribute getAttribute(String name) {
+		if (null == attributeMap)
+			return null;
+		else
+			return (ElementAttribute) attributeMap.get(name);
 	}
 
 	public ElementIndex normalize(int index, List elementList,
 			ParsingSession session) throws ParseException {
 		ElementIndex rtn = null;
-		if (isFlat()) rtn = null;
-		else rtn = super.normalize(index, elementList, session);
+		if (isFlat())
+			rtn = null;
+		else
+			rtn = super.normalize(index, elementList, session);
 		StringUtil.trimLastEmptyLine(getChildren());
-		if (index > 0 && elementList.get(index-1) instanceof TextElement)
-			previousTextElement = (TextElement) elementList.get(index-1);
+		if (index > 0 && elementList.get(index - 1) instanceof TextElement)
+			previousTextElement = (TextElement) elementList.get(index - 1);
 		return rtn;
 	}
 
 	protected boolean isStartElement(Element e) {
-		return (e instanceof MacroInstanceDirective
-				&& ((MacroInstanceDirective) e).getName().equals(getName()));
+		return (e instanceof MacroInstanceDirective && ((MacroInstanceDirective) e)
+				.getName().equals(getName()));
 	}
 
 	protected boolean isEndElement(Element e) {
@@ -260,42 +290,44 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		return "[@" + contents + "]";
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		if (null == macro) {
 			// we might need to lazy load
 			macro = context.getResourceContainer().getMacroManager().getMacro(
 					getName(), getNamespace(), context);
-		}
-		else if (context.doRefreshTemplates() && null != namespace
+		} else if (context.doRefreshTemplates() && null != namespace
 				&& macro.getMacroLibrary().hasBeenModified()) {
 			// reload the macro
-			macro = context.getResourceContainer().getMacroManager().reloadMacro(
-					getName(), getNamespace(), context);
+			macro = context.getResourceContainer().getMacroManager()
+					.reloadMacro(getName(), getNamespace(), context);
 		}
 		if (null == macro) {
-			throw new ExecutionException("Undefined macro '" + getName() + "'", this);
+			throw new ExecutionException("Undefined macro '" + getName() + "'",
+					this);
 		}
 
-		macro.executeMacro(
-				context, isOrdinal(), getAttributes(),
+		macro.executeMacro(context, isOrdinal(), getAttributes(),
 				new MacroInstanceExecutor(this), sw);
 	}
 
-	public String getNestedContent (ExtendedContext context) throws ExecutionException {
+	public String getNestedContent(ExtendedContext context)
+			throws ExecutionException {
 		StringWriter sw = new StringWriter();
-		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+		for (Iterator i = getChildren().iterator(); i.hasNext();) {
 			((Element) i.next()).merge(context, sw);
 		}
 		return sw.toString();
 	}
 
-	public void writeNestedContent (ExtendedContext context, Writer writer) throws ExecutionException {
-		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+	public void writeNestedContent(ExtendedContext context, Writer writer)
+			throws ExecutionException {
+		for (Iterator i = getChildren().iterator(); i.hasNext();) {
 			((Element) i.next()).merge(context, writer);
 		}
 	}
 
-	public MacroDirective getMacroDefinition () {
+	public MacroDirective getMacroDefinition() {
 		return macro;
 	}
 
@@ -318,11 +350,11 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 	public void setOrdinal(boolean isOrdinal) {
 		this.isOrdinal = isOrdinal;
 	}
-	
+
 	public void getMatchingTemplateDefinedParameters(ExtendedContext context,
 			List list, MacroDirective macro, Map additionalContextEntries) {
-		super.appendTemplateDefinedParameters(
-				getChildren(), context, list, macro, additionalContextEntries);
+		super.appendTemplateDefinedParameters(getChildren(), context, list,
+				macro, additionalContextEntries);
 	}
 
 	public boolean isInMacroDefinition() {
@@ -341,16 +373,18 @@ implements MacroInstanceAware, DebugElementContainerElement, MacroOrientedElemen
 		this.isInMacroDefinition = isInMacroDefinition;
 	}
 
-	public String getFullName () {
-		if (null == namespace) return name;
-		else return namespace + Constants.NAMESPACE_SEPARATOR + name;
+	public String getFullName() {
+		if (null == namespace)
+			return name;
+		else
+			return namespace + Constants.NAMESPACE_SEPARATOR + name;
 	}
 
-	public List getMacroDefinitionAttributes (ExtendedContext context) {
+	public List getMacroDefinitionAttributes(ExtendedContext context) {
 		if (null != macro) {
 			return macro.getAttributes();
-		}
-		else return baseMacroDefinition.getAttributes();
+		} else
+			return baseMacroDefinition.getAttributes();
 	}
 
 	public MacroHeaderElement getHeader() {

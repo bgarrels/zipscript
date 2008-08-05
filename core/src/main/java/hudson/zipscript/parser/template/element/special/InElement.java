@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -11,19 +16,22 @@ import java.util.List;
 public class InElement extends IdentifierElement implements SpecialElement {
 
 	private static final InElement instance = new InElement();
-	public static final InElement getInstance () {
+
+	public static final InElement getInstance() {
 		return instance;
 	}
 
-	private InElement () {}
+	private InElement() {
+	}
 
 	public String getTokenValue() {
 		return "in";
 	}
 
-	public ElementIndex normalize(int index, List elementList, ParsingSession session) throws ParseException {
-		return SpecialElementNormalizer.normalizeSpecialElement(this, index, elementList, session);
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
+		return SpecialElementNormalizer.normalizeSpecialElement(this, index,
+				elementList, session);
 	}
 
-	
 }

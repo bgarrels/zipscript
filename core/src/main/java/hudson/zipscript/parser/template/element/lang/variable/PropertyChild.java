@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.Context;
@@ -25,12 +30,14 @@ public class PropertyChild implements VariableChild {
 
 	private boolean doTypeChecking = false;
 
-	public PropertyChild (String name) {
+	public PropertyChild(String name) {
 		this.name = name;
 	}
 
-	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
-		if (null == parent) return null;
+	public Object execute(Object parent, ExtendedContext context)
+			throws ExecutionException {
+		if (null == parent)
+			return null;
 		if (doTypeChecking || type == Short.MIN_VALUE) {
 			type = Short.MIN_VALUE;
 			if (parent instanceof ZSContextRequiredGetter)
@@ -42,51 +49,49 @@ public class PropertyChild implements VariableChild {
 					type = TYPE_MAP;
 				}
 				if (type == Short.MIN_VALUE) {
-					mapAdapter = context.getResourceContainer().getVariableAdapterFactory().getHashAdapter(parent);
+					mapAdapter = context.getResourceContainer()
+							.getVariableAdapterFactory().getHashAdapter(parent);
 					if (null != mapAdapter) {
 						type = TYPE_MAP;
-					}
-					else {
-						objectAdapter = context.getResourceContainer().getVariableAdapterFactory().getObjectAdapter(parent);
+					} else {
+						objectAdapter = context.getResourceContainer()
+								.getVariableAdapterFactory().getObjectAdapter(
+										parent);
 						type = TYPE_OBJECT;
 					}
 				}
 			}
 		}
-		
+
 		if (doTypeChecking) {
 			// dont' worry about ClassCast because we just detected type
 			if (type == TYPE_CONTEXT) {
-				return ((Context) parent).get(name, retrievalContext, contextHint);
-			}
-			else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
-				return ((ZSContextRequiredGetter) parent).get(
-						name, retrievalContext, contextHint, context);
-			}
-			else if (type == TYPE_MAP) {
-				return mapAdapter.get(
-						name, parent, retrievalContext, contextHint);
-			}
-			else return objectAdapter.get(
-					name, parent, retrievalContext, contextHint);
-		}
-		else {
+				return ((Context) parent).get(name, retrievalContext,
+						contextHint);
+			} else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
+				return ((ZSContextRequiredGetter) parent).get(name,
+						retrievalContext, contextHint, context);
+			} else if (type == TYPE_MAP) {
+				return mapAdapter.get(name, parent, retrievalContext,
+						contextHint);
+			} else
+				return objectAdapter.get(name, parent, retrievalContext,
+						contextHint);
+		} else {
 			try {
 				if (type == TYPE_CONTEXT) {
-					return ((Context) parent).get(name, retrievalContext, contextHint);
-				}
-				else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
-					return ((ZSContextRequiredGetter) parent).get(
-							name, retrievalContext, contextHint, context);
-				}
-				else if (type == TYPE_MAP) {
-					return mapAdapter.get(
-							name, parent, retrievalContext, contextHint);
-				}
-				else return objectAdapter.get(
-						name, parent, retrievalContext, contextHint);
-			}
-			catch (ClassCastException e) {
+					return ((Context) parent).get(name, retrievalContext,
+							contextHint);
+				} else if (type == TYPE_CONTEXT_REQUIRED_GETTER) {
+					return ((ZSContextRequiredGetter) parent).get(name,
+							retrievalContext, contextHint, context);
+				} else if (type == TYPE_MAP) {
+					return mapAdapter.get(name, parent, retrievalContext,
+							contextHint);
+				} else
+					return objectAdapter.get(name, parent, retrievalContext,
+							contextHint);
+			} catch (ClassCastException e) {
 				this.doTypeChecking = true;
 				return this.execute(parent, context);
 			}

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import java.util.Iterator;
@@ -15,8 +20,8 @@ public class IteratorAdapter implements SequenceAdapter {
 		return (object instanceof Iterator);
 	}
 
-	public Object getItemAt(
-			int index, Object sequence, RetrievalContext retrievalContext, String contextHint)
+	public Object getItemAt(int index, Object sequence,
+			RetrievalContext retrievalContext, String contextHint)
 			throws ClassCastException {
 		throw new UnsupportedOperationException();
 	}

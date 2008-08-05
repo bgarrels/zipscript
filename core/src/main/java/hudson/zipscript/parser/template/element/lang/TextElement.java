@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.ExpressionParser;
@@ -20,24 +25,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class TextElement extends AbstractElement implements Element {
 
 	private VarSpecialElement[] specialMethods = null;
 
-	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] {
-		new VariablePatternMatcher()
-	};
+	public static final PatternMatcher[] MATCHERS = new PatternMatcher[] { new VariablePatternMatcher() };
 
 	private boolean evaluateText;
 	private String text;
 	private List children;
 
-	public TextElement (String text) {
-		this (text, false);
+	public TextElement(String text) {
+		this(text, false);
 	}
 
-	public TextElement (String text, boolean evaluateText) {
+	public TextElement(String text, boolean evaluateText) {
 		this.text = text;
 		this.evaluateText = evaluateText;
 	}
@@ -46,22 +48,21 @@ public class TextElement extends AbstractElement implements Element {
 		if (evaluateText) {
 			if (null != specialMethods) {
 				StringWriter sw1 = new StringWriter();
-				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+				for (Iterator i = getChildren().iterator(); i.hasNext();) {
 					((Element) i.next()).merge(context, sw1);
 				}
 				Object source = sw1.toString();
-				for (int i=0; i<specialMethods.length; i++) {
-					source = specialMethods[i].execute(
-							source, RetrievalContext.HASH, null, context);
-					if (null == source) return null;
+				for (int i = 0; i < specialMethods.length; i++) {
+					source = specialMethods[i].execute(source,
+							RetrievalContext.HASH, null, context);
+					if (null == source)
+						return null;
 				}
 				return source;
-			}
-			else {
+			} else {
 				return text;
 			}
-		}
-		else {
+		} else {
 			return text;
 		}
 	}
@@ -74,24 +75,23 @@ public class TextElement extends AbstractElement implements Element {
 		if (evaluateText) {
 			if (null != specialMethods) {
 				StringWriter sw1 = new StringWriter();
-				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+				for (Iterator i = getChildren().iterator(); i.hasNext();) {
 					((Element) i.next()).merge(context, sw1);
 				}
 				Object source = sw1.toString();
-				for (int i=0; i<specialMethods.length; i++) {
-					source = specialMethods[i].execute(
-							source, RetrievalContext.HASH, null, context);
-					if (null == source) return;
+				for (int i = 0; i < specialMethods.length; i++) {
+					source = specialMethods[i].execute(source,
+							RetrievalContext.HASH, null, context);
+					if (null == source)
+						return;
 				}
 				StringUtil.append(source.toString(), sw);
-			}
-			else {
-				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+			} else {
+				for (Iterator i = getChildren().iterator(); i.hasNext();) {
 					((Element) i.next()).merge(context, sw);
 				}
 			}
-		}
-		else if (null != text) {
+		} else if (null != text) {
 			StringUtil.append(text, sw);
 		}
 	}
@@ -104,11 +104,12 @@ public class TextElement extends AbstractElement implements Element {
 		return "'" + text + "'";
 	}
 
-	public ElementIndex normalize(
-			int index, List elementList, ParsingSession session) throws ParseException {
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
 		if (evaluateText) {
-			ParsingResult pr = ExpressionParser.getInstance().parse(text, MATCHERS, TextDefaultElementFactory.INSTANCE,
-					session, (int) (getElementPosition() + 1));
+			ParsingResult pr = ExpressionParser.getInstance().parse(text,
+					MATCHERS, TextDefaultElementFactory.INSTANCE, session,
+					(int) (getElementPosition() + 1));
 			setChildren(pr.getElements());
 
 			List varSpecialElements = new ArrayList();
@@ -123,13 +124,13 @@ public class TextElement extends AbstractElement implements Element {
 						e = ei.getElement();
 					}
 					varSpecialElements.add(e);
-				}
-				else
+				} else
 					break;
 			}
 			if (varSpecialElements.size() > 0) {
-				this.specialMethods = 
-					(VarSpecialElement[]) varSpecialElements.toArray(new VarSpecialElement[varSpecialElements.size()]);
+				this.specialMethods = (VarSpecialElement[]) varSpecialElements
+						.toArray(new VarSpecialElement[varSpecialElements
+								.size()]);
 			}
 		}
 		return null;

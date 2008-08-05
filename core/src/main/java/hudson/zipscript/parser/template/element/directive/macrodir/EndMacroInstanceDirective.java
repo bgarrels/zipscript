@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,11 +20,12 @@ public class EndMacroInstanceDirective extends NestableDirective {
 	private String name;
 	private boolean isTemplateDefinedParameterInMacroDefinition;
 
-	public EndMacroInstanceDirective (String name) {
+	public EndMacroInstanceDirective(String name) {
 		this(name, false);
 	}
 
-	public EndMacroInstanceDirective (String name, boolean isTemplateDefinedParameterInMacroDefinition) {
+	public EndMacroInstanceDirective(String name,
+			boolean isTemplateDefinedParameterInMacroDefinition) {
 		this.name = name;
 		this.isTemplateDefinedParameterInMacroDefinition = isTemplateDefinedParameterInMacroDefinition;
 	}
@@ -28,7 +34,8 @@ public class EndMacroInstanceDirective extends NestableDirective {
 		return "[/@" + getName() + "]";
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		throw new ExecutionException("Invalid macro directive", this);
 	}
 

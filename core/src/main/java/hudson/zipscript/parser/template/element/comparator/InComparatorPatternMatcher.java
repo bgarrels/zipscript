@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comparator;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -15,15 +20,12 @@ public class InComparatorPatternMatcher implements PatternMatcher {
 	}
 
 	public char[][] getStartTokens() {
-		return new char[][] {
-				" not in ".toCharArray(),
-				" in ".toCharArray()
-		};
+		return new char[][] { " not in ".toCharArray(), " in ".toCharArray() };
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader,
-			ParsingSession parseData, List elements, StringBuffer unmatchedChars)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars,
+			CharBuffer reader, ParsingSession parseData, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
 		if (startChars.length == 4)
 			return new InExpression();
 		else

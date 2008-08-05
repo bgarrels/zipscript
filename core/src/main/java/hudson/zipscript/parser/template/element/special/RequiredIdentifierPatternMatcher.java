@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -18,8 +23,9 @@ public class RequiredIdentifierPatternMatcher implements PatternMatcher {
 		return null;
 	}
 
-	public Element match(char previousChar, char[] startChars,CharBuffer reader,
-			ParsingSession parseData, List elements, StringBuffer unmatchedChars) throws ParseException {
+	public Element match(char previousChar, char[] startChars,
+			CharBuffer reader, ParsingSession parseData, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
 		if (Character.isWhitespace(previousChar) || previousChar == '[') {
 			if (reader.hasRemaining()) {
 				char c = reader.charAt(0);

@@ -1,8 +1,11 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comparator;
 
 import hudson.zipscript.parser.template.element.special.NullElement;
-
-
 
 public class EqExpression extends AbstractComparatorElement {
 
@@ -14,8 +17,8 @@ public class EqExpression extends AbstractComparatorElement {
 				return true;
 			else
 				return false;
-		}
-		else return lhs.equals(rhs);
+		} else
+			return lhs.equals(rhs);
 	}
 
 	public int getPriority() {

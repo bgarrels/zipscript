@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -11,21 +16,23 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.util.List;
 
-public class SpecialVariableElementImpl extends VariableElement implements SpecialStringElement {
+public class SpecialVariableElementImpl extends VariableElement implements
+		SpecialStringElement {
 
 	// normally we won't do this but there are occasions with variable defaults
 	private boolean shouldEvaluateSeparators = true;
-	
-	public SpecialVariableElementImpl(
-			String text, ParsingSession session, int contentPosition) throws ParseException {
+
+	public SpecialVariableElementImpl(String text, ParsingSession session,
+			int contentPosition) throws ParseException {
 		super(false, false, text, session, contentPosition);
 	}
 
 	/**
-	 * Create the pattern text and have the VariableElement manage parsing the pattern
+	 * Create the pattern text and have the VariableElement manage parsing the
+	 * pattern
 	 */
-	public ElementIndex normalize(
-			int index, List elementList, ParsingSession session) throws ParseException {
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
 		StringBuffer pattern = null;
 		while (elementList.size() > index) {
 			Element e = (Element) elementList.get(index);
@@ -37,13 +44,12 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				}
 				pattern.append(((SpecialElement) e).getTokenValue());
 				continue;
-			}
-			else if (e instanceof VariableTokenSeparatorElement) {
+			} else if (e instanceof VariableTokenSeparatorElement) {
 				elementList.remove(index);
 				e.normalize(index, elementList, session);
 				addSpecialElement((VariableTokenSeparatorElement) e);
-			}
-			else if (isShouldEvaluateSeparators() && e instanceof GroupElement) {
+			} else if (isShouldEvaluateSeparators()
+					&& e instanceof GroupElement) {
 				elementList.remove(index);
 				if (null == pattern) {
 					pattern = new StringBuffer();
@@ -51,8 +57,7 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 				}
 				e.normalize(index, elementList, session);
 				pattern.append(e);
-			}
-			else if (isShouldEvaluateSeparators() && e instanceof DotElement) {
+			} else if (isShouldEvaluateSeparators() && e instanceof DotElement) {
 				elementList.remove(index);
 				if (null == pattern) {
 					pattern = new StringBuffer();
@@ -64,26 +69,26 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 					if (e instanceof SpecialElement) {
 						pattern.append(((SpecialElement) e).getTokenValue());
 						continue;
-					}
-					else if (e instanceof SpecialVariableElementImpl) {
-						pattern.append(((SpecialVariableElementImpl) e).getTokenValue());
+					} else if (e instanceof SpecialVariableElementImpl) {
+						pattern.append(((SpecialVariableElementImpl) e)
+								.getTokenValue());
 						continue;
+					} else {
+						throw new ParseException(this,
+								"Invalid variable sequence '" + pattern + "'");
 					}
-					else {
-						throw new ParseException(this, "Invalid variable sequence '" + pattern + "'");
-					}
-				}
-				else {
-					throw new ParseException(this, "Invalid variable sequence '" + pattern + "'");
+				} else {
+					throw new ParseException(this,
+							"Invalid variable sequence '" + pattern + "'");
 				}
 
-			}
-			else {
+			} else {
 				break;
 			}
 		}
 		if (null != pattern)
-			setPattern(getStartToken() + pattern.toString() + getEndToken(), session, 0);
+			setPattern(getStartToken() + pattern.toString() + getEndToken(),
+					session, 0);
 		return null;
 	}
 
@@ -99,11 +104,11 @@ public class SpecialVariableElementImpl extends VariableElement implements Speci
 		this.shouldEvaluateSeparators = shouldEvaluateSeparators;
 	}
 
-	public String getStartToken () {
+	public String getStartToken() {
 		return "${";
 	}
 
-	public String getEndToken () {
+	public String getEndToken() {
 		return "}";
 	}
 }

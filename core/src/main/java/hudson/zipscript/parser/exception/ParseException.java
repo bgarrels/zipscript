@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.exception;
 
 import hudson.zipscript.parser.template.data.LinePosition;
 import hudson.zipscript.parser.template.data.ParsingResult;
 import hudson.zipscript.parser.template.element.Element;
-
 
 public class ParseException extends Exception {
 	private static final long serialVersionUID = -1363961609103512907L;
@@ -14,20 +18,20 @@ public class ParseException extends Exception {
 	private Element element;
 	private String resource;
 
-	public ParseException (long position, String message) {
+	public ParseException(long position, String message) {
 		this(null, position, Integer.MIN_VALUE, message);
 	}
 
-	public ParseException (long position, int length, String message) {
+	public ParseException(long position, int length, String message) {
 		this(null, position, length, message);
 	}
 
-	public ParseException (Element element, String message) {
+	public ParseException(Element element, String message) {
 		this(element, Long.MIN_VALUE, Integer.MIN_VALUE, message);
 	}
 
-	public ParseException (Element element, long position,
-			int length, String message) {
+	public ParseException(Element element, long position, int length,
+			String message) {
 		super(message);
 		if (position >= 0)
 			this.absolutePosition = position;
@@ -42,14 +46,14 @@ public class ParseException extends Exception {
 			this.length = element.getElementLength();
 	}
 
-	public void setParsingResult (ParsingResult parsingData) {
+	public void setParsingResult(ParsingResult parsingData) {
 		this.parseData = parsingData;
 	}
 
 	public String getMessage() {
 		StringBuffer sb = new StringBuffer();
 		if (null != resource)
-			sb.append ("[" + resource + "] ");
+			sb.append("[" + resource + "] ");
 		if (null != parseData) {
 			LinePosition lp = parseData.getLinePosition(absolutePosition);
 			sb.append("(line " + lp.line + ", position " + lp.position + ") ");
@@ -58,13 +62,15 @@ public class ParseException extends Exception {
 		return sb.toString();
 	}
 
-	public int getLine () {
-		if (null == parseData) return 0;
+	public int getLine() {
+		if (null == parseData)
+			return 0;
 		return parseData.getLinePosition(absolutePosition).line;
 	}
 
-	public int getPosition () {
-		if (null == parseData) return 0;
+	public int getPosition() {
+		if (null == parseData)
+			return 0;
 		return parseData.getLinePosition(absolutePosition).position;
 	}
 

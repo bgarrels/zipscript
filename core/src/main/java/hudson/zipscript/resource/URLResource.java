@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.resource;
 
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -12,7 +17,7 @@ public class URLResource extends AbstractResource {
 	URL resource;
 	long lastModified;
 
-	public URLResource (URL resource) {
+	public URLResource(URL resource) {
 		this.resource = resource;
 	}
 
@@ -21,9 +26,9 @@ public class URLResource extends AbstractResource {
 			URLConnection urlConn = resource.openConnection();
 			lastModified = urlConn.getLastModified();
 			return urlConn.getInputStream();
-		}
-		catch (IOException e) {
-			throw new ExecutionException("The file '" + resource.getPath() + "' could not be located", null, e);
+		} catch (IOException e) {
+			throw new ExecutionException("The file '" + resource.getPath()
+					+ "' could not be located", null, e);
 		}
 	}
 
@@ -34,8 +39,7 @@ public class URLResource extends AbstractResource {
 				return true;
 			else
 				return false;
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			return false;
 		}
 	}

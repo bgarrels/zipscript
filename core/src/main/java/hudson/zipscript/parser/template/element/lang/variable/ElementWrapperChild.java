@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -11,11 +16,12 @@ public class ElementWrapperChild implements VariableChild {
 	private RetrievalContext retrievalContext;
 	private String contextHint;
 
-	public ElementWrapperChild (Element element) {
+	public ElementWrapperChild(Element element) {
 		this.element = element;
 	}
 
-	public Object execute(Object parent, ExtendedContext context) throws ExecutionException {
+	public Object execute(Object parent, ExtendedContext context)
+			throws ExecutionException {
 		return element.objectValue(context);
 	}
 

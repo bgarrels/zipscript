@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.xml;
 
 import hudson.zipscript.parser.context.AbstractContext;
@@ -20,10 +25,12 @@ public class DocumentContextWrapper extends AbstractContext {
 		this.document = document;
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
+	public Object get(Object key, RetrievalContext retrievalContext,
+			String contextHint) {
 		Object rtn = null;
 		if (key instanceof String)
-			rtn = adapter.get((String) key, document, retrievalContext, contextHint);
+			rtn = adapter.get((String) key, document, retrievalContext,
+					contextHint);
 		if (null == rtn)
 			rtn = additionaContextValues.get(key);
 		return rtn;

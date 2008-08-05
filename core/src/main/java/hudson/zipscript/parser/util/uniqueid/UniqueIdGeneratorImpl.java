@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.util.uniqueid;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -14,9 +19,8 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 	public String toString(ExtendedContext context) {
 		if (Long.MIN_VALUE == uniqueId) {
 			uniqueId = System.currentTimeMillis();
-		}
-		else {
-			uniqueId = uniqueId ++;
+		} else {
+			uniqueId = uniqueId++;
 		}
 		return Long.toString(uniqueId);
 	}
@@ -29,6 +33,6 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 		return toString(null);
 	}
 
-	public void configure(Map properties) throws InitializationException {	
+	public void configure(Map properties) throws InitializationException {
 	}
 }

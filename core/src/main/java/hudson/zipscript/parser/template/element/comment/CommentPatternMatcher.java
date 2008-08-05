@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comment;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -11,9 +16,10 @@ import java.util.List;
 public class CommentPatternMatcher extends AbstractPatternMatcher {
 
 	public Element match(char previousChar, char[] startChars,
-			CharBuffer contents, ParsingSession parseData, List elements, StringBuffer unmatchedChars)
-			throws ParseException {
-		Element e = super.match(previousChar, startChars, contents, parseData, elements, unmatchedChars);
+			CharBuffer contents, ParsingSession parseData, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
+		Element e = super.match(previousChar, startChars, contents, parseData,
+				elements, unmatchedChars);
 		if (null != e && contents.hasRemaining()) {
 			if (contents.charAt(0) == '\r')
 				contents.get();
@@ -22,7 +28,7 @@ public class CommentPatternMatcher extends AbstractPatternMatcher {
 		}
 		return e;
 	}
-	
+
 	protected Element createElement(char[] startToken, String s,
 			int contentStartPosition, ParsingSession parseData)
 			throws ParseException {
