@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -15,11 +20,11 @@ public class NumericPatternMatcher implements PatternMatcher {
 	private Locale locale;
 	private char decimalSeparator;
 
-	public NumericPatternMatcher () {
+	public NumericPatternMatcher() {
 		this(Locale.getDefault());
 	}
 
-	public NumericPatternMatcher (Locale locale) {
+	public NumericPatternMatcher(Locale locale) {
 		this.locale = locale;
 		this.decimalSeparator = LocaleUtil.getDecimalSeparator(locale);
 	}
@@ -29,49 +34,39 @@ public class NumericPatternMatcher implements PatternMatcher {
 	}
 
 	public char[][] getStartTokens() {
-		return new char[][] {
-				new char[]{decimalSeparator},
-				"0".toCharArray(),
-				"1".toCharArray(),
-				"2".toCharArray(),
-				"3".toCharArray(),
-				"4".toCharArray(),
-				"5".toCharArray(),
-				"6".toCharArray(),
-				"7".toCharArray(),
-				"8".toCharArray(),
-				"9".toCharArray()
-		};
+		return new char[][] { new char[] { decimalSeparator },
+				"0".toCharArray(), "1".toCharArray(), "2".toCharArray(),
+				"3".toCharArray(), "4".toCharArray(), "5".toCharArray(),
+				"6".toCharArray(), "7".toCharArray(), "8".toCharArray(),
+				"9".toCharArray() };
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader,
-			ParsingSession session, List elements, StringBuffer unmatchedChars)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars,
+			CharBuffer reader, ParsingSession session, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
 		StringBuffer sb = new StringBuffer();
-		sb.append (startChars);
+		sb.append(startChars);
 		char type = Character.MIN_VALUE;
 		while (reader.hasRemaining()) {
 			char c = reader.get();
 			if (Character.isDigit(c) || c == decimalSeparator) {
 				// still number
 				sb.append(c);
-			}
-			else {
-				for (int i=0; i<NumberElement.TYPES.length; i++) {
+			} else {
+				for (int i = 0; i < NumberElement.TYPES.length; i++) {
 					if (c == NumberElement.TYPES[i]) {
 						type = c;
 						break;
 					}
 				}
 				if (type != Character.MIN_VALUE) {
-					if (sb.length() == 1 && sb.charAt(0) == '.') return null;
+					if (sb.length() == 1 && sb.charAt(0) == '.')
+						return null;
 					return new NumberElement(sb.toString(), type, locale);
-				}
-				else if (Character.isLetter(c)) {
+				} else if (Character.isLetter(c)) {
 					return null;
-				}
-				else {
-					reader.position(reader.position()-1);
+				} else {
+					reader.position(reader.position() - 1);
 					if (sb.length() == 1 && !Character.isDigit(sb.charAt(0)))
 						return null;
 					else

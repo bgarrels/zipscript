@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -11,7 +16,7 @@ import junit.framework.TestCase;
 
 public class MathTestCase extends TestCase {
 
-	public void testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions() throws Exception {
 		assertEquals(new Integer(8), eval("4+3*2-2"));
 		assertEquals(new Long(20), eval("(4+3*2l-2)+6*2"));
 		assertEquals(new Float(2), eval("(20-2*2f-2)-6*2"));
@@ -21,7 +26,7 @@ public class MathTestCase extends TestCase {
 		assertEquals(new Double(5.5), eval("11d/2"));
 	}
 
-	public void testContextExpressions () throws Exception {
+	public void testContextExpressions() throws Exception {
 		Map context = new HashMap();
 		context.put("num1", new Integer(10));
 		context.put("num2", new Double(2));
@@ -33,13 +38,12 @@ public class MathTestCase extends TestCase {
 		assertEquals(new Integer(20), eval("${num1+10}", context));
 	}
 
-	private Object eval (String s)
-	throws ParseException, ExecutionException {
+	private Object eval(String s) throws ParseException, ExecutionException {
 		return eval(s, null);
 	}
 
-	private Object eval (String s, Object context)
-	throws ParseException, ExecutionException {
+	private Object eval(String s, Object context) throws ParseException,
+			ExecutionException {
 		return ZipEngine.createInstance().getEvaluator(s).objectValue(context);
 	}
 }

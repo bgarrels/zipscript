@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.xml;
 
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
@@ -34,7 +39,7 @@ public class NodeListSequenceAdapter implements SequenceAdapter {
 	}
 
 	public boolean hasNext(int index, Object previousItem, Object sequence) {
-		return ((NodeList) sequence).getLength() > (index+1);
+		return ((NodeList) sequence).getLength() > (index + 1);
 	}
 
 	public int indexOf(Object object, Object sequence)

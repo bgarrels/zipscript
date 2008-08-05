@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.whiledir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -10,7 +15,7 @@ public class EndWhileDirective extends NestableDirective {
 
 	public String contents;
 
-	public EndWhileDirective (String contents) {
+	public EndWhileDirective(String contents) {
 		this.contents = contents;
 	}
 
@@ -18,7 +23,8 @@ public class EndWhileDirective extends NestableDirective {
 		return "[/#while]";
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		throw new ExecutionException("Invalid while directive", this);
 	}
 }

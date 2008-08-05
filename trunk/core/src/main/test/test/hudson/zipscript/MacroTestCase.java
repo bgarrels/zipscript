@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -17,39 +22,41 @@ import test.hudson.zipscript.model.Person;
 
 public class MacroTestCase extends TestCase {
 
-//	public static TestSuite suite () {
-//		TestSuite suite = new TestSuite();
-//		suite.addTest(new MacroTestCase("testCommonTDOMacro"));
-//		return suite;
-//	}
+	// public static TestSuite suite () {
+	// TestSuite suite = new TestSuite();
+	// suite.addTest(new MacroTestCase("testCommonTDOMacro"));
+	// return suite;
+	// }
 
-	public MacroTestCase () {}
-	public MacroTestCase (String name) {
+	public MacroTestCase() {
+	}
+
+	public MacroTestCase(String name) {
 		super(name);
 	}
 
-	public void testSimpleMacro () throws Exception {
+	public void testSimpleMacro() throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_test.zs";
 		String resultFile = "/templates/macro_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testCommonTDOMacro () throws Exception {
+	public void testCommonTDOMacro() throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_common_test.zs";
 		String resultFile = "/templates/macro_common_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testNestingMacro () throws Exception {
+	public void testNestingMacro() throws Exception {
 		Map context = new HashMap();
 		String mergeTemplate = "templates/macro_nesting_test.zs";
 		String resultFile = "/templates/macro_nesting_result.txt";
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testObjectOrientedMacro () throws Exception {
+	public void testObjectOrientedMacro() throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList(3);
 		l.add(new Person("John", "Smith", "03/14/82"));
@@ -62,7 +69,7 @@ public class MacroTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	public void testFulltestMacro () throws Exception {
+	public void testFulltestMacro() throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList(3);
 		l.add(new Person("John", "Smith", "03/14/82"));
@@ -78,15 +85,17 @@ public class MacroTestCase extends TestCase {
 		evalResult(mergeTemplate, resultFile, context);
 	}
 
-	private void evalResult (String mergeTemplate, String resultFile, Object context)
-	throws ParseException, ExecutionException, IOException {
-		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(resultFile));
+	private void evalResult(String mergeTemplate, String resultFile,
+			Object context) throws ParseException, ExecutionException,
+			IOException {
+		String expectedResult = IOUtil.toString(getClass().getResourceAsStream(
+				resultFile));
 		String actualResult = merge(mergeTemplate, context);
 		assertEquals(expectedResult, actualResult);
 	}
 
-	private String merge (String template, Object context)
-	throws ParseException, ExecutionException, IOException {
+	private String merge(String template, Object context)
+			throws ParseException, ExecutionException, IOException {
 		return ZipEngine.createInstance().getTemplate(template).merge(context);
 	}
 }

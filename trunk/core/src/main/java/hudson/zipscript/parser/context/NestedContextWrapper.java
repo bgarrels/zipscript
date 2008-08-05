@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
@@ -20,19 +25,21 @@ public class NestedContextWrapper implements ExtendedContext {
 	private boolean travelUp;
 	private Element scopedElement;
 
-	public NestedContextWrapper (ExtendedContext parentContext, Element scopedElement) {
-		this (parentContext, scopedElement, true);
+	public NestedContextWrapper(ExtendedContext parentContext,
+			Element scopedElement) {
+		this(parentContext, scopedElement, true);
 	}
 
-	public NestedContextWrapper (
-			ExtendedContext parentContext, Element scopedElement, boolean travelUp) {
+	public NestedContextWrapper(ExtendedContext parentContext,
+			Element scopedElement, boolean travelUp) {
 		this.parentContext = parentContext;
 		this.scopedElement = scopedElement;
 		this.travelUp = travelUp;
 		map.put(Constants.VARS, this);
 	}
 
-	public Object get(Object key, RetrievalContext retrievalContext, String contextHint) {
+	public Object get(Object key, RetrievalContext retrievalContext,
+			String contextHint) {
 		Object obj = map.get(key);
 		if (null == obj && travelUp)
 			obj = parentContext.get(key, retrievalContext, contextHint);
@@ -58,7 +65,7 @@ public class NestedContextWrapper implements ExtendedContext {
 		return map.remove(key);
 	}
 
-	public Object getSuper () {
+	public Object getSuper() {
 		return parentContext;
 	}
 
@@ -70,7 +77,7 @@ public class NestedContextWrapper implements ExtendedContext {
 		parentContext.setParsingSession(session);
 	}
 
-	public Locale getLocale () {
+	public Locale getLocale() {
 		return parentContext.getLocale();
 	}
 
@@ -82,11 +89,11 @@ public class NestedContextWrapper implements ExtendedContext {
 		return parentContext.getResourceContainer();
 	}
 
-	public void setResourceContainer (ResourceContainer resourceContainer) {
+	public void setResourceContainer(ResourceContainer resourceContainer) {
 		parentContext.setResourceContainer(resourceContainer);
 	}
 
-	public ExtendedContext getRootContext () {
+	public ExtendedContext getRootContext() {
 		return parentContext.getRootContext();
 	}
 
@@ -130,11 +137,11 @@ public class NestedContextWrapper implements ExtendedContext {
 		return parentContext.isInitialized(topLevelElement);
 	}
 
-	public MacroDirective getMacro (String name) {
+	public MacroDirective getMacro(String name) {
 		return parentContext.getMacro(name);
 	}
 
-	public String getMacroImportPath (String namespace) {
+	public String getMacroImportPath(String namespace) {
 		return parentContext.getMacroImportPath(namespace);
 	}
 

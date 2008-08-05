@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 public class TestSuite extends junit.framework.TestSuite {
 
-	public static junit.framework.TestSuite suite () {
+	public static junit.framework.TestSuite suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(BooleanTestCase.class);
 		suite.addTestSuite(DirectiveTestCase.class);

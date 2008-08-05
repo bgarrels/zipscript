@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -12,8 +17,8 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 public class VariableDefaultsTestCase extends TestCase {
-	
-	public void _testNoContextExpressions () throws Exception {
+
+	public void _testNoContextExpressions() throws Exception {
 		assertEquals("abc", eval("foo!'abc'"));
 		assertEquals(new Integer(1), eval("foo!1"));
 		assertEquals(new Short((short) 1), eval("foo!1s"));
@@ -26,7 +31,7 @@ public class VariableDefaultsTestCase extends TestCase {
 		assertEquals(Boolean.FALSE, eval("foo!false"));
 	}
 
-	public void testContextExpressions () throws Exception {
+	public void testContextExpressions() throws Exception {
 		Map context = new HashMap();
 		context.put("abc", "def");
 		Map subMap = new HashMap();
@@ -38,13 +43,12 @@ public class VariableDefaultsTestCase extends TestCase {
 		assertEquals("babble", eval("foo!pop!baz.foo", context));
 	}
 
-	private Object eval (String s)
-	throws ParseException, ExecutionException {
+	private Object eval(String s) throws ParseException, ExecutionException {
 		return eval(s, null);
 	}
 
-	private Object eval (String s, Object context)
-	throws ParseException, ExecutionException {
+	private Object eval(String s, Object context) throws ParseException,
+			ExecutionException {
 		Evaluator t = ZipEngine.createInstance().getEvaluator(s);
 		return t.objectValue(context);
 	}

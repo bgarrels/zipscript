@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.escape.translate;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -23,42 +28,43 @@ public class TranslateDirective extends NestableElement {
 
 	private Map translatedLocales = new HashMap();
 
-	public TranslateDirective (String contents, int contentIndex, ParsingSession parsingSession)
-	throws ParseException {
+	public TranslateDirective(String contents, int contentIndex,
+			ParsingSession parsingSession) throws ParseException {
 	}
 
 	public void validate(ParsingSession session) throws ParseException {
 		// we can only have text and variable elements
 		super.validate(session);
 		if (null != getChildren()) {
-			for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+			for (Iterator i = getChildren().iterator(); i.hasNext();) {
 				Element e = (Element) i.next();
 				if (e instanceof VariableElement || e instanceof TextElement) {
 					// we're ok here
-				}
-				else {
-					throw new ParseException(this, "Only text and interpolations are allowed in a translate directive");
+				} else {
+					throw new ParseException(this,
+							"Only text and interpolations are allowed in a translate directive");
 				}
 			}
 		}
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		String localeKey = null;
 		List elements = getChildren();
 		if (null != context.getLocale())
 			localeKey = getLocaleKey(context.getLocale());
-		if (!localeKey.equals(context.getResourceContainer().getTranslator().getBaseLocaleKey())) {
+		if (!localeKey.equals(context.getResourceContainer().getTranslator()
+				.getBaseLocaleKey())) {
 			// we have to translate
 			Object maybeElements = translatedLocales.get(context.getLocale());
 			if (null != maybeElements) {
 				if (!maybeElements.equals(Boolean.FALSE))
 					elements = (List) maybeElements;
-					
-			}
-			else {
+
+			} else {
 				// we haven't already translated yet
-				elements = doTranslation (context, localeKey);
+				elements = doTranslation(context, localeKey);
 				if (null != elements)
 					translatedLocales.put(localeKey, elements);
 				else
@@ -68,11 +74,11 @@ public class TranslateDirective extends NestableElement {
 		appendElements(elements, context, sw);
 	}
 
-	protected List doTranslation (ExtendedContext context, String localeKey) {
+	protected List doTranslation(ExtendedContext context, String localeKey) {
 		if (null != getChildren()) {
 			try {
 				List l = new ArrayList();
-				for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+				for (Iterator i = getChildren().iterator(); i.hasNext();) {
 					Element e = (Element) i.next();
 					if (e instanceof TextElement)
 						l.add(((TextElement) e).getText());
@@ -80,26 +86,25 @@ public class TranslateDirective extends NestableElement {
 						l.add(e);
 				}
 
-				return context.getResourceContainer().getTranslator().translate(
-						l, context.getLocale());
-			}
-			catch (ExecutionException e) {
+				return context.getResourceContainer().getTranslator()
+						.translate(l, context.getLocale());
+			} catch (ExecutionException e) {
 				e.setElement(this);
 				throw e;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new ExecutionException(e.getMessage(), this, e);
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
 
-	protected String getLocaleKey (Locale locale) {
+	protected String getLocaleKey(Locale locale) {
 		String s = locale.getLanguage();
-		if (null == s) return locale.toString();
-		else return s;
+		if (null == s)
+			return locale.toString();
+		else
+			return s;
 	}
 
 	protected boolean isStartElement(Element e) {

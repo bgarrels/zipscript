@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.format;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,27 +20,27 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 import java.util.Date;
 import java.util.List;
 
-public class VarFormattingElement extends IdentifierElement implements VariableTokenSeparatorElement {
+public class VarFormattingElement extends IdentifierElement implements
+		VariableTokenSeparatorElement {
 
 	private String format;
 	private String formatFunction;
 	private Formatter formatter;
 
-	public ElementIndex normalize(
-			int index, List elementList, ParsingSession session)
-			throws ParseException {
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
 		if (elementList.size() > index) {
 			Element e = (Element) elementList.remove(index);
 			if (e instanceof SpecialVariableElementImpl) {
-				formatFunction = ((SpecialVariableElementImpl) e).getTokenValue();
-			}
-			else if (e instanceof TextElement) {
+				formatFunction = ((SpecialVariableElementImpl) e)
+						.getTokenValue();
+			} else if (e instanceof TextElement) {
 				this.format = ((TextElement) e).getText();
 			}
 			return null;
-		}
-		else {
-			throw new ParseException(this, "A formatting element was detected with no value");
+		} else {
+			throw new ParseException(this,
+					"A formatting element was detected with no value");
 		}
 	}
 
@@ -46,45 +51,45 @@ public class VarFormattingElement extends IdentifierElement implements VariableT
 			return "|" + formatFunction;
 	}
 
-	public Object execute(
-			Object source, RetrievalContext retrievalContext,
+	public Object execute(Object source, RetrievalContext retrievalContext,
 			String contextHint, ExtendedContext context) {
-		if (null == source) return null;
+		if (null == source)
+			return null;
 		try {
 			if (null == formatter) {
-				formatter = initializeFormatter (source, context);
+				formatter = initializeFormatter(source, context);
 			}
 			return formatter.format(source, context);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (e instanceof ExecutionException) {
 				((ExecutionException) e).setElement(this);
 				throw (ExecutionException) e;
-			}
-			else throw new ExecutionException(e.getMessage(), this, e);
+			} else
+				throw new ExecutionException(e.getMessage(), this, e);
 		}
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		return null;
 	}
 
-	protected Formatter initializeFormatter (
-			Object source, ExtendedContext context) {
+	protected Formatter initializeFormatter(Object source,
+			ExtendedContext context) {
 		if (source instanceof Date) {
 			if (null != this.format) {
 				return new CustomDateFormatter(this.format, context.getLocale());
+			} else {
+				return new DefinedDateFormatter(this.formatFunction, context
+						.getLocale());
 			}
-			else {
-				return new DefinedDateFormatter(this.formatFunction, context.getLocale());
-			}
-		}
-		else if (source instanceof Number) {
+		} else if (source instanceof Number) {
 			if (null != this.format) {
-				return new CustomNumberFormatter(this.format, context.getLocale());
-			}
-			else {
-				return new DefinedNumberFormatter(this.formatFunction, context.getLocale());
+				return new CustomNumberFormatter(this.format, context
+						.getLocale());
+			} else {
+				return new DefinedNumberFormatter(this.formatFunction, context
+						.getLocale());
 			}
 		}
 		return null;

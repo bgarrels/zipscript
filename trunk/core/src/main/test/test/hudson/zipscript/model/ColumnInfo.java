@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript.model;
 
 public class ColumnInfo {
@@ -7,7 +12,7 @@ public class ColumnInfo {
 	private String type;
 	private String propertyName;
 
-	public ColumnInfo (String title, String propertyName, int size, String type) {
+	public ColumnInfo(String title, String propertyName, int size, String type) {
 		this.title = title;
 		this.size = size;
 		this.propertyName = propertyName;
@@ -17,18 +22,23 @@ public class ColumnInfo {
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public int getSize() {
 		return size;
 	}
+
 	public void setSize(int size) {
 		this.size = size;
 	}
+
 	public String getPropertyName() {
 		return propertyName;
 	}
+
 	public void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
 	}

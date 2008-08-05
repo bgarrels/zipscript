@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.special.xml;
 
 import hudson.zipscript.parser.context.Context;
@@ -28,31 +33,30 @@ public class XPathSpecialMethod implements SpecialMethod {
 	// static
 	private XPathExpression xPathExpression;
 
-	public XPathSpecialMethod (Element[] vars) throws ExecutionException {
+	public XPathSpecialMethod(Element[] vars) throws ExecutionException {
 		if (null != vars && vars.length == 1) {
 			this.xPathElement = vars[0];
 			boolean isStatic = false;
 			if (this.xPathElement instanceof VariableElement
 					&& ((VariableElement) this.xPathElement).isStatic()) {
 				isStatic = true;
-			}
-			else if (this.xPathElement instanceof TextElement) {
+			} else if (this.xPathElement instanceof TextElement) {
 				isStatic = true;
 			}
 			if (isStatic) {
 				try {
-					this.xPathExpression = compile(new MapContextWrapper(new HashMap()), false);
-				}
-				catch (XPathExpressionException e) {
+					this.xPathExpression = compile(new MapContextWrapper(
+							new HashMap()), false);
+				} catch (XPathExpressionException e) {
 					throw new ExecutionException(e.getMessage(), null);
 				}
-			}
-			else {
+			} else {
 				compiledXpathStatements = new HashMap();
 			}
-		}
-		else {
-			throw new ExecutionException("?xpath statements must provide 1 expression parameter", null);
+		} else {
+			throw new ExecutionException(
+					"?xpath statements must provide 1 expression parameter",
+					null);
 		}
 	}
 
@@ -65,11 +69,9 @@ public class XPathSpecialMethod implements SpecialMethod {
 
 		if (retrievalContext.is(RetrievalContext.SEQUENCE)) {
 			return xPathExpression.evaluate(source, XPathConstants.NODESET);
-		}
-		else if (retrievalContext.is(RetrievalContext.HASH)) {
+		} else if (retrievalContext.is(RetrievalContext.HASH)) {
 			return xPathExpression.evaluate(source, XPathConstants.NODE);
-		}
-		else
+		} else
 			return xPathExpression.evaluate(source);
 	}
 
@@ -78,12 +80,15 @@ public class XPathSpecialMethod implements SpecialMethod {
 	}
 
 	private XPath xPath;
-	private XPathExpression compile (Context context, boolean cashXPath) throws XPathExpressionException {
+
+	private XPathExpression compile(Context context, boolean cashXPath)
+			throws XPathExpressionException {
 		XPathExpression xPathExpression = null;
 		String xPathStatement = this.xPathElement.objectValue(
 				new MapContextWrapper(new HashMap())).toString();
 		if (cashXPath) {
-			xPathExpression = (XPathExpression) compiledXpathStatements.get(xPathStatement);
+			xPathExpression = (XPathExpression) compiledXpathStatements
+					.get(xPathStatement);
 		}
 		if (null == xPathExpression) {
 			if (null == this.xPath) {
@@ -98,7 +103,7 @@ public class XPathSpecialMethod implements SpecialMethod {
 		return xPathExpression;
 	}
 
-	public String toString () {
+	public String toString() {
 		return "xpath(" + xPathElement + ")";
 	}
 }

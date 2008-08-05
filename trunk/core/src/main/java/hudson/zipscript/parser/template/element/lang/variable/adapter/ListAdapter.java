@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import java.util.List;
-
 
 public class ListAdapter implements SequenceAdapter {
 
@@ -15,8 +19,8 @@ public class ListAdapter implements SequenceAdapter {
 		return ((List) object).size();
 	}
 
-	public Object getItemAt(
-			int index, Object sequence, RetrievalContext retrievalContext, String contextHint) {
+	public Object getItemAt(int index, Object sequence,
+			RetrievalContext retrievalContext, String contextHint) {
 		return ((List) sequence).get(index);
 	}
 
@@ -32,9 +36,8 @@ public class ListAdapter implements SequenceAdapter {
 		((List) sequence).add(index, value);
 	}
 
-	public boolean hasNext(int index, Object previousItem,
-			Object sequence) {
-		return ((List) sequence).size() > (index+1);
+	public boolean hasNext(int index, Object previousItem, Object sequence) {
+		return ((List) sequence).size() > (index + 1);
 	}
 
 	public int indexOf(Object object, Object sequence)

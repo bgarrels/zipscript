@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.group;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -22,26 +27,31 @@ public class GroupElement extends NestableElement {
 		StringUtil.append('(', sw);
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as booleans", this);
+			throw new ExecutionException(
+					"groups can not be evaluated as booleans", this);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).objectValue(context);
 		else
-			throw new ExecutionException("groups can not be evaluated as objects", this);
+			throw new ExecutionException(
+					"groups can not be evaluated as objects", this);
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("(");
 		if (null != getChildren()) {
-			for (int i=0; i<getChildren().size(); i++) {
-				if (i > 0) sb.append(", ");
+			for (int i = 0; i < getChildren().size(); i++) {
+				if (i > 0)
+					sb.append(", ");
 				sb.append(getChildren().get(i));
 			}
 		}

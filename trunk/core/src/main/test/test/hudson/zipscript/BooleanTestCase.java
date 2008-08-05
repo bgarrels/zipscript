@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -11,7 +16,7 @@ import junit.framework.TestCase;
 
 public class BooleanTestCase extends TestCase {
 
-	public void testNoContextExpressions () throws Exception {
+	public void testNoContextExpressions() throws Exception {
 		assertEquals(true, eval("true"));
 		assertEquals(false, eval("false"));
 		assertEquals(false, eval("'true'"));
@@ -27,7 +32,7 @@ public class BooleanTestCase extends TestCase {
 
 	}
 
-	public void testContextExpressions () throws Exception {
+	public void testContextExpressions() throws Exception {
 		Map context = new HashMap();
 		context.put("foo", "false");
 		context.put("num3", new Integer(3));
@@ -47,13 +52,12 @@ public class BooleanTestCase extends TestCase {
 		assertEquals(true, eval("num4==num3+1d", context));
 	}
 
-	private boolean eval (String s)
-	throws ParseException, ExecutionException {
+	private boolean eval(String s) throws ParseException, ExecutionException {
 		return eval(s, null);
 	}
 
-	private boolean eval (String s, Object context)
-	throws ParseException, ExecutionException {
+	private boolean eval(String s, Object context) throws ParseException,
+			ExecutionException {
 		return ZipEngine.createInstance().getEvaluator(s).booleanValue(context);
 	}
 }

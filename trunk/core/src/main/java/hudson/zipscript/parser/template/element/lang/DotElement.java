@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -9,8 +14,8 @@ import java.util.List;
 
 public class DotElement extends IdentifierElement {
 
-	public ElementIndex normalize(int index, List elementList, ParseParameters parameters)
-			throws ParseException {
+	public ElementIndex normalize(int index, List elementList,
+			ParseParameters parameters) throws ParseException {
 		return null;
 	}
 

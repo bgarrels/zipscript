@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -11,19 +16,21 @@ import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalC
 
 import java.util.List;
 
-public class VarDefaultElement extends IdentifierElement implements VariableTokenSeparatorElement {
+public class VarDefaultElement extends IdentifierElement implements
+		VariableTokenSeparatorElement {
 
 	private Element executeElement;
-	public ElementIndex normalize(int index, List elementList, ParsingSession session)
-			throws ParseException {
+
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
 		if (elementList.size() > index) {
 			executeElement = (Element) elementList.remove(index);
 			if (executeElement instanceof SpecialVariableElementImpl)
-				((SpecialVariableElementImpl) executeElement).setShouldEvaluateSeparators(true);
+				((SpecialVariableElementImpl) executeElement)
+						.setShouldEvaluateSeparators(true);
 			executeElement.normalize(index, elementList, session);
 			return null;
-		}
-		else {
+		} else {
 			throw new ParseException(this, "Default elements must have a value");
 		}
 	}
@@ -32,12 +39,13 @@ public class VarDefaultElement extends IdentifierElement implements VariableToke
 		return "!" + executeElement;
 	}
 
-	public Object execute(
-			Object source, RetrievalContext retrievalContext, String contextHint, ExtendedContext context) {
+	public Object execute(Object source, RetrievalContext retrievalContext,
+			String contextHint, ExtendedContext context) {
 		return objectValue(context);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		return executeElement.objectValue(context);
 	}
 

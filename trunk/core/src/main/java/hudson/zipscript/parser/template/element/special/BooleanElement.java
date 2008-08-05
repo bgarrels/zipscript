@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.special;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,7 +20,7 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 
 	private Boolean value;
 
-	public BooleanElement (boolean value) {
+	public BooleanElement(boolean value) {
 		this.value = new Boolean(value);
 	}
 
@@ -26,10 +31,10 @@ public class BooleanElement extends AbstractElement implements SpecialElement {
 			return "false";
 	}
 
-	public ElementIndex normalize(
-			int index, List elementList, ParsingSession session) throws ParseException {
-		return SpecialElementNormalizer.normalizeSpecialElement(
-				this, index, elementList, session);
+	public ElementIndex normalize(int index, List elementList,
+			ParsingSession session) throws ParseException {
+		return SpecialElementNormalizer.normalizeSpecialElement(this, index,
+				elementList, session);
 	}
 
 	public Object objectValue(ExtendedContext context) {

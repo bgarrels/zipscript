@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.setdir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -21,15 +26,15 @@ import java.util.Map;
 public class NewMapElement extends AbstractElement implements Element {
 
 	List attributes = null;
-	
-	public NewMapElement (MapElement me, ParsingSession session, Element setElement)
-	throws ParseException {
+
+	public NewMapElement(MapElement me, ParsingSession session,
+			Element setElement) throws ParseException {
 		List children = me.getChildren();
 		if (null != children && children.size() > 0) {
 			attributes = new ArrayList();
 			while (children.size() > 0) {
-				ElementAttribute ea = AttributeUtil.getNamedAttribute(
-						children, session, setElement);
+				ElementAttribute ea = AttributeUtil.getNamedAttribute(children,
+						session, setElement);
 				attributes.add(ea);
 			}
 		}
@@ -57,7 +62,7 @@ public class NewMapElement extends AbstractElement implements Element {
 			throws ExecutionException {
 		Map rtn = new HashMap();
 		if (null != attributes) {
-			for (Iterator i=attributes.iterator(); i.hasNext(); ) {
+			for (Iterator i = attributes.iterator(); i.hasNext();) {
 				ElementAttribute ea = (ElementAttribute) i.next();
 				Object val = ea.getValue().objectValue(context);
 				if (null != val)

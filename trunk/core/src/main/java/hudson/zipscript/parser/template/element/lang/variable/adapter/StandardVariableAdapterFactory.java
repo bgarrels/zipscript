@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import hudson.zipscript.parser.Constants;
@@ -95,11 +100,12 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			return IteratorAdapter.INSTANCE;
 		else if (sequence instanceof NodeList)
 			return NodeListSequenceAdapter.INSTANCE;
-		else return null;
+		else
+			return null;
 	}
 
-	public SpecialMethod getSpecialMethod(
-			String method, Element[] parameters, ParsingSession parsingSession, Element element) {
+	public SpecialMethod getSpecialMethod(String method, Element[] parameters,
+			ParsingSession parsingSession, Element element) {
 		try {
 			// object methods
 			if (method.equals("void"))
@@ -122,10 +128,13 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return new ObjectValueSpecialMethod(element);
 			else if (method.equals("booleanValue"))
 				return new BooleanValueSpecialMethod();
-	
-			// string methods - these are a special case as we will turn objects into strings
-			SpecialMethod sm = getStringEscapingStringMethod(method, parsingSession);
-			if (null != sm) return sm;
+
+			// string methods - these are a special case as we will turn objects
+			// into strings
+			SpecialMethod sm = getStringEscapingStringMethod(method,
+					parsingSession);
+			if (null != sm)
+				return sm;
 			else if (method.equals("leftPad"))
 				return new LPadSpecialMethod(parameters);
 			else if (method.equals("rightPad"))
@@ -136,7 +145,6 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return IsLowerCaseSpecialMethod.INSTANCE;
 			else if (method.equals("isUpperCase"))
 				return IsUpperCaseSpecialMethod.INSTANCE;
-	
 
 			else if (method.equals("round"))
 				return RoundSpecialMethod.INSTANCE;
@@ -145,17 +153,14 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			else if (method.equals("floor"))
 				return FloorSpecialMethod.INSTANCE;
 
-			
 			else if (method.equals("jsDate"))
 				return JSDateSpecialMethod.INSTANCE;
 			else if (method.equals("jsDateTime"))
 				return JSDateTimeSpecialMethod.INSTANCE;
 
-
 			else if (method.equals("xpath"))
 				return new XPathSpecialMethod(parameters);
 
-			
 			// sequence special methods
 			else if (method.equals("length"))
 				return new LengthSpecialMethod();
@@ -169,7 +174,6 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return new AddLastSpecialMethod(parameters);
 			else if (method.equals("contains"))
 				return new ContainsSpecialMethod(parameters);
-	
 
 			// map special methods
 			if (method.equals("keys"))
@@ -178,23 +182,25 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return new ValuesSpecialMethod();
 
 			return null;
-		}
-		catch (ExecutionException e) {
+		} catch (ExecutionException e) {
 			e.setElement(element);
 			throw e;
 		}
 	}
-	
-	public SpecialMethod getStringEscapingStringMethod (
-			String method, ParsingSession session) {
+
+	public SpecialMethod getStringEscapingStringMethod(String method,
+			ParsingSession session) {
 		if (method.equals("upperFirst"))
-			return getStringSpecialMethod(null, UpperFirstSpecialMethod.INSTANCE);
+			return getStringSpecialMethod(null,
+					UpperFirstSpecialMethod.INSTANCE);
 		else if (method.equals("lowerFirst"))
-			return getStringSpecialMethod(null, LowerFirstSpecialMethod.INSTANCE);
+			return getStringSpecialMethod(null,
+					LowerFirstSpecialMethod.INSTANCE);
 		else if (method.equals("lowerCase"))
 			return getStringSpecialMethod(null, LowerCaseSpecialMethod.INSTANCE);
 		else if (method.equals("humpbackCase"))
-			return getStringSpecialMethod(null, HumpbackCaseSpecialMethod.INSTANCE);
+			return getStringSpecialMethod(null,
+					HumpbackCaseSpecialMethod.INSTANCE);
 		else if (method.equals("upperCase"))
 			return getStringSpecialMethod(null, UpperCaseSpecialMethod.INSTANCE);
 		else if (method.equals("html"))
@@ -207,12 +213,16 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 			return getStringSpecialMethod(null, new URLSpecialMethod(session));
 		else if (method.equals("xml"))
 			return getStringSpecialMethod(null, XMLSpecialMethod.INSTANCE);
-		else return null;
+		else
+			return null;
 	}
 
-	private SpecialMethod getStringSpecialMethod (Object source, SpecialMethod specialMethod) {
-		if (source instanceof String) return specialMethod;
-		else return new StringSpecialMethod(specialMethod);
+	private SpecialMethod getStringSpecialMethod(Object source,
+			SpecialMethod specialMethod) {
+		if (source instanceof String)
+			return specialMethod;
+		else
+			return new StringSpecialMethod(specialMethod);
 	}
 
 	public String getDefaultGetterMethod(Object obj) {
@@ -220,10 +230,8 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 	}
 
 	private static String[] reservedContextAttributes = new String[] {
-		Constants.GLOBAL,
-		Constants.RESOURCE,
-		Constants.UNIQUE_ID
-	};
+			Constants.GLOBAL, Constants.RESOURCE, Constants.UNIQUE_ID };
+
 	public String[] getReservedContextAttributes() {
 		return reservedContextAttributes;
 	}

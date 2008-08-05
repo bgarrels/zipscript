@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -8,8 +13,8 @@ public class TextDefaultElementFactory implements DefaultElementFactory {
 
 	public static TextDefaultElementFactory INSTANCE = new TextDefaultElementFactory();
 
-	public Element createDefaultElement(
-			String text, ParsingSession session, int currentPosition) {
+	public Element createDefaultElement(String text, ParsingSession session,
+			int currentPosition) {
 		TextElement element = new TextElement(text);
 		return element;
 	}

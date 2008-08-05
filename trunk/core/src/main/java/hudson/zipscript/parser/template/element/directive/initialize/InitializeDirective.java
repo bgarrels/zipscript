@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.initialize;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -9,11 +14,13 @@ import hudson.zipscript.parser.template.element.NonOutputElement;
 import java.io.Writer;
 import java.util.Iterator;
 
-public class InitializeDirective extends NestableElement implements NonOutputElement {
+public class InitializeDirective extends NestableElement implements
+		NonOutputElement {
 
 	private static final NullWriter NULL_WRITER = new NullWriter();
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		// this has no output
 	}
 
@@ -33,8 +40,8 @@ public class InitializeDirective extends NestableElement implements NonOutputEle
 		return false;
 	}
 
-	public void doInitialize (ExtendedContext context) {
-		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+	public void doInitialize(ExtendedContext context) {
+		for (Iterator i = getChildren().iterator(); i.hasNext();) {
 			((Element) i.next()).merge(context, NULL_WRITER);
 		}
 	}

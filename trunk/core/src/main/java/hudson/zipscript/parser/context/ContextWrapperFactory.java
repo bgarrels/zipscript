@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
@@ -24,14 +29,15 @@ public class ContextWrapperFactory {
 	private static final MathUtil mathUtil = new MathUtil();
 
 	private static ContextWrapperFactory instance;
-	public static final ContextWrapperFactory getInstance () {
+
+	public static final ContextWrapperFactory getInstance() {
 		if (null == instance)
 			instance = new ContextWrapperFactory();
 		return instance;
 	}
 
-	public ExtendedContext wrap (
-			Object obj, ParsingSession parsingSession, ResourceContainer resourceContainer) {
+	public ExtendedContext wrap(Object obj, ParsingSession parsingSession,
+			ResourceContainer resourceContainer) {
 		ExtendedContext context = null;
 
 		// wrap the context if necessary
@@ -45,7 +51,7 @@ public class ContextWrapperFactory {
 		// add plugin wrapping here
 		if (null != resourceContainer.getPlugins()) {
 			Context ctx = null;
-			for (int i=0; i<resourceContainer.getPlugins().length; i++) {
+			for (int i = 0; i < resourceContainer.getPlugins().length; i++) {
 				ctx = resourceContainer.getPlugins()[i].wrapContextObject(obj);
 				if (null != ctx) {
 					if (ctx instanceof ExtendedContext)
@@ -69,14 +75,15 @@ public class ContextWrapperFactory {
 		context.put(Constants.VARS, context, false);
 		context.put(Constants.GLOBAL, context, false);
 		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
-				"uniqueIdGenerator", resourceContainer.getInitParameters(), UniqueIdGenerator.class,
-				UniqueIdGeneratorImpl.class, null), false);
-		context.put(Constants.RESOURCE, ClassUtil.loadResource(
-				"i18n", resourceContainer.getInitParameters(), I18NResource.class,
+				"uniqueIdGenerator", resourceContainer.getInitParameters(),
+				UniqueIdGenerator.class, UniqueIdGeneratorImpl.class, null),
+				false);
+		context.put(Constants.RESOURCE, ClassUtil.loadResource("i18n",
+				resourceContainer.getInitParameters(), I18NResource.class,
 				I18NResourceImpl.class, null), false);
 		context.put(Constants.MATH, mathUtil, false);
 		if (null != resourceContainer.getPlugins()) {
-			for (int i=0; i<resourceContainer.getPlugins().length; i++) {
+			for (int i = 0; i < resourceContainer.getPlugins().length; i++) {
 				resourceContainer.getPlugins()[i].initialize(context);
 			}
 		}
@@ -85,13 +92,15 @@ public class ContextWrapperFactory {
 			// initialize macro imports
 			Map staticImports = parsingSession.getStaticMacroImports();
 			if (null != staticImports) {
-				for  (Iterator i=staticImports.entrySet().iterator(); i.hasNext(); ) {
+				for (Iterator i = staticImports.entrySet().iterator(); i
+						.hasNext();) {
 					Map.Entry entry = (Map.Entry) i.next();
-					context.addMacroImport((String) entry.getKey(), (String) entry.getValue());
+					context.addMacroImport((String) entry.getKey(),
+							(String) entry.getValue());
 				}
 			}
 		}
-		
+
 		if (null == context.getLocale())
 			context.setLocale(Locale.getDefault());
 

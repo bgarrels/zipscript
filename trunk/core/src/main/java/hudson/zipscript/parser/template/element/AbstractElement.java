@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element;
 
 import hudson.zipscript.parser.Constants;
@@ -12,7 +17,6 @@ import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.util.List;
 
-
 public abstract class AbstractElement implements Element {
 
 	private long elementPosition;
@@ -25,11 +29,10 @@ public abstract class AbstractElement implements Element {
 	public String toString() {
 		if (this instanceof SpecialElement) {
 			return ((SpecialElement) this).getTokenValue();
-		}
-		else if (this instanceof SpecialStringElement) {
+		} else if (this instanceof SpecialStringElement) {
 			return "'" + ((SpecialStringElement) this).getTokenValue() + "'";
-		}
-		else return super.toString();
+		} else
+			return super.toString();
 	}
 
 	public long getElementPosition() {
@@ -48,35 +51,42 @@ public abstract class AbstractElement implements Element {
 		this.elementLength = elementLength;
 	}
 
-	protected Element parseElement (
-			String contents, ParsingSession parsingSession, int startPosition)
-	throws ParseException {
-		ElementParsingSession eps = ExpressionParser.getInstance().parseToElement(
-				contents, getContentParsingPatternMatchers(),
-				getContentParsingDefaultElementFactory(), startPosition, parsingSession.getResourceContainer());
-		if (null != eps) return eps.element;
-		else return null;
+	protected Element parseElement(String contents,
+			ParsingSession parsingSession, int startPosition)
+			throws ParseException {
+		ElementParsingSession eps = ExpressionParser.getInstance()
+				.parseToElement(contents, getContentParsingPatternMatchers(),
+						getContentParsingDefaultElementFactory(),
+						startPosition, parsingSession.getResourceContainer());
+		if (null != eps)
+			return eps.element;
+		else
+			return null;
 	}
 
-	protected List parseElements (String contents, ParsingSession session, int startPosition) throws ParseException {
+	protected List parseElements(String contents, ParsingSession session,
+			int startPosition) throws ParseException {
 		return parseElements(contents, session, startPosition, true);
 	}
 
-	protected List parseElements (String contents, ParsingSession session, int startPosition, boolean hideEscaping) throws ParseException {
-		session = session.clone(new ParseParameters(
-				session.getResourceContainer(), true, true));
-		if (hideEscaping) session.setHideEscapeMethods(true);
-		List rtn = ExpressionParser.getInstance().parse(
-				contents, getContentParsingPatternMatchers(), getContentParsingDefaultElementFactory(),
-				session, startPosition).getElements();
+	protected List parseElements(String contents, ParsingSession session,
+			int startPosition, boolean hideEscaping) throws ParseException {
+		session = session.clone(new ParseParameters(session
+				.getResourceContainer(), true, true));
+		if (hideEscaping)
+			session.setHideEscapeMethods(true);
+		List rtn = ExpressionParser.getInstance().parse(contents,
+				getContentParsingPatternMatchers(),
+				getContentParsingDefaultElementFactory(), session,
+				startPosition).getElements();
 		return rtn;
 	}
 
-	protected PatternMatcher[] getContentParsingPatternMatchers () {
+	protected PatternMatcher[] getContentParsingPatternMatchers() {
 		return Constants.VARIABLE_MATCHERS;
 	}
 
-	protected DefaultElementFactory getContentParsingDefaultElementFactory () {
+	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
 		return DefaultVariablePatternMatcher.getInstance();
 	}
 
@@ -88,6 +98,6 @@ public abstract class AbstractElement implements Element {
 		this.parsingSession = parsingSession;
 	}
 
-	public void validate(ParsingSession session) throws ParseException {	
+	public void validate(ParsingSession session) throws ParseException {
 	}
 }

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.special.string;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -7,16 +12,15 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 
 import java.net.URLEncoder;
 
-
 public class URLSpecialMethod implements SpecialMethod {
 
 	private String encoding;
-	public URLSpecialMethod (ParsingSession parsingSession) {
+
+	public URLSpecialMethod(ParsingSession parsingSession) {
 		this.encoding = "UTF-8";
 	}
 
-	public Object execute(
-			Object source, RetrievalContext retrievalContext,
+	public Object execute(Object source, RetrievalContext retrievalContext,
 			String contextHint, ExtendedContext context) throws Exception {
 		return URLEncoder.encode((String) source, encoding);
 	}

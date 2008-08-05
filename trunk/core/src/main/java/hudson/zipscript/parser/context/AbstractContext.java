@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.context;
 
 import hudson.zipscript.ResourceContainer;
@@ -30,8 +35,8 @@ public abstract class AbstractContext implements ExtendedContext {
 
 	public void setParsingSession(ParsingSession parsingSession) {
 		this.parsingSession = parsingSession;
-		this.refreshTemplates = parsingSession.getParameters().getPropertyAsBoolean(
-				Constants.REFRESH_TEMPLATES, true);
+		this.refreshTemplates = parsingSession.getParameters()
+				.getPropertyAsBoolean(Constants.REFRESH_TEMPLATES, true);
 	}
 
 	public ResourceContainer getResourceContainer() {
@@ -43,8 +48,10 @@ public abstract class AbstractContext implements ExtendedContext {
 	}
 
 	public boolean isInitialized(Element topLevelElement) {
-		if (null == initializeMap) return false;
-		else return (null != initializeMap.get(topLevelElement));
+		if (null == initializeMap)
+			return false;
+		else
+			return (null != initializeMap.get(topLevelElement));
 	}
 
 	public void markInitialized(Element topLevelElement) {
@@ -53,13 +60,15 @@ public abstract class AbstractContext implements ExtendedContext {
 		initializeMap.put(topLevelElement, Boolean.TRUE);
 	}
 
-	public MacroDirective getMacro (String name) {
+	public MacroDirective getMacro(String name) {
 		return getParsingSession().getMacro(name);
 	}
 
-	public String getMacroImportPath (String namespace) {
-		if (null == importDefinitions) return null;
-		else return (String) importDefinitions.get(namespace);
+	public String getMacroImportPath(String namespace) {
+		if (null == importDefinitions)
+			return null;
+		else
+			return (String) importDefinitions.get(namespace);
 	}
 
 	public void addMacroImport(String namespace, String macroPath) {
@@ -68,7 +77,7 @@ public abstract class AbstractContext implements ExtendedContext {
 		importDefinitions.put(namespace, macroPath);
 	}
 
-	public Locale getLocale () {
+	public Locale getLocale() {
 		return locale;
 	}
 
@@ -86,6 +95,6 @@ public abstract class AbstractContext implements ExtendedContext {
 	}
 
 	public void addToElementScope(List nestingStack) {
-		// this is a root element	
+		// this is a root element
 	}
 }

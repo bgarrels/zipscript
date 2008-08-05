@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -5,12 +10,13 @@ import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 
-public class SpecialVariableDefaultEelementFactory implements DefaultElementFactory {
+public class SpecialVariableDefaultEelementFactory implements
+		DefaultElementFactory {
 
 	public static final SpecialVariableDefaultEelementFactory INSTANCE = new SpecialVariableDefaultEelementFactory();
 
-	public Element createDefaultElement(
-			String text, ParsingSession session, int contentPosition) throws ParseException {
+	public Element createDefaultElement(String text, ParsingSession session,
+			int contentPosition) throws ParseException {
 		SpecialVariableElementImpl element = new SpecialVariableElementImpl(
 				text, session, contentPosition);
 		element.setShouldEvaluateSeparators(false);

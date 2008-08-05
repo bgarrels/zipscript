@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.group;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -24,21 +29,21 @@ public class ListElement extends NestableElement {
 		ElementIndex rtn = super.normalize(index, elementList, session);
 		// load the elements into a list
 		boolean waslastEntryComma = true;
-		for (Iterator i=getChildren().iterator(); i.hasNext(); ) {
+		for (Iterator i = getChildren().iterator(); i.hasNext();) {
 			Element e = (Element) i.next();
-			if (e instanceof WhitespaceElement) continue;
+			if (e instanceof WhitespaceElement)
+				continue;
 			if (waslastEntryComma) {
 				if (e instanceof CommaElement) {
 					throw new ParseException(this, "Unexpected Comma");
-				}
-				else {
+				} else {
 					waslastEntryComma = false;
 					listElements.add(e);
 				}
-			}
-			else {
+			} else {
 				if (!(e instanceof CommaElement))
-					throw new ParseException(this, "Expecting comma but found '" + e.toString() + "'");
+					throw new ParseException(this,
+							"Expecting comma but found '" + e.toString() + "'");
 				else {
 					waslastEntryComma = true;
 				}
@@ -52,22 +57,26 @@ public class ListElement extends NestableElement {
 		throw new ExecutionException("Lists can not be merged directly", this);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		List l = new ArrayList();
-		for (Iterator i=listElements.iterator(); i.hasNext(); ) {
+		for (Iterator i = listElements.iterator(); i.hasNext();) {
 			l.add(((Element) i.next()).objectValue(context));
 		}
 		return l;
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		if (getChildren().size() == 1)
 			return ((Element) getChildren().get(0)).booleanValue(context);
 		else
-			throw new ExecutionException("lists can not be evaluated as booleans", this);
+			throw new ExecutionException(
+					"lists can not be evaluated as booleans", this);
 	}
 
-	protected boolean isStartElement(hudson.zipscript.parser.template.element.Element e) {
+	protected boolean isStartElement(
+			hudson.zipscript.parser.template.element.Element e) {
 		return (e instanceof ListElement);
 	}
 
@@ -79,8 +88,9 @@ public class ListElement extends NestableElement {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		if (null != getChildren()) {
-			for (int i=0; i<getChildren().size(); i++) {
-				if (i > 0) sb.append(", ");
+			for (int i = 0; i < getChildren().size(); i++) {
+				if (i > 0)
+					sb.append(", ");
 				sb.append(getChildren().get(i));
 			}
 		}

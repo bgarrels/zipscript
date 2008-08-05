@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang;
 
 import hudson.zipscript.parser.exception.ParseException;
@@ -15,17 +20,13 @@ public class WhitespacePatternMatcher implements PatternMatcher {
 	}
 
 	public char[][] getStartTokens() {
-		return new char[][] {
-			" ".toCharArray(),
-			"\r\n".toCharArray(),
-			"\n".toCharArray(),
-			"\t".toCharArray()
-		};
+		return new char[][] { " ".toCharArray(), "\r\n".toCharArray(),
+				"\n".toCharArray(), "\t".toCharArray() };
 	}
 
-	public Element match(char previousChar, char[] startChars, CharBuffer reader,
-			ParsingSession session, List elements, StringBuffer unmatchedChars)
-			throws ParseException {
+	public Element match(char previousChar, char[] startChars,
+			CharBuffer reader, ParsingSession session, List elements,
+			StringBuffer unmatchedChars) throws ParseException {
 		return new WhitespaceElementImpl();
 	}
 }

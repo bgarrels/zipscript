@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.escape;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,10 +20,11 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-public class NoEscapeDirective extends NestableElement implements MacroInstanceAware {
+public class NoEscapeDirective extends NestableElement implements
+		MacroInstanceAware {
 
-	public NoEscapeDirective (String contents, int contentIndex, ParsingSession parsingSession)
-	throws ParseException {
+	public NoEscapeDirective(String contents, int contentIndex,
+			ParsingSession parsingSession) throws ParseException {
 	}
 
 	public ElementIndex normalize(int index, List elementList,
@@ -29,13 +35,16 @@ public class NoEscapeDirective extends NestableElement implements MacroInstanceA
 		return rtn;
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		appendElements(getChildren(), context, sw);
 	}
 
-	public void getMatchingTemplateDefinedParameters(
-			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
-		appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+	public void getMatchingTemplateDefinedParameters(ExtendedContext context,
+			List macroInstanceList, MacroDirective macro,
+			Map additionalContextEntries) throws ExecutionException {
+		appendTemplateDefinedParameters(getChildren(), context,
+				macroInstanceList, macro, additionalContextEntries);
 	}
 
 	protected boolean isStartElement(Element e) {

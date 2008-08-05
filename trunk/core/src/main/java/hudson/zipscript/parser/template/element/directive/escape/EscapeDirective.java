@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.escape;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -15,17 +20,20 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
-public class EscapeDirective extends NestableElement implements MacroInstanceAware {
+public class EscapeDirective extends NestableElement implements
+		MacroInstanceAware {
 
 	private SpecialMethod escapeMethod;
 
-	public EscapeDirective (String contents, int contentIndex, ParsingSession parsingSession)
-	throws ParseException {
+	public EscapeDirective(String contents, int contentIndex,
+			ParsingSession parsingSession) throws ParseException {
 		String method = contents.trim();
-		escapeMethod = parsingSession.getResourceContainer().getVariableAdapterFactory().getStringEscapingStringMethod(
-				method, parsingSession);
+		escapeMethod = parsingSession.getResourceContainer()
+				.getVariableAdapterFactory().getStringEscapingStringMethod(
+						method, parsingSession);
 		if (null == escapeMethod)
-			throw new ParseException(contentIndex, "Undefined escape method '" + escapeMethod + "'");
+			throw new ParseException(contentIndex, "Undefined escape method '"
+					+ escapeMethod + "'");
 	}
 
 	public ElementIndex normalize(int index, List elementList,
@@ -36,13 +44,16 @@ public class EscapeDirective extends NestableElement implements MacroInstanceAwa
 		return rtn;
 	}
 
-	public void merge(ExtendedContext context, Writer sw) throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		appendElements(getChildren(), context, sw);
 	}
 
-	public void getMatchingTemplateDefinedParameters(
-			ExtendedContext context, List macroInstanceList, MacroDirective macro, Map additionalContextEntries) throws ExecutionException {
-		appendTemplateDefinedParameters(getChildren(), context, macroInstanceList, macro, additionalContextEntries);
+	public void getMatchingTemplateDefinedParameters(ExtendedContext context,
+			List macroInstanceList, MacroDirective macro,
+			Map additionalContextEntries) throws ExecutionException {
+		appendTemplateDefinedParameters(getChildren(), context,
+				macroInstanceList, macro, additionalContextEntries);
 	}
 
 	protected boolean isStartElement(Element e) {

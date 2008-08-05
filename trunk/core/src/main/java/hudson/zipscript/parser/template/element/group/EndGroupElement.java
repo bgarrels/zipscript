@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.group;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -13,12 +18,16 @@ public class EndGroupElement extends NestableDirective {
 		StringUtil.append(')', sw);
 	}
 
-	public boolean booleanValue(ExtendedContext context) throws ExecutionException {
-		throw new ExecutionException("groups can not be evaluated as booleans", this);
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
+		throw new ExecutionException("groups can not be evaluated as booleans",
+				this);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
-		throw new ExecutionException("groups can not be evaluated as objects", this);
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
+		throw new ExecutionException("groups can not be evaluated as objects",
+				this);
 	}
 
 	public String toString() {

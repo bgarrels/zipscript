@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript;
 
 import hudson.zipscript.parser.template.element.component.Component;
@@ -28,11 +33,14 @@ public class ResourceContainer {
 	private ResourceLoader macroLibResourceLoader = null;
 	private ResourceLoader evalResourceLoader = new StringResourceLoader();
 
-
-	public ResourceContainer (
-			ZipEngine zipEngine, Plugin[] plugins, MacroManager macroManager, VariableAdapterFactory variableAdapterFactory,
-			ResourceLoader templateResourceLoader, ResourceLoader includeResourceLoader, ResourceLoader macroLibResourceLoader, ResourceLoader evalResourceLoader,
-			Component[] components, Map initParameters) {
+	public ResourceContainer(ZipEngine zipEngine, Plugin[] plugins,
+			MacroManager macroManager,
+			VariableAdapterFactory variableAdapterFactory,
+			ResourceLoader templateResourceLoader,
+			ResourceLoader includeResourceLoader,
+			ResourceLoader macroLibResourceLoader,
+			ResourceLoader evalResourceLoader, Component[] components,
+			Map initParameters) {
 		this.zipEngine = zipEngine;
 		this.plugins = plugins;
 		this.macroManager = macroManager;
@@ -51,25 +59,32 @@ public class ResourceContainer {
 	public MacroManager getMacroManager() {
 		return macroManager;
 	}
+
 	public Component[] getComponents() {
 		return components;
 	}
+
 	public VariableAdapterFactory getVariableAdapterFactory() {
 		return variableAdapterFactory;
 	}
+
 	public Map getInitParameters() {
 		return initParameters;
 	}
+
 	public void setMacroManager(MacroManager macroManager) {
 		this.macroManager = macroManager;
 	}
+
 	public void setComponents(Component[] components) {
 		this.components = components;
 	}
+
 	public void setVariableAdapterFactory(
 			VariableAdapterFactory variableAdapterFactory) {
 		this.variableAdapterFactory = variableAdapterFactory;
 	}
+
 	public void setInitParameters(Map initParameters) {
 		this.initParameters = initParameters;
 	}
@@ -95,12 +110,12 @@ public class ResourceContainer {
 		else
 			return includeResourceLoader;
 	}
-	
+
 	public Plugin[] getPlugins() {
 		return plugins;
 	}
 
-	public ZipEngine getEngine () {
+	public ZipEngine getEngine() {
 		return zipEngine;
 	}
 
@@ -120,12 +135,12 @@ public class ResourceContainer {
 		this.evalResourceLoader = evalResourceLoader;
 	}
 
-	public Translator getTranslator () {
+	public Translator getTranslator() {
 		synchronized (this) {
 			if (null == translator) {
-				translator = (Translator) ClassUtil.loadResource(
-						"translator", initParameters,
-							Translator.class, GoogleTranslator.class, null);
+				translator = (Translator) ClassUtil.loadResource("translator",
+						initParameters, Translator.class,
+						GoogleTranslator.class, null);
 			}
 		}
 		return translator;

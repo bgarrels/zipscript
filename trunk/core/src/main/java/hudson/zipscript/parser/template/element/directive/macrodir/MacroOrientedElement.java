@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -12,23 +17,25 @@ public interface MacroOrientedElement extends Element {
 
 	public String getName();
 
-	public boolean isBodyEmpty ();
+	public boolean isBodyEmpty();
 
-	public List getMacroDefinitionAttributes (ExtendedContext context);
+	public List getMacroDefinitionAttributes(ExtendedContext context);
 
 	public List getAttributes();
 
-	public String getNestedContent (ExtendedContext context) throws ExecutionException;
+	public String getNestedContent(ExtendedContext context)
+			throws ExecutionException;
 
 	public MacroHeaderElement getHeader();
 
 	public MacroFooterElement getFooter();
 
-	public void writeNestedContent (ExtendedContext context, Writer writer) throws ExecutionException;
+	public void writeNestedContent(ExtendedContext context, Writer writer)
+			throws ExecutionException;
 
 	public boolean isOrdinal();
 
 	public boolean isInMacroDefinition();
 
-	public ElementAttribute getAttribute (String name);
+	public ElementAttribute getAttribute(String name);
 }

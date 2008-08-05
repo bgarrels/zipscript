@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.comparator;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -14,43 +19,46 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public abstract class AbstractComparatorElement extends AbstractElement implements ComparatorElement {
+public abstract class AbstractComparatorElement extends AbstractElement
+		implements ComparatorElement {
 
 	private Element leftHandSide;
 	private Element rightHandSide;
 
-	public boolean booleanValue (ExtendedContext context) throws ExecutionException {
+	public boolean booleanValue(ExtendedContext context)
+			throws ExecutionException {
 		Object lhsValue = getValue(leftHandSide, context);
 		Object rhsValue = getValue(rightHandSide, context);
 		return compare(lhsValue, rhsValue);
 	}
 
-	public Object objectValue(ExtendedContext context) throws ExecutionException {
+	public Object objectValue(ExtendedContext context)
+			throws ExecutionException {
 		return new Boolean(booleanValue(context));
 	}
 
-	protected Object getValue (Element element, ExtendedContext context)
-	throws ExecutionException{
+	protected Object getValue(Element element, ExtendedContext context)
+			throws ExecutionException {
 		return element.objectValue(context);
 	}
 
-	protected abstract boolean compare (Object lhs, Object rhs);
+	protected abstract boolean compare(Object lhs, Object rhs);
 
-	protected abstract String getComparatorString ();
+	protected abstract String getComparatorString();
 
-	public void merge (ExtendedContext context, Writer sw)
-	throws ExecutionException {
+	public void merge(ExtendedContext context, Writer sw)
+			throws ExecutionException {
 		Object rtn = objectValue(context);
 		if (null != rtn) {
 			try {
 				sw.write(rtn.toString().toCharArray());
+			} catch (IOException e) {
 			}
-			catch (IOException e) {}
 		}
 	}
 
-	public ElementIndex normalize(int index, List elements, ParsingSession session) throws ParseException {
+	public ElementIndex normalize(int index, List elements,
+			ParsingSession session) throws ParseException {
 		if (elements.size() == 1) {
 			return null;
 		}
@@ -71,19 +79,19 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 		int i = 1;
 		while (null == lhs || lhs instanceof WhitespaceElement) {
 			if (index > 0) {
-				lhs = (Element) elements.remove(index-i);
-				i ++;
-				returnIndex --;
-				checkIndex --;
-			}
-			else {
-				throw new ParseException(this, "Improperly formed expression '" + this.toString() + "'");
+				lhs = (Element) elements.remove(index - i);
+				i++;
+				returnIndex--;
+				checkIndex--;
+			} else {
+				throw new ParseException(this, "Improperly formed expression '"
+						+ this.toString() + "'");
 			}
 		}
 		setLeftHandSide(lhs);
 
 		// see if we need to deal with priority
-		for (int j=checkIndex; j<elements.size(); j++) {
+		for (int j = checkIndex; j < elements.size(); j++) {
 			if (elements.get(j) instanceof WhitespaceElement)
 				continue;
 			else if (elements.get(j) instanceof ComparatorElement) {
@@ -92,12 +100,12 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 					// this will be our new right side
 					// reset the right side context
 					elements.add(j, getRightHandSide());
-					setRightHandSide((ComparatorElement) elements.remove(j+1));
-					ce.normalize(j+1, elements, session);
+					setRightHandSide((ComparatorElement) elements.remove(j + 1));
+					ce.normalize(j + 1, elements, session);
 					break;
 				}
-			}
-			else break;
+			} else
+				break;
 		}
 		return new ElementIndex(this, returnIndex);
 	}
@@ -110,7 +118,8 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 	}
 
 	/**
-	 * @param leftHandSide the leftHandSide to set
+	 * @param leftHandSide
+	 *            the leftHandSide to set
 	 */
 	public void setLeftHandSide(Element leftHandSide) {
 		this.leftHandSide = leftHandSide;
@@ -124,13 +133,15 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 	}
 
 	/**
-	 * @param rightHandSide the rightHandSide to set
+	 * @param rightHandSide
+	 *            the rightHandSide to set
 	 */
 	public void setRightHandSide(Element rightHandSide) {
 		this.rightHandSide = rightHandSide;
 	}
 
 	List children = null;
+
 	public List getChildren() {
 		if (null == children) {
 			children = new ArrayList();
@@ -140,7 +151,8 @@ public abstract class AbstractComparatorElement extends AbstractElement implemen
 		return children;
 	}
 
-	public String toString () {
-		return getLeftHandSide() + " " + getComparatorString() + " " + getRightHandSide();
+	public String toString() {
+		return getLeftHandSide() + " " + getComparatorString() + " "
+				+ getRightHandSide();
 	}
 }

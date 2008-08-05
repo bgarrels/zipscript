@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.resource.macrolib;
 
 import hudson.zipscript.ResourceContainer;
@@ -24,22 +29,24 @@ public class MacroManager {
 	private ResourceContainer resourceContainer;
 	private Object resourceLoaderParameter;
 
-	public void addMacroLibrary (
-			String namespace, String resourcePath, ResourceLoader resourceLoader,
+	public void addMacroLibrary(String namespace, String resourcePath,
+			ResourceLoader resourceLoader,
 			VariableAdapterFactory variableAdapterFactory)
-	throws ParseException {
-		if (null == macroLibraries) macroLibraries = new HashMap();
-		Resource resource = resourceLoader.getResource(resourcePath, resourceLoaderParameter);
+			throws ParseException {
+		if (null == macroLibraries)
+			macroLibraries = new HashMap();
+		Resource resource = resourceLoader.getResource(resourcePath,
+				resourceLoaderParameter);
 		String contents = IOUtil.toString(resource.getInputStream());
-		ParsingResult pr = ExpressionParser.getInstance().parse(
-				contents, resourceContainer.getComponents(),
+		ParsingResult pr = ExpressionParser.getInstance().parse(contents,
+				resourceContainer.getComponents(),
 				TextDefaultElementFactory.INSTANCE, 0, resourceContainer);
 		List l = pr.getElements();
 		MacroLibrary macroLibrary = new MacroLibrary(namespace, resource);
-		for (Iterator i=l.iterator(); i.hasNext(); ) {
+		for (Iterator i = l.iterator(); i.hasNext();) {
 			Element e = (Element) i.next();
 			if (e instanceof MacroDirective) {
-				macroLibrary.addMacroDefinition((MacroDirective) e); 
+				macroLibrary.addMacroDefinition((MacroDirective) e);
 			}
 		}
 		if (macroLibrary.getMacroNames().size() > 0) {
@@ -47,25 +54,27 @@ public class MacroManager {
 		}
 	}
 
-	public MacroDirective reloadMacro (String name, String namespace, MacroProvider defaultMacroProvider) {
+	public MacroDirective reloadMacro(String name, String namespace,
+			MacroProvider defaultMacroProvider) {
 		if (null != namespace) {
 			String path = defaultMacroProvider.getMacroImportPath(namespace);
 			if (null != path) {
 				macroLibraries.remove(path);
-			}
-			else  {
+			} else {
 				macroLibraries.remove(namespace);
 			}
 		}
 		return getMacro(name, namespace, defaultMacroProvider);
 	}
 
-	public MacroDirective getMacro (String name, String namespace, MacroProvider defaultMacroProvider) {
+	public MacroDirective getMacro(String name, String namespace,
+			MacroProvider defaultMacroProvider) {
 		if (null == namespace) {
-			if (null != defaultMacroProvider) return defaultMacroProvider.getMacro(name);
-			else return null;
-		}
-		else {
+			if (null != defaultMacroProvider)
+				return defaultMacroProvider.getMacro(name);
+			else
+				return null;
+		} else {
 			String path = defaultMacroProvider.getMacroImportPath(namespace);
 			if (null != path) {
 				// import with macro provider
@@ -73,22 +82,25 @@ public class MacroManager {
 				if (null == lib) {
 					// load the macro library
 					try {
-						addMacroLibrary(path, path, resourceContainer.getMacroLibResourceLoader(),
-								resourceContainer.getVariableAdapterFactory());
-					}
-					catch (ParseException e) {
+						addMacroLibrary(path, path, resourceContainer
+								.getMacroLibResourceLoader(), resourceContainer
+								.getVariableAdapterFactory());
+					} catch (ParseException e) {
 						throw new ExecutionException(e.getMessage(), null);
 					}
 				}
 				lib = (MacroLibrary) macroLibraries.get(path);
-				if (null != lib) return lib.getMacro(name);
-				else return null;
-			}
-			else  {
+				if (null != lib)
+					return lib.getMacro(name);
+				else
+					return null;
+			} else {
 				// import added at engine level
 				MacroLibrary lib = (MacroLibrary) macroLibraries.get(namespace);
-				if (null != lib) return lib.getMacro(name);
-				else return null;
+				if (null != lib)
+					return lib.getMacro(name);
+				else
+					return null;
 			}
 		}
 	}

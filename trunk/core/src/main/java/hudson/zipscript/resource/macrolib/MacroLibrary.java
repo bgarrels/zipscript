@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.resource.macrolib;
 
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
@@ -13,25 +18,25 @@ public class MacroLibrary implements MacroProvider {
 	private Resource resource;
 	private Map macroDefinitions = new HashMap();
 
-	public MacroLibrary (String namespace, Resource resource) {
+	public MacroLibrary(String namespace, Resource resource) {
 		this.namespace = namespace;
 		this.resource = resource;
 	}
 
-	public boolean hasBeenModified () {
+	public boolean hasBeenModified() {
 		return resource.hasBeenModified();
 	}
 
-	public Set getMacroNames () {
+	public Set getMacroNames() {
 		return macroDefinitions.keySet();
 	}
 
-	public void addMacroDefinition (MacroDirective macro) {
+	public void addMacroDefinition(MacroDirective macro) {
 		macro.setMacroLibrary(this);
 		macroDefinitions.put(macro.getName(), macro);
 	}
-	
-	public MacroDirective getMacro  (String name) {
+
+	public MacroDirective getMacro(String name) {
 		return (MacroDirective) macroDefinitions.get(name);
 	}
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.template.element.Element;
@@ -12,13 +17,15 @@ public class MacroDefinitionAttribute {
 	private boolean isTemplateDefinedParameter;
 	private List tdpAttributes;
 
-	public MacroDefinitionAttribute (String name, Element defaultValue, boolean isRequired) {
+	public MacroDefinitionAttribute(String name, Element defaultValue,
+			boolean isRequired) {
 		this.name = name;
 		this.defaultValue = defaultValue;
 		this.isRequired = isRequired;
 	}
 
-	public MacroDefinitionAttribute (String name, List tdpAttributes, boolean isRequired) {
+	public MacroDefinitionAttribute(String name, List tdpAttributes,
+			boolean isRequired) {
 		this.name = name;
 		this.tdpAttributes = tdpAttributes;
 		this.isRequired = isRequired;
@@ -61,7 +68,7 @@ public class MacroDefinitionAttribute {
 		this.isTemplateDefinedParameter = isTemplateDefinedParameter;
 	}
 
-	public List getTDPAttributes () {
+	public List getTDPAttributes() {
 		return tdpAttributes;
 	}
 }

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.directive.importdir;
 
 import hudson.zipscript.parser.context.ExtendedContext;
@@ -23,8 +28,8 @@ public class ImportDirective extends AbstractDirective {
 	private String contents;
 	private int contentStartPosition;
 
-	public ImportDirective (String contents, ParsingSession session, int contentStartPosition)
-	throws ParseException {
+	public ImportDirective(String contents, ParsingSession session,
+			int contentStartPosition) throws ParseException {
 		this.contents = contents;
 		this.contentStartPosition = contentStartPosition;
 	}
@@ -32,19 +37,21 @@ public class ImportDirective extends AbstractDirective {
 	public void validate(ParsingSession session) throws ParseException {
 		int index = contents.indexOf(" as ");
 		if (index == -1) {
-			throw new ParseException(this, "Invalid formed import.  Should be [#import pathElement as reference/]");
+			throw new ParseException(this,
+					"Invalid formed import.  Should be [#import pathElement as reference/]");
 		}
 		String s1 = contents.substring(0, index).trim();
-		this.namespace = contents.substring(index+4, contents.length()).trim();
+		this.namespace = contents.substring(index + 4, contents.length())
+				.trim();
 
 		// evaluate the import
-		importElement = new VariableElement(false, true, s1.trim(), session, contentStartPosition);
+		importElement = new VariableElement(false, true, s1.trim(), session,
+				contentStartPosition);
 		if (this.importElement.isStatic()) {
 			// go ahead and add the macro
-			session.addMacroImport(namespace, (String) this.importElement.objectValue(
-					new MapContextWrapper(new HashMap())));
-		}
-		else {
+			session.addMacroImport(namespace, (String) this.importElement
+					.objectValue(new MapContextWrapper(new HashMap())));
+		} else {
 			session.addDynamicMacroImport(namespace);
 		}
 	}
@@ -55,7 +62,8 @@ public class ImportDirective extends AbstractDirective {
 			// we have to add during the merge
 			Object path = importElement.objectValue(context);
 			if (null == path)
-				throw new ExecutionException("Null import path evaluated for '" + this + "'", this);
+				throw new ExecutionException("Null import path evaluated for '"
+						+ this + "'", this);
 			context.addMacroImport(namespace, path.toString());
 		}
 	}

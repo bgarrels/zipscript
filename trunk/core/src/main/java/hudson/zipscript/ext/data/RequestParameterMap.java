@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.ext.data;
 
 import java.util.Collection;
@@ -10,11 +15,11 @@ public class RequestParameterMap implements Map {
 
 	HttpServletRequest request;
 
-	public RequestParameterMap (HttpServletRequest request) {
+	public RequestParameterMap(HttpServletRequest request) {
 		this.request = request;
 	}
 
-	public String get (String key) {
+	public String get(String key) {
 		return request.getParameter(key);
 	}
 
@@ -39,8 +44,10 @@ public class RequestParameterMap implements Map {
 	}
 
 	public Object get(Object key) {
-		if (null == key) return null;
-		else return request.getParameter(key.toString());
+		if (null == key)
+			return null;
+		else
+			return request.getParameter(key.toString());
 	}
 
 	public boolean isEmpty() {

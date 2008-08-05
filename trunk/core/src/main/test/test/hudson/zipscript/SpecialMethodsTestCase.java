@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package test.hudson.zipscript;
 
 import hudson.zipscript.ZipEngine;
@@ -16,7 +21,7 @@ import junit.framework.TestCase;
 
 public class SpecialMethodsTestCase extends TestCase {
 
-	public void testStringMethods () throws Exception {
+	public void testStringMethods() throws Exception {
 		Map context = new HashMap();
 		context.put("str", "test");
 		assertEquals("Test", merge("str?upperFirst", context));
@@ -37,7 +42,8 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("true", merge("'STR'?isUpperCase", context));
 		assertEquals("false", merge("'sTr'?isUpperCase", context));
 		context.put("str", "http://www.google.com?a=b&d=e");
-		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge("str?url", context));
+		assertEquals("http%3A%2F%2Fwww.google.com%3Fa%3Db%26d%3De", merge(
+				"str?url", context));
 		context.put("str", "com.foo.bar");
 		String[] arr = (String[]) ZipEngine.createInstance().getEvaluator(
 				"str?split('.')").objectValue(context);
@@ -47,7 +53,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("bar", arr[2]);
 	}
 
-	public void testNumberMethods () throws Exception {
+	public void testNumberMethods() throws Exception {
 		Map context = new HashMap();
 		context.put("myNumber", new Double("939.4323"));
 		assertEquals("940", merge("myNumber?ceiling", context));
@@ -57,7 +63,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("940", merge("myNumber?round", context));
 	}
 
-	public void testSequenceMethods () throws Exception {
+	public void testSequenceMethods() throws Exception {
 		Map context = new HashMap();
 		List l = new ArrayList();
 		l.add("abc");
@@ -68,18 +74,20 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("ghi", merge("myList?last", context));
 		assertEquals("true", merge("myList?contains('def')", context));
 		assertEquals("false", merge("myList?contains('foo')", context));
-		Object obj = ZipEngine.createInstance().getEvaluator("myList?length").objectValue(context);
+		Object obj = ZipEngine.createInstance().getEvaluator("myList?length")
+				.objectValue(context);
 		assertEquals(new Integer(3), obj);
-		
+
 		merge("myList?addFirst('joe')", context);
 		assertEquals("joe", merge("myList?first", context));
 		merge("myList?addLast('eoj')", context);
 		assertEquals("eoj", merge("myList?last", context));
-		obj = ZipEngine.createInstance().getEvaluator("myList?length").objectValue(context);
+		obj = ZipEngine.createInstance().getEvaluator("myList?length")
+				.objectValue(context);
 		assertEquals(new Integer(5), obj);
 	}
 
-	public void testMapMethods () throws Exception {
+	public void testMapMethods() throws Exception {
 		Map context = new HashMap();
 		Map map = new HashMap();
 		map.put("foo", "foo_value");
@@ -91,14 +99,14 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("foo", c.toArray()[0]);
 		assertEquals("bar", c.toArray()[1]);
 
-		c = (Collection) ZipEngine.createInstance().getEvaluator(
-				"myMap?values").objectValue(context);
+		c = (Collection) ZipEngine.createInstance()
+				.getEvaluator("myMap?values").objectValue(context);
 		assertEquals(2, c.size());
 		assertEquals("foo_value", c.toArray()[0]);
 		assertEquals("bar_value", c.toArray()[1]);
 	}
 
-	public void testObjectMethods () throws Exception {
+	public void testObjectMethods() throws Exception {
 		assertIsMethod("isBoolean", Boolean.TRUE, "not it");
 		assertIsMethod("isDate", new Date(), "not it");
 		assertIsMethod("isNumber", new Integer(1), "not it");
@@ -107,21 +115,26 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertIsMethod("isHash", new HashMap(), "not it");
 	}
 
-	private void assertIsMethod(String sm, Object matchVal, Object noMatchVal) throws ParseException {
+	private void assertIsMethod(String sm, Object matchVal, Object noMatchVal)
+			throws ParseException {
 		Map context = new HashMap();
 		context.put("shouldMatch", matchVal);
 		context.put("shouldNotMatch", noMatchVal);
 		String query = "shouldMatch?" + sm;
-		assertEquals(true, ZipEngine.createInstance().getEvaluator(query).booleanValue(context));
+		assertEquals(true, ZipEngine.createInstance().getEvaluator(query)
+				.booleanValue(context));
 		query = "shouldNotMatch?" + sm;
-		assertEquals(false, ZipEngine.createInstance().getEvaluator(query).booleanValue(context));
+		assertEquals(false, ZipEngine.createInstance().getEvaluator(query)
+				.booleanValue(context));
 	}
 
-	private String merge (String contents, Object context)
-	throws ParseException, ExecutionException, IOException {
-		Object rtn = ZipEngine.createInstance().getEvaluator(
-				contents).objectValue(context);
-		if (null != rtn) return rtn.toString();
-		else return null;
+	private String merge(String contents, Object context)
+			throws ParseException, ExecutionException, IOException {
+		Object rtn = ZipEngine.createInstance().getEvaluator(contents)
+				.objectValue(context);
+		if (null != rtn)
+			return rtn.toString();
+		else
+			return null;
 	}
 }

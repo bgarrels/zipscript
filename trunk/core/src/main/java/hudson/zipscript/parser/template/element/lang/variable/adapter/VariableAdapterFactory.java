@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008 Joe Hudson.  All rights reserved.
+ * License: LGPL <http://www.gnu.org/licenses/lgpl.html>
+ */
+
 package hudson.zipscript.parser.template.element.lang.variable.adapter;
 
 import hudson.zipscript.parser.template.data.ParsingSession;
@@ -6,17 +11,17 @@ import hudson.zipscript.parser.template.element.lang.variable.special.SpecialMet
 
 public interface VariableAdapterFactory {
 
-	public HashAdapter getHashAdapter (Object map);
+	public HashAdapter getHashAdapter(Object map);
 
-	public SequenceAdapter getSequenceAdapter (Object sequence);
+	public SequenceAdapter getSequenceAdapter(Object sequence);
 
-	public ObjectAdapter getObjectAdapter (Object object);
+	public ObjectAdapter getObjectAdapter(Object object);
 
-	public SpecialMethod getSpecialMethod (
-			String name, Element[] parameters, ParsingSession session, Element element);
+	public SpecialMethod getSpecialMethod(String name, Element[] parameters,
+			ParsingSession session, Element element);
 
-	public SpecialMethod getStringEscapingStringMethod (
-			String method, ParsingSession session);
+	public SpecialMethod getStringEscapingStringMethod(String method,
+			ParsingSession session);
 
 	public String getDefaultGetterMethod(Object obj);
 
