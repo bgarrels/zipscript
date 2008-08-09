@@ -495,8 +495,7 @@ public class VariableElement extends AbstractElement implements Element {
 				wasSeparator = false;
 				if (children.size() == 0) {
 					// qualified path to use as context key
-					children.add(new TextElementRootChild(((TextElement) e)
-							.getText()));
+					children.add(new TextElementRootChild(((TextElement) e)));
 				} else {
 					addChildProperty(((TextElement) e).getText(), children,
 							session.getResourceContainer()
@@ -649,11 +648,22 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 	}
 
+	private Boolean isStatic;
 	public boolean isStatic() {
+		if (null == isStatic) {
 		if (children.length == 1) {
-			return (children[0] instanceof TextElementRootChild);
-		} else
-			return false;
+			if (children[0] instanceof TextElementRootChild) {
+				isStatic = new Boolean(
+						((TextElementRootChild) children[0]).getTextElement().isStatic());
+			}
+			else {
+				isStatic = Boolean.FALSE;
+			}
+		}
+		else
+			isStatic = Boolean.FALSE;
+		}
+		return isStatic.booleanValue();
 	}
 
 	protected void addSpecialElement(VariableTokenSeparatorElement e) {

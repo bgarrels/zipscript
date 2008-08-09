@@ -74,9 +74,6 @@ public class ElementNormalizer {
 				Element eSub = (Element) i.next();
 				validate(eSub, session);
 			}
-			if (session.getNestingStack().size() == 0) {
-				System.out.println("joe");
-			}
 			Object o = session.getNestingStack().peek();
 			if (o == e)
 				session.getNestingStack().pop();

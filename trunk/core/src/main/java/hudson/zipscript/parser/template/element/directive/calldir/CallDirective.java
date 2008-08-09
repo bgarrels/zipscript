@@ -210,7 +210,7 @@ public class CallDirective extends AbstractDirective {
 			MacroInstanceEntity callInput = (MacroInstanceEntity) obj;
 			MacroOrientedElement macroInstance = callInput.getMacroInstance();
 			MacroInstanceExecutor executor = new MacroInstanceExecutor(
-					macroInstance);
+					macroInstance, context);
 			if (null == additionalAttributes) {
 				getMacroDirective(context.getParsingSession()).executeMacro(
 						context, macroInstance.isOrdinal(),

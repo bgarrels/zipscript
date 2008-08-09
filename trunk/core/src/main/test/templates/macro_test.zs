@@ -28,5 +28,5 @@
 [/@test]
 
 [@foo abc="zyx" baz="jjj" bar="kkk"]
-	flip flop ${abc}
+	flip flop
 [/@foo]
