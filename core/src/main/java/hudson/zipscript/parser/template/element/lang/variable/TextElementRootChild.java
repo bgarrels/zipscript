@@ -6,20 +6,21 @@
 package hudson.zipscript.parser.template.element.lang.variable;
 
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 public class TextElementRootChild implements VariableChild {
 
-	private String text;
+	private TextElement textElement;
 	private RetrievalContext retrievalContext;
 	private String contextHint;
 
-	public TextElementRootChild(String text) {
-		this.text = text;
+	public TextElementRootChild(TextElement textElement) {
+		this.textElement = textElement;
 	}
 
 	public Object execute(Object parent, ExtendedContext context) {
-		return text;
+		return textElement.objectValue(context);
 	}
 
 	public boolean shouldReturnSomething() {
@@ -27,11 +28,11 @@ public class TextElementRootChild implements VariableChild {
 	}
 
 	public String toString() {
-		return text;
+		return textElement.toString();
 	}
 
 	public String getPropertyName() {
-		return text;
+		return textElement.toString();
 	}
 
 	public RetrievalContext getRetrievalContext() {
@@ -48,5 +49,9 @@ public class TextElementRootChild implements VariableChild {
 
 	public void setContextHint(String contextHint) {
 		this.contextHint = contextHint;
+	}
+
+	public TextElement getTextElement () {
+		return textElement;
 	}
 }

@@ -40,3 +40,11 @@
 
 
 
+
+
+
+				<tr>
+			<td class="label"></td>
+			<td class="entry"><input type="text" name="jobTitle" size="30" maxLength="80""/></td>
+		</tr>
+	

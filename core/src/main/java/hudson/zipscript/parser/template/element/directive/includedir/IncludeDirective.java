@@ -46,7 +46,7 @@ public class IncludeDirective extends AbstractDirective {
 
 	public void validate(ParsingSession session) throws ParseException {
 		this.includeElement = new VariableElement(false, true, contents.trim(),
-				session, contentStartPosition);
+				session.clone(session.getParameters()), contentStartPosition);
 		if (this.includeElement.isStatic()) {
 			this.includePath = this.includeElement.objectValue(
 					new MapContextWrapper(new HashMap())).toString();

@@ -80,3 +80,22 @@
 	[#else] If we see this, something is broken
 	[/#if]
 [/#macro]
+
+[#macro text | name="foo" id=null label=null required=false size=null maxLength=null value=null]
+	[@label label=label]
+		<input type="text" name="${name}"[#if id!=null] id="${id}"[/#if][#if size!=null] size="${size}"[/#if][#if maxLength!=null] maxLength="${maxLength}"[/#if][#if value!=null] value="${value?js}[/#if]"/>
+	[/@label]
+[/#macro]
+
+[#macro label | label=null]
+	[#if label!=null]
+		<tr>
+			<td class="label">${Resources("label.${label}")}</td>
+			<td class="entry">${body}</td>
+		</tr>
+	[#else]
+		${body}
+	[/#if]
+[/#macro]
+
+[@text label="jobTitle" name="jobTitle" size=30 maxLength=80 required=true/]

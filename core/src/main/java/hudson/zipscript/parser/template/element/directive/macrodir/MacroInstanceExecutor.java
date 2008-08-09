@@ -17,9 +17,16 @@ public class MacroInstanceExecutor implements ToStringWithContextElement,
 		NoAutoEscapeElement {
 
 	private MacroOrientedElement macroInstance;
+	private ExtendedContext bodyContext;
 
-	public MacroInstanceExecutor(MacroOrientedElement macroInstance) {
+	public MacroInstanceExecutor(
+			MacroOrientedElement macroInstance, ExtendedContext bodyContext) {
 		this.macroInstance = macroInstance;
+		this.bodyContext = bodyContext;
+	}
+
+	public void setBodyContext (ExtendedContext bodyContext) {
+		this.bodyContext = bodyContext;
 	}
 
 	public List getChildren() {
@@ -33,9 +40,7 @@ public class MacroInstanceExecutor implements ToStringWithContextElement,
 	}
 
 	public void append(ExtendedContext context, Writer writer) {
-		if (context instanceof MacroInstanceEntityContext)
-			((MacroInstanceEntityContext) context).setPostMacroContext(context);
-		macroInstance.writeNestedContent(context, writer);
+		macroInstance.writeNestedContent(this.bodyContext, writer);
 	}
 
 	public MacroOrientedElement getMacroInstance() {

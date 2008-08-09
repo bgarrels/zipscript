@@ -308,7 +308,7 @@ public class MacroInstanceDirective extends NestableElement implements
 		}
 
 		macro.executeMacro(context, isOrdinal(), getAttributes(),
-				new MacroInstanceExecutor(this), sw);
+				new MacroInstanceExecutor(this, context), sw);
 	}
 
 	public String getNestedContent(ExtendedContext context)

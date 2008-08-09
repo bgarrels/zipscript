@@ -60,7 +60,12 @@ public class TextElement extends AbstractElement implements Element {
 				}
 				return source;
 			} else {
-				return text;
+				if (getChildren().size() == 0) return ((Element) getChildren().get(0)).objectValue(context);
+				StringWriter sw1 = new StringWriter();
+				for (Iterator i = getChildren().iterator(); i.hasNext();) {
+					((Element) i.next()).merge(context, sw1);
+				}
+				return sw1.toString();
 			}
 		} else {
 			return text;
@@ -146,5 +151,9 @@ public class TextElement extends AbstractElement implements Element {
 
 	public void setChildren(List children) {
 		this.children = children;
+	}
+
+	public boolean isStatic () {
+		return (null == children || children.size() == 1);
 	}
 }
