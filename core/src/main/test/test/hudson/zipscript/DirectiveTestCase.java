@@ -25,7 +25,7 @@ public class DirectiveTestCase extends TestCase {
 
 //	public static TestSuite suite() {
 //		TestSuite suite = new TestSuite();
-//		suite.addTest(new DirectiveTestCase("testTranslation"));
+//		suite.addTest(new DirectiveTestCase("testMacro"));
 //		return suite;
 //	}
 
@@ -187,6 +187,7 @@ public class DirectiveTestCase extends TestCase {
 		props.put("includeResourceLoader.type", "classpath");
 		props.put("includeResourceLoader.pathPrefix", "templates/includes/");
 		ZipEngine zipEngine = ZipEngine.createInstance(props);
-		return zipEngine.getTemplate(template).merge(context, locale);
+		return zipEngine.getTemplate(template)
+				.merge(context, locale);
 	}
 }

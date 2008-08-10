@@ -54,6 +54,12 @@ public class VariableTestCase extends TestCase {
 		context.put("myList", new ArrayList());
 		context.put("obj", new Obj3("foo bar"));
 		context.put("dynamicPath", "text");
+		
+		context.put("fieldErrorName", "foo");
+		Map errors = new HashMap();
+		errors.put("foo", "abc");
+		context.put("fieldErrors", errors);
+		
 		evalResult(mergeTemplate, resultFile, context);
 	}
 

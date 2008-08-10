@@ -5,6 +5,7 @@
 
 package hudson.zipscript.parser.template.element.lang;
 
+import hudson.zipscript.ext.data.DefaultElementContainer;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
@@ -13,10 +14,11 @@ public class TextDefaultElementFactory implements DefaultElementFactory {
 
 	public static TextDefaultElementFactory INSTANCE = new TextDefaultElementFactory();
 
-	public Element createDefaultElement(String text, ParsingSession session,
+	public DefaultElementContainer createDefaultElement(
+			Element nextElement, String text, ParsingSession session,
 			int currentPosition) {
-		TextElement element = new TextElement(text);
-		return element;
+		return new DefaultElementContainer(
+			new TextElement(text), nextElement);
 	}
 
 	public boolean doAppend(char c) {

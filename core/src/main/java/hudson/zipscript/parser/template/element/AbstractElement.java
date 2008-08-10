@@ -70,14 +70,25 @@ public abstract class AbstractElement implements Element {
 	}
 
 	protected List parseElements(String contents, ParsingSession session,
+			int startPosition, DefaultElementFactory defaultElementFactory) throws ParseException {
+		return parseElements(contents, session, startPosition, true, defaultElementFactory);
+	}
+
+	protected List parseElements(String contents, ParsingSession session,
 			int startPosition, boolean hideEscaping) throws ParseException {
+		return parseElements(contents, session, startPosition,
+				hideEscaping, getContentParsingDefaultElementFactory());
+	}
+	
+	protected List parseElements(String contents, ParsingSession session,
+			int startPosition, boolean hideEscaping, DefaultElementFactory defaultElementFactory) throws ParseException {
 		session = session.clone(new ParseParameters(session
 				.getResourceContainer(), true, true));
 		if (hideEscaping)
 			session.setHideEscapeMethods(true);
 		List rtn = ExpressionParser.getInstance().parse(contents,
 				getContentParsingPatternMatchers(),
-				getContentParsingDefaultElementFactory(), session,
+				defaultElementFactory, session,
 				startPosition).getElements();
 		return rtn;
 	}

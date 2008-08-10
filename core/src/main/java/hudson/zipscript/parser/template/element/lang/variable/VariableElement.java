@@ -46,7 +46,7 @@ public class VariableElement extends AbstractElement implements Element {
 
 	boolean isSilenced;
 	boolean isFormal;
-	private VariableChild[] children;
+	protected VariableChild[] children;
 	private String pattern;
 	private VariableTokenSeparatorElement[] specialElements;
 	private SpecialMethod[] escapeMethods;
@@ -54,6 +54,11 @@ public class VariableElement extends AbstractElement implements Element {
 	private String contextHint;
 
 	private boolean suppressNullErrors;
+
+	public VariableElement () {
+		this.isFormal = false;
+		this.isSilenced = false;
+	}
 
 	public VariableElement(boolean isFormal, boolean isSilenced,
 			String pattern, ParsingSession session, int contentIndex)
@@ -345,6 +350,20 @@ public class VariableElement extends AbstractElement implements Element {
 		}
 		List escapeMethods = new ArrayList();
 
+		// check for maps or groups
+		if (elementList.size() > index) {
+			Element nextElement = (Element) elementList.get(index);
+			while (nextElement instanceof MapElement
+					|| nextElement instanceof GroupElement) {
+				Element e = (Element) elementList.remove(index);
+				ElementIndex ei = e.normalize(index, elementList, session);
+				if (null != ei) {
+					index = ei.getIndex();
+					e = ei.getElement();
+				}
+			}
+		}
+		
 		// if the next element over is a special char - process for variable
 		if (elementList.size() > index) {
 			Element nextElement = (Element) elementList.get(index);
@@ -429,7 +448,7 @@ public class VariableElement extends AbstractElement implements Element {
 		return sb.toString();
 	}
 
-	private VariableChild[] parse(List elements, ParsingSession session)
+	protected VariableChild[] parse(List elements, ParsingSession session)
 			throws ParseException {
 		List children = new ArrayList();
 		List specialElements = new ArrayList();
@@ -561,9 +580,9 @@ public class VariableElement extends AbstractElement implements Element {
 				MapElement me = (MapElement) e;
 				if (me.getChildren().size() == 1) {
 					children
-							.add(new MapChild((Element) me.getChildren().get(0)));
+							.add(new MapChild(me, (Element) me.getChildren().get(0)));
 				} else {
-					children.add(new MapChild(new VariableElement(me
+					children.add(new MapChild(me, new VariableElement(me
 							.getChildren(), RetrievalContext.HASH, null,
 							session)));
 				}

@@ -18,9 +18,11 @@ import hudson.zipscript.parser.template.element.directive.macrodir.MacroInstance
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
+import hudson.zipscript.parser.template.element.special.NoMapDefaultVariablePatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +42,14 @@ public class SetDirective extends AbstractDirective implements
 
 	private void parseContents(String contents, ParsingSession session,
 			int contentPosition) throws ParseException {
-		java.util.List elements = parseElements(contents, session,
-				contentPosition);
-		try {
+		int index = contents.indexOf('=');
+		if (index > 0) {
+			String setName = contents.substring(0, index);
+			String setValue = contents.substring(index+1);
+
+			// deal with set name
+			java.util.List elements = parseElements(setName, session,
+					contentPosition, NoMapDefaultVariablePatternMatcher.getInstance());
 			if (elements.get(0) instanceof SpecialStringElement) {
 				this.varName = ((SpecialStringElement) elements.remove(0))
 						.getTokenValue();
@@ -50,42 +57,33 @@ public class SetDirective extends AbstractDirective implements
 				throw new ParseException(this,
 						"Invalid sequence.  Expecting variable name");
 			}
-			Element e = (Element) elements.remove(0);
-			if (e instanceof AssignmentElement) {
-				// standard set
-				if (elements.size() > 1 || elements.size() == 0)
-					throw new ParseException(this,
-							"Invalid sequence.  Improperly formed set expression");
-				this.setElement = (Element) elements.get(0);
-				// see if we are creating a new Map or Sequence
-				if (this.setElement instanceof MapElement) {
-					this.setElement = new NewMapElement(
-							(MapElement) this.setElement, session, this);
-				}
-			} else {
+			if (elements.size() > 0) {
 				// complex set
 				StringBuffer sb = new StringBuffer();
 				sb.append(varName);
-				while (!(e instanceof AssignmentElement)) {
-					sb.append(e);
-					if (elements.size() == 0) {
-						throw new ParseException(this,
-								"Invalid sequence.  Expecting '='");
-					}
-					e = (Element) elements.remove(0);
+				for (Iterator i=elements.iterator(); i.hasNext(); ) {
+					sb.append(i.next());
 				}
 				this.varName = null;
 				this.setterParent = new VariableElement(false, true, sb
 						.toString(), session, contentPosition);
-
-				if (elements.size() > 1 || elements.size() == 0)
-					throw new ParseException(this,
-							"Invalid sequence.  Improperly formed set expression");
-				this.setElement = (Element) elements.get(0);
 			}
-		} catch (IndexOutOfBoundsException e) {
-			throw new ParseException(this,
-					"Improperly formed set expression: must have at least 3 tokens");
+
+			// deal with the set value
+			elements = parseElements(setValue, session, contentPosition+index);
+			if (elements.size() > 1 || elements.size() == 0)
+				throw new ParseException(this,
+						"Invalid sequence.  Improperly formed set expression");
+			this.setElement = (Element) elements.get(0);
+			// see if we are creating a new Map or Sequence
+			if (this.setElement instanceof MapElement) {
+				this.setElement = new NewMapElement(
+						(MapElement) this.setElement, session, this);
+			}
+		}
+		else {
+			// nested set
+			throw new ParseException(this, "Improperly formed set expression");
 		}
 	}
 

@@ -6,6 +6,7 @@
 package hudson.zipscript.parser;
 
 import hudson.zipscript.ResourceContainer;
+import hudson.zipscript.ext.data.DefaultElementContainer;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -222,12 +223,15 @@ public class ExpressionParser {
 								e
 										.setElementLength((int) (buffer
 												.position() - position));
-								unmatchedChars = recordUnmatchedChars(buffer
+								UnmatchedElementContainer uec = recordUnmatchedChars(e, buffer
 										.position()
 										+ startPosition, unmatchedChars,
 										elements, session,
 										defaultElementFactory);
-								elements.add(e);
+								unmatchedChars = uec.stringBuffer;
+								if (null != uec.nextElement) {
+									elements.add(e);
+								}
 								match = true;
 								buffer.position(buffer.position() - 1);
 								previousChar = buffer.get();
@@ -246,7 +250,7 @@ public class ExpressionParser {
 					previousChar = c;
 				}
 			}
-			recordUnmatchedChars(buffer.position() + startPosition,
+			recordUnmatchedChars(null, buffer.position() + startPosition,
 					unmatchedChars, elements, session, defaultElementFactory);
 
 			ElementNormalizer.normalize(elements, session, true);
@@ -278,18 +282,18 @@ public class ExpressionParser {
 		return new ParsingResult(elements, lineBreakArr, parsingSession);
 	}
 
-	private StringBuffer recordUnmatchedChars(int position, StringBuffer sb,
+	private UnmatchedElementContainer recordUnmatchedChars(Element nextElement, int position, StringBuffer sb,
 			List elements, ParsingSession session, DefaultElementFactory factory)
 			throws ParseException {
 		// we've got an element match - record it
 		if (sb.length() > 0) {
 			// record any unmatched characters as an element
-			Element e = factory.createDefaultElement(sb.toString(), session,
+			DefaultElementContainer dec = factory.createDefaultElement(nextElement, sb.toString(), session,
 					position - sb.length());
-			elements.add(e);
-			return new StringBuffer();
+			elements.add(dec.defaultElement);
+			return new UnmatchedElementContainer(new StringBuffer(), dec.nextElement); 
 		} else
-			return sb;
+			return new UnmatchedElementContainer(sb, nextElement);
 	}
 
 	private boolean isMatch(CharBuffer cb, char[] tokens) {
@@ -351,6 +355,16 @@ public class ExpressionParser {
 				PatternMatcher patternMatcher, char[] startToken) {
 			this.patternMatcher = patternMatcher;
 			this.startToken = startToken;
+		}
+	}
+
+	private class UnmatchedElementContainer {
+		public StringBuffer stringBuffer;
+		public Element nextElement;
+		public UnmatchedElementContainer (
+				StringBuffer stringBuffer, Element nextElement) {
+			this.stringBuffer = stringBuffer;
+			this.nextElement = nextElement;
 		}
 	}
 }

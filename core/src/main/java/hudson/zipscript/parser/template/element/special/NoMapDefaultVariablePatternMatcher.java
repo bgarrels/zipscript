@@ -12,11 +12,11 @@ import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.lang.variable.SpecialVariableElementImpl;
 
-public class DefaultVariablePatternMatcher implements DefaultElementFactory {
+public class NoMapDefaultVariablePatternMatcher implements DefaultElementFactory {
 
-	private static DefaultVariablePatternMatcher INSTANCE = new DefaultVariablePatternMatcher();
+	private static NoMapDefaultVariablePatternMatcher INSTANCE = new NoMapDefaultVariablePatternMatcher();
 
-	public static DefaultVariablePatternMatcher getInstance() {
+	public static NoMapDefaultVariablePatternMatcher getInstance() {
 		return INSTANCE;
 	}
 
@@ -24,7 +24,7 @@ public class DefaultVariablePatternMatcher implements DefaultElementFactory {
 			Element nextElement, String text, ParsingSession session,
 			int contentPosition) throws ParseException {
 		return new DefaultElementContainer(
-			new SpecialVariableElementImpl(text, session, contentPosition),
+			new SpecialVariableElementImpl(text, session, contentPosition, false),
 			nextElement);
 	}
 

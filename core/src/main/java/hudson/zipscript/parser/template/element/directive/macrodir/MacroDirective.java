@@ -12,6 +12,7 @@ import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.DebugElementContainerElement;
+import hudson.zipscript.parser.template.element.DefaultElementFactory;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.NestableElement;
@@ -20,6 +21,8 @@ import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
+import hudson.zipscript.parser.template.element.special.DefaultVariablePatternMatcher;
+import hudson.zipscript.parser.template.element.special.NoMapDefaultVariablePatternMatcher;
 import hudson.zipscript.parser.template.element.special.RequiredIdentifierPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
 import hudson.zipscript.resource.macrolib.MacroLibrary;
@@ -92,7 +95,7 @@ public class MacroDirective extends NestableElement implements
 		// we aren't supporting any new identifiers right now
 		if (nameAndIdentifiers.length > index)
 			throw new ParseException(this, "Unknown macro identifier '"
-					+ nameAndIdentifiers[1] + "'");
+					+ nameAndIdentifiers[1] + "' did you forget to add the separator '|'?");
 
 		boolean startedRequiredAttributes = false;
 		boolean startedDefaultedAttributes = false;
@@ -363,6 +366,10 @@ public class MacroDirective extends NestableElement implements
 			}
 		}
 		return null;
+	}
+
+	protected DefaultElementFactory getContentParsingDefaultElementFactory() {
+		return NoMapDefaultVariablePatternMatcher.getInstance();
 	}
 
 	protected boolean isStartElement(Element e) {

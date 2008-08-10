@@ -7,11 +7,16 @@ package hudson.zipscript.parser.template.element.group;
 
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.exception.ParseException;
+import hudson.zipscript.parser.template.data.ElementIndex;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NestableElement;
+import hudson.zipscript.parser.template.element.lang.variable.VariableElement;
 import hudson.zipscript.parser.util.StringUtil;
 
 import java.io.Writer;
+import java.util.List;
 
 public class MapElement extends NestableElement {
 
