@@ -54,6 +54,10 @@ abc
 			Context Key: myObject - test.hudson.zipscript.model.Obj1
 		
 		
+			Context Key: fieldErrorName - foo
+		
+			Context Key: fieldErrors - {foo=abc}
+		
 			Context Key: abc - {foo=ddd, hhh=jjj}
 		
 			Context Key: dynamicPath - text

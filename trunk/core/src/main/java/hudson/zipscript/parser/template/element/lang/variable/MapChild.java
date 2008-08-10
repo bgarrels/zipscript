@@ -9,6 +9,7 @@ import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.template.element.Element;
+import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.HashAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.ObjectAdapter;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
@@ -28,11 +29,13 @@ public class MapChild implements VariableChild {
 	private SequenceAdapter sequenceAdapter;
 	private ObjectAdapter objectAdapter;
 
+	private MapElement mapElement;
 	private Element keyElement;
 	private RetrievalContext retrievalContext;
 	private String contextHint;
 
-	public MapChild(Element keyElement) {
+	public MapChild(MapElement mapElement, Element keyElement) {
+		this.mapElement = mapElement;
 		this.keyElement = keyElement;
 	}
 
@@ -124,6 +127,10 @@ public class MapChild implements VariableChild {
 		return sb.toString();
 	}
 
+	public MapElement getMapElement () {
+		return mapElement;
+	}
+	
 	public Element getKeyElement() {
 		return keyElement;
 	}

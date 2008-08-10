@@ -22,11 +22,11 @@ import test.hudson.zipscript.model.Person;
 
 public class MacroTestCase extends TestCase {
 
-	// public static TestSuite suite () {
-	// TestSuite suite = new TestSuite();
-	// suite.addTest(new MacroTestCase("testCommonTDOMacro"));
-	// return suite;
-	// }
+	 public static TestSuite suite () {
+	 TestSuite suite = new TestSuite();
+	 suite.addTest(new MacroTestCase("testSimpleMacro"));
+	 return suite;
+	 }
 
 	public MacroTestCase() {
 	}

@@ -44,9 +44,9 @@ public class ErrorTestCase extends TestCase {
 		evalResult("variable4.zs", 2, 7, false);
 	}
 
-	public void testWhileDirective() {
-		evalResult("while1.zs", 7, 13, false);
-	}
+//	public void testWhileDirective() {
+//		evalResult("while1.zs", 7, 13, false);
+//	}
 
 	public void testForeachDirective() {
 		evalResult("foreach1.zs", 6, 15, false);

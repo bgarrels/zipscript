@@ -44,6 +44,9 @@ public class NumericPatternMatcher implements PatternMatcher {
 	public Element match(char previousChar, char[] startChars,
 			CharBuffer reader, ParsingSession session, List elements,
 			StringBuffer unmatchedChars) throws ParseException {
+		if (previousChar != Character.MIN_VALUE)
+			if (Character.isLetter(previousChar) || previousChar == '_')
+				return null;
 		StringBuffer sb = new StringBuffer();
 		sb.append(startChars);
 		char type = Character.MIN_VALUE;
