@@ -47,4 +47,8 @@ public class MacroLibrary implements MacroProvider {
 	public String getMacroImportPath(String namespace) {
 		return null;
 	}
+
+	public Resource getResource() {
+		return resource;
+	}
 }

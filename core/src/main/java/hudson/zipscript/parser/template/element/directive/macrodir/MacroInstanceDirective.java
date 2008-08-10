@@ -299,8 +299,13 @@ public class MacroInstanceDirective extends NestableElement implements
 		} else if (context.doRefreshTemplates() && null != namespace
 				&& macro.getMacroLibrary().hasBeenModified()) {
 			// reload the macro
-			macro = context.getResourceContainer().getMacroManager()
-					.reloadMacro(getName(), getNamespace(), context);
+			try {
+				macro = context.getResourceContainer().getMacroManager()
+						.reloadMacro(getName(), getNamespace(), context);
+			}
+			catch (ParseException e) {
+				throw new ExecutionException(e.getMessage(), null, e);
+			}
 		}
 		if (null == macro) {
 			throw new ExecutionException("Undefined macro '" + getName() + "'",
