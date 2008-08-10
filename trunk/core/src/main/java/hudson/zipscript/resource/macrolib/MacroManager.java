@@ -37,6 +37,13 @@ public class MacroManager {
 			macroLibraries = new HashMap();
 		Resource resource = resourceLoader.getResource(resourcePath,
 				resourceLoaderParameter);
+		MacroLibrary ml = load(namespace, resource);
+		if (ml.getMacroNames().size() > 0) {
+			macroLibraries.put(namespace, ml);
+		}
+	}
+
+	private MacroLibrary load (String namespace, Resource resource) throws ParseException {
 		String contents = IOUtil.toString(resource.getInputStream());
 		ParsingResult pr = ExpressionParser.getInstance().parse(contents,
 				resourceContainer.getComponents(),
@@ -49,19 +56,22 @@ public class MacroManager {
 				macroLibrary.addMacroDefinition((MacroDirective) e);
 			}
 		}
-		if (macroLibrary.getMacroNames().size() > 0) {
-			macroLibraries.put(namespace, macroLibrary);
-		}
+		return macroLibrary;
 	}
 
 	public MacroDirective reloadMacro(String name, String namespace,
-			MacroProvider defaultMacroProvider) {
+			MacroProvider defaultMacroProvider) throws ParseException {
 		if (null != namespace) {
 			String path = defaultMacroProvider.getMacroImportPath(namespace);
 			if (null != path) {
 				macroLibraries.remove(path);
 			} else {
-				macroLibraries.remove(namespace);
+				MacroLibrary ml = (MacroLibrary) macroLibraries.remove(namespace);
+				Resource r = ml.getResource();
+				ml = load(namespace, r);
+				if (ml.getMacroNames().size() > 0) {
+					macroLibraries.put(namespace, ml);
+				}
 			}
 		}
 		return getMacro(name, namespace, defaultMacroProvider);
