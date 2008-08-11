@@ -142,6 +142,10 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 		preMacroContext.markInitialized(topLevelElement);
 	}
 
+	public boolean isInitialized() {
+		return postMacroContext.isInitialized();
+	}
+
 	public boolean isInitialized(Element topLevelElement) {
 		return postMacroContext.isInitialized(topLevelElement);
 	}

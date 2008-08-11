@@ -132,6 +132,10 @@ public class NestedContextWrapper implements ExtendedContext {
 	public void markInitialized(Element topLevelElement) {
 		parentContext.markInitialized(topLevelElement);
 	}
+	
+	public boolean isInitialized() {
+		return parentContext.isInitialized();
+	}
 
 	public boolean isInitialized(Element topLevelElement) {
 		return parentContext.isInitialized(topLevelElement);

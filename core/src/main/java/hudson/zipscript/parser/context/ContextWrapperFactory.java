@@ -48,8 +48,8 @@ public class ContextWrapperFactory {
 		else if (obj instanceof Context) {
 			context = new SimpleContextWrapper((Context) obj);
 		}
-		// add plugin wrapping here
-		if (null != resourceContainer.getPlugins()) {
+		if (null != resourceContainer.getPlugins() && (null == context || !context.isInitialized())) {
+			// add plugin wrapping here
 			Context ctx = null;
 			for (int i = 0; i < resourceContainer.getPlugins().length; i++) {
 				ctx = resourceContainer.getPlugins()[i].wrapContextObject(obj);
@@ -70,39 +70,41 @@ public class ContextWrapperFactory {
 				context = new ObjectContextWrapper(obj);
 		}
 
-		// initialize the context
-		context.put(Constants.NOW, new Date(), false);
-		context.put(Constants.VARS, context, false);
-		context.put(Constants.GLOBAL, context, false);
-		context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
-				"uniqueIdGenerator", resourceContainer.getInitParameters(),
-				UniqueIdGenerator.class, UniqueIdGeneratorImpl.class, null),
-				false);
-		context.put(Constants.RESOURCE, ClassUtil.loadResource("i18n",
-				resourceContainer.getInitParameters(), I18NResource.class,
-				I18NResourceImpl.class, null), false);
-		context.put(Constants.MATH, mathUtil, false);
-		if (null != resourceContainer.getPlugins()) {
-			for (int i = 0; i < resourceContainer.getPlugins().length; i++) {
-				resourceContainer.getPlugins()[i].initialize(context);
-			}
-		}
-
-		if (null != parsingSession) {
-			// initialize macro imports
-			Map staticImports = parsingSession.getStaticMacroImports();
-			if (null != staticImports) {
-				for (Iterator i = staticImports.entrySet().iterator(); i
-						.hasNext();) {
-					Map.Entry entry = (Map.Entry) i.next();
-					context.addMacroImport((String) entry.getKey(),
-							(String) entry.getValue());
+		if (!context.isInitialized()) {
+			// initialize the context
+			context.put(Constants.NOW, new Date(), false);
+			context.put(Constants.VARS, context, false);
+			context.put(Constants.GLOBAL, context, false);
+			context.put(Constants.UNIQUE_ID, ClassUtil.loadResource(
+					"uniqueIdGenerator", resourceContainer.getInitParameters(),
+					UniqueIdGenerator.class, UniqueIdGeneratorImpl.class, null),
+					false);
+			context.put(Constants.RESOURCE, ClassUtil.loadResource("i18n",
+					resourceContainer.getInitParameters(), I18NResource.class,
+					I18NResourceImpl.class, null), false);
+			context.put(Constants.MATH, mathUtil, false);
+			if (null != resourceContainer.getPlugins()) {
+				for (int i = 0; i < resourceContainer.getPlugins().length; i++) {
+					resourceContainer.getPlugins()[i].initialize(context);
 				}
 			}
+	
+			if (null != parsingSession) {
+				// initialize macro imports
+				Map staticImports = parsingSession.getStaticMacroImports();
+				if (null != staticImports) {
+					for (Iterator i = staticImports.entrySet().iterator(); i
+							.hasNext();) {
+						Map.Entry entry = (Map.Entry) i.next();
+						context.addMacroImport((String) entry.getKey(),
+								(String) entry.getValue());
+					}
+				}
+			}
+	
+			if (null == context.getLocale())
+				context.setLocale(Locale.getDefault());
 		}
-
-		if (null == context.getLocale())
-			context.setLocale(Locale.getDefault());
 
 		return context;
 	}

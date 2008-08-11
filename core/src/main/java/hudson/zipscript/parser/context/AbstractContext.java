@@ -47,6 +47,10 @@ public abstract class AbstractContext implements ExtendedContext {
 		this.resourceContainer = resourceContainer;
 	}
 
+	public boolean isInitialized() {
+		return (null != initializeMap && initializeMap.size() > 0);
+	}
+
 	public boolean isInitialized(Element topLevelElement) {
 		if (null == initializeMap)
 			return false;

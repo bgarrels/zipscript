@@ -60,7 +60,7 @@ public class TextElement extends AbstractElement implements Element {
 				}
 				return source;
 			} else {
-				if (getChildren().size() == 0) return ((Element) getChildren().get(0)).objectValue(context);
+				if (getChildren().size() == 0) return "";
 				StringWriter sw1 = new StringWriter();
 				for (Iterator i = getChildren().iterator(); i.hasNext();) {
 					((Element) i.next()).merge(context, sw1);
