@@ -66,12 +66,10 @@ public class MacroManager {
 			if (null != path) {
 				macroLibraries.remove(path);
 			} else {
-				MacroLibrary ml = (MacroLibrary) macroLibraries.remove(namespace);
+				MacroLibrary ml = (MacroLibrary) macroLibraries.get(namespace);
 				Resource r = ml.getResource();
 				ml = load(namespace, r);
-				if (ml.getMacroNames().size() > 0) {
-					macroLibraries.put(namespace, ml);
-				}
+				macroLibraries.put(namespace, ml);
 			}
 		}
 		return getMacro(name, namespace, defaultMacroProvider);

@@ -18,11 +18,11 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 
 	public String toString(ExtendedContext context) {
 		if (Long.MIN_VALUE == uniqueId) {
-			uniqueId = System.currentTimeMillis();
+			uniqueId = 1000l;
 		} else {
-			uniqueId = uniqueId++;
+			uniqueId = uniqueId + 1;
 		}
-		return Long.toString(uniqueId);
+		return "i" + Long.toString(uniqueId);
 	}
 
 	public void append(ExtendedContext context, Writer writer) {

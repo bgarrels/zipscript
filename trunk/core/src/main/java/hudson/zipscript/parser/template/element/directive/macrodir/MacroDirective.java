@@ -17,11 +17,11 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.ElementAttribute;
 import hudson.zipscript.parser.template.element.NestableElement;
 import hudson.zipscript.parser.template.element.PatternMatcher;
+import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.AssignmentElement;
 import hudson.zipscript.parser.template.element.lang.TextElement;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
-import hudson.zipscript.parser.template.element.special.DefaultVariablePatternMatcher;
 import hudson.zipscript.parser.template.element.special.NoMapDefaultVariablePatternMatcher;
 import hudson.zipscript.parser.template.element.special.RequiredIdentifierPatternMatcher;
 import hudson.zipscript.parser.template.element.special.SpecialStringElement;
@@ -234,11 +234,12 @@ public class MacroDirective extends NestableElement implements
 				Object val = instAttribute.getValue()
 						.objectValue(parentContext);
 				if (null == val) {
-
 					// do we default
 					if (null != defAttribute.getDefaultValue())
 						val = defAttribute.getDefaultValue();
 				}
+				if (val instanceof ToStringWithContextElement)
+					val = ((ToStringWithContextElement) val).toString(context);
 				if (null != val)
 					context.put(defAttribute.getName(), val, true);
 			}
@@ -248,24 +249,21 @@ public class MacroDirective extends NestableElement implements
 						.get(i);
 				Object val = instAttribute.getValue()
 						.objectValue(parentContext);
-				if (null == val) {
-					MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) attributeMap
-							.get(instAttribute.getName());
-					// do we default
-					if (null != defAttribute.getDefaultValue())
-						val = defAttribute.getDefaultValue();
-				}
 				if (null != val)
 					context.put(instAttribute.getName(), val, true);
 			}
+			// check the defaults
 			for (Iterator i = getAttributes().iterator(); i.hasNext();) {
 				MacroDefinitionAttribute defAttribute = (MacroDefinitionAttribute) i
 						.next();
 				if (null != defAttribute.getDefaultValue()
 						&& null == context.get(defAttribute.getName(),
 								RetrievalContext.UNKNOWN, null)) {
-					context.put(defAttribute.getName(), defAttribute
-							.getDefaultValue().objectValue(context), true);
+					Object val = defAttribute.getDefaultValue().objectValue(context);
+					if (val instanceof ToStringWithContextElement)
+						val = ((ToStringWithContextElement) val).toString(context);
+					if (null != val)
+						context.put(defAttribute.getName(), val, true);
 				}
 			}
 		}

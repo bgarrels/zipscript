@@ -24,6 +24,11 @@ import java.util.Map;
 public interface ExtendedContext extends Context, MacroProvider {
 
 	/**
+	 * Return true if the context has ever been initialized
+	 */
+	public boolean isInitialized ();
+
+	/**
 	 * Return true if the context has been initialized and false if not
 	 */
 	public boolean isInitialized(Element topLevelElement);
