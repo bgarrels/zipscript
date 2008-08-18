@@ -10,6 +10,8 @@ import hudson.zipscript.ext.data.ResultData;
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.Context;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.exception.ExecutionException;
+import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.util.StringUtil;
 import hudson.zipscript.plugin.Plugin;
 import hudson.zipscript.plugin.struts2.Struts2Plugin;
@@ -94,6 +96,23 @@ public class ZipScriptManager {
 
 		ZipEngine zipEngine = ZipEngine.createInstance(
 				props, new Plugin[]{new Struts2Plugin()});
+
+		String autoImports = (String) props.get("autoImport");
+		if (null != autoImports) {
+			StringTokenizer st = new StringTokenizer(autoImports, ";");
+			while (st.hasMoreElements()) {
+				String name = st.nextToken().trim();
+				if (name.length() > 0) {
+					String namespace = name.substring(0, name.indexOf('.'));
+					try {
+						zipEngine.addMacroLibrary(namespace, name);
+					}
+					catch (ParseException e) {
+						throw new ExecutionException(e.getMessage(), null, e);
+					}
+				}
+			}
+		}
 
 		// set resource loaders
 		String rootDirectory = getProperty("rootDirectory", "zs/", props);
