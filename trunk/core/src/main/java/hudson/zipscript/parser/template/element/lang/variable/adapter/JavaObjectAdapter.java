@@ -57,6 +57,9 @@ public class JavaObjectAdapter implements ObjectAdapter {
 		} else {
 			try {
 				return ((Method) obj).invoke(object, NO_PARAMS);
+			}
+			catch (IllegalArgumentException e) {
+				throw new ClassCastException(e.getMessage());
 			} catch (Exception e) {
 				throw new ExecutionException(e.getMessage(), null, e);
 			}

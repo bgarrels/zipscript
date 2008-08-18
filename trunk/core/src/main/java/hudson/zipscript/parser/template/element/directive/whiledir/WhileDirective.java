@@ -5,6 +5,7 @@
 
 package hudson.zipscript.parser.template.element.directive.whiledir;
 
+import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
@@ -63,16 +64,17 @@ public class WhileDirective extends NestableElement implements
 	public void merge(ExtendedContext context, Writer sw)
 			throws ExecutionException {
 		int i = 0;
-		context = new NestedContextWrapper(context, this);
-		context.put(TOKEN_INDEX, new Integer(0), false);
+		ExtendedContext subContext = new NestedContextWrapper(context, this);
+		subContext.put(Constants.SUPER, context);
+		subContext.put(TOKEN_INDEX, new Integer(0), false);
 		try {
-			while (whileElement.booleanValue(context)) {
+			while (whileElement.booleanValue(subContext)) {
 				try {
-					appendElements(getChildren(), context, sw);
+					appendElements(getChildren(), subContext, sw);
 				} catch (ContinueException e) {
 					// continue
 				}
-				context.put(TOKEN_INDEX, new Integer(++i), false);
+				subContext.put(TOKEN_INDEX, new Integer(++i), false);
 			}
 		} catch (BreakException e) {
 			// end
@@ -83,21 +85,22 @@ public class WhileDirective extends NestableElement implements
 			List macroInstanceList, MacroDirective macro,
 			Map additionalContextEntries) throws ExecutionException {
 		int i = 0;
-		context = new NestedContextWrapper(context, this);
+		ExtendedContext subContext = new NestedContextWrapper(context, this);
+		subContext.put(Constants.SUPER, context);
 		Integer int0 = new Integer(0);
 		additionalContextEntries.put(TOKEN_INDEX, int0);
-		context.put(TOKEN_INDEX, int0, false);
+		subContext.put(TOKEN_INDEX, int0, false);
 		try {
-			while (whileElement.booleanValue(context)) {
+			while (whileElement.booleanValue(subContext)) {
 				try {
-					appendTemplateDefinedParameters(getChildren(), context,
+					appendTemplateDefinedParameters(getChildren(), subContext,
 							macroInstanceList, macro, additionalContextEntries);
 				} catch (ContinueException e) {
 					// continue
 				}
 				Integer index = new Integer(++i);
 				additionalContextEntries.put(TOKEN_INDEX, index);
-				context.put(TOKEN_INDEX, index, false);
+				subContext.put(TOKEN_INDEX, index, false);
 			}
 		} catch (BreakException e) {
 			// end

@@ -90,7 +90,7 @@
 [#macro label | label=null]
 	[#if label!=null]
 		<tr>
-			<td class="label">${Resources("label.${label}")}</td>
+			<td class="label">${Resource("label.${label}")}</td>
 			<td class="entry">${body}</td>
 		</tr>
 	[#else]

@@ -20,7 +20,9 @@ public class RequestParameterMap implements Map {
 	}
 
 	public String get(String key) {
-		return request.getParameter(key);
+		String s = request.getParameter(key);
+		if (null == s || s.length() == 0) return null;
+		else return s;
 	}
 
 	public String[] values(String key) {
@@ -46,8 +48,11 @@ public class RequestParameterMap implements Map {
 	public Object get(Object key) {
 		if (null == key)
 			return null;
-		else
-			return request.getParameter(key.toString());
+		else {
+			String s = request.getParameter(key.toString());
+			if (null == s || s.length() == 0) return null;
+			else return s;
+		}
 	}
 
 	public boolean isEmpty() {

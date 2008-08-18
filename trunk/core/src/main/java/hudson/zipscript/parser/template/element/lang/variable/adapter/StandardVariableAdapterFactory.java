@@ -34,6 +34,7 @@ import hudson.zipscript.parser.template.element.lang.variable.special.object.IsS
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsStringSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.IsXMLSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.StringSpecialMethod;
+import hudson.zipscript.parser.template.element.lang.variable.special.object.ToIntSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.object.VoidSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.AddFirstSpecialMethod;
 import hudson.zipscript.parser.template.element.lang.variable.special.sequence.AddLastSpecialMethod;
@@ -135,6 +136,8 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return new ObjectValueSpecialMethod(element);
 			else if (method.equals("booleanValue"))
 				return new BooleanValueSpecialMethod();
+			else if (method.equals("toInt"))
+				return ToIntSpecialMethod.INSTANCE;
 
 			// string methods - these are a special case as we will turn objects
 			// into strings
@@ -169,7 +172,7 @@ public class StandardVariableAdapterFactory implements VariableAdapterFactory {
 				return new XPathSpecialMethod(parameters);
 
 			// sequence special methods
-			else if (method.equals("length"))
+			else if (method.equals("size"))
 				return new LengthSpecialMethod();
 			else if (method.equals("first"))
 				return new FirstSpecialMethod();

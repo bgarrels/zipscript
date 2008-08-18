@@ -92,7 +92,7 @@ public class AssumedGetRoot implements VariableChild {
 	}
 
 	public boolean shouldReturnSomething() {
-		return false;
+		return true;
 	}
 
 	public String toString() {
