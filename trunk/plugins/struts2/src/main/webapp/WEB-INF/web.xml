@@ -11,7 +11,10 @@
 
         <init-param>
             <param-name>zipscript.contextValues</param-name>
-            <param-value>yuiIncludePrefix=http://yui.yahooapis.com/2.5.2/build</param-value>
+            <param-value>
+            	yuiIncludePrefix=http://yui.yahooapis.com/2.5.2/build;
+            	appUrl=test
+            </param-value>
         </init-param>
     </filter>
 
