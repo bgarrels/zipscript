@@ -46,6 +46,7 @@ public class Constants {
 	public static final String HEADER = "header";
 	public static final String FOOTER = "footer";
 	public static final String THIS = "this";
+	public static final String SUPER = "super";
 
 	public static final String NOW = "Now";
 	public static final String VARS = "Vars";

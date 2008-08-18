@@ -157,7 +157,7 @@ public class VariableElement extends AbstractElement implements Element {
 			Object rtn = null;
 			int count = 0;
 			boolean isNullAllowed = false;
-			if (null == pattern) {
+			if (null != children) {
 				for (int i = 0; i < this.children.length; i++) {
 					rtn = children[i].execute(rtn, context);
 					if (!children[i].shouldReturnSomething())

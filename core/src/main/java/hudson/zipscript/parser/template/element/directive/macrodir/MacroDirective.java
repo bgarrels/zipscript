@@ -289,7 +289,7 @@ public class MacroDirective extends NestableElement implements
 		List tdp = new ArrayList();
 		if (mie.getMacroInstance().isInMacroDefinition()) {
 			appendTemplateDefinedParameters(nestedContent.getChildren(),
-					context, tdp, this, new HashMap());
+					parentContext, tdp, this, new HashMap());
 		} else {
 			// we are in the body of a macro which is in a normal template -
 			// simulate the context

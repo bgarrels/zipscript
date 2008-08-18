@@ -172,26 +172,28 @@ public class ForeachDirective extends NestableElement implements
 				while (true) {
 					previousItem = sequenceAdapter.nextItem(index,
 							previousItem, sequence);
-					if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
-						hasNext = false;
-						context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-						additionalContextEntries.put(TOKEN_HASNEXT,
-								Boolean.FALSE);
-					}
-					if (previousItem instanceof SequenceItem) {
-						Object obj = ((SequenceItem) previousItem).getObject();
-						additionalContextEntries.put(varName, obj);
-						context.put(varName, obj, false);
-					} else {
-						additionalContextEntries.put(varName, previousItem);
-						context.put(varName, previousItem, false);
-					}
-					try {
-						appendTemplateDefinedParameters(getChildren(), context,
-								macroInstanceList, macro,
-								additionalContextEntries);
-					} catch (ContinueException e) {
-						// continue
+					if (null != previousItem) {
+						if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
+							hasNext = false;
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+							additionalContextEntries.put(TOKEN_HASNEXT,
+									Boolean.FALSE);
+						}
+						if (previousItem instanceof SequenceItem) {
+							Object obj = ((SequenceItem) previousItem).getObject();
+							additionalContextEntries.put(varName, obj);
+							context.put(varName, obj, false);
+						} else {
+							additionalContextEntries.put(varName, previousItem);
+							context.put(varName, previousItem, false);
+						}
+						try {
+							appendTemplateDefinedParameters(getChildren(), context,
+									macroInstanceList, macro,
+									additionalContextEntries);
+						} catch (ContinueException e) {
+							// continue
+						}
 					}
 					if (!hasNext)
 						break;
@@ -247,20 +249,22 @@ public class ForeachDirective extends NestableElement implements
 				while (true) {
 					previousItem = sequenceAdapter.nextItem(index,
 							previousItem, sequence);
-					if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
-						hasNext = false;
-						context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
-					}
-					if (previousItem instanceof SequenceItem) {
-						context.put(varName, ((SequenceItem) previousItem)
-								.getObject(), false);
-					} else {
-						context.put(varName, previousItem, false);
-					}
-					try {
-						appendElements(getChildren(), context, sw);
-					} catch (ContinueException e) {
-						// continue
+					if (null != previousItem) {
+						if (!sequenceAdapter.hasNext(index, previousItem, sequence)) {
+							hasNext = false;
+							context.put(TOKEN_HASNEXT, Boolean.FALSE, false);
+						}
+						if (previousItem instanceof SequenceItem) {
+							context.put(varName, ((SequenceItem) previousItem)
+									.getObject(), false);
+						} else {
+							context.put(varName, previousItem, false);
+						}
+						try {
+							appendElements(getChildren(), context, sw);
+						} catch (ContinueException e) {
+							// continue
+						}
 					}
 					if (!hasNext)
 						break;

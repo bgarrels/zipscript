@@ -74,7 +74,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("ghi", merge("myList?last", context));
 		assertEquals("true", merge("myList?contains('def')", context));
 		assertEquals("false", merge("myList?contains('foo')", context));
-		Object obj = ZipEngine.createInstance().getEvaluator("myList?length")
+		Object obj = ZipEngine.createInstance().getEvaluator("myList?size")
 				.objectValue(context);
 		assertEquals(new Integer(3), obj);
 
@@ -82,7 +82,7 @@ public class SpecialMethodsTestCase extends TestCase {
 		assertEquals("joe", merge("myList?first", context));
 		merge("myList?addLast('eoj')", context);
 		assertEquals("eoj", merge("myList?last", context));
-		obj = ZipEngine.createInstance().getEvaluator("myList?length")
+		obj = ZipEngine.createInstance().getEvaluator("myList?size")
 				.objectValue(context);
 		assertEquals(new Integer(5), obj);
 	}

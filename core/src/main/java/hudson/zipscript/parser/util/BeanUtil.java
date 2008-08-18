@@ -20,6 +20,14 @@ public class BeanUtil {
 							+ "'");
 		}
 		Class clazz = bean.getClass();
+		if (clazz.getName().indexOf("EnhancerByCGLIB") > 0) {
+			try {
+				clazz = Thread.currentThread().getContextClassLoader().loadClass(clazz.getName().substring(0, clazz.getName().indexOf('$')));
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 		if (null == parameters || parameters.length == 0) {
 			// simple getter
 			Method m = null;

@@ -38,7 +38,7 @@ ${abc.foo} -- ${abc['foo']}
 
 == Sequence Creation ==
 [#set mySequence={}/]
-${mySequence?length}
+${mySequence?size}
 [#set mySequence={"abc"}/]
 ${mySequence[0]}
 
