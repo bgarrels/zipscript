@@ -19,6 +19,7 @@ import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.NoAutoEscapeElement;
 import hudson.zipscript.parser.template.element.ToStringWithContextElement;
 import hudson.zipscript.parser.template.element.comparator.ComparatorElement;
+import hudson.zipscript.parser.template.element.comparator.math.AbstractMathExpression;
 import hudson.zipscript.parser.template.element.group.GroupElement;
 import hudson.zipscript.parser.template.element.group.MapElement;
 import hudson.zipscript.parser.template.element.lang.CommaElement;
@@ -144,9 +145,11 @@ public class VariableElement extends AbstractElement implements Element {
 			if (!isSilenced) {
 				if (suppressNullErrors)
 					StringUtil.append(toString(), sw);
-				else
+				else {
+					obj = objectValue(context);
 					throw new ExecutionException("Value evaluated as null "
 							+ this.toString(), this);
+				}
 			}
 		}
 	}
@@ -588,6 +591,10 @@ public class VariableElement extends AbstractElement implements Element {
 				}
 			} else if (e instanceof ComparatorElement && elements.size() == 1) {
 				children.add(new ElementWrapperChild(e));
+			} else if (e instanceof AbstractMathExpression) {
+				// we're using math
+				throw new ParseException(e, "Need to support math here '"
+						+ e.toString() + "'");
 			} else {
 				throw new ParseException(e, "Invalid element detected '"
 						+ e.toString() + "'");

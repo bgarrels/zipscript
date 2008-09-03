@@ -39,4 +39,8 @@ public class ContextMapAdapter implements HashAdapter {
 		return ((Context) map).remove(key);
 	}
 
+	public int getSize(Object map) throws ClassCastException {
+		return ((Context) map).getKeys().size();
+	}
+
 }

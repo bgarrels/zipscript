@@ -26,7 +26,7 @@ public class IteratorAdapter implements SequenceAdapter {
 		throw new UnsupportedOperationException();
 	}
 
-	public int getLength(Object sequence) throws ClassCastException {
+	public int getSize(Object sequence) throws ClassCastException {
 		throw new UnsupportedOperationException();
 	}
 

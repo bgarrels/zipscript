@@ -61,4 +61,8 @@ public class NodeHashAdapter extends NodeObjectAdapter implements HashAdapter {
 	public Object remove(Object key, Object map) throws ClassCastException {
 		throw new UnsupportedOperationException();
 	}
+
+	public int getSize(Object map) throws ClassCastException {
+		throw new UnsupportedOperationException(); 
+	}
 }

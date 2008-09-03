@@ -14,7 +14,7 @@ public class LastSpecialMethod extends SequenceSpecialMethod {
 	public Object execute(Object source, SequenceAdapter sequenceAdapter,
 			RetrievalContext retrievalContext, String contextHint,
 			ExtendedContext context) {
-		int length = sequenceAdapter.getLength(source);
+		int length = sequenceAdapter.getSize(source);
 		if (length == 0)
 			return null;
 		return sequenceAdapter.getItemAt(length - 1, source, retrievalContext,

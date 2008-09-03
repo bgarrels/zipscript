@@ -22,11 +22,11 @@ import test.hudson.zipscript.model.Obj3;
 
 public class VariableTestCase extends TestCase {
 
-//	 public static TestSuite suite () {
-//	 TestSuite suite = new TestSuite();
-//	 suite.addTest(new VariableTestCase("testSimpleVariables"));
-//	 return suite;
-//	 }
+	 public static TestSuite suite () {
+	 TestSuite suite = new TestSuite();
+	 suite.addTest(new VariableTestCase("testSimpleVariables"));
+	 return suite;
+	 }
 
 	public VariableTestCase() {
 	}

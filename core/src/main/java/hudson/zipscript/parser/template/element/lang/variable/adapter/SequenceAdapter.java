@@ -9,7 +9,7 @@ public interface SequenceAdapter {
 
 	public boolean appliesTo(Object object);
 
-	public int getLength(Object sequence) throws ClassCastException;
+	public int getSize(Object sequence) throws ClassCastException;
 
 	public Object nextItem(int index, Object lastVal, Object sequence)
 			throws ClassCastException;
