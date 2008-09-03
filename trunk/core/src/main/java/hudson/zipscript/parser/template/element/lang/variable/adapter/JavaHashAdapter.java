@@ -38,4 +38,7 @@ public class JavaHashAdapter implements HashAdapter {
 		return ((Map) map).remove(key);
 	}
 
+	public int getSize(Object map) throws ClassCastException {
+		return ((Map) map).size();
+	}
 }

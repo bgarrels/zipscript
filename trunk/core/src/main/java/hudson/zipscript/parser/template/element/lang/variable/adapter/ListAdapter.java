@@ -15,7 +15,7 @@ public class ListAdapter implements SequenceAdapter {
 		return (object instanceof List);
 	}
 
-	public int getLength(Object object) {
+	public int getSize(Object object) {
 		return ((List) object).size();
 	}
 

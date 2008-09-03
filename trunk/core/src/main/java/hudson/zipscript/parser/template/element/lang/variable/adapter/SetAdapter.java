@@ -16,7 +16,7 @@ public class SetAdapter implements SequenceAdapter {
 		return (object instanceof Set);
 	}
 
-	public int getLength(Object object) {
+	public int getSize(Object object) {
 		return ((Set) object).size();
 	}
 

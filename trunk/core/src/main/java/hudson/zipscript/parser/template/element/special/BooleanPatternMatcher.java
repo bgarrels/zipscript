@@ -26,6 +26,11 @@ public class BooleanPatternMatcher implements PatternMatcher {
 	public Element match(char previousChar, char[] startChars,
 			CharBuffer reader, ParsingSession session, List elements,
 			StringBuffer unmatchedChars) throws ParseException {
+		if (reader.hasRemaining()) {
+			char c = reader.charAt(0);
+			if (Character.isLetterOrDigit(c) || c == '_')
+				return null;
+		}
 		if (startChars[0] == 't')
 			return new BooleanElement(true);
 		else

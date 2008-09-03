@@ -24,4 +24,6 @@ public interface HashAdapter {
 	public Set getKeys(Object map) throws ClassCastException;
 
 	public Collection getValues(Object map) throws ClassCastException;
+
+	public int getSize (Object map) throws ClassCastException;
 }

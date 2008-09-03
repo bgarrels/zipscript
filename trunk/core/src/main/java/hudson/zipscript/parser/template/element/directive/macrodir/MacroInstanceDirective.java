@@ -327,8 +327,10 @@ public class MacroInstanceDirective extends NestableElement implements
 
 	public void writeNestedContent(ExtendedContext context, Writer writer)
 			throws ExecutionException {
-		for (Iterator i = getChildren().iterator(); i.hasNext();) {
-			((Element) i.next()).merge(context, writer);
+		if (null != getChildren()) {
+			for (Iterator i = getChildren().iterator(); i.hasNext();) {
+				((Element) i.next()).merge(context, writer);
+			}
 		}
 	}
 

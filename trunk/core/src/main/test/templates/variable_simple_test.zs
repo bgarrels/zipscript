@@ -1,3 +1,7 @@
+${(obj.val)+1}
+${obj.val+1}
+
+[##
 == Formal Variables ==
 ${myObject.testMap['anotherObj'].list1[0].getText().length}
 ${myObject.testMap['anotherObj'].list1[0].getText()}
@@ -48,3 +52,4 @@ ${mySequence[0]}
 		Context Key: ${key} - ${Vars[key]}
 	[/#if]
 [/#foreach]
+##]

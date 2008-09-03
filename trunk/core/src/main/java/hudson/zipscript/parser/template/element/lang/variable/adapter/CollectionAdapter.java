@@ -16,7 +16,7 @@ public class CollectionAdapter implements SequenceAdapter {
 		return (object instanceof Collection);
 	}
 
-	public int getLength(Object object) {
+	public int getSize(Object object) {
 		return ((Collection) object).size();
 	}
 

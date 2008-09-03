@@ -13,7 +13,7 @@ public class ObjectArrayAdapter implements SequenceAdapter {
 		return (object instanceof Object[]);
 	}
 
-	public int getLength(Object object) {
+	public int getSize(Object object) {
 		return ((Object[]) object).length;
 	}
 

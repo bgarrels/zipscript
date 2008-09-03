@@ -135,14 +135,15 @@ public abstract class NestableElement extends AbstractDirective {
 								(TemplateDefinedParameter) e, context,
 								additionalContextEntries));
 					}
-				} else if (e instanceof MacroInstanceDirective) {
-					// might contain common template-defined parameters
-					MacroInstanceDirective mid = (MacroInstanceDirective) e;
-					if (null != mid.getMacroDefinition())
-						mid.getMacroDefinition()
-								.getMatchingTemplateDefinedParameters(context,
-										macroInstanceList, macro,
-										additionalContextEntries);
+// FIXME we are using the wrong context in this case - we need the context containing macro parameters
+//				} else if (e instanceof MacroInstanceDirective) {
+//					// might contain common template-defined parameters
+//					MacroInstanceDirective mid = (MacroInstanceDirective) e;
+//					if (null != mid.getMacroDefinition())
+//						mid.getMacroDefinition()
+//								.getMatchingTemplateDefinedParameters(context,
+//										macroInstanceList, macro,
+//										additionalContextEntries);
 				} else if (e instanceof MacroInstanceAware) {
 					((MacroInstanceAware) e)
 							.getMatchingTemplateDefinedParameters(context,

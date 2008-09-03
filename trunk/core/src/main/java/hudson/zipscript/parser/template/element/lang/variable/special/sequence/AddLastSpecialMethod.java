@@ -21,7 +21,7 @@ public class AddLastSpecialMethod extends SequenceSpecialMethod {
 	public Object execute(Object source, SequenceAdapter sequenceAdapter,
 			RetrievalContext retrievalContext, String contextHint,
 			ExtendedContext context) {
-		int length = sequenceAdapter.getLength(source);
+		int length = sequenceAdapter.getSize(source);
 		Object value = element.objectValue(context);
 		sequenceAdapter.addItemAt(length, value, source);
 		return null;

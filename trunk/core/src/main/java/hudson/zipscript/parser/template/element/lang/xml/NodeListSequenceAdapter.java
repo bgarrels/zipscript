@@ -34,7 +34,7 @@ public class NodeListSequenceAdapter implements SequenceAdapter {
 		return ((NodeList) sequence).item(index);
 	}
 
-	public int getLength(Object sequence) throws ClassCastException {
+	public int getSize(Object sequence) throws ClassCastException {
 		return ((NodeList) sequence).getLength();
 	}
 

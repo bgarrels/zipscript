@@ -19,4 +19,8 @@ public class Obj3 {
 	public String toString() {
 		return getClass().getName();
 	}
+
+	public int getVal () {
+		return 2;
+	}
 }
