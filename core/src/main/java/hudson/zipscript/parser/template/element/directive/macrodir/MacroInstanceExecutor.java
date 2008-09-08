@@ -46,4 +46,8 @@ public class MacroInstanceExecutor implements ToStringWithContextElement,
 	public MacroOrientedElement getMacroInstance() {
 		return macroInstance;
 	}
+
+	public void put (String key, Object value) {
+		bodyContext.put(key, value);
+	}
 }
