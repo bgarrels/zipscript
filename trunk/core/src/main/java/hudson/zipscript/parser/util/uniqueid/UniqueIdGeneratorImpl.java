@@ -18,7 +18,7 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 
 	public String toString(ExtendedContext context) {
 		if (Long.MIN_VALUE == uniqueId) {
-			uniqueId = 1000l;
+			uniqueId = generateStartId();
 		} else {
 			uniqueId = uniqueId + 1;
 		}
@@ -34,5 +34,9 @@ public class UniqueIdGeneratorImpl implements UniqueIdGenerator {
 	}
 
 	public void configure(Map properties) throws InitializationException {
+	}
+
+	private long generateStartId () {
+		return (long) (Math.random() * 100000000);
 	}
 }

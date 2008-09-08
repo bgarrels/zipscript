@@ -82,6 +82,9 @@ public class AssumedGetRoot implements VariableChild {
 		} catch (ClassCastException e) {
 			this.doTypeChecking = true;
 			return execute(parent, context);
+		} catch (IllegalArgumentException e) {
+			this.doTypeChecking = true;
+			return execute(parent, context);
 		} catch (Exception e) {
 			throw new ExecutionException(e.getMessage(), variableElement, e);
 		}
