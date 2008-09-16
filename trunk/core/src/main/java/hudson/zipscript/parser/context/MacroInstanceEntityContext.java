@@ -165,4 +165,12 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 	public boolean doRefreshTemplates() {
 		return preMacroContext.doRefreshTemplates();
 	}
+
+	public ExtendedContext getPreMacroContext() {
+		return preMacroContext;
+	}
+
+	public ExtendedContext getPostMacroContext() {
+		return postMacroContext;
+	}
 }

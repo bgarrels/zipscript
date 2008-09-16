@@ -37,5 +37,7 @@ public interface MacroOrientedElement extends Element {
 
 	public boolean isInMacroDefinition();
 
+	public boolean isInTemplate();
+
 	public ElementAttribute getAttribute(String name);
 }

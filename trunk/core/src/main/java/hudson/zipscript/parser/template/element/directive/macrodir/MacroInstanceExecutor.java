@@ -22,7 +22,7 @@ public class MacroInstanceExecutor implements ToStringWithContextElement,
 	public MacroInstanceExecutor(
 			MacroOrientedElement macroInstance, ExtendedContext bodyContext) {
 		this.macroInstance = macroInstance;
-		this.bodyContext = bodyContext;
+			this.bodyContext = bodyContext;
 	}
 
 	public void setBodyContext (ExtendedContext bodyContext) {
