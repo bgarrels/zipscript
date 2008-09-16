@@ -10,6 +10,7 @@ import hudson.zipscript.parser.ExpressionParser;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ParsingResult;
+import hudson.zipscript.parser.template.data.ParsingSession;
 import hudson.zipscript.parser.template.element.Element;
 import hudson.zipscript.parser.template.element.directive.macrodir.MacroDirective;
 import hudson.zipscript.parser.template.element.lang.TextDefaultElementFactory;
@@ -47,7 +48,7 @@ public class MacroManager {
 		String contents = IOUtil.toString(resource.getInputStream());
 		ParsingResult pr = ExpressionParser.getInstance().parse(contents,
 				resourceContainer.getComponents(),
-				TextDefaultElementFactory.INSTANCE, 0, resourceContainer);
+				TextDefaultElementFactory.INSTANCE, 0, resourceContainer, ParsingSession.PARSING_CONTEXT_MACRO);
 		List l = pr.getElements();
 		MacroLibrary macroLibrary = new MacroLibrary(namespace, resource);
 		for (Iterator i = l.iterator(); i.hasNext();) {

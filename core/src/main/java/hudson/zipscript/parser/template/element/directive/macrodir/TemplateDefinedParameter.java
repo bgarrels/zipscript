@@ -44,6 +44,7 @@ public class TemplateDefinedParameter extends NestableElement implements
 
 	private MacroInstanceDirective baseMacroInstance;
 	boolean isInMacroDefinition;
+	boolean isInTemplate;
 	private MacroDefinitionAttribute templateDefinedParameterDefinition;
 	// for a template defined parameter reference inside a common macro
 	boolean isTemplateDefinedParameterInMacroDefinition;
@@ -136,6 +137,8 @@ public class TemplateDefinedParameter extends NestableElement implements
 				break;
 			}
 		}
+		if (session.getParsingContext() == ParsingSession.PARSING_CONTEXT_TEMPLATE)
+			this.isInTemplate = true;
 		if (!isTemplateDefinedParameterInMacroDefinition) {
 			// find associated macro instance
 			for (int i = session.getNestingStack().size() - 1; i >= 0; i--) {
@@ -346,6 +349,10 @@ public class TemplateDefinedParameter extends NestableElement implements
 
 	public boolean isInMacroDefinition() {
 		return isInMacroDefinition;
+	}
+
+	public boolean isInTemplate () {
+		return isInTemplate;
 	}
 
 	public MacroDefinitionAttribute getTemplateDefinedParameterDefinition() {

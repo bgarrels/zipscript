@@ -16,6 +16,9 @@ import java.util.Stack;
 
 public class ParsingSession implements MacroProvider {
 
+	public static final int PARSING_CONTEXT_TEMPLATE = 1;
+	public static final int PARSING_CONTEXT_MACRO = 2;
+	
 	private ParseParameters parameters;
 	private Map unknownVariablePatterns;
 	private Map inlineMacroDefinitions;
@@ -24,9 +27,15 @@ public class ParsingSession implements MacroProvider {
 	private Stack nestingStack;
 	private Stack escapeMethodStack = new Stack();
 	private boolean hideEscapeMethods = false;
+	private int parsingContext = PARSING_CONTEXT_TEMPLATE;
 
 	public ParsingSession(ParseParameters parameters) {
 		this.parameters = parameters;
+	}
+
+	public ParsingSession(ParseParameters parameters, int parsingContext) {
+		this.parameters = parameters;
+		this.parsingContext = parsingContext;
 	}
 
 	public ParsingSession clone(ParseParameters parameters) {
@@ -42,6 +51,7 @@ public class ParsingSession implements MacroProvider {
 			m.putAll(inlineMacroDefinitions);
 			session.inlineMacroDefinitions = m;
 		}
+		session.parsingContext = parsingContext;
 		return session;
 	}
 
@@ -158,5 +168,9 @@ public class ParsingSession implements MacroProvider {
 
 	public Map getStaticMacroImports() {
 		return staticMacroImports;
+	}
+
+	public int getParsingContext () {
+		return parsingContext;
 	}
 }

@@ -63,6 +63,17 @@ public class ExpressionParser {
 				startPosition);
 	}
 
+	public ParsingResult parse(String contents, Component[] components,
+			DefaultElementFactory defaultElementFactory, int startPosition,
+			ResourceContainer resourceContainer, int parsingContext) throws ParseException {
+		ParseParameters parameters = new ParseParameters(resourceContainer,
+				false, false);
+		ParsingSession session = new ParsingSession(parameters, parsingContext);
+		return parse(CharBuffer.wrap(contents.toCharArray()),
+				getStartTokens(components), defaultElementFactory, session,
+				startPosition);
+	}
+	
 	/**
 	 * Parse the given expression using the components for pattern matching
 	 * 

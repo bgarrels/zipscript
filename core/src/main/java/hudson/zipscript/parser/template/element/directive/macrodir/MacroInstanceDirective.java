@@ -7,6 +7,8 @@ package hudson.zipscript.parser.template.element.directive.macrodir;
 
 import hudson.zipscript.parser.Constants;
 import hudson.zipscript.parser.context.ExtendedContext;
+import hudson.zipscript.parser.context.MacroInstanceEntityContext;
+import hudson.zipscript.parser.context.NestedContextWrapper;
 import hudson.zipscript.parser.exception.ExecutionException;
 import hudson.zipscript.parser.exception.ParseException;
 import hudson.zipscript.parser.template.data.ElementIndex;
@@ -43,6 +45,7 @@ public class MacroInstanceDirective extends NestableElement implements
 	private MacroDirective macro;
 	private MacroDirective baseMacroDefinition;
 	private boolean isInMacroDefinition;
+	private boolean isInTemplate;
 
 	private MacroHeaderElement header;
 	private MacroFooterElement footer;
@@ -137,6 +140,8 @@ public class MacroInstanceDirective extends NestableElement implements
 				break;
 			}
 		}
+		if (session.getParsingContext() == ParsingSession.PARSING_CONTEXT_TEMPLATE)
+			this.isInTemplate = true;
 
 		// find macro in session
 		// if we're in the header/footer - we can't validate until the whole
@@ -312,8 +317,23 @@ public class MacroInstanceDirective extends NestableElement implements
 					this);
 		}
 
+		ExtendedContext bodyContext = context;
+		if (isInTemplate()) {
+			while (true) {
+				boolean mod = false;
+				while (bodyContext instanceof MacroInstanceEntityContext) {
+					bodyContext = ((MacroInstanceEntityContext) bodyContext).getPreMacroContext();
+					mod = true;
+				}
+				while (bodyContext instanceof NestedContextWrapper && ((NestedContextWrapper) bodyContext).getScopedElement() instanceof MacroDirective) {
+					bodyContext = ((NestedContextWrapper) bodyContext).getParentContext();
+					mod = true;
+				}
+				if (!mod) break;
+			}
+		}
 		macro.executeMacro(context, isOrdinal(), getAttributes(),
-				new MacroInstanceExecutor(this, context), sw);
+					new MacroInstanceExecutor(this, bodyContext), sw);
 	}
 
 	public String getNestedContent(ExtendedContext context)
@@ -366,6 +386,10 @@ public class MacroInstanceDirective extends NestableElement implements
 
 	public boolean isInMacroDefinition() {
 		return isInMacroDefinition;
+	}
+
+	public boolean isInTemplate() {
+		return isInTemplate;
 	}
 
 	public String getNamespace() {
