@@ -318,20 +318,9 @@ public class MacroInstanceDirective extends NestableElement implements
 		}
 
 		ExtendedContext bodyContext = context;
-		if (isInTemplate()) {
-			while (true) {
-				boolean mod = false;
-				while (bodyContext instanceof MacroInstanceEntityContext) {
-					bodyContext = ((MacroInstanceEntityContext) bodyContext).getPreMacroContext();
-					mod = true;
-				}
-				while (bodyContext instanceof NestedContextWrapper && ((NestedContextWrapper) bodyContext).getScopedElement() instanceof MacroDirective) {
-					bodyContext = ((NestedContextWrapper) bodyContext).getParentContext();
-					mod = true;
-				}
-				if (!mod) break;
-			}
-		}
+//		if (isInTemplate()) {
+//			bodyContext = context.getTemplateContext();
+//		}
 		macro.executeMacro(context, isOrdinal(), getAttributes(),
 					new MacroInstanceExecutor(this, bodyContext), sw);
 	}

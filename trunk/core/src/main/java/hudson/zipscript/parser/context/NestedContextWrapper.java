@@ -24,6 +24,7 @@ public class NestedContextWrapper implements ExtendedContext {
 	private HashMap map = new HashMap(4);
 	private boolean travelUp;
 	private Element scopedElement;
+	private ExtendedContext templateContext;
 
 	public NestedContextWrapper(ExtendedContext parentContext,
 			Element scopedElement) {
@@ -36,6 +37,10 @@ public class NestedContextWrapper implements ExtendedContext {
 		this.scopedElement = scopedElement;
 		this.travelUp = travelUp;
 		map.put(Constants.VARS, this);
+		if (parentContext.getTemplateContext().equals(parentContext) && !(scopedElement instanceof MacroDirective))
+			templateContext = this;
+		else
+			templateContext = parentContext.getTemplateContext();
 	}
 
 	public Object get(Object key, RetrievalContext retrievalContext,
@@ -155,5 +160,9 @@ public class NestedContextWrapper implements ExtendedContext {
 
 	public boolean doRefreshTemplates() {
 		return parentContext.doRefreshTemplates();
+	}
+
+	public ExtendedContext getTemplateContext() {
+		return templateContext;
 	}
 }

@@ -6,6 +6,7 @@
 package hudson.zipscript.parser.template.element.lang.xml;
 
 import hudson.zipscript.parser.context.AbstractContext;
+import hudson.zipscript.parser.context.ExtendedContext;
 import hudson.zipscript.parser.template.element.lang.variable.adapter.RetrievalContext;
 
 import java.util.HashMap;
@@ -50,5 +51,9 @@ public class DocumentContextWrapper extends AbstractContext {
 
 	public Set getKeys() {
 		return additionaContextValues.keySet();
+	}
+
+	public ExtendedContext getTemplateContext() {
+		return this;
 	}
 }

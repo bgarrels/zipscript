@@ -124,4 +124,9 @@ public interface ExtendedContext extends Context, MacroProvider {
 	 * @return
 	 */
 	public boolean doRefreshTemplates();
+
+	/**
+	 * Return the context that is the most closest in scope but is not nested inside a macro directive
+	 */
+	public ExtendedContext getTemplateContext ();
 }

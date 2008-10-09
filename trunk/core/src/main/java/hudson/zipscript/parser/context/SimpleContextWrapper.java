@@ -62,4 +62,8 @@ public class SimpleContextWrapper extends AbstractContext {
 	public void addToElementScope(List nestingStack) {
 		// this is a root element
 	}
+
+	public ExtendedContext getTemplateContext() {
+		return this;
+	}
 }

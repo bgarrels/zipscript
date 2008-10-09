@@ -38,4 +38,8 @@ public class MapContextWrapper extends AbstractContext {
 	public Set getKeys() {
 		return map.keySet();
 	}
+
+	public ExtendedContext getTemplateContext() {
+		return this;
+	}
 }

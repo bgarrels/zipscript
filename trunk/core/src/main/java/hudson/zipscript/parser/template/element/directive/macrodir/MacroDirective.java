@@ -293,10 +293,10 @@ public class MacroDirective extends NestableElement implements
 		} else {
 			// we are in the body of a macro which is in a normal template -
 			// simulate the context
-			((NestedContextWrapper) context).setTravelUp(true);
+			// ((NestedContextWrapper) context).setTravelUp(true);
 			appendTemplateDefinedParameters(nestedContent.getChildren(),
-					context, tdp, this, new HashMap());
-			((NestedContextWrapper) context).setTravelUp(false);
+					parentContext, tdp, this, new HashMap());
+			// ((NestedContextWrapper) context).setTravelUp(false);
 		}
 		if (getParsingSession().isDebug()) {
 			for (Iterator i = tdp.iterator(); i.hasNext();) {

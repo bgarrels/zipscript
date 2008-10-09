@@ -71,7 +71,12 @@ public class MacroInstanceEntity implements ZSContextRequiredGetter {
 	}
 
 	public void put(String key, Object value) {
-		this.context.put(key, value, true);
+		if (macroInstance.isInTemplate()) {
+			this.context.getTemplateContext().put(key, value);
+		}
+		else {
+			this.context.put(key, value, true);
+		}
 	}
 
 	public MacroInstanceEntityContext getContext() {

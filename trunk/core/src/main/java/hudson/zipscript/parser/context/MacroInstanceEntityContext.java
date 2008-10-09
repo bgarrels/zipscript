@@ -173,4 +173,8 @@ public class MacroInstanceEntityContext implements ExtendedContext {
 	public ExtendedContext getPostMacroContext() {
 		return postMacroContext;
 	}
+
+	public ExtendedContext getTemplateContext() {
+		return preMacroContext.getTemplateContext();
+	}
 }
