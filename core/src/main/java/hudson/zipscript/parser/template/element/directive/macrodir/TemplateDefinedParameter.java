@@ -301,6 +301,9 @@ public class TemplateDefinedParameter extends NestableElement implements
 
 	public String getNestedContent(ExtendedContext context)
 			throws ExecutionException {
+		if (isInTemplate()) {
+			context = context.getTemplateContext();
+		}
 		StringWriter sw = new StringWriter();
 		for (Iterator i = getChildren().iterator(); i.hasNext();) {
 			((Element) i.next()).merge(context, sw);
