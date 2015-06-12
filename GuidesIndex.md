@@ -1,0 +1,1 @@
+[Click here](http://www.zipscript.org/layout/frameset.html?http://www.zipscript.org/docs/current/index_only.html) to view the index

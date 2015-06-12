@@ -1,0 +1,1 @@
+The following features/issues will be addressed in the next release: [Click here for details](http://code.google.com/p/zipscript/issues/list?q=label%3Ar0.9.3%20label%3AModule-core&can=1)
